@@ -1,0 +1,322 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=9; IE=8; IE=7" />
+    <meta charset="utf-8" />
+    <title>@ViewBag.Title - @ViewData["moduleName"]</title>
+    <script type="text/javascript" src="@(Url.Content("~/Scripts/css3-mediaqueries.js"))"></script>
+    <link href="@(Url.Content("~/Content/bootstrap.css"))" rel="stylesheet" media="screen" />
+    <meta name="viewport" content="width=device-width" />
+        
+    <style type="text/css">
+    #main
+    {
+        border:#e1e1e8 1px solid;
+    }
+    nav a,nav a:hover,nav a:focus
+    {
+        color:White;
+    }
+    .navbar
+    {
+        background:url("@(Url.Content("~/Content/img/top_menu_bg.png"))") repeat scroll 0 0;
+    }
+    .navbar-brand
+    {
+        color: #FFFFFF;
+        font-size: 13px;
+        font-weight: bold;
+    }
+    .navbar-brand:hover
+    {
+        color:Red;
+    }
+    .navbar-nav a
+    {
+        color: #FFFFFF;
+        font-size: 13px;
+        font-weight: bold;
+    }
+    .nav .open > a, .nav .open > a:hover, .nav .open > a:focus
+    {
+        background-color:inherit;
+    }
+    .navbar-nav > li > a:hover
+    {
+        color:Red;
+        background-color:inherit;
+    }
+    .nav > li > a:focus
+    {
+        background-color:inherit;
+    }
+    .navbar-link
+    {
+        color:#ffffff;
+        font-style:italic;
+    }
+    .navbar-link:hover
+    {
+        color:Red;
+        font-style:italic;
+    }
+    .nav-tabs a
+    {
+        outline:none;
+    }
+    #accordion
+    {
+        padding:10px;
+    }
+    .focusField{
+        border:solid 2px #73A6FF;
+        background:#EFF5FF;
+        color:#000;
+        font:bold 12px "Lucida Grande",Arial,sans-serif;
+        width:100%;
+    }
+    .idleField{
+        background:#ffffff;
+        color: #6F6F6F;
+        border: solid 2px #DFDFDF;
+        font:bold 12px "Lucida Grande",Arial,sans-serif;
+        width:100%;
+    }
+    .input-group-addon
+    {
+        font-weight:bold;
+        color:Black;
+    }
+    dl
+    {
+        margin-left: 50px;
+    }
+    dt
+    {
+        float:left;
+    }
+    .row-item
+    {
+        float:left;
+        padding:20px 9px;
+        width:50%;
+    }
+    .btn
+    {
+        font-weight:bold;
+    }
+    .thead-color
+    {
+        color:White;
+        background:url("@(Url.Content("~/Content/img/top_menu_bg.png"))") repeat-x scroll 0 0;
+    }
+    table
+    {
+        border-spacing:0 5px;
+        border-collapse:separate;
+    }
+    table tr {
+        margin-bottom: 10px;
+        background-color: #EEEEEE;
+        border-radius:4px;
+    }
+    .maintable table
+    {
+        margin:0px;
+    }
+    .maintable table tr
+    {
+        background-color:White;
+    }
+    .maintable table tr th
+    {
+        color:inherit;
+    }
+    .maintable table tr td
+    {
+        font-weight:lighter;
+    }
+       
+    .panel-group
+    {
+        margin-bottom:10px;
+    }
+    .frame
+    {
+        padding:10px;
+    }
+    #info tr
+    {
+        background-color:White;
+    }
+    fieldset {
+        padding: 5px 30px 30px;
+    }
+    #sidenav li a
+    {
+        padding:5px 15px;
+    }
+    .warningclass
+    {
+        color:Red;
+        border-color:Red;
+    }
+    table.table-condensed tr
+    {
+        background-color:White;
+    }
+    .glyphicon-calendar
+    {
+        cursor:pointer;
+    }
+</style>
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--if lt IE 9-->
+        <script type="text/javascript" src="@(Url.Content("~/Scripts/html5shiv.js"))"></script>
+        <script type="text/javascript" src="@(Url.Content("~/Scripts/respond.min.js"))"></script>
+    <!---------------->
+
+    <!--if lt IE 8-->
+       <script type="text/javascript" src="@(Url.Content("~/Scripts/json3.min.js"))"></script>
+    <!---------------->
+        <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script type="text/javascript" src="@(Url.Content("~/Scripts/jquery-1.9.1.js"))"></script>
+</head>
+<body data-target="#sidenav" data-spy="scroll" data-offset="0">
+    <div class="page">
+        <div class="container" style="max-width:1440px;">
+            <div id="header">
+                <div id="title">
+                    <h1><img alt="logo" src="@(Url.Content("~/Content/img/logo.gif"))" />&nbsp;&nbsp;&nbsp;@ViewData["moduleName"]</h1>
+                </div>          
+            </div>
+
+            <nav class="navbar navbar-static-top" role="navigation">
+                <!-- Brand and toggle get grouped for better mobile display -->
+       
+                <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse" style="background-color:White;">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="@Url.Content("~/")"><i class="glyphicon glyphicon-home glyphicon-white"></i> Home</a>
+              </div>
+       
+                <!-- Collect the nav links, forms, and other content for toggling -->
+                <div class="collapse111 navbar-collapse navbar-ex1-collapse">
+                    <ul class="nav navbar-nav">
+                        <li class="active"><a href="#"><i class="glyphicon glyphicon-question-sign glyphicon-white"></i> Help</a></li>
+                        <li><a href="http://ssgws03/default.aspx"><i class="glyphicon glyphicon-globe glyphicon-white"></i> Intranet</a></li>
+                        
+                        @{if (ViewData["hr_user"].Equals("Y")) 
+                          { 
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">HR Management<b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="@(Url.Content("~/HRManage/NewCycle"))">Start New Cycle</a></li>
+                                    <li><a href="@(Url.Content("~/HRManage/ManageCycle"))">Manage Existing Cycle</a></li>
+                                    <li class="divider"></li>
+                                    <li><a href="#">View Appraisal</a></li>
+                                </ul>
+                            </li>
+                          } 
+                         }
+                    </ul> 
+                    <!--<p style="color:#ffffff;" class="navbar-text pull-right"><a href="/Home/UserProfile/@ViewData["userid"]" class="navbar-link">My Appraisal Profile</a></p>-->
+                </div><!-- /.navbar-collapse -->
+            </nav>
+
+            <nav id="fixedtopnav" class="navbar navbar-fixed-top" role="navigation" style="display:none;">
+                
+                <!-- Brand and toggle get grouped for better mobile display -->
+            
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse" style="background-color:White;">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="@Url.Content("~/")"><i class="glyphicon glyphicon-home glyphicon-white"></i> Home</a>
+                </div>
+            
+                <!-- Collect the nav links, forms, and other content for toggling -->
+                <div class="collapse navbar-collapse navbar-ex1-collapse">
+                    <ul class="nav navbar-nav">
+                        <li class="active"><a href="#"><i class="glyphicon glyphicon-question-sign glyphicon-white"></i> Help</a></li>
+                        <li><a href="#"><i class="glyphicon glyphicon-list-alt glyphicon-white"></i> Intranet</a></li>
+                    </ul> 
+                    <!--<p style="color:#ffffff;" class="navbar-text pull-right"><a href="#" class="navbar-link">My Appraisal Profile</a></p>-->
+            </div><!-- /.navbar-collapse -->
+            </nav>
+            <div id="main">
+                @RenderSection("featured", required: false)
+                <section class="content-wrapper main-content clear-fix">@RenderBody()</section>
+                <div id="footer">Copyright © @DateTime.Now.Year Asia Capital Reinsurance Group Co Reg No 200617360M</div>
+            </div>
+        </div>
+    </div>
+
+    @RenderSection("scripts", required: false)
+    <script type="text/javascript" src="@Url.Content("~/Scripts/bootstrap.js")"></script>
+    <script type="text/javascript" src="@Url.Content("~/Scripts/bootstrap-select.min.js")"></script>
+    <script type="text/javascript">
+        var stop = $(".navbar").offset().top;
+        $(window).scroll(function () {
+            /*if ($(this).scrollTop() > (stop + $(".navbar").height()) && $(".navbar-static-top").length > 0) {
+            //$(".navbar").removeClass("navbar-static-top").addClass("navbar-fixed-top");
+            $("#fixedtopnav").show();
+            }
+            else if ($(this).scrollTop() <= (stop + $(".navbar").height()) && $(".navbar-fixed-top").length > 0) {
+            //$(".navbar").removeClass("navbar-fixed-top").addClass("navbar-static-top");
+            $("#fixedtopnav").hide();
+            }*/
+            ;
+        });
+        $(function () {
+            $('input[type="text"]').addClass("idleField");
+            $('input[type="text"]').focus(function () {
+                $(this).removeClass("idleField").addClass("focusField").removeClass("warningclass");
+                if (this.value == this.defaultValue && this.value.indexOf("Type something here")==0) {
+                    this.value = "";
+                }
+                if (this.value != this.defaultValue) {
+                    this.select();
+                }
+            });
+            $('input[type="text"]').blur(function () {
+                $(this).removeClass("focusField").addClass("idleField");
+                if ($.trim(this.value) == "") {
+                    this.value = (this.defaultValue ? this.defaultValue : '');
+                }
+            });
+            $('textarea').focus(function () {
+                $(this).removeClass("idleField").addClass("focusField").removeClass("warningclass");
+                if (this.value == this.defaultValue && this.value.indexOf("Type something here") == 0) {
+                    this.value = "";
+                }
+                if (this.value != this.defaultValue) {
+                    this.select();
+                }
+            });
+            $('textarea').blur(function () {
+                $(this).removeClass("focusField").addClass("idleField");
+                if ($.trim(this.value) == '') {
+                    this.value = (this.defaultValue ? this.defaultValue : '');
+                }
+            });
+
+            $(document).on("click", function (e) {
+                var $target = $(e.target);
+                isPopover = $(e.target).is('.ViewKpiComments');
+                inPopover = $(e.target).closest('.popover').length > 0;
+
+                //hide only if clicked on button or inside popover
+                if (!isPopover && !inPopover) $(".ViewKpiComments").popover('destroy');
+            });
+        });
+    </script>
+</body>
+</html>

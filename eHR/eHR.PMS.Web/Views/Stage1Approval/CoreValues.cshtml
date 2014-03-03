@@ -1,0 +1,386 @@
+﻿@{
+    var message = TempData["AlertMessage"] ?? string.Empty;
+}
+@model eHR.PMS.Web.Models.DTO.AppraisalPage
+
+@{int index = 0; int commentsindex = 0;}
+
+ <div class="frame">
+        <ul id="sectionlist" class="nav nav-tabs">
+            @{if (!eHR.PMS.Lib.Utility.Common.IsNullOrEmptyList(Model.Sections))
+              {
+                  foreach (eHR.PMS.Model.DTO.Master.Section sc in Model.Sections)
+                  {
+                      if (sc.Name.Replace(" ", "") == ViewContext.RouteData.Values["Action"].ToString())
+                      {
+                        <li class="active"><a sectionid="@sc.Id" href="@(Url.Content("~/Stage1Approval/"))@(sc.Name.Replace(" ", ""))/@(Model.CurrentTaskId)/@(Model.Appraisal.Id)#" >@sc.Name</a></li>
+                      }
+                      else
+                      {
+                        <li><a sectionid="@sc.Id" href="@(Url.Content("~/Stage1Approval/"))@(sc.Name.Replace(" ", ""))/@(Model.CurrentTaskId)/@(Model.Appraisal.Id)#" >@sc.Name</a></li>
+                      }
+                  }
+                  } 
+            }  
+        </ul>
+        <div  class="row" style="padding:10px;">
+          <div class="col-md-10">
+           <div id="Description" class="alert alert-success">
+             <h4>ACR Core Values :</h4>
+            <p>
+                The ACR Core Values guides our behaviours, the way we conduct business and how we treat our clients and colleagues. 
+                Living the values is essential to creating and reinforcing our corporate values.<br />
+                All Core Values (RIPPLES) must be evaluated for the year.<br />
+            </p>
+            <br />
+            <h4>Core Value Ratings :</h4>
+            <p>
+                <img alt="ACR Core Value Rating Descriptors" src="@(Url.Content("~/Content/img/pms_corevalue_rating_description.jpg"))" />
+            </p>
+            </div>
+           <form action="@(Url.Content("~/Stage1Approval/CoreValues/"))@(Model.CurrentTaskId)/@Model.Appraisal.Id" method="post">
+            <input type="hidden" value="0" id="ApORRe" name="ApORRe" />                    
+           @foreach (eHR.PMS.Model.DTO.Master.Block kpinfo in Model.CurrentSection.Blocks)
+           {
+               
+              <div id="@(kpinfo.Name.Split('/')[0])" class="panel-group" style="margin-bottom:10px;">
+            <div class="panel panel-default" style="overflow: visible;">
+                <div class="panel-heading">
+                  <h4 class="panel-title">
+                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#Financials" href="#collapse(@index)">
+                      @kpinfo.Name
+                    </a>
+                  </h4>
+                  <h6><span class="help-block">@kpinfo.Description</span></h6>
+                </div>
+                <div id="collapse(@index)" class="panel-collapse collapse in">
+                  <div class="panel-body">
+                  
+                    <div blockid="@kpinfo.Id" class="tablediv" style="display:none;">
+                        
+                        <table class="table">
+                            <thead class="">
+                                <tr class="thead-color">
+                                    <th></th>
+                                    <th style="width:30%">Core Value Competency</th>
+                                    <th style="width:30%">Performance Target</th> 
+                                    <th style="width:20%">Comments</th>                                  
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody class="KPItbody">
+                                @{if (!eHR.PMS.Lib.Utility.Common.IsNullOrEmptyList(Model.Appraisal.CoreValues))
+                                  {
+                                      IEnumerable<eHR.PMS.Model.DTO.Appraisal.CoreValue> list = Model.Appraisal.CoreValues.Where(rec => rec.Block.Id == kpinfo.Id);
+                                      foreach (eHR.PMS.Model.DTO.Appraisal.CoreValue kpi in list)
+                                      {
+                                            <tr>
+                                                <td><input type="hidden" class="KPIID" name="KPIID@(kpi.Id)" value="@kpi.Id" /></td>
+                                                <td>@kpi.CoreValueCompetency.Name</td>
+                                                <td>@kpi.Target</td>
+                                                <td style="display:none;">
+                                                @{if (!eHR.PMS.Lib.Utility.Common.IsNullOrEmptyList(kpi.Comments) && kpi.Comments.Where(rec => rec.FormSaveOnly == false).Count() > 0)
+                                                  {
+                                                    <div class="Comments">
+                                                            <div style="width:500px;">                                                   
+                                                            <ul class="list-group">
+                                                          @foreach (eHR.PMS.Model.DTO.Appraisal.CoreValueComment comment in kpi.Comments.Where(rec => rec.Id > 0))
+                                                          {
+                                                              if (comment.FormSaveOnly == false) { 
+                                                             <li class="list-group-item">
+                                                             <span class="badge">By @(comment.Commentor.PreferredName) on @(Convert.ToDateTime(comment.CommentedTimestamp).ToString("hh:mm tt,dd-MMM-yyyy"))</span>                                                                                                                           
+                                                             <br />
+                                                             <p style="word-wrap:break-word;">@comment.Comments</p>
+                                                              </li>
+                                                              }
+                                                          }
+                                                            </ul> 
+                                                            </div>                                                  
+                                                     
+                                                   </div>
+                                                  }
+                                                  else
+                                                  {
+                                                    <div class="Comments"></div>
+                                                  }
+                                                  }
+                                                </td>
+                                                <td>
+                                                    <textarea name="CommentContent@(kpi.Id)" class="CommentContent PTtext idleField" rows="2" cols="5">
+                                                    @{if (!eHR.PMS.Lib.Utility.Common.IsNullOrEmptyList(kpi.Comments))
+                                                        {
+                                                            if (!eHR.PMS.Lib.Utility.Common.IsNullOrEmptyList(kpi.Comments.Where(rec => rec.FormSaveOnly == true))) 
+                                                            { 
+                                                                @(kpi.Comments.Where(rec => rec.FormSaveOnly == true).Single().Comments)
+                                                            }
+                                                            
+                                                        }
+                                                     }
+                                                    </textarea>
+                                                </td>
+                                                <td align="right">
+                                                    <a commentsid="@(kpinfo.Id)@(commentsindex++)" href="javascript:void(0)" class="ViewKpiComments btn btn-warning btn-xs" ><i class="glyphicon glyphicon-pencil"></i> View Comments</a>                                                     
+                                                </td>
+                                            </tr>
+                                      }
+                                  }
+                                  else 
+                                  { 
+                                        <tr>
+                                          <td colspan="6">There are no core values submitted for this appraisal.</td>
+                                        </tr>
+                                  }
+                                }
+                                
+                            </tbody>
+                         </table>
+                    </div>             
+                  </div>
+                </div>
+            </div>
+           </div> 
+                                  index++;
+           }
+           
+           <div id="buttongroup" style="text-align: center;">
+                     <div style="float:left;">
+                         <a href="@(Url.Content("~/Stage1Approval/KeyPerformanceIndicators/"))@(Model.CurrentTaskId)/@Model.Appraisal.Id" class="btn btn-warning btn-xs"><i class="glyphicon glyphicon-hand-left"></i> Prev</a>
+                         <!--
+                         <button type="button" id="stage1kpiapproval" class="btn btn-success btn-xs"><i class="glyphicon glyphicon-ok-circle"></i> Approve</button>
+                         <button type="button" id="stage1kpireject" class="btn btn-danger btn-xs"><i class="glyphicon glyphicon-remove-circle"></i> Reject</button>
+                         -->
+                         <button type="button" id="btn_next_section"class="btn btn-warning btn-xs"><i class="glyphicon glyphicon-hand-right"></i> Next</button>               
+                         <!--&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="/Stage1Approval/PerformanceCoachingandReview/@Model.CurrentTaskId/@Model.Appraisal.Id" class="btn btn-warning btn-xs">Skip <i class="glyphicon glyphicon-share-alt"></i></a>-->                                     
+                     </div>
+                     <!--<button type="button" id="stage1kpisubmit" class="btn btn-primary"><i class="glyphicon glyphicon-floppy-saved"></i> Submit</button>
+                     -->
+                     <div style="float:right;">
+                         <button type="button" data-loading-text="Saving...." id="stage1kpisave" class="btn btn-success btn-xs"><i class="glyphicon glyphicon-save"></i> Save</button> 
+                         <button type="button" class="btn btn-danger btn-xs" id="btn_appraisal_cancel"><i class="glyphicon glyphicon-floppy-remove"></i> Cancel</button>
+                     </div>
+                    </div>
+
+            <!--pop up info for submit -->
+            <div style="top:50%;" class="modal fade" id="SubmitInfoModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+              <div class="modal-dialog" style="text-align:center;">
+                <div  class="modal-content">
+                  <div class="modal-body" style="padding-bottom:0px;">
+                        <div class="alert alert-warning alert-dismissable">
+                          <strong>Are you sure submit your Core Values now???</strong>
+                        </div>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="submit" data-loading-text="Submit...." class="btn btn-primary">OK</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Cancel</button>
+                  </div>
+
+                </div><!-- /.modal-content -->
+              </div><!-- /.modal-dialog -->
+            </div><!-- /.modal -->
+
+           <!--pop up info for cancel -->
+            <div style="top:50%;" class="modal fade" id="CancelInfoModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+              <div class="modal-dialog" style="text-align:center;">
+                <div  class="modal-content">
+                  <div class="modal-body" style="padding-bottom:0px;">
+                    <div class="alert alert-warning alert-dismissable">
+                        <strong>@(eHR.PMS.Web.Resources.Resource.MSG_CANCEL)</strong>
+                    </div>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" id="btn_cancel_modal_ok" class="btn btn-primary">Yes</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">No</button>
+                  </div>
+                </div><!-- /.modal-content -->
+              </div><!-- /.modal-dialog -->
+            </div><!-- /.modal -->
+
+           </form>
+          </div>
+          <div id="sidenav" data-spy="affix" class="col-md-2" style="right:2%;">
+                <ul class="nav nav-pills nav-stacked" style="border:1px solid #E1E1E8">
+                  <li><h5 style="padding:10px 15px;">Quick link</h5></li>
+                  <li class="divider"></li>
+                  <li><a href="#header">Top</a></li>
+                  @{foreach (eHR.PMS.Model.DTO.Master.Block kpinfo in Model.CurrentSection.Blocks)
+                    {
+                     <li><a href="#@(kpinfo.Name.Split('/')[0])">@kpinfo.Name</a></li> 
+                    }
+                  }
+                </ul>
+                <!--
+                 <ul class="nav nav-pills nav-stacked autosaveloading" style="border:1px solid #E1E1E8;margin-top:10px;text-align:center;">
+                    <li><h6><img alt="" src="@(Url.Content("~/Content/img/ajax-loader.gif"))" />Autosaving....</h6></li>
+                </ul>
+                -->
+         </div>
+        </div>
+    </div>
+
+    
+
+    <!--pop up info for ajaxsave -->
+    <div style="top:50%;" class="modal fade" id="InfoModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+      <div class="modal-dialog" style="text-align:center;">
+        <div id="loadingcontent" class="modal-content">
+          <div class="modal-body">
+                <img alt="" src="@(Url.Content("~/Content/img/ajax-loader.gif"))" />
+          </div>
+        </div><!-- /.modal-content -->
+        <div id="resultcontent" class="modal-content" style="display:none;">
+          <div class="modal-body" style="padding-bottom:0px;">
+                <div class="alert alert-success alert-dismissable">
+                  <strong>@(eHR.PMS.Web.Resources.Resource.MSG_SAVE_SUCCESS)</strong>
+                </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" data-dismiss="modal">OK</button>
+          </div>
+
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+    
+    <!--pop up info for redirect-->
+    <div style="top:50%;" class="modal fade" id="RedirectModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+      <div class="modal-dialog" style="text-align:center;">
+        <div id="submitcontent" class="modal-content">
+          <div class="modal-body" style="padding-bottom:0px;">
+                <div class="alert alert-success alert-dismissable">
+                  <strong>@message</strong>
+                </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" data-dismiss="modal">OK</button>
+          </div>
+
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+    <script type="text/javascript">
+        var message = '@message';
+        var savefunction = function () {
+            var KPIArray = new Array();
+            $.each($(".KPIID"), function () {
+                KPIArray.push(({ KpiId: $(this).val(), Comments: $(this).parent().parent().find(".CommentContent").val() }));
+            });
+            $.ajax({
+                url: "@(Url.Content("~/Stage1Approval/CoreValuesSave"))",
+                type: "POST",
+                dataType: "Json",
+                data: { "KPIForDatabase": JSON.stringify(KPIArray) },
+                beforeSend: function () {
+                    //$("#stage1kpisave").button('loading');
+                    //$("#buttongroup").showLoading();
+                    $('#resultcontent').hide();
+                    $('#loadingcontent').show();
+                    $('#InfoModal').modal();
+                },
+                success: function (data) {
+                    $("#stage1kpisave").button('reset');
+                    $('#loadingcontent').hide();
+                    $('#resultcontent').show();
+                    //$('#InfoModal').modal();
+                }
+            });
+        };
+        var autosavefunction = function () {
+            var KPIArray = new Array();
+            $.each($(".KPIID"), function () {
+                KPIArray.push(({ KpiId: $(this).val(), Comments: $(this).parent().parent().find(".CommentContent").val() }));
+            });
+            $.ajax({
+                url: "@(Url.Content("~/Stage1Approval/CoreValuesSave"))",
+                type: "POST",
+                dataType: "Json",
+                data: { "KPIForDatabase": JSON.stringify(KPIArray) },
+                beforeSend: function () {
+                    $("#autosaveloading").show('slow');
+                    $("#stage1kpisave").attr("disabled", true);
+                },
+                success: function (data) {
+                    $("#autosaveloading").hide('slow');
+                    $("#stage1kpisave").attr("disabled", false);
+                }
+            });
+        };
+        $(function () {
+            if (message)
+                $('#RedirectModal').modal();
+            $('body').scrollspy({ target: '#sidenav' });
+            $('.selectpicker').selectpicker();
+            $('button[data-loading-text]').click(function () {
+                $(this).button('loading');
+            });
+            $.each($(".KPIID"), function () {
+                $(this).parent().parent().parent().parent().parent().show();
+            });
+            $("#btn_next_section").click(function () {
+                $("form").submit();
+            });
+            $("#stage1kpiapproval").click(function () {
+                $("#ApORRe").val("1");
+                $("modelmessage").text("Are you sure approve this now?")
+                $('#SubmitInfoModal').modal();
+            });
+            $("#stage1kpireject").click(function () {
+                $("#ApORRe").val("0");
+                $("modelmessage").text("Are you sure reeject this now?")
+                $('#SubmitInfoModal').modal();
+            });
+            $("#stage1kpisave").click(savefunction);
+
+            $("#btn_appraisal_cancel").click(function () {
+                $('#CancelInfoModal').modal();
+            });
+
+            $("#btn_cancel_modal_ok").click(function () {
+                window.location.href("@(Url.Content("~/"))");
+            });
+
+            var oddClick = true;
+            var oldComments = 0;
+            var newComments = 0;
+            $(".panel-body").on('click', '.ViewKpiComments', function () {
+                if ($(".popover").length == 0) oddClick = true;
+                if (oddClick) {
+                    oddClick = !oddClick;
+                    oldComments = newComments = $(this).attr("commentsid");
+                    $(this).popover({
+                        title: 'Comments',
+                        placement: 'top',
+                        html: 'true',
+                        content: function () {
+                            var content = $(this).parent().parent().find(".Comments").html();
+                            return (content != "" ? content : "There is no Comments");
+                        }
+                    });
+                    $(this).popover('show');
+                }
+                else {
+                    newComments = $(this).attr("commentsid");
+                    if (oldComments != newComments) {
+                        oldComments = $(this).attr("commentsid");
+                        $(".ViewKpiComments").popover('destroy');
+                        $(this).popover({
+                            title: 'Comments',
+                            placement: 'top',
+                            html: 'true',
+                            content: function () {
+                                var content = $(this).parent().parent().find(".Comments").html();
+                                return (content != "" ? content : "There is no Comments");
+                            }
+                        });
+                        $(this).popover('show');
+                    }
+                    else {
+                        oddClick = !oddClick;
+                        $(this).popover('destroy');
+                    }
+                }
+
+            });
+        });
+        //setInterval(autosavefunction, 300000); 
+    </script>

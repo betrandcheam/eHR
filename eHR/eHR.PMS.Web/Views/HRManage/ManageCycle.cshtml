@@ -1,0 +1,708 @@
+﻿@model eHR.PMS.Web.Models.DTO.CycleManagementPage
+@{
+    var message = TempData["AlertMessage"] ?? string.Empty;
+    var msg_error = TempData["ErrorMessage"] ?? string.Empty;
+    Dictionary<string, string> form = (Dictionary<string, string>)TempData["QueryData"];
+    int int_participants_page_size = 10;
+}
+<div class="well" style="margin:35px;">
+    <form method="post" action="@(Url.Content("~/HRManage/ManageCycle"))" class="form-horizontal" role="form">
+      <div class="form-group">
+      <div id="div_error" class="div_error">
+        
+      </div>
+      <input type="hidden" value="0" id="startcycle" name="startcycle" /> 
+        <label for="cyclename" class="col-sm-2 control-label">Cycle Name: </label>
+        <div class="col-sm-4">
+            <select class="selectpicker show-tick">
+                <option value="xx">Cycle Names</option> 
+                <option value="xx">Cycle Names</option> 
+            </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="Stage1StartDate" class="col-sm-2 control-label">Goal Setting Start Date: </label>
+        <div class="col-sm-4 input-group" id="datetimepicker1">
+        @{
+            if (form == null || !form.Keys.Contains("Stage1StartDate"))
+            {
+                <input type="text" class="form-control" id="Stage1StartDate" name="Stage1StartDate" value="@(DateTime.Now.ToString("dd/MM/yyyy"))" />
+            }
+            else
+            {
+                <input type="text" class="form-control" id="Stage1StartDate" name="Stage1StartDate" value="@form["Stage1StartDate"]"/>                   
+            }
+           }
+          <span class="input-group-addon">
+              <span class="glyphicon glyphicon-calendar"></span>
+          </span>
+        </div>
+        <label for="Stage1EndDate" class="col-sm-2 control-label">Goal Setting End Date: </label>
+        <div class="col-sm-4 input-group" id="datetimepicker2">
+          @{
+              if (form == null || !form.Keys.Contains("Stage1EndDate"))
+              {
+                <input type="text" class="form-control" id="Stage1EndDate" name="Stage1EndDate"/>
+              }
+              else
+              {
+                <input type="text" class="form-control" id="Stage1EndDate" name="Stage1EndDate" value="@form["Stage1EndDate"]"/>                   
+                <input type="hidden" class="form-control" id="strStage1EndDate" value="@form["strStage1EndDate"]"/>                                                   
+              }
+           }
+          <span class="input-group-addon">
+              <span class="glyphicon glyphicon-calendar"></span>
+          </span>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="Stage2StartDate" class="col-sm-2 control-label">Progess Review Start Date: </label>
+        <div class="col-sm-4 input-group" id="datetimepicker3">
+           @{
+               if (form == null || !form.Keys.Contains("Stage2StartDate"))
+               {
+                <input type="text" class="form-control" id="Stage2StartDate" name="Stage2StartDate">
+               }
+               else
+               {
+                <input type="text" class="form-control" id="Stage2StartDate" name="Stage2StartDate" value="@form["Stage2StartDate"]"/>                   
+               }
+           }
+          <span class="input-group-addon">
+              <span class="glyphicon glyphicon-calendar"></span>
+          </span>
+        </div>
+        <label for="Stage2EndDate" class="col-sm-2 control-label">Progress Review End Date: </label>
+        <div class="col-sm-4 input-group" id="datetimepicker4">
+           @{
+               if (form == null || !form.Keys.Contains("Stage2EndDate"))
+               {
+                <input type="text" class="form-control" id="Stage2EndDate" name="Stage2EndDate">
+               }
+               else
+               {
+                <input type="text" class="form-control" id="Stage2EndDate" name="Stage2EndDate" value="@form["Stage2EndDate"]"/>                   
+               }
+           }
+          <span class="input-group-addon">
+              <span class="glyphicon glyphicon-calendar"></span>
+          </span>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="Stage3StartDate" class="col-sm-2 control-label">Final Year Review Start Date: </label>
+        <div class="col-sm-4 input-group" id="datetimepicker5">
+          @{
+              if (form == null || !form.Keys.Contains("Stage3StartDate"))
+              {
+                <input type="text" class="form-control" id="Stage3StartDate" name="Stage3StartDate">
+              }
+              else
+              {
+                <input type="text" class="form-control" id="Stage3StartDate" name="Stage3StartDate" value="@form["Stage3StartDate"]"/>                   
+              }
+           }
+          <span class="input-group-addon">
+              <span class="glyphicon glyphicon-calendar"></span>
+          </span>
+        </div>
+        <label for="Stage3EndDate" class="col-sm-2 control-label">Final Year Review End Date: </label>
+        <div class="col-sm-4 input-group" id="datetimepicker6">
+           @{
+               if (form == null || !form.Keys.Contains("Stage3EndDate"))
+               {
+                <input type="text" class="form-control" id="Stage3EndDate" name="Stage3EndDate">
+               }
+               else
+               {
+                <input type="text" class="form-control" id="Stage3EndDate" name="Stage3EndDate" value="@form["Stage3EndDate"]"/>                   
+                <input type="hidden" class="form-control" id="strStage3EndDate" value="@form["strStage3EndDate"]"/>                                   
+               }
+           }
+          <span class="input-group-addon">
+              <span class="glyphicon glyphicon-calendar"></span>
+          </span>
+        </div>        
+      </div>
+      <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <button type="button" id="btn_retrieve_participants" class="btn btn-xs btn-success"><i class="glyphicon glyphicon-cloud-download"></i> Retrieve Participants</button>            
+            </div>
+        </div>
+
+            <!--pop up info for submit -->
+            <div style="top:50%;" class="modal fade" id="SubmitInfoModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+              <div class="modal-dialog" style="text-align:center;">
+                <div  class="modal-content">
+                  <div class="modal-body" style="padding-bottom:0px;">
+                        <div class="alert alert-warning alert-dismissable">
+                          <strong>Are you sure you want to start the appraisal cycle now?</strong>
+                        </div>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="submit" data-loading-text="Submit...." class="btn btn-primary">Yes</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">No</button>
+                  </div>
+
+                </div><!-- /.modal-content -->
+              </div><!-- /.modal-dialog -->
+            </div><!-- /.modal -->
+
+ 
+    </form>
+</div> 
+<div id="AfterRetrieve" style="display:none;"> 
+<div id="Participants" class="row maintable" >
+    <div class="panel-group" id="accordion1" style="padding:20px 50px;">           
+            <div class="panel panel-success" style="overflow:visible;">
+                <div class="panel-heading">
+                  <h4 class="panel-title">
+                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#collapseOne">
+                      <i class="glyphicon glyphicon-list"></i> Employee List
+                    </a>
+                    <div style="float:right; right:5%;" class="btn-group">
+                      <button type="button" class="btn btn-xs btn-warning dropdown-toggle" data-toggle="dropdown" id="btn_addremove">
+                        <i class="glyphicon glyphicon-move"></i> Add/Remove <span class="caret"></span>
+                      </button>
+                      <ul class="dropdown-menu" role="menu">
+                        <li><a id="AddParticipants" href="@(Url.Content("~/HRManage/AddParticipants/"))@(form["strStage1EndDate"] == null ? "" : form["strStage1EndDate"].ToString())/@(form["strStage3EndDate"] == null ? "" : form["strStage3EndDate"].ToString())">Add Participants</a></li>
+                        <li><a id="RemoveParticipants">Remove Participants</a></li>
+                      </ul>
+                    </div>
+
+                  </h4>
+                  @{if (!eHR.PMS.Lib.Utility.Common.IsNullOrEmptyList(Model.Participants))
+                    {
+                        <h5>
+                        <span class="label label-info">Total number of employees: <label style="color:Red;">@Model.Participants.Count</label></span>
+                        <span class="label label-info">number of employees with 2 level of approvals: <label style="color:Red;">@Model.GetNumberOfParticipantsWithTwoLevelsOfApproval()</label></span>                    
+                        <span class="label label-info">number of employees with 1 level of approvals: <label style="color:Red;">@Model.GetNumberOfParticipantsWithOnlyOneLevelOfApproval()</label></span>                    
+                        <span class="label label-info">number of employees with 0 level of approvals: <label style="color:Red;">@Model.GetNumberOfParticipantsWithNoLevelOfApproval()</label></span>                                                            
+                        </h5>
+                    }
+                   }
+                </div>
+                <div id="collapseOne" class="panel-collapse collapse in">
+                  <div class="panel-body" style="padding:0px;">
+                       <table class="table table-bordered" style="border-collapse:collapse;border-spacing:0px 0px;">
+                          <thead>
+                          <tr class="success">
+                            <th></th>
+                            <th>Name</th>
+                            <th>Department</th>
+                            <th>Number of level of approvers</th>                           
+                          </tr>
+                          </thead>
+                          <tbody id="eicontent">
+                          @if (!eHR.PMS.Lib.Utility.Common.IsNullOrEmptyList(Model.Participants))
+                          {
+                              foreach (eHR.PMS.Model.DTO.Core.Employee ei in Model.Participants)
+                              {
+                              <tr>
+                                <td><input type="hidden" class="eid" value="@ei.Id" /></td>
+                                <td>@(ei.PreferredName)</td>
+                                <td>@(ei.Department.Name)</td>
+                                <td>@ei.GetNumberOfApprovers()</td>
+                              </tr>
+                              }
+                          }
+                          </tbody>
+                       </table> 
+                       <div style="text-align:center;">
+                            <span id="pages"></span>
+                            <!--<span>Go to Page: <select id="showpage">
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                                <option value="6">6</option>
+                                <option value="7">7</option>
+                                <option value="8">8</option>
+                                <option value="9">9</option>
+                                <option value="10">10</option>
+                            </select>
+                            </span>-->
+                       </div>     
+                  <div id="buttongroup" style="float:right;">
+             <div>
+                 <button type="button" class="btn btn-success btn-xs" id="btn_start_cycle"><i class="glyphicon glyphicon-play"></i> Start</button>
+                 <button type="button" id="btn_cancel" class="btn btn-danger btn-xs"><i class="glyphicon glyphicon-stop"></i> Cancel</button>
+             </div>
+            </div>
+                  </div>
+                  
+                </div>
+            </div>
+        </div>
+        </div>
+            </div>
+                       <!--pop up info for cancel -->
+            <div style="top:50%;" class="modal fade" id="CancelInfoModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+              <div class="modal-dialog" style="text-align:center;">
+                <div  class="modal-content">
+                  <div class="modal-body" style="padding-bottom:0px;">
+                    <div class="alert alert-warning alert-dismissable">
+                        <strong>All information that are not saved will be discarded. Are you sure you want to return to the main menu?</strong>
+                    </div>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" id="btn_cancel_modal_ok" class="btn btn-primary">Yes</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">No</button>
+                  </div>
+                </div><!-- /.modal-content -->
+              </div><!-- /.modal-dialog -->
+            </div><!-- /.modal -->
+
+<!--pop up info for ajaxsave -->
+    <div style="top:50%;" class="modal fade" id="InfoModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+      <div class="modal-dialog" style="text-align:center;">
+        <div id="loadingcontent" class="modal-content">
+          <div class="modal-body">
+                <img alt="" src="@(Url.Content("~/Content/img/ajax-loader.gif"))" />
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+<!--pop up info for redirect -->
+    <div style="top:50%;" class="modal fade" id="RedirectModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+      <div class="modal-dialog" style="text-align:center;">
+        <div id="resultcontent" class="modal-content">
+          <div class="modal-body" style="padding-bottom:0px;">
+                <div class="alert alert-success alert-dismissable">
+                  <strong>@message</strong>
+                </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" data-dismiss="modal">OK</button>
+          </div>
+
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+<!--pop up info for redirect -->
+    <div style="top:50%;" class="modal fade" id="ErrorModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+      <div class="modal-dialog" style="text-align:center;">
+        <div id="resultcontent" class="modal-content">
+          <div class="modal-body" style="padding-bottom:0px;">
+                <div class="alert alert-warning alert-dismissable">
+                  <strong>@msg_error</strong>
+                </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" data-dismiss="modal">OK</button>
+          </div>
+
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+<!--pop up info for redirect -->
+    <div style="top:50%;" class="modal fade" id="RemoveParticipantModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+      <div class="modal-dialog" style="text-align:center;">
+        <div id="resultcontent" class="modal-content">
+          <div class="modal-body" style="padding-bottom:0px;">
+                <div class="alert alert-warning alert-dismissable">
+                  <strong>There are no employees to remove.</strong>
+                </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" data-dismiss="modal">OK</button>
+          </div>
+
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+
+<script type="text/javascript" src="@Url.Content("~/Scripts/moment.min.js")"></script>
+<script type="text/javascript" src="@Url.Content("~/Scripts/bootstrap-datetimepicker.min.js")"></script>
+<script type="text/javascript" src="@(Url.Content("~/Scripts/bootstrap-paginator.js"))"></script>
+<script type="text/javascript" src="@(Url.Content("~/Scripts/validators.js"))"></script>
+<script type="text/javascript">
+    $(function () {
+        var total = '@(Model.GetNumberOfParticipants())';
+        var intTotal = parseInt(total);
+        if (intTotal != 0) {
+            $("#AfterRetrieve").show('slow');
+            var pagenum = (intTotal % 10 != 0 ? (intTotal / 10 + 1) : (intTotal / 10));
+            var options = {
+                currentPage: 1,
+                totalPages: pagenum,
+                size: 'small',
+                useBootstrapTooltip: true,
+                onPageClicked: function (e, originalEvent, type, page) {
+                    $.ajax({
+                        url: "@(Url.Content("~/HRManage/RetrieveByPage"))",
+                        type: "post",
+                        dataType: "json",
+                        data: { "page": page, "Stage1EndDate": $("#Stage1EndDate").val(), "Stage3EndDate": $("#Stage3EndDate").val() },
+                        beforeSend: function () {
+                            $('#resultcontent').hide();
+                            $('#loadingcontent').show();
+                            $('#InfoModal').modal(); ;
+                        },
+                        success: function (data) {
+                            $("#eicontent").html(data);
+                            $('#InfoModal').modal('hide');
+                        }
+                    });
+                }
+            }
+
+            $('#pages').bootstrapPaginator(options);
+        }
+
+        $('#showpage').change(function () {
+            var page = $(this).val();
+            $('#pages').bootstrapPaginator("show", page);
+        })
+
+        $("#AddParticipants").click(function () {
+            if (intTotal == 0) {
+                //$("#RedirectModal").model();
+                //return false;
+            }
+            else {
+               window.location.href = "@(Url.Content("~/"))HRManage/AddParticipants/" + $("#strStage1EndDate").val() + "/" + $("#strStage3EndDate").val();
+            }
+        });
+        $("#RemoveParticipants").click(function () {
+            if (intTotal == 0) {
+                $("#RemoveParticipantModal").model();
+                return false;
+            }
+            else {
+               window.location.href = "@(Url.Content("~/"))HRManage/RemoveParticipants/" + $("#strStage1EndDate").val() + "/" + $("#strStage3EndDate").val();
+            } 
+        });
+        $('#datetimepicker1').datetimepicker({
+            format: "DD/MM/YYYY",
+            pickTime: false
+        });
+        $('#datetimepicker2').datetimepicker({
+            format: "DD/MM/YYYY",
+            pickTime: false
+        });
+        $('#datetimepicker3').datetimepicker({
+            format: "DD/MM/YYYY",
+            pickTime: false
+        });
+        $('#datetimepicker4').datetimepicker({
+            format: "DD/MM/YYYY",
+            pickTime: false
+        });
+        $('#datetimepicker5').datetimepicker({
+            format: "DD/MM/YYYY",
+            pickTime: false
+        });
+        $('#datetimepicker6').datetimepicker({
+            format: "DD/MM/YYYY",
+            pickTime: false
+        });
+
+        $("#btn_start_cycle").click(function () {
+            $("#startcycle").val("1");
+            $("modelmessage").text("Are you sure approve this now?")
+            $('#SubmitInfoModal').modal();
+        });
+
+        $("#btn_retrieve_participants").click(function () {
+            $("#startcycle").val("0");
+            var int_error_count = 0;
+            var str_error_message = "";
+
+            $("#cyclename").removeClass("warningclass");
+            $("#Stage1StartDate").removeClass("warningclass");
+            $("#Stage1EndDate").removeClass("warningclass");
+            $("#Stage2StartDate").removeClass("warningclass");
+            $("#Stage2EndDate").removeClass("warningclass");
+            $("#Stage3StartDate").removeClass("warningclass");
+            $("#Stage3EndDate").removeClass("warningclass");
+
+            if ($.trim($("#cyclename").val()).length == 0)
+            {
+                int_error_count ++;
+                $("#cyclename").addClass("warningclass");
+
+                str_error_message = "Please provide the name of the cycle.";
+            }
+
+            if ($.trim($("#Stage1StartDate").val()).length == 0)
+            {
+                int_error_count ++;
+                $("#Stage1StartDate").addClass("warningclass");
+
+                if (str_error_message == "")
+                {
+                    str_error_message = "Please provide the start date of Goal Setting Stage for cycle.";
+                }
+                else
+                {   
+                    str_error_message = str_error_message + "<br/> Please provide the start date of Goal Setting Stage for cycle.";
+                }
+            }
+            else
+            {
+                if (!validators_boo_checkDate($.trim($("#Stage1StartDate").val()),"/"))
+                {
+                    int_error_count ++;
+                    $("#Stage1StartDate").addClass("warningclass");
+
+                    if (str_error_message == "")
+                    {
+                        str_error_message = "Goal Setting Stage Start Date is not valid. It should be in DD/MM/YYYY format.";
+                    }
+                    else
+                    {   
+                        str_error_message = str_error_message + "<br/> Goal Setting Stage Start Date is not valid. It should be in DD/MM/YYYY format.";
+                    }
+                }
+            }
+
+            if ($.trim($("#Stage1EndDate").val()).length == 0)
+            {
+                int_error_count ++;
+                $("#Stage1EndDate").addClass("warningclass");
+
+                if (str_error_message == "")
+                {
+                    str_error_message = "Please provide the end date of Goal Setting Stage for cycle.";
+                }
+                else
+                {   
+                    str_error_message = str_error_message + "<br/> Please provide the end date of Goal Setting Stage for cycle.";
+                }
+            }
+            else
+            {
+                if (!validators_boo_checkDate($.trim($("#Stage1EndDate").val()),"/"))
+                {
+                    int_error_count ++;
+                    $("#Stage1EndDate").addClass("warningclass");
+                
+                    if (str_error_message == "")
+                    {
+                        str_error_message = "Goal Setting Stage End Date is not valid. It should be in DD/MM/YYYY format.";
+                    }
+                    else
+                    {   
+                        str_error_message = str_error_message + "<br/> Goal Setting Stage End Date is not valid. It should be in DD/MM/YYYY format.";
+                    }
+                }
+            }
+ 
+            if ($.trim($("#Stage2StartDate").val()).length == 0)
+            {
+                int_error_count ++;
+                $("#Stage2StartDate").addClass("warningclass");
+
+                if (str_error_message == "")
+                {
+                    str_error_message = "Please provide the start date of Progress Review Stage for cycle.";
+                }
+                else
+                {   
+                    str_error_message = str_error_message + "<br/> Please provide the start date of Progress Review Stage for cycle.";
+                }
+            }
+            else
+            {
+                if (!validators_boo_checkDate($.trim($("#Stage2StartDate").val()),"/"))
+                {
+                    int_error_count ++;
+                    $("#Stage2StartDate").addClass("warningclass");
+
+                    if (str_error_message == "")
+                    {
+                        str_error_message = "Progress Review Stage Start Date is not valid. It should be in DD/MM/YYYY format.";
+                    }
+                    else
+                    {   
+                        str_error_message = str_error_message + "<br/> Progress Review Stage Start Date is not valid. It should be in DD/MM/YYYY format.";
+                    }
+                }
+            }
+
+            if ($.trim($("#Stage2EndDate").val()).length == 0)
+            {
+                int_error_count ++;
+                $("#Stage2EndDate").addClass("warningclass");
+
+                if (str_error_message == "")
+                {
+                    str_error_message = "Please provide the end date of Progress Review Stage for cycle.";
+                }
+                else
+                {   
+                    str_error_message = str_error_message + "<br/> Please provide the end date of Progress Review Stage for cycle.";
+                }
+            }
+            else
+            {
+                if (!validators_boo_checkDate($.trim($("#Stage2EndDate").val()),"/"))
+                {
+                    int_error_count ++;
+                    $("#Stage2EndDate").addClass("warningclass");
+                }
+
+                if (str_error_message == "")
+                {
+                    str_error_message = "Progress Review Stage End Date is not valid. It should be in DD/MM/YYYY format.";
+                }
+                else
+                {   
+                    str_error_message = str_error_message + "<br/> Progress Review End Date is not valid. It should be in DD/MM/YYYY format.";
+                }
+            }
+
+            if ($.trim($("#Stage3StartDate").val()).length == 0)
+            {
+                int_error_count ++;
+                $("#Stage3StartDate").addClass("warningclass");
+
+                if (str_error_message == "")
+                {
+                    str_error_message = "Please provide the start date of Final Year Review Stage for cycle.";
+                }
+                else
+                {   
+                    str_error_message = str_error_message + "<br/> Please provide the start date of Final Year Review Stage for cycle.";
+                }
+            }
+            else
+            {
+                if (!validators_boo_checkDate($.trim($("#Stage3StartDate").val()),"/"))
+                {
+                    int_error_count ++;
+                    $("#Stage3StartDate").addClass("warningclass");
+                }
+
+                if (str_error_message == "")
+                {
+                    str_error_message = "Final Year Review Stage Start Date is not valid. It should be in DD/MM/YYYY format.";
+                }
+                else
+                {   
+                    str_error_message = str_error_message + "<br/> Final Year Review Stage Start Date is not valid. It should be in DD/MM/YYYY format.";
+                }
+            }
+
+            if ($.trim($("#Stage3EndDate").val()).length == 0)
+            {
+                int_error_count ++;
+                $("#Stage3EndDate").addClass("warningclass");
+
+                if (str_error_message == "")
+                {
+                    str_error_message = "Please provide the end date of Final Year Review Stage for cycle.";
+                }
+                else
+                {   
+                    str_error_message = str_error_message + "<br/> Please provide the end date of Final Year Review Stage for cycle.";
+                }
+            }
+            else
+            {
+                if (!validators_boo_checkDate($.trim($("#Stage3EndDate").val()),"/"))
+                {
+                    int_error_count ++;
+                    $("#Stage3EndDate").addClass("warningclass");
+                }
+
+                if (str_error_message == "")
+                {
+                    str_error_message = "Final Year Review Stage End Date is not valid. It should be in DD/MM/YYYY format.";
+                }
+                else
+                {   
+                    str_error_message = str_error_message + "<br/> Final Year Review Stage End Date is not valid. It should be in DD/MM/YYYY format.";
+                }
+            }
+
+            if (int_error_count == 0)
+            {
+                if(getDate($("#Stage1StartDate").val()).getTime() < getDate("@(DateTime.Now.ToString("dd/MM/yyyy"))").getTime())
+                {
+                    int_error_count ++;
+                    $("#Stage1StartDate").addClass("warningclass");
+                    str_error_message = "Goal Setting Start Date must not be earlier than today.";
+                }
+                else if(getDate($("#Stage1StartDate").val()).getTime() >= getDate($("#Stage1EndDate").val()).getTime())
+                {
+                    int_error_count ++;
+                    $("#Stage1StartDate").addClass("warningclass");
+                    str_error_message = "Goal Setting Start Date must be earlier than the Goal Setting End Date.";
+                }
+                else if(getDate($("#Stage1EndDate").val()).getTime() >= getDate($("#Stage2StartDate").val()).getTime())
+                {
+                    int_error_count ++;
+                    $("#Stage1EndDate").addClass("warningclass");
+                    str_error_message = "Goal Setting End Date must be earlier than the Progress Review Start Date.";
+                }
+                else if(getDate($("#Stage2StartDate").val()).getTime() >= getDate($("#Stage2EndDate").val()).getTime())
+                {
+                    int_error_count ++;
+                    $("#Stage2StartDate").addClass("warningclass");
+                    str_error_message = "Progress Review End Date must be later than the Progress Review Start Date.";
+                }
+                else if(getDate($("#Stage2EndDate").val()).getTime() >= getDate($("#Stage3StartDate").val()).getTime())
+                {
+                    int_error_count ++;
+                    $("#Stage2EndDate").addClass("warningclass");
+                    str_error_message = "Progress Review End Date must be earlier than the Final Year Review Start Date.";
+                }
+                else if(getDate($("#Stage3StartDate").val()).getTime() >= getDate($("#Stage3EndDate").val()).getTime())
+                {
+                    int_error_count ++;
+                    $("#Stage3StartDate").addClass("warningclass");
+                    str_error_message = "Final Year Review End Date must be later than the Final Year Review Start Date.";
+                }
+            }
+
+            if(int_error_count == 0)
+            {
+                $("div.div_error").text("");
+                $("div.div_error").removeClass("warningclass");
+                $("form").submit();
+            }
+            else
+            {
+                $("div.div_error").html(str_error_message + "<br/><br/>");
+                $("div.div_error").addClass("warningclass");
+            }
+        });
+
+        $("#btn_cancel").click(function () {
+            $('#CancelInfoModal').modal();
+        });
+
+        $("#btn_cancel_modal_ok").click(function () {
+            window.location.href("@(Url.Content("~/"))");
+        });
+
+        var message = '@(message)';
+        $(function(){
+            if (message)
+                $('#RedirectModal').modal();
+        });
+
+        
+        var error_message = "@(msg_error)";
+        $(function(){
+            if (error_message)
+            {
+                $('#ErrorModal').modal();     
+            }
+        });
+
+        function getDate(datestring)
+        {
+            var dateparts = datestring.split("/");
+            return new Date(dateparts[2],dateparts[1],dateparts[0]);
+       }
+    });
+</script>
+

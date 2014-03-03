@@ -1,0 +1,214 @@
+﻿@{
+    var message = TempData["AlertMessage"] ?? string.Empty;
+}
+@model eHR.PMS.Web.Models.DTO.HomePage
+@{int index = 1;}
+<div class="row maintable">
+    <div class="panel-group" id="accordion1" style="padding:20px 50px;">
+        <div class="panel panel-danger">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#collapseOne">
+                    <i class="glyphicon glyphicon-tasks"></i> My tasks
+                </a>
+                </h4>
+            </div>
+            <div id="collapseOne" class="panel-collapse collapse in">
+                <div class="panel-body" style="padding:0px;">
+                    <table class="table table-bordered" style="border-collapse:collapse;border-spacing:0px 0px;">
+                        <tr class="danger">
+                        <th></th>
+                        <th>Module</th>
+                        <th>Action Required</th>
+                        </tr>
+                        @{if (!eHR.PMS.Lib.Utility.Common.IsNullOrEmptyList(Model.MyTasks))
+                        {
+                            foreach (eHR.PMS.Model.DTO.Core.Task.Task obj_task in Model.MyTasks)
+                            {
+                                <tr>
+                                <td align="center"><a class="btn btn-xs btn-warning" href="@(Url.Content("~" + obj_task.Address))"><i class="glyphicon glyphicon-play"></i> Start Task</a></td>
+                                <td>@obj_task.Module.Name</td>
+                                <td>@obj_task.Name</td>                                    
+                                </tr> 
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                            <td colspan="3">There are no outstanding tasks that requires your action.</td>
+                            </tr>
+                        }
+                        } 
+                    </table>        
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row maintable">
+    <div class="panel-group" id="accordion4" style="padding:20px 50px;">
+        <div class="panel panel-warning">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion4" href="#collapseFour">
+                    <i class="glyphicon glyphicon-list-alt"></i> My Appraisals
+                </a>
+                </h4>
+            </div>
+            <div id="collapseFour" class="panel-collapse collapse in">
+                <div class="panel-body" style="padding:0px;">
+                    <table class="table table-bordered" style="border-collapse:collapse;border-spacing:0px 0px;">
+                        <tr class="warning">
+                            <th></th>
+                            <th>Appraisal Cycle</th>
+                            <th>Department</th>
+                            <th>Review Period From</th>
+                            <th>Review Period To</th>
+                            <th>Stage</th>
+                            <th>Status</th>
+                            <th>Level 1 Approver</th>
+                            <th>Level 2 Approver</th>
+                            <th>Reviewers</th>
+                        </tr>
+                        @{
+                            if (!eHR.PMS.Lib.Utility.Common.IsNullOrEmptyList(Model.MyAppraisals))
+                            {
+                                foreach (eHR.PMS.Model.DTO.Appraisal.Appraisal obj_appraisal in Model.MyAppraisals)
+                                {
+                                    <tr>
+                                        <td align="center"><a class="btn btn-xs btn-danger" href="@(Url.Content("~/stage1/KeyPerformanceIndicators/0/"))@(obj_appraisal.Id)"><i class="glyphicon glyphicon-file"></i> View</a></td>
+                                        <td>@obj_appraisal.Cycle.Name</td>
+                                        <td>@(obj_appraisal.Department == null ? "" : obj_appraisal.Department.Name)</td>
+                                        <td>@(obj_appraisal.ReviewPeriodStartDate == null ? "" : Convert.ToDateTime(obj_appraisal.ReviewPeriodStartDate).ToString("dd/MM/yyyy"))</td>
+                                        <td>@(obj_appraisal.ReviewPeriodEndDate == null ? "" : Convert.ToDateTime(obj_appraisal.ReviewPeriodEndDate).ToString("dd/MM/yyyy"))</td>
+                                        <td>@(obj_appraisal.Stage.Name)</td>
+                                        <td>@(obj_appraisal.Status.Name)</td>
+                                        <td>@(obj_appraisal.GetApproverByLevel(1) == null ? "" : obj_appraisal.GetApproverByLevel(1).PreferredName)</td>
+                                        <td>@(obj_appraisal.GetApproverByLevel(2) == null ? "" : obj_appraisal.GetApproverByLevel(2).PreferredName)</td>
+                                        <td>@obj_appraisal.ReviewersNamesInString</td>
+                                    </tr>
+                                }
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td colspan="10">There are no appraisals belonging to you.</td>
+                                </tr>
+                            }
+                        }
+                    </table>       
+                </div>
+            </div>
+        </div>
+    </div>
+</div> 
+              
+<div class="row maintable">
+    <div class="panel-group col-md-6" id="accordion2" style="padding:20px 50px;">
+        <div class="panel panel-success">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">
+                        <i class="glyphicon glyphicon-user"></i> My Staffs to Approve
+                    </a>
+                </h4>
+            </div>
+            <div id="collapseTwo" class="panel-collapse collapse in">
+                <div class="panel-body" style="padding:0px;">
+                    <table class="table table-bordered" style="border-collapse:collapse;border-spacing:0px 0px;">
+                        <tr class="success">
+                            <th>Name</th>
+                            <th>Domain ID</th>
+                            <th>Approval Level</th>
+                        </tr>
+                        @{
+                            if (!eHR.PMS.Lib.Utility.Common.IsNullOrEmptyList(Model.MyAppraisalsToApprove))
+                            {
+                                foreach (eHR.PMS.Model.DTO.Appraisal.Appraisal obj_appraisal in Model.MyAppraisalsToApprove)
+                                {
+                                    <tr>
+                                    <td><a href="@(Url.Content("~/stage1/KeyPerformanceIndicators/0/"))@(obj_appraisal.Id)">@obj_appraisal.Employee.PreferredName</a></td>
+                                    <td>@obj_appraisal.Employee.DomainId</td>
+                                    <td>@obj_appraisal.ApproverLevelInString(Model.User.Id)</td>
+                                    </tr>
+                                }
+                            }
+                            else
+                            {
+                                <tr>
+                                <td colspan="3">
+                                    There are no employees that require you to approve their appraisals.
+                                </td>
+                                </tr>
+                            }
+                        }
+                    </table>        
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="panel-group col-md-6" id="accordion3" style="padding:20px 50px;">
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion3" href="#collapseThree">
+                        <i class="glyphicon glyphicon-eye-open"></i> My Colleagues to Review
+                    </a>
+                </h4>
+            </div>
+            <div id="collapseThree" class="panel-collapse collapse in">
+                <div class="panel-body" style="padding:0px;">
+                    <table class="table table-bordered" style="border-collapse:collapse;border-spacing:0px 0px;">
+                        <tr style="background-color: #D9EDF7;">
+                            <th>Name</th>
+                            <th>Domain ID</th>
+                        </tr>
+                        @{ if (!eHR.PMS.Lib.Utility.Common.IsNullOrEmptyList(Model.MyAppraisalsToReview))
+                            {
+                                foreach (eHR.PMS.Model.DTO.Appraisal.Appraisal obj_appraisal in Model.MyAppraisalsToReview)
+                                {
+                                    <tr>
+                                        <td><a href="@(Url.Content("~/stage1/KeyPerformanceIndicators/0/"))@(obj_appraisal.Id)">@obj_appraisal.Employee.PreferredName</a></td>
+                                        <td>@obj_appraisal.Employee.DomainId</td>
+                                    </tr>
+                                }
+                            }
+                            else
+                            {
+                                <tr>
+                                <td colspan="2">
+                                    There are no colleagues' appraisals for you to review.
+                                </td>
+                                </tr>
+                            }
+                        }
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+        <!--pop up info for redirect-->
+    <div style="top:50%;" class="modal fade" id="RedirectModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+      <div class="modal-dialog" style="text-align:center;">
+        <div id="submitcontent" class="modal-content">
+          <div class="modal-body" style="padding-bottom:0px;">
+                <div class="alert alert-success alert-dismissable">
+                  <strong>@message</strong>
+                </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" data-dismiss="modal">OK</button>
+          </div>
+
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+        <script type="text/javascript">
+            var message = '@message';
+            $(function(){
+                if (message)
+                    $('#RedirectModal').modal();
+            });
+        </script>

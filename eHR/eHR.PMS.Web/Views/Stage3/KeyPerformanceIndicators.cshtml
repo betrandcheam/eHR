@@ -1,0 +1,338 @@
+﻿@{
+    var message = TempData["AlertMessage"] ?? string.Empty;
+}
+@model ACR_PMSSystem.Common.PMSPageInfo
+@{int index = 0; int kpiindex = 0; int commentsindex = 1;}
+
+ <div class="frame">
+        <input id="apprid" name="apprid" value="1" style="display:none;" />
+        <ul id="sectionlist" class="nav nav-tabs">
+             @{if (Model.SCList != null)
+               {
+                   bool flag = false;
+                   foreach (ACR_PMSSystem.Models.MasterSectionInfo sc in Model.SCList)
+                   {
+                       if (sc.Name.Replace(" ", "") == ViewContext.RouteData.Values["Action"].ToString())
+                       {
+                         flag = true;
+                        <li class="active"><a sectionid="@sc.ID" href="/Stage3/@(sc.Name.Replace(" ", ""))/@(Model.TaskId)/@(Model.ApprisalId)#" >@sc.Name</a></li>
+                       }
+                       else
+                       {
+                           if (flag)
+                           {
+                                        <li><a sectionid="@sc.ID" class="Next" href="#" >@sc.Name</a></li>
+                           }
+                           else
+                           {
+                                        <li><a sectionid="@sc.ID" href="/Stage3/@(sc.Name.Replace(" ", ""))/@(Model.TaskId)/@(Model.ApprisalId)#" >@sc.Name</a></li>
+                           }
+                       }
+                   }
+               }
+               } 
+        </ul>
+        <div  class="row" style="padding:10px;">
+          <div class="col-md-10">
+           <div id="Description" class="alert alert-success">
+            <h4>Key Performance Indicators Descriptions:</h4>
+            <p>
+                You will need to....<br />
+                You are to complete...<br />
+                Once you have....<br /> 
+            </p>
+            <h4>Performance Rating Descriptions:</h4>
+            <p>
+                <span class="badge">5</span> - Far Exceeds<br />
+                        <span class="badge">4</span> - Exceds Expec...<br />
+                        <span class="badge">3</span> - Meets Expec....<br /> 
+            </p>
+            </div>
+           <form action="/Stage3/KeyPerformanceIndicators/@(Model.TaskId)/@Model.ApprisalId" method="post">
+           @foreach (ACR_PMSSystem.Models.PMSBlockInfo kpinfo in Model.BIList)
+           {
+               
+              <div id="@(kpinfo.BlockName.Split('/')[0])" class="panel-group" style="margin-bottom:10px;">
+            <div class="panel panel-default" style="overflow: visible;">
+                <div class="panel-heading">
+                  <h4 class="panel-title">
+                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#Financials" href="#collapse(@index)">
+                      @kpinfo.BlockName
+                    </a>
+                  </h4>
+                </div>
+                <div id="collapse(@index)" class="panel-collapse collapse in">
+                  <div class="panel-body">
+                  
+                    <div blockid="@kpinfo.BlockID" class="tablediv" style="display:none;">
+                        
+                        <table class="table">
+                            <thead class="">
+                                <tr class="thead-color">
+                                    <th></th>
+                                    <th style="width:30%">Key Performance Indicator</th>
+                                    <th style="width:5%">Priority</th>
+                                    <th style="width:30%">Performance Target</th>
+                                    <th style="width:5%">Score</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody class="KPItbody">
+                                @{if (Model.KPIList != null && Model.KPIList.Count > 0)
+                                  {
+                                      IEnumerable<ACR_PMSSystem.Models.PMSKPIInfo> list = ((List<ACR_PMSSystem.Models.PMSKPIInfo>)Model.KPIList).Where(a => a.BlockID == kpinfo.BlockID);
+                                      foreach (ACR_PMSSystem.Models.PMSKPIInfo kpi in list)
+                                      {
+                                            <tr>
+                                                <td><input type="hidden" class="KPIID" name="KPIID@(kpi.KPIID)" value="@kpi.KPIID" /></td>
+                                                <td>@kpi.Description</td>
+                                                <td>@kpi.Priority</td>
+                                                <td>@kpi.Target</td>
+                                                <td style="display:none;">
+                                                @{if (kpi.Comments != null && kpi.Comments.Count > 0)
+                                                  {
+                                                    <div class="Comments">
+                                                            <div style="width:500px;">                                                   
+                                                            <ul class="list-group">
+                                                          @foreach (ACR_PMSSystem.Models.PMSCommentsInfo comment in kpi.Comments)
+                                                          {
+                                                             <li class="list-group-item">
+                                                             <span class="badge">By @(comment.CommentsByName) on @(comment.CommentsTimeStamp.ToString("hh:mm tt,dd-MMM-yyyy"))</span>                                                                                                                           
+                                                             <br />
+                                                             <p style="word-wrap:break-word;">@comment.Comments</p>
+                                                              </li>
+                                                          }
+                                                            </ul> 
+                                                            </div>                                                  
+                                                     
+                                                   </div>
+                                                  }
+                                                  else
+                                                  {
+                                                    <div class="Comments"></div>
+                                                  }
+                                                  }
+
+                                                </td>
+                                                <td>
+                                                <input kpiid="@kpi.KPIID" type="text" name="score@(kpi.KPIID)" class="form-control input-sm scoreinput" value="@(kpi.SelfScore != 0 ? kpi.SelfScore.ToString() : "")">
+                                                </td>
+                                                <td align="right">
+                                                    <a commentsid="@(kpinfo.BlockID)@(commentsindex++)" href="javascript:void(0)" class="ViewKpiComments btn btn-warning btn-xs" ><i class="glyphicon glyphicon-pencil"></i> View Comments</a>                                                     
+                                                </td>
+                                            </tr>
+                                      }
+                                  }
+                                }
+                            </tbody>
+                         </table>
+                    </div>                
+                  </div>
+                </div>
+            </div>
+           </div> 
+                                  index++;
+           }
+           
+           <div id="buttongroup" style="text-align: center;">
+             <div style="float:left;">
+                 <button type="button" class="btn btn-warning btn-xs" disabled="disabled"><i class="glyphicon glyphicon-hand-left"></i> Prev</button>
+                 <button type="button" id="stage1kpisubmit" class="btn btn-warning btn-xs">Next <i class="glyphicon glyphicon-hand-right"></i></button>
+             </div>
+             <!--<button type="button" id="stage1kpisubmit" class="btn btn-primary"><i class="glyphicon glyphicon-floppy-saved"></i> Submit</button>
+             -->
+             <div style="float:right;">
+                 <button type="button" data-loading-text="Saving...." id="stage1kpisave" class="btn btn-success btn-xs"><i class="glyphicon glyphicon-save"></i> Save</button>
+                 <button type="button" class="btn btn-danger btn-xs"><i class="glyphicon glyphicon-floppy-remove"></i> Cancel</button>
+             </div>
+            </div>
+
+            <!--pop up info for submit -->
+            <div style="top:50%;" class="modal fade" id="SubmitInfoModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+              <div class="modal-dialog" style="text-align:center;">
+                <div  class="modal-content">
+                  <div class="modal-body" style="padding-bottom:0px;">
+                        <div class="alert alert-warning alert-dismissable">
+                          <strong>Are you sure submit your KPI now?</strong>
+                        </div>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="submit" data-loading-text="Submit...." class="btn btn-primary">OK</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Cancel</button>
+                  </div>
+
+                </div><!-- /.modal-content -->
+              </div><!-- /.modal-dialog -->
+            </div><!-- /.modal -->
+           </form>
+          </div>
+          <div id="sidenav" data-spy="affix" class="col-md-2" style="right:2%;">
+                <ul class="nav nav-pills nav-stacked" style="border:1px solid #E1E1E8">
+                  <li><h5 style="padding:10px 15px;">Quick link</h5></li>
+                  <li class="divider"></li>
+                  <li><a href="#header">Top</a></li>
+                  @foreach (ACR_PMSSystem.Models.PMSBlockInfo kpinfo in Model.BIList)
+                  {
+                     <li><a href="#@(kpinfo.BlockName.Split('/')[0])">@kpinfo.BlockName</a></li> 
+                  }
+
+                </ul>
+                <ul class="nav nav-pills nav-stacked autosaveloading" style="border:1px solid #E1E1E8;margin-top:10px;text-align:center;">
+                    <li><h6><img alt="" src="/Content/img/ajax-loader.gif" />Autosaving....</h6></li>
+                </ul>
+         </div>
+        </div>
+    </div>
+
+    
+
+    <!--pop up info for ajaxsave -->
+    <div style="top:50%;" class="modal fade" id="InfoModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+      <div class="modal-dialog" style="text-align:center;">
+        <div id="loadingcontent" class="modal-content">
+          <div class="modal-body">
+                <img alt="" src="/Content/img/ajax-loader.gif" />
+          </div>
+        </div><!-- /.modal-content -->
+        <div id="resultcontent" class="modal-content" style="display:none;">
+          <div class="modal-body" style="padding-bottom:0px;">
+                <div class="alert alert-success alert-dismissable">
+                  <strong>All KPI data has been saved successfully!</strong>
+                </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" data-dismiss="modal">OK</button>
+          </div>
+
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+    
+
+    <script type="text/javascript">
+        var savefunction = function () {
+            var KPIArray = new Array();
+            $.each($(".scoreinput"), function () {
+                KPIArray.push({ KpiId: $(this).attr("kpiid"), Score: $(this).val() });
+            });
+            $.ajax({
+                url: "/Stage3/KPISave",
+                type: "POST",
+                dataType: "Json",
+                data: { "KPIForDatabase": JSON.stringify(KPIArray) },
+                beforeSend: function () {
+                    //$("#stage1kpisave").button('loading');
+                    //$("#buttongroup").showLoading();
+                    $('#resultcontent').hide();
+                    $('#loadingcontent').show();
+                    $('#InfoModal').modal();
+                },
+                success: function (data) {
+                    //$("#stage1kpisave").button('reset');
+                    $('#loadingcontent').hide();
+                    $('#resultcontent').show();
+                    //$('#InfoModal').modal();
+                }
+            });
+        };
+        var autosavefunction = function () {
+            var KPIArray = new Array();
+            $.each($(".scoreinput"), function () {
+                KPIArray.push({ KpiId: $(this).attr("kpiid"), Score: $(this).val() });
+            });
+            $.ajax({
+                url: "/Stage3/KPISave",
+                type: "POST",
+                dataType: "Json",
+                data: { "KPIForDatabase": JSON.stringify(KPIArray) },
+                beforeSend: function () {
+                    $("#autosaveloading").show('slow');
+                    $("#stage1kpisave").attr("disabled", true);
+                },
+                success: function (data) {
+                    $("#autosaveloading").hide('slow');
+                    $("#stage1kpisave").attr("disabled", false);
+                }
+            });
+        };
+        $(function () {
+            $('body').scrollspy({ target: '#sidenav' });
+            $(".scoreinput").tooltip({ placement: 'top', title: 'range: 1-5', trigger: 'focus' });
+            $('.selectpicker').selectpicker();
+            $.each($(".KPIID"), function () {
+                $(this).parent().parent().parent().parent().parent().show();
+            });
+            $('button[data-loading-text]').click(function () {
+                $(this).button('loading');
+            });
+            $(".Next").click(function () {
+                $("#stage1kpisubmit").trigger('click');
+            });
+            $("#stage1kpisubmit").click(function () {
+                $(".scoreinput").removeClass("warningclass");
+                var flag = true;
+                var errorplace = new Object();
+                $.each($(".scoreinput"), function () {
+                    if ($(this).val().trim() == "") {
+                        flag = false;
+                        errorplace = $(this);
+                        $(this).addClass("warningclass");
+                        return false;
+                    }
+                });
+                if (flag)
+                    $('#SubmitInfoModal').modal();
+                else {
+                    $("html,body").animate({ scrollTop: errorplace.offset().top + "px" });
+                }
+            });
+            $("#stage1kpisave").click(function () {
+                $(".scoreinput").removeClass("warningclass");
+                savefunction();
+            });
+
+            var oddClick = true;
+            var oldComments = 0;
+            var newComments = 0;
+            $(".panel-body").on('click', '.ViewKpiComments', function () {
+                if ($(".popover").length == 0) oddClick = true;
+                if (oddClick) {
+                    oddClick = !oddClick;
+                    oldComments = newComments = $(this).attr("commentsid");
+                    $(this).popover({
+                        title: 'Comments',
+                        placement: 'top',
+                        html: 'true',
+                        content: function () {
+                            var content = $(this).parent().parent().find(".Comments").html();
+                            return (content != "" ? content : "There is no Comments");
+                        }
+                    });
+                    $(this).popover('show');
+                }
+                else {
+                    newComments = $(this).attr("commentsid");
+                    if (oldComments != newComments) {
+                        oldComments = $(this).attr("commentsid");
+                        $(".ViewKpiComments").popover('destroy');
+                        $(this).popover({
+                            title: 'Comments',
+                            placement: 'top',
+                            html: 'true',
+                            content: function () {
+                                var content = $(this).parent().parent().find(".Comments").html();
+                                return (content != "" ? content : "There is no Comments");
+                            }
+                        });
+                        $(this).popover('show');
+                    }
+                    else {
+                        oddClick = !oddClick;
+                        $(this).popover('destroy');
+                    }
+                }
+
+            });
+        });
+        //setInterval(autosavefunction, 300000); 
+    </script>

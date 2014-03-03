@@ -1,0 +1,257 @@
+﻿@{
+    var message = TempData["AlertMessage"] ?? string.Empty;
+}
+@model eHR.PMS.Web.Models.DTO.AppraisalPage
+@{int index = 0;}
+
+ <div class="frame">
+        <form action="@(Url.Content("~/Stage1Approval/CareerDevelopment/"))@(Model.CurrentTaskId)/@Model.Appraisal.Id" method="post">
+        <input type="hidden" value="@{if (Model.Appraisal.CareerDevelopment != null){ @Model.Appraisal.CareerDevelopment.Id } }" name="KPIID" /> 
+        <input type="hidden" value="0" id="ApORRe" name="ApORRe" />                                   
+         <ul id="sectionlist" class="nav nav-tabs">
+            @{if (!eHR.PMS.Lib.Utility.Common.IsNullOrEmptyList(Model.Sections))
+              {
+                  foreach (eHR.PMS.Model.DTO.Master.Section sc in Model.Sections)
+                  {
+                      if (sc.Name.Replace(" ", "") == ViewContext.RouteData.Values["Action"].ToString())
+                      {
+                        <li class="active"><a sectionid="@sc.Id" href="@(Url.Content("~/Stage1Approval/"))@(sc.Name.Replace(" ", ""))/@(Model.CurrentTaskId)/@(Model.Appraisal.Id)#" >@sc.Name</a></li>
+                      }
+                      else
+                      {
+                        <li><a sectionid="@sc.Id" href="@(Url.Content("~/Stage1Approval/"))@(sc.Name.Replace(" ", ""))/@(Model.CurrentTaskId)/@(Model.Appraisal.Id)#" >@sc.Name</a></li>
+                      }
+                  }
+                  } 
+            }  
+        </ul>
+        <div  class="row" style="padding:10px;">
+          <div class="col-md-10">
+                   <fieldset>
+                      <div class="form-group">
+                        <label for="Short-termCareerGoal">Short-term Career Goals: </label>
+                        @{
+                            if (Model.Appraisal.CareerDevelopment != null)
+                            {
+                                <textarea id="ShorttermCareerGoal" name="ShorttermCareerGoal" class="form-control idleField" rows="3">@Model.Appraisal.CareerDevelopment.ShortTermGoals</textarea>
+                            }
+                            else
+                            {
+                                <textarea id="ShorttermCareerGoal" name="ShorttermCareerGoal" class="form-control idleField" rows="3"></textarea>                                
+                            }
+                         }
+                      </div>
+                      <div class="form-group">
+                        <label for="DevelopmentPlan">Development Plan: </label>
+                        @{
+                            if (Model.Appraisal.CareerDevelopment != null)
+                            {
+                                <textarea id="DevelopmentPlan" name="DevelopmentPlan" class="form-control idleField" rows="3">@Model.Appraisal.CareerDevelopment.CareerPlans</textarea>                                
+                            }
+                            else
+                            {
+                                <textarea id="DevelopmentPlan" name="DevelopmentPlan" class="form-control idleField" rows="3"></textarea>                                
+                            }
+                        }
+                      </div>
+                      <div class="form-group">
+                        <label for="Learninganddevelopment">Learning and development: </label>
+                        @{
+                            if (Model.Appraisal.CareerDevelopment != null)
+                            {
+                                <textarea id="Learninganddevelopment" class="form-control idleField" rows="3">@Model.Appraisal.CareerDevelopment.LearningPlans</textarea>                                
+                            }
+                            else
+                            {
+                                <textarea id="Learninganddevelopment" class="form-control idleField" rows="3"></textarea>                                
+                            }
+                        }
+                      </div>
+                      <div class="form-group">
+                        <label for="Comments">Comments: </label>
+                                                @{
+                            if (Model.Appraisal.CareerDevelopment != null)
+                            {
+                                if (!eHR.PMS.Lib.Utility.Common.IsNullOrEmptyList(Model.Appraisal.CareerDevelopment.Comments))
+                                {
+                                    <textarea KPIID="@{if (Model.Appraisal.CareerDevelopment != null) { @Model.Appraisal.CareerDevelopment.Id } }" id="Comments" name="Comments" class="form-control idleField" rows="3">
+                                     @{if (!eHR.PMS.Lib.Utility.Common.IsNullOrEmptyList(Model.Appraisal.CareerDevelopment.Comments.Where(rec => rec.FormSaveOnly == true))) 
+                                      { 
+                                       @(Model.Appraisal.CareerDevelopment.Comments.Where(rec => rec.FormSaveOnly == true).First().Comments)
+                                      }
+                                        
+                                     }
+                                    </textarea>    
+                                }
+                                else
+                                {
+                                <textarea KPIID="@{if (Model.Appraisal.CareerDevelopment != null){ @Model.Appraisal.CareerDevelopment.Id } }" id="Comments" name="Comments" class="form-control idleField" rows="3"></textarea>  
+                                }
+                            } 
+                         }                    
+                        </div>
+                     <div id="buttongroup" style="text-align: center;">
+                     <div style="float:left;">
+                         <a href="@(Url.Content("~/Stage1Approval/PerformanceCoachingandReview/"))@Model.CurrentTaskId/@Model.Appraisal.Id" class="btn btn-warning btn-xs"><i class="glyphicon glyphicon-hand-left"></i> Prev</a>
+                         <button type="button" id="stage1kpiapproval" class="btn btn-success btn-xs"><i class="glyphicon glyphicon-ok-circle"></i> Approve</button>
+                         <button type="button" id="stage1kpireject" class="btn btn-danger btn-xs"><i class="glyphicon glyphicon-remove-circle"></i> Reject</button>                 
+                     </div>
+                     <!--<button type="button" id="stage1kpisubmit" class="btn btn-primary"><i class="glyphicon glyphicon-floppy-saved"></i> Submit</button>
+                     -->
+                     <div style="float:right;">
+                         <button type="button" data-loading-text="Saving...." id="stage1kpisave" class="btn btn-success btn-xs"><i class="glyphicon glyphicon-save"></i> Save</button>
+                         <button type="button" class="btn btn-danger btn-xs" id="btn_appraisal_cancel"><i class="glyphicon glyphicon-floppy-remove"></i> Cancel</button>
+                     </div>
+                    </div>
+                   </fieldset>
+           
+
+            <!--pop up info for submit -->
+            <div style="top:50%;" class="modal fade" id="SubmitInfoModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+              <div class="modal-dialog" style="text-align:center;">
+                <div  class="modal-content">
+                  <div class="modal-body" style="padding-bottom:0px;">
+                        <div class="alert alert-warning alert-dismissable">
+                          <strong id="modalmessage">Are you sure submit your Career Development now????</strong>
+                        </div>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="submit" data-loading-text="Submit...." class="btn btn-primary">Yes</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">No</button>
+                  </div>
+
+                </div><!-- /.modal-content -->
+              </div><!-- /.modal-dialog -->
+            </div><!-- /.modal -->
+
+           <!--pop up info for cancel -->
+            <div style="top:50%;" class="modal fade" id="CancelInfoModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+              <div class="modal-dialog" style="text-align:center;">
+                <div  class="modal-content">
+                  <div class="modal-body" style="padding-bottom:0px;">
+                    <div class="alert alert-warning alert-dismissable">
+                        <strong>@(eHR.PMS.Web.Resources.Resource.MSG_CANCEL)</strong>
+                    </div>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" id="btn_cancel_modal_ok" class="btn btn-primary">Yes</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">No</button>
+                  </div>
+                </div><!-- /.modal-content -->
+              </div><!-- /.modal-dialog -->
+            </div>
+
+           </form>
+          </div>
+         
+        </div>
+    </div>
+
+    
+
+    <!--pop up info for ajaxsave -->
+    <div style="top:50%;" class="modal fade" id="InfoModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+      <div class="modal-dialog" style="text-align:center;">
+        <div id="loadingcontent" class="modal-content">
+          <div class="modal-body">
+                <img alt="" src="@(Url.Content("~/Content/img/ajax-loader.gif"))" />
+          </div>
+        </div><!-- /.modal-content -->
+        <div id="resultcontent" class="modal-content" style="display:none;">
+          <div class="modal-body" style="padding-bottom:0px;">
+                <div class="alert alert-success alert-dismissable">
+                  <strong>@(eHR.PMS.Web.Resources.Resource.MSG_SAVE_SUCCESS)</strong>
+                </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" data-dismiss="modal">OK</button>
+          </div>
+
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+    
+    <!--pop up info for redirect-->
+    <div style="top:50%;" class="modal fade" id="RedirectModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+      <div class="modal-dialog" style="text-align:center;">
+        <div id="submitcontent" class="modal-content">
+          <div class="modal-body" style="padding-bottom:0px;">
+                <div class="alert alert-success alert-dismissable">
+                  <strong>@message</strong>
+                </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" data-dismiss="modal">OK</button>
+          </div>
+
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+
+    <script type="text/javascript">
+        var savefunction = function () {
+            $.ajax({
+                url: "@(Url.Content("~/Stage1Approval/CareerDevelopmentSave"))",
+                type: "POST",
+                dataType: "Json",
+                data: { "ApprID": $("#apprid").val(), "SectionID": $("#sectionlist li.active").attr("sectionid"), "Short-termCareerGoal": $("#Short-termCareerGoal").val(), "DevelopmentPlan": $("#DevelopmentPlan").val(), "Learninganddevelopment": $("#Learninganddevelopment").val(), "Comments" : $('#Comments').val(), "KPIID" : $("#Comments").attr("KPIID") },
+                beforeSend: function () {
+                    //$("#stage1kpisave").button('loading');
+                    //$("#buttongroup").showLoading();
+                    $('#resultcontent').hide();
+                    $('#loadingcontent').show();
+                    $('#InfoModal').modal();
+                },
+                success: function (data) {
+                    //$("#stage1kpisave").button('reset');
+                    $('#loadingcontent').hide();
+                    $('#resultcontent').show();
+                    //$('#InfoModal').modal();
+                }
+            });
+        };
+        var autosavefunction = function () {
+            $.ajax({
+                url: "@(Url.Content("~/Stage1/CareerDevelopmentSave"))",
+                type: "POST",
+                dataType: "Json",
+                data: { "ApprID":$("#apprid").val(),"SectionID":$("#sectionlist li.active").attr("sectionid"),"ShorttermCareerGoal": $("#Short-termCareerGoal").val(), "DevelopmentPlan": $("#DevelopmentPlan").val(), "Learninganddevelopment": $("#Learninganddevelopment").val(), "Comments" : $("#Comments").val(), "KPIID" : $("#Comments").attr("KPIID") },
+                beforeSend: function () {
+                    $("#autosaveloading").show('slow');
+                    $("#stage1kpisave").attr("disabled", true);
+                },
+                success: function (data) {
+                    $("#autosaveloading").hide('slow');
+                    $("#stage1kpisave").attr("disabled", false);
+                }
+            });
+        };
+        $(function () {
+            $('body').scrollspy({ target: '#sidenav' });
+            $('button[data-loading-text]').click(function () {
+                $(this).button('loading');
+            });
+            $("#stage1kpiapproval").click(function () {
+                $("#ApORRe").val("1");
+                $("#modalmessage").text("@(eHR.PMS.Web.Resources.Resource.MSG_APPROVE_SUBMISSION)")
+                $('#SubmitInfoModal').modal();
+            });
+            $("#stage1kpireject").click(function () {
+                $("#ApORRe").val("0");
+                $("#modalmessage").text("@(eHR.PMS.Web.Resources.Resource.MSG_REJECT_SUBMISSION)")
+                $('#SubmitInfoModal').modal();
+            });
+            $("#stage1kpisave").click(savefunction);
+
+            $("#btn_appraisal_cancel").click(function () {
+                $('#CancelInfoModal').modal();
+            });
+
+            $("#btn_cancel_modal_ok").click(function () {
+                window.location.href("@(Url.Content("~/"))");
+            });
+        });
+        //setInterval(autosavefunction, 300000); 
+    </script>
+

@@ -1,0 +1,119 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{AB4FDDC0-3CFC-4F75-9A4B-7E8CF436053D}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>eHR.PMS.Model</RootNamespace>
+    <AssemblyName>eHR.PMS.Model</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System" />
+    <Reference Include="System.Data.Entity" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Context\PMS.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PMS.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="DTO\Appraisal\Appraisal.cs" />
+    <Compile Include="DTO\Appraisal\CoreValue.cs" />
+    <Compile Include="DTO\Appraisal\CoreValueComment.cs" />
+    <Compile Include="DTO\Appraisal\KPI.cs" />
+    <Compile Include="DTO\Appraisal\KPIComment.cs" />
+    <Compile Include="DTO\Appraisal\Section.cs" />
+    <Compile Include="DTO\Appraisal\SectionComment.cs" />
+    <Compile Include="DTO\Appraisal\Stage.cs" />
+    <Compile Include="DTO\Appraisal\Approver.cs" />
+    <Compile Include="DTO\Appraisal\CareerDevelopment.cs" />
+    <Compile Include="DTO\Appraisal\CareerDevelopmentComment.cs" />
+    <Compile Include="DTO\Appraisal\Comment.cs" />
+    <Compile Include="DTO\Core\Department.cs" />
+    <Compile Include="DTO\Core\Employee.cs" />
+    <Compile Include="DTO\Core\Master\EmployementType.cs" />
+    <Compile Include="DTO\Core\Master\Department.cs" />
+    <Compile Include="DTO\Core\Master\Grade.cs" />
+    <Compile Include="DTO\Core\Master\Module.cs" />
+    <Compile Include="DTO\Core\Master\Role.cs" />
+    <Compile Include="DTO\Core\Master\Status.cs" />
+    <Compile Include="DTO\Core\Security\User.cs" />
+    <Compile Include="DTO\Core\Security\UserRole.cs" />
+    <Compile Include="DTO\Core\Task\Owner.cs" />
+    <Compile Include="DTO\Core\Task\Task.cs" />
+    <Compile Include="DTO\Cycle\Cycle.cs" />
+    <Compile Include="DTO\GradeCompetency.cs" />
+    <Compile Include="DTO\Master\Action.cs" />
+    <Compile Include="DTO\Master\Block.cs" />
+    <Compile Include="DTO\Master\CoreValueCompetency.cs" />
+    <Compile Include="DTO\Master\Priority.cs" />
+    <Compile Include="DTO\Master\Section.cs" />
+    <Compile Include="DTO\Master\Stage.cs" />
+    <Compile Include="DTO\Master\Status.cs" />
+    <Compile Include="DTO\Cycle\Stage.cs" />
+    <Compile Include="DTO\Appraisal\PerformanceCoaching.cs" />
+    <Compile Include="DTO\Appraisal\PerformanceCoachingComment.cs" />
+    <Compile Include="DTO\Appraisal\Reviewer.cs" />
+    <Compile Include="DTO\Appraisal\Trail.cs" />
+    <Compile Include="Mappers\CoreMapper.cs" />
+    <Compile Include="Mappers\PMSMapper.cs" />
+    <Compile Include="PMSConstants.cs" />
+    <Compile Include="PMSModel.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EntityDeploy Include="Context\PMS.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>PMS.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.Config">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\eHR.PMS.Lib\eHR.PMS.Lib.csproj">
+      <Project>{2FB1CCDD-1BF7-488C-AEBA-D341A64E1600}</Project>
+      <Name>eHR.PMS.Lib</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
