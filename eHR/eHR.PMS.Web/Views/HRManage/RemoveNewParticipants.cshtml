@@ -1,11 +1,10 @@
-﻿@model eHR.PMS.Web.Models.DTO.CycleManagementPage
+﻿@model eHR.PMS.Web.Models.DTO.NewCycleManagementPage
 @{
     Dictionary<string, string> form = (Dictionary<string, string>)TempData["QueryData"];
     int int_participants_page_size = 10;
-    var cycleid = ViewContext.RouteData.Values["cycleId"];
 }
 <div class="well" style="margin:35px;">
-    <form method="post" action="@(Url.Content("~/"))HRManage/RemoveParticipants/@(eHR.PMS.Lib.Utility.Common.ChangeDateFormatVS(ViewData["Stage1EndDate"].ToString()))/@(eHR.PMS.Lib.Utility.Common.ChangeDateFormatVS(ViewData["Stage3EndDate"].ToString()))/@cycleid" class="form-horizontal" role="form">
+    <form method="post" action="@(Url.Content("~/"))HRManage/RemoveParticipants/@(eHR.PMS.Lib.Utility.Common.ChangeDateFormatVS(ViewData["Stage1EndDate"].ToString()))/@(eHR.PMS.Lib.Utility.Common.ChangeDateFormatVS(ViewData["Stage3EndDate"].ToString()))" class="form-horizontal" role="form">
       <div class="form-group">
         <label for="EmployeeName" class="col-sm-1 control-label">Name: </label>
         <div class="col-sm-2 input-group">
@@ -82,15 +81,15 @@
                           <tbody id="eicontent">
                           @if (!eHR.PMS.Lib.Utility.Common.IsNullOrEmptyList(Model.Participants))
                           {
-                              foreach (eHR.PMS.Model.DTO.Appraisal.Appraisal ei in Model.Participants.Take(int_participants_page_size).ToList())
+                              foreach (eHR.PMS.Model.DTO.Core.Employee ei in Model.Participants.Take(int_participants_page_size).ToList())
                               {
                               <tr>
                                 <td style="text-align:center;">
-                                    <input eid="@ei.Employee.Id" objectvalue="@(ei.Id)^&*@(ei.Employee.Id)^&*@(ei.Employee.DomainId)^&*@(ei.Employee.FirstName)^&*@(ei.Employee.LastName)^&*@(ei.Employee.Department != null ? ei.Employee.Department.Name : null)^&*@(ei.Employee.GetNumberOfApprovers())^&*ONERECORDENDED" type="checkbox" class="isadd" />
+                                    <input eid="@ei.Id" objectvalue="@(ei.Id)^&*@(ei.DomainId)^&*@(ei.FirstName)^&*@(ei.LastName)^&*@(ei.Department != null ? ei.Department.Name : null)^&*@(ei.GetNumberOfApprovers())^&*ONERECORDENDED" type="checkbox" class="isadd" />
                                 </td>
-                                <td>@(ei.Employee.PreferredName)</td>
-                                <td>@(ei.Employee.Department!=null?ei.Employee.Department.Name:"")</td>
-                                <td>@(ei.Employee.GetNumberOfApprovers())</td>
+                                <td>@(ei.PreferredName)</td>
+                                <td>@(ei.Department.Name)</td>
+                                <td>@(ei.GetNumberOfApprovers())</td>
                               </tr>
                               }
                           }
@@ -116,21 +115,20 @@
                   
                 </div>
             </div>
-            <div id="buttongroup" style="float:right;margin-top:20px;margin-bottom:20px;">
+        </div>
+        </div>
+<div id="buttongroup" style="float:right;">
              <div">
                  @{ if (!eHR.PMS.Lib.Utility.Common.IsNullOrEmptyList(Model.Participants))
                     {
                         <button type="button" id="RemoveParticipants" class="btn btn-success btn-xs"><i class="glyphicon glyphicon-minus"></i> Remove</button>
                     }
                   }
-                     <a href="@(Url.Content("~/HRManage/CancelAddRemove"))/@(eHR.PMS.Lib.Utility.Common.ChangeDateFormatVS(ViewData["Stage1EndDate"].ToString()))/@(eHR.PMS.Lib.Utility.Common.ChangeDateFormatVS(ViewData["Stage3EndDate"].ToString()))/@cycleid" class="btn btn-danger btn-xs"><i class="glyphicon glyphicon-off"></i> Back</a>                
+                     <a href="@(Url.Content("~/HRManage/CancelAddRemoveNew"))/@(eHR.PMS.Lib.Utility.Common.ChangeDateFormatVS(ViewData["Stage1EndDate"].ToString()))/@(eHR.PMS.Lib.Utility.Common.ChangeDateFormatVS(ViewData["Stage3EndDate"].ToString()))" class="btn btn-danger btn-xs"><i class="glyphicon glyphicon-off"></i> Back</a>                
              </div>
              <ul id="totallist" style="display:none;">
              </ul>
 </div>
-        </div>
-        </div>
-
 </div>
 <!--pop up info for ajaxsave -->
     <div style="top:50%;" class="modal fade" id="InfoModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
@@ -240,10 +238,10 @@
                 EIForCache = [EIForCache, $(this).text()].join();
             });
             $.ajax({
-                url: "@(Url.Content("~/HRManage/ConfirmRemove"))",
+                url: "@(Url.Content("~/HRManage/ConfirmRemoveNew"))",
                 type: "post",
                 dataType: "json",
-                data: { "cycleDateRangeStart": '@(ViewData["Stage1EndDate"].ToString())', "cycleDateRangeEnd": '@(ViewData["Stage3EndDate"].ToString())',"cycleId":'@cycleid', "EIForCache": EIForCache.substr(1) },
+                data: { "cycleDateRangeStart": '@(ViewData["Stage1EndDate"].ToString())', "cycleDateRangeEnd": '@(ViewData["Stage3EndDate"].ToString())', "EIForCache": EIForCache.substr(1) },
                 beforeSend: function () {
                     $('#InfoModal').modal();
                 },

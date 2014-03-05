@@ -107,50 +107,13 @@
                   <div class="form-group">
                     <label class="col-sm-2 control-label">Level 1 Approver: </label>
                     <div class="col-sm-4">
-                        @{if (Model.User.Id != Model.Appraisal.Employee.Id && ViewData["hr_user"].Equals("Y"))
-                          {
-                            <input usrid="@(Model.Appraisal.GetApproverByLevel(1).EmployeeId)" type="text" class="form-control Approver1" value="@(Model.Appraisal.GetApproverByLevel(1).PreferredName) (@(Model.Appraisal.GetApproverByLevel(1).DomainId))" >
-                            <span class="tt-dropdown-menu" style="position: absolute; top: 100%; left: 0px; z-index: 100; display: none; right: auto;"></span>
-                          }
-                          else
-                          {
-                            <input type="text" class="form-control" disabled="disabled" value="@(Model.Appraisal.GetApproverByLevel(1).PreferredName) (@(Model.Appraisal.GetApproverByLevel(1).DomainId))">
-                          }
-                         }
-                    </div>                    
-                    <!--
-                    <div class="col-sm-4">
                       <input type="text" class="form-control" disabled="disabled" value="@(Model.Appraisal.GetApproverByLevel(1).PreferredName)">
                     </div>
-                    -->
                     <label class="col-sm-2 control-label">Level 2 Approver: </label>
-                    <div class="col-sm-4">
-                        @{if (Model.User.Id != Model.Appraisal.Employee.Id && ViewData["hr_user"].Equals("Y"))
-                          {
-                            <input usrid="@(Model.Appraisal.GetApproverByLevel(2).EmployeeId)" type="text" class="form-control Approver2" value="@(Model.Appraisal.GetApproverByLevel(2).PreferredName) (@(Model.Appraisal.GetApproverByLevel(2).DomainId))" >
-                            <span class="tt-dropdown-menu" style="position: absolute; top: 100%; left: 0px; z-index: 100; display: none; right: auto;"></span>
-                          }
-                          else
-                          {
-                            <input type="text" class="form-control" disabled="disabled" value="@(Model.Appraisal.GetApproverByLevel(2).PreferredName) (@(Model.Appraisal.GetApproverByLevel(2).DomainId))">
-                          }
-                         }
-                    </div>  
-                    <!--
                     <div class="col-sm-4">
                       <input type="text" class="form-control" disabled="disabled" value="@(Model.Appraisal.GetApproverByLevel(2).PreferredName)">
                     </div>
-                    -->
                   </div>
-                    @{if (Model.User.Id != Model.Appraisal.Employee.Id && ViewData["hr_user"].Equals("Y"))
-                        {
-                        <div class="form-group">
-                            <div class="col-sm-4 col-sm-offset-2">
-                                <button type="button" data-loading-text="Saving...." id="approversave" class="btn btn-xs btn-success"><i class="glyphicon glyphicon-save"></i> Save Approvers</button>
-                            </div>
-                        </div>
-                        }
-                    }
                   <div class="form-group">
                     <label class="col-sm-2 control-label">Reviewer 1 : </label>
                     <div class="col-sm-4">
@@ -210,7 +173,7 @@
         <div id="resultcontent" class="modal-content" style="display:none;">
           <div class="modal-body" style="padding-bottom:0px;">
                 <div class="alert alert-success alert-dismissable">
-                  <strong id="modalmessage">Reviewers has been saved successfully!</strong>
+                  <strong>Reviewers has been saved successfully!</strong>
                 </div>
           </div>
           <div class="modal-footer">
@@ -232,21 +195,6 @@
                   <div class="modal-footer">
                     <button type="button" id="btn_cancel_modal_ok" class="btn btn-primary">Yes</button>
                     <button type="button" class="btn btn-primary" data-dismiss="modal">No</button>
-                  </div>
-                </div><!-- /.modal-content -->
-              </div><!-- /.modal-dialog -->
-            </div><!-- /.modal -->
-
-            <div style="top:50%;" class="modal fade" id="ErrorInfoModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
-              <div class="modal-dialog" style="text-align:center;">
-                <div  class="modal-content">
-                  <div class="modal-body" style="padding-bottom:0px;">
-                    <div class="alert alert-warning alert-dismissable">
-                        <strong id="errormodalmessage">ERROR</strong>
-                    </div>
-                  </div>
-                  <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" data-dismiss="modal">Ok</button>
                   </div>
                 </div><!-- /.modal-content -->
               </div><!-- /.modal-dialog -->
@@ -322,172 +270,6 @@
                         }
                     });
                 });
-
-                // Approver1 search
-                $('.Approver1').on('keyup', function () {
-                    obj = $(this);
-                    obj.next().html("");
-                    if (obj.val() != "") {
-                        $.ajax({
-                            url: "@(Url.Content("~/Home/SearchEmployeeByName"))",
-                            dataType: 'json',
-                            type: 'POST',
-                            data: { name: obj.val() },
-                            success: function (data) {
-                                if (obj.next().css('display') == 'none')
-                                    obj.next().css('display', 'block');
-                                var html = '<div class="tt-dataset-0"><span class="tt-suggestions" style="display: block;">';
-                                $.each(data, function (index) {
-                                    html = [html, '<div usrid="', data[index].Id, '" class="tt-suggestion" style="white-space: nowrap; cursor: pointer;">', '<p style="white-space: normal;">', data[index].PreferredName + " (" + data[index].DomainId + ")", '</p>', '</div>'].join('');
-                                });
-                                html = [html, '<span></div>'].join('');
-                                $(html).appendTo(obj.next());
-                                $(".tt-suggestion").mouseover(function () {
-                                    $(this).addClass("tt-is-under-cursor");
-                                }).mouseleave(function () {
-                                    $(this).removeClass("tt-is-under-cursor");
-                                })
-                                $(".tt-dropdown-menu").on('mousedown', '.tt-suggestion', function () {
-                                    obj.attr('usrid', $(this).attr("usrid"));
-                                    obj.val($(this).children().text());
-                                    obj.next().hide();
-                                });
-                                obj.focus(function () {
-                                    obj.next().show();
-                                }).blur(function () {
-                                    obj.next().hide();
-                                });
-                            }
-                        });
-                    }
-                    else {
-                        obj.next().hide();
-                    }
-                });
-                // End Approver1 search
-
-                // Approver2 search
-                $('.Approver2').on('keyup', function () {
-                    obj = $(this);
-                    obj.next().html("");
-                    if (obj.val() != "") {
-                        $.ajax({
-                            url: "@(Url.Content("~/Home/SearchEmployeeByName"))",
-                            dataType: 'json',
-                            type: 'POST',
-                            data: { name: obj.val() },
-                            success: function (data) {
-                                if (obj.next().css('display') == 'none')
-                                    obj.next().css('display', 'block');
-                                var html = '<div class="tt-dataset-0"><span class="tt-suggestions" style="display: block;">';
-                                $.each(data, function (index) {
-                                    html = [html, '<div usrid="', data[index].Id, '" class="tt-suggestion" style="white-space: nowrap; cursor: pointer;">', '<p style="white-space: normal;">', data[index].PreferredName + " (" + data[index].DomainId + ")", '</p>', '</div>'].join('');
-                                });
-                                html = [html, '<span></div>'].join('');
-                                $(html).appendTo(obj.next());
-                                $(".tt-suggestion").mouseover(function () {
-                                    $(this).addClass("tt-is-under-cursor");
-                                }).mouseleave(function () {
-                                    $(this).removeClass("tt-is-under-cursor");
-                                })
-                                $(".tt-dropdown-menu").on('mousedown', '.tt-suggestion', function () {
-                                    obj.attr('usrid', $(this).attr("usrid"));
-                                    obj.val($(this).children().text());
-                                    obj.next().hide();
-                                });
-                                obj.focus(function () {
-                                    obj.next().show();
-                                }).blur(function () {
-                                    obj.next().hide();
-                                });
-                            }
-                        });
-                    }
-                    else {
-                        obj.next().hide();
-                    }
-                });
-                // End Approver2 search
-
-                // Approver Save
-                $("#approversave").click(function () {
-                    var approvers = "";
-                    if ($.trim($(".Approver1").val()) == "" || $.trim($(".Approver2").val()) == "") {
-                         $("#errormodalmessage").text("Both level 1 and level 2 approvers must be provided.");
-                         $('#ErrorInfoModal').modal(); 
-                    }
-                    else if ($(".Approver1").attr("usrid") == $(".Approver2").attr("usrid")) 
-                    {
-                        $("#errormodalmessage").text("Level 1 and Level 2 approvers cannot be the same person.");
-                        $('#ErrorInfoModal').modal(); 
-                    }
-                    else {
-                        approvers = $(".Approver1").attr("usrid") + "|" + $(".Approver2").attr("usrid");
-                        if(approvers!="") {
-                            approvers = approvers.substring(1, approvers.length);
-                        }
-
-                        $.ajax({
-                        url: "@(Url.Content("~/Home/SaveProfileApprovers"))",
-                        dataType: 'json',
-                        type: 'POST',
-                        data: { "approver1": $(".Approver1").attr("usrid"), "approver2": $(".Approver2").attr("usrid"), "appraisalId": parseInt($("#apprid").val()) },
-                        beforeSend: function () {
-                            $('#resultcontent').hide();
-                            $('#loadingcontent').show();
-                            $('#modalmessage').text("Approvers saved successfully.");
-                            $('#InfoModal').modal();
-                        },
-                        success: function (data) {
-                            if (data == "") {
-                                $('#loadingcontent').hide();
-                                $('#resultcontent').show();
-                            }
-                        }
-                    });
-                    }
-
-                    /*
-                    $.each($(".Approver"), function (index) {
-                        if ($(this).val() != "") {
-                            alert($(this).val());
-                            alert($(this).attr("usrid"));
-                            if (approvers.indexOf($(this).attr("usrid")) != 0) {
-                                alert("here");
-                            }
-                            else {
-                                alert("there");
-                            }
-
-
-                            approvers = [approvers, '|', $(this).attr("usrid")].join('');
-                        }
-                            
-                    });
-                    if(approvers!="")
-                        approvers = approvers.substring(1, approvers.length);
-                        */
-                   /*
-                    $.ajax({
-                        url: "@(Url.Content("~/Home/SaveProfile"))",
-                        dataType: 'json',
-                        type: 'POST',
-                        data: { "reviewers": reviewers, "apprid": parseInt($("#apprid").val()) },
-                        beforeSend: function () {
-                            $('#resultcontent').hide();
-                            $('#loadingcontent').show();
-                            $('#InfoModal').modal();
-                        },
-                        success: function (data) {
-                            if (data == "") {
-                                $('#loadingcontent').hide();
-                                $('#resultcontent').show();
-                            }
-                        }
-                    });
-                    */
-                });
-                // End Approver Save
 
                 $("#btn_appraisal_cancel").click(function () {
                     $('#CancelInfoModal').modal();

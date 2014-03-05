@@ -99,52 +99,9 @@ namespace eHR.PMS.Web.Controllers
         }
 
         [HttpPost]
-        public JsonResult SaveProfileApprovers(string approver1, string approver2, int appraisalId)
+        public JsonResult SaveApproversForProfile(string approver1, string approver2, int appraisalId)
         {
-            string message = string.Empty;
-            List<Model.DTO.Appraisal.Approver> lst_new_approvers = null;
-
-            if (!string.IsNullOrEmpty(approver1) && !string.IsNullOrEmpty(approver2)) {
-                Model.DTO.Appraisal.Appraisal obj_appraisal = Model.PMSModel.GetAppraisalById(appraisalId);
-                lst_new_approvers = new List<Model.DTO.Appraisal.Approver>();
-
-                if (obj_appraisal != null)
-                {
-                    Model.DTO.Appraisal.Approver obj_level_1_approver = obj_appraisal.GetApproverByLevel(1);
-                    Model.DTO.Appraisal.Approver obj_level_2_approver = obj_appraisal.GetApproverByLevel(2);
-
-                    if (obj_level_1_approver != null && obj_level_1_approver.EmployeeId != Convert.ToInt32(approver1))
-                    {
-                        Model.DTO.Appraisal.Approver obj_approver = new Model.DTO.Appraisal.Approver() 
-                        { 
-                            Id = obj_level_1_approver.Id,
-                            Appraisal= obj_appraisal,
-                            EmployeeId = Convert.ToInt32(approver1),
-                            ApprovalLevel = 1
-                        };
-
-                        lst_new_approvers.Add(obj_approver);
-                    }
-
-                    if (obj_level_2_approver != null && obj_level_2_approver.EmployeeId != Convert.ToInt32(approver2))
-                    {
-                        Model.DTO.Appraisal.Approver obj_approver = new Model.DTO.Appraisal.Approver()
-                        {
-                            Id = obj_level_2_approver.Id,
-                            Appraisal = obj_appraisal,
-                            EmployeeId = Convert.ToInt32(approver2),
-                            ApprovalLevel = 2
-                        };
-                        lst_new_approvers.Add(obj_approver);
-                    }
-
-                    if (!Business.AppraisalManager.ManageChangeApprover(obj_appraisal, lst_new_approvers, out message)) 
-                    {
-                        return Json(message);
-                    }
-                }
-            }
-            return Json(message);
+            return Json("");
         }
 
         #endregion Appraisal Profile

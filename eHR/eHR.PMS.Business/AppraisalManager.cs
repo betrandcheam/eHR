@@ -8,7 +8,6 @@ namespace eHR.PMS.Business
 {
     public class AppraisalManager
     {
-
         #region Cycle
 
         public static bool CreateNewCycle(PMS.Model.DTO.Cycle.Cycle cycle,  Model.DTO.Core.Employee user, out string message) 
@@ -32,6 +31,33 @@ namespace eHR.PMS.Business
                 }
             }
             else 
+            {
+                boo_success = true;
+            }
+            return boo_success;
+        }
+
+        public static bool UpdateCycle(PMS.Model.DTO.Cycle.Cycle cycle,int cycleId, List<int> cids, Model.DTO.Core.Employee user, out string message)
+        {
+            bool boo_success = false;
+            message = string.Empty;
+
+            if (!Lib.Utility.Common.IsNullOrEmptyList(cycle.Appriasals))
+            {
+                boo_success = Model.PMSModel.UpdateCycleAndCreateAppraisalTasks(cycle, cycleId,cids,out message);
+
+                if (boo_success)
+                {
+                    cycle = Model.PMSModel.GetCycleById(Convert.ToInt32(message));
+                    Model.DTO.Cycle.Stage obj_stage = cycle.CycleStages.Where(rec => rec.StageId == Model.PMSConstants.STAGE_ID_GOAL_SETTING).Single();
+
+                    if (obj_stage.StartDate == DateTime.Now.Date)
+                    {
+                        PreCycleStageManagement(cycle, DateTime.Now.Date, user);
+                    }
+                }
+            }
+            else
             {
                 boo_success = true;
             }
@@ -82,16 +108,19 @@ namespace eHR.PMS.Business
             {
                 foreach (Model.DTO.Appraisal.Appraisal obj_appraisal in cycle.Appriasals)
                 {
-                    obj_appraisal.Locked = false;
-                    obj_appraisal.AddTrail(CreateAppraisalTrail(obj_appraisal, user, new Model.DTO.Master.Action() { Id = Model.PMSConstants.ACTION_ID_APPRAISAL_OPENED }));
-                    obj_appraisal.Stage = Model.Mappers.PMSMapper.MapAppraisalStageDTOToStageDTO(obj_appraisal.AppraisalStages.Where(rec => rec.StageId == Model.PMSConstants.STAGE_ID_GOAL_SETTING).SingleOrDefault());
-                    obj_appraisal.Status = new Model.DTO.Master.Status() { Id = Model.PMSConstants.STATUS_ID_NEW };
-                    lst_all_tasks.Add(CreateTasksForCycleStageChange(obj_appraisal));
-                    lst_appraisals_to_update.Add(obj_appraisal);
-                    if (!string.IsNullOrEmpty(obj_appraisal.Employee.OfficeEmailAddress))
-                    {
-                        lst_email_messages.Add(GenerateEmailMessageForCycleStageStart(obj_appraisal));
-                    }
+                    //if (obj_appraisal.Stage.Id == Model.PMSConstants.STAGE_ID_PRE_CYCLE)
+                    //{
+                        obj_appraisal.Locked = false;
+                        obj_appraisal.AddTrail(CreateAppraisalTrail(obj_appraisal, user, new Model.DTO.Master.Action() { Id = Model.PMSConstants.ACTION_ID_APPRAISAL_OPENED }));
+                        obj_appraisal.Stage = Model.Mappers.PMSMapper.MapAppraisalStageDTOToStageDTO(obj_appraisal.AppraisalStages.Where(rec => rec.StageId == Model.PMSConstants.STAGE_ID_GOAL_SETTING).SingleOrDefault());
+                        obj_appraisal.Status = new Model.DTO.Master.Status() { Id = Model.PMSConstants.STATUS_ID_NEW };
+                        lst_all_tasks.Add(CreateTasksForCycleStageChange(obj_appraisal));
+                        lst_appraisals_to_update.Add(obj_appraisal);
+                        if (!string.IsNullOrEmpty(obj_appraisal.Employee.OfficeEmailAddress))
+                        {
+                            lst_email_messages.Add(GenerateEmailMessageForCycleStageStart(obj_appraisal));
+                        }
+                    //}
                 }
             }
             lst_cycles.Add(cycle);
@@ -376,6 +405,59 @@ namespace eHR.PMS.Business
             return boo_success;
         }
 
+        public static bool ManageChangeApprover(Model.DTO.Appraisal.Appraisal appraisal, List<Model.DTO.Appraisal.Approver> newApprovers, out string message)
+        {
+            message = string.Empty;
+            List<Model.DTO.Core.Task.Owner> lst_owners_to_update = null;
+
+            if (!Lib.Utility.Common.IsNullOrEmptyList(newApprovers))
+            {
+                List<Model.DTO.Core.Task.Task> lst_tasks = Model.PMSModel.GetTasksByAppraisal(appraisal.Id, Model.PMSConstants.STATUS_CORE_ID_OPEN);
+                lst_owners_to_update = new List<Model.DTO.Core.Task.Owner>();
+
+                Model.DTO.Appraisal.Approver obj_new_level_1_approver = newApprovers.Where(rec => rec.ApprovalLevel == 1).SingleOrDefault();
+                Model.DTO.Appraisal.Approver obj_new_level_2_approver = newApprovers.Where(rec => rec.ApprovalLevel == 2).SingleOrDefault();
+
+                if (appraisal.Status.Id == Model.PMSConstants.STATUS_ID_PENDING_LEVEL_1_APPROVAL)
+                {
+                    if (obj_new_level_1_approver != null)
+                    {
+                        if (!Lib.Utility.Common.IsNullOrEmptyList(lst_tasks))
+                        {
+                            foreach (Model.DTO.Core.Task.Task obj_task in lst_tasks)
+                            {
+                                foreach (Model.DTO.Core.Task.Owner obj_owner in obj_task.Owners)
+                                {
+                                    obj_owner.EmployeeId = obj_new_level_1_approver.EmployeeId;
+                                    lst_owners_to_update.Add(obj_owner);
+                                }
+                            }
+                        }
+                    }
+                }
+                else if (appraisal.Status.Id == Model.PMSConstants.STATUS_ID_PENDING_LEVEL_2_APPROVAL)
+                {
+                    if (obj_new_level_2_approver != null)
+                    {
+                        if (!Lib.Utility.Common.IsNullOrEmptyList(lst_tasks))
+                        {
+                            foreach (Model.DTO.Core.Task.Task obj_task in lst_tasks)
+                            {
+                                foreach (Model.DTO.Core.Task.Owner obj_owner in obj_task.Owners)
+                                {
+                                    obj_owner.EmployeeId = obj_new_level_2_approver.EmployeeId;
+                                    lst_owners_to_update.Add(obj_owner);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            return Model.PMSModel.UpdateApproversAndTasks(appraisal, newApprovers, lst_owners_to_update, out message);
+        }
+
+
         #endregion Appraisal
 
         #region Email
@@ -413,7 +495,7 @@ namespace eHR.PMS.Business
                 sb_body.Append(ConfigurationManager.AppSettings["pmsweburl"]);
                 sb_body.Append("'>eHR Online Portal</a>.</p>");
                 sb_body.Append("<p>Please note that the submission deadline for Employees' KPIs for Managers' review is <u>");
-                sb_body.Append("XXX");
+                sb_body.Append(Convert.ToDateTime(obj_appraisal_start_stage.StartDate).AddDays(5).ToString("dd/MM/yyyy"));
                 sb_body.Append("</u>.</p>");
                 sb_body.Append("<p'>Best Regards,<br />HR Team</p><br />");
                 sb_body.Append("<p><span style='font-style:italic; font-size:small;'>This is a computer generated email. Please do not reply.</span></p>");
@@ -623,10 +705,10 @@ namespace eHR.PMS.Business
             if (!string.IsNullOrEmpty(employeeName) || !string.IsNullOrEmpty(employeeDomainId) || !string.IsNullOrEmpty(employeeDepartmentName))
             {
                 lst_active_employees = Model.PMSModel.GetEmployees(true);
-
+                lst_current_participant_ids = new List<int>();
                 if (!Lib.Utility.Common.IsNullOrEmptyList(currentParticipants))
                 {
-                    lst_current_participant_ids = new List<int>();
+                    
                     foreach (Model.DTO.Core.Employee obj_employee in currentParticipants)
                     {
                         lst_current_participant_ids.Add(obj_employee.Id);
@@ -785,6 +867,83 @@ namespace eHR.PMS.Business
             return lst_remove_employees;
         }
 
+        public static List<Model.DTO.Appraisal.Appraisal> GetApprisalsToRemoveFromCycle(string employeeName, string employeeDomainId, string employeeDepartmentName, List<Model.DTO.Appraisal.Appraisal> currentParticipants)
+        {
+            List<PMS.Model.DTO.Appraisal.Appraisal> lst_remove_employees = null;
+            IEnumerable<PMS.Model.DTO.Appraisal.Appraisal> lst_to_remove_employees = null;
+
+            if (!string.IsNullOrEmpty(employeeName) || !string.IsNullOrEmpty(employeeDomainId) || !string.IsNullOrEmpty(employeeDepartmentName))
+            {
+                //lst_active_employees = Model.PMSModel.GetEmployees(true);
+
+                if (!Lib.Utility.Common.IsNullOrEmptyList(currentParticipants))
+                {
+                    if (!string.IsNullOrEmpty(employeeName))
+                    {
+                        if (!string.IsNullOrEmpty(employeeDomainId))
+                        {
+                            if (!string.IsNullOrEmpty(employeeDepartmentName))
+                            {
+                                // all 3 search criteria provided
+                                lst_to_remove_employees = currentParticipants.Where(rec => rec.Employee.PreferredName.ToUpper().Contains(employeeName.ToUpper()) &&
+                                                                                                rec.Employee.DomainId.ToUpper().Contains(employeeDomainId.ToUpper()) &&
+                                                                                                rec.Department.Name.ToUpper().Contains(employeeDepartmentName.ToUpper()));
+                            }
+                            else
+                            {
+                                // employ name and domain id provided
+                                lst_to_remove_employees = currentParticipants.Where(rec => rec.Employee.PreferredName.ToUpper().Contains(employeeName.ToUpper()) &&
+                                                                                                 rec.Employee.DomainId.ToUpper().Contains(employeeDomainId.ToUpper()));
+                            }
+                        }
+                        else
+                        {
+                            if (!string.IsNullOrEmpty(employeeDepartmentName))
+                            {
+                                //employee name and department name provided
+                                lst_to_remove_employees = currentParticipants.Where(rec => rec.Employee.PreferredName.ToUpper().Contains(employeeName.ToUpper()) &&
+                                                                                                rec.Department.Name.ToUpper().Contains(employeeDepartmentName.ToUpper()));
+                            }
+                            else
+                            {
+                                //employee name provided
+                                lst_to_remove_employees = currentParticipants.Where(rec => rec.Employee.PreferredName.ToUpper().Contains(employeeName.ToUpper()));
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (!string.IsNullOrEmpty(employeeDomainId))
+                        {
+                            if (!string.IsNullOrEmpty(employeeDepartmentName))
+                            {
+                                // domain id and department name provided
+                                lst_to_remove_employees = currentParticipants.Where(rec => rec.Employee.DomainId.ToUpper().Contains(employeeDomainId.ToUpper()) &&
+                                                                                                rec.Department.Name.ToUpper().Contains(employeeDepartmentName.ToUpper()));
+
+                            }
+                            else
+                            {
+                                //only domain id provided
+                                lst_to_remove_employees = currentParticipants.Where(rec => rec.Employee.DomainId.ToUpper().Contains(employeeDomainId.ToUpper()));
+
+                            }
+                        }
+                        else
+                        {
+                            // only department name is provided
+                            lst_to_remove_employees = currentParticipants.Where(rec => rec.Department.Name.ToUpper().Contains(employeeDepartmentName.ToUpper()));
+                        }
+                    }
+
+                    if (!Lib.Utility.Common.IsNullOrEmptyList(lst_to_remove_employees))
+                    {
+                        lst_remove_employees = lst_to_remove_employees.ToList();
+                    }
+                }
+            }
+            return lst_remove_employees;
+        }
         public static List<Model.DTO.Core.Employee> GetEligibleEmployeesForCycle(DateTime eligibleDateStart, DateTime eligibleDateEnd)
         {
             List<PMS.Model.DTO.Core.Employee> lst_active_employees = Model.PMSModel.GetEmployees(true);

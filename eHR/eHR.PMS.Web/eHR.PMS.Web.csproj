@@ -282,8 +282,8 @@
     <Content Include="Views\Stage1Approval\CoreValues.cshtml" />
     <Content Include="Views\Stage1Approval\KeyPerformanceIndicators.cshtml" />
     <Content Include="Views\Stage1Approval\PerformanceCoachingandReview.cshtml" />
-    <Content Include="Views\HRManage\AddParticipants.cshtml" />
-    <Content Include="Views\HRManage\RemoveParticipants.cshtml" />
+    <Content Include="Views\HRManage\AddNewParticipants.cshtml" />
+    <Content Include="Views\HRManage\RemoveNewParticipants.cshtml" />
     <Content Include="Views\HRManage\NewCycle.cshtml" />
     <Content Include="Views\Home\AppraisalProfile.cshtml" />
     <Content Include="Views\Stage2\CareerDevelopment.cshtml" />
@@ -295,6 +295,8 @@
     <Content Include="Views\Stage2Approval\KeyPerformanceIndicators.cshtml" />
     <Content Include="Views\Stage2Approval\PerformanceCoachingandReview.cshtml" />
     <Content Include="Views\HRManage\ManageCycle.cshtml" />
+    <Content Include="Views\HRManage\RemoveParticipants.cshtml" />
+    <Content Include="Views\HRManage\AddParticipants.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

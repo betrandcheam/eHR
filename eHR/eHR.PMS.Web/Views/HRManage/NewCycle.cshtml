@@ -1,4 +1,4 @@
-﻿@model eHR.PMS.Web.Models.DTO.CycleManagementPage
+﻿@model eHR.PMS.Web.Models.DTO.NewCycleManagementPage
 @{
     var message = TempData["AlertMessage"] ?? string.Empty;
     var msg_error = TempData["ErrorMessage"] ?? string.Empty;
@@ -171,8 +171,8 @@
                         <i class="glyphicon glyphicon-move"></i> Add/Remove <span class="caret"></span>
                       </button>
                       <ul class="dropdown-menu" role="menu">
-                        <li><a id="AddParticipants" href="@(Url.Content("~/HRManage/AddParticipants/"))@(form["strStage1EndDate"] == null ? "" : form["strStage1EndDate"].ToString())/@(form["strStage3EndDate"] == null ? "" : form["strStage3EndDate"].ToString())">Add Participants</a></li>
-                        <li><a id="RemoveParticipants">Remove Participants</a></li>
+                        <li><a id="AddParticipants" href="@(Url.Content("~/HRManage/AddNewParticipants/"))@(form["strStage1EndDate"] == null ? "" : form["strStage1EndDate"].ToString())/@(form["strStage3EndDate"] == null ? "" : form["strStage3EndDate"].ToString())">Add Participants</a></li>
+                        <li><a id="RemoveParticipants" href="@(Url.Content("~/HRManage/RemoveNewParticipants/"))@(form["strStage1EndDate"] == null ? "" : form["strStage1EndDate"].ToString())/@(form["strStage3EndDate"] == null ? "" : form["strStage3EndDate"].ToString())">Remove Participants</a></li>
                       </ul>
                     </div>
 
@@ -366,13 +366,13 @@
             $('#pages').bootstrapPaginator("show", page);
         })
 
-        $("#AddParticipants").click(function () {
+        /*$("#AddParticipants").click(function () {
             if (intTotal == 0) {
                 //$("#RedirectModal").model();
                 //return false;
             }
             else {
-               window.location.href = "@(Url.Content("~/"))HRManage/AddParticipants/" + $("#strStage1EndDate").val() + "/" + $("#strStage3EndDate").val();
+               window.location.href = "(Url.Content("~/"))HRManage/AddParticipants/" + $("#strStage1EndDate").val() + "/" + $("#strStage3EndDate").val();
             }
         });
         $("#RemoveParticipants").click(function () {
@@ -381,9 +381,9 @@
                 return false;
             }
             else {
-               window.location.href = "@(Url.Content("~/"))HRManage/RemoveParticipants/" + $("#strStage1EndDate").val() + "/" + $("#strStage3EndDate").val();
+               window.location.href = "(Url.Content("~/"))HRManage/RemoveParticipants/" + $("#strStage1EndDate").val() + "/" + $("#strStage3EndDate").val();
             } 
-        });
+        });*/
         $('#datetimepicker1').datetimepicker({
             format: "DD/MM/YYYY",
             pickTime: false

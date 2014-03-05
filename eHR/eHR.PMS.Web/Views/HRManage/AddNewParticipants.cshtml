@@ -1,11 +1,10 @@
-﻿@model eHR.PMS.Web.Models.DTO.CycleManagementPage
+﻿@model eHR.PMS.Web.Models.DTO.NewCycleManagementPage
 @{
     Dictionary<string, string> form = (Dictionary<string, string>)TempData["QueryData"];
     int int_participants_page_size = 10;
-    var cycleid = ViewContext.RouteData.Values["cycleId"];
 }
 <div class="well" style="margin:35px;">
-    <form method="post" action="@(Url.Content("~/"))HRManage/RemoveParticipants/@(eHR.PMS.Lib.Utility.Common.ChangeDateFormatVS(ViewData["Stage1EndDate"].ToString()))/@(eHR.PMS.Lib.Utility.Common.ChangeDateFormatVS(ViewData["Stage3EndDate"].ToString()))/@cycleid" class="form-horizontal" role="form">
+    <form method="post" action="@(Url.Content("~/"))HRManage/AddNewParticipants/@(eHR.PMS.Lib.Utility.Common.ChangeDateFormatVS(ViewData["Stage1EndDate"].ToString()))/@(eHR.PMS.Lib.Utility.Common.ChangeDateFormatVS(ViewData["Stage3EndDate"].ToString()))" class="form-horizontal" role="form">
       <div class="form-group">
         <label for="EmployeeName" class="col-sm-1 control-label">Name: </label>
         <div class="col-sm-2 input-group">
@@ -16,12 +15,13 @@
             }
             else
             {
-                <input type="text" class="form-control" id="EmployeeName" name="EmployeeName" />
+                <!--<input type="text" class="form-control" id="EmployeeName" name="EmployeeName" value="@form["EmployeeName"]">-->
+                <input type="text" class="form-control" id="EmployeeName" name="EmployeeName" />                   
                 <input type="hidden" id="hidEmployeeName" value="@form["EmployeeName"]" />                
             }
            }
         </div>
-        <label for="DomainID" class="col-sm-1 control-label">Domain ID: </label>
+        <label for="DomainID" class="col-sm-2 control-label">Domain ID: </label>
         <div class="col-sm-2 input-group">
           @{
               if (form == null)
@@ -30,6 +30,7 @@
               }
               else
               {
+                <!--<input type="text" class="form-control" id="DomainID" name="DomainID" value="@form["DomainID"]"> -->
                 <input type="text" class="form-control" id="DomainID" name="DomainID" />
                 <input type="hidden" id="hidDomainID" value="@form["DomainID"]" />                  
               }
@@ -44,7 +45,8 @@
               }
               else
               {
-                <input type="text" class="form-control" id="DepartmentName" name="DepartmentName" />
+                <!--<input type="text" class="form-control" id="DepartmentName" name="DepartmentName" value="@form["DepartmentName"]">-->
+                <input type="text" class="form-control" id="DepartmentName" name="DepartmentName" />                  
                 <input type="hidden" id="hidDepartmentName" value="@form["DepartmentName"]" />
               }
            }
@@ -57,7 +59,7 @@
         </div>
     </form>
 </div>
-<div> 
+<div>
 <div id="Participants" class="row maintable" >
     <div class="panel-group" id="accordion1" style="padding:20px 50px;">           
             <div class="panel panel-success" style="overflow:visible;">
@@ -82,15 +84,15 @@
                           <tbody id="eicontent">
                           @if (!eHR.PMS.Lib.Utility.Common.IsNullOrEmptyList(Model.Participants))
                           {
-                              foreach (eHR.PMS.Model.DTO.Appraisal.Appraisal ei in Model.Participants.Take(int_participants_page_size).ToList())
+                              foreach (eHR.PMS.Model.DTO.Core.Employee ei in Model.Participants.Take(int_participants_page_size).ToList())
                               {
                               <tr>
                                 <td style="text-align:center;">
-                                    <input eid="@ei.Employee.Id" objectvalue="@(ei.Id)^&*@(ei.Employee.Id)^&*@(ei.Employee.DomainId)^&*@(ei.Employee.FirstName)^&*@(ei.Employee.LastName)^&*@(ei.Employee.Department != null ? ei.Employee.Department.Name : null)^&*@(ei.Employee.GetNumberOfApprovers())^&*ONERECORDENDED" type="checkbox" class="isadd" />
+                                    <input eid="@ei.Id" objectvalue="@(ei.Id)^&*@(ei.DomainId)^&*@(ei.FirstName)^&*@(ei.LastName)^&*@(ei.Department != null ? ei.Department.Name : null)^&*@(ei.GetNumberOfApprovers())^&*@(ei.Department != null ? 0 : ei.Department.Id)^&*ONERECORDENDED" type="checkbox" class="isadd" />
                                 </td>
-                                <td>@(ei.Employee.PreferredName)</td>
-                                <td>@(ei.Employee.Department!=null?ei.Employee.Department.Name:"")</td>
-                                <td>@(ei.Employee.GetNumberOfApprovers())</td>
+                                <td>@(ei.PreferredName)</td>
+                                <td>@(ei.Department.Name)</td>
+                                <td>@(ei.GetNumberOfApprovers())</td>
                               </tr>
                               }
                           }
@@ -116,21 +118,22 @@
                   
                 </div>
             </div>
-            <div id="buttongroup" style="float:right;margin-top:20px;margin-bottom:20px;">
+        </div>
+        </div>
+    <div id="buttongroup" style="float:right;">
              <div">
                  @{ if (!eHR.PMS.Lib.Utility.Common.IsNullOrEmptyList(Model.Participants))
                     {
-                        <button type="button" id="RemoveParticipants" class="btn btn-success btn-xs"><i class="glyphicon glyphicon-minus"></i> Remove</button>
+                        <button type="button" id="AddParticipants" class="btn btn-success btn-xs"><i class="glyphicon glyphicon-plus"></i> Add</button>
                     }
+                       
                   }
-                     <a href="@(Url.Content("~/HRManage/CancelAddRemove"))/@(eHR.PMS.Lib.Utility.Common.ChangeDateFormatVS(ViewData["Stage1EndDate"].ToString()))/@(eHR.PMS.Lib.Utility.Common.ChangeDateFormatVS(ViewData["Stage3EndDate"].ToString()))/@cycleid" class="btn btn-danger btn-xs"><i class="glyphicon glyphicon-off"></i> Back</a>                
+                 <!--<a href="@(Url.Content("~/HRManage/NewCycle"))/@(eHR.PMS.Lib.Utility.Common.ChangeDateFormatVS(ViewData["Stage1EndDate"].ToString()))/@(eHR.PMS.Lib.Utility.Common.ChangeDateFormatVS(ViewData["Stage3EndDate"].ToString()))" class="btn btn-danger btn-xs"><i class="glyphicon glyphicon-off"></i> Cancel</a>-->
+                 <a href="@(Url.Content("~/HRManage/CancelAddRemove"))/@(eHR.PMS.Lib.Utility.Common.ChangeDateFormatVS(ViewData["Stage1EndDate"].ToString()))/@(eHR.PMS.Lib.Utility.Common.ChangeDateFormatVS(ViewData["Stage3EndDate"].ToString()))" class="btn btn-danger btn-xs"><i class="glyphicon glyphicon-off"></i> Back</a>                
              </div>
              <ul id="totallist" style="display:none;">
              </ul>
-</div>
-        </div>
-        </div>
-
+    </div>
 </div>
 <!--pop up info for ajaxsave -->
     <div style="top:50%;" class="modal fade" id="InfoModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
@@ -170,7 +173,8 @@
                 </div>
           </div>
           <div class="modal-footer">
-            <a id="btn_add_modal_ok" class="btn btn-primary btn-xs">OK</a>            
+            <!--<a href="@(Url.Content("~/HRManage/NewCycle/"))@(eHR.PMS.Lib.Utility.Common.ChangeDateFormatVS(ViewData["Stage1EndDate"].ToString()))/@(eHR.PMS.Lib.Utility.Common.ChangeDateFormatVS(ViewData["Stage3EndDate"].ToString()))" class="btn btn-primary btn-xs">OK</a>-->
+            <button type="button" id="btn_add_modal_ok" class="btn btn-primary">OK</button>
           </div>
 
         </div><!-- /.modal-content -->
@@ -190,7 +194,7 @@
                 useBootstrapTooltip: true,
                 onPageClicked: function (e, originalEvent, type, page) {
                     $.ajax({
-                        url: "@(Url.Content("~/HRManage/RetriveRemoveParticipantsByPage"))",
+                        url: "@(Url.Content("~/HRManage/RetriveAddParticipantsByPage"))",
                         type: "post",
                         dataType: "json",
                         data: { "page": page, "Stage1EndDate": '@(ViewData["Stage1EndDate"].ToString())', "Stage3EndDate": '@(ViewData["Stage3EndDate"].ToString())', "EmployeeName": $("#hidEmployeeName").val(), "DomainID": $("#hidDomainID").val(), "DepartmentName": $("#hidDepartmentName").val() },
@@ -229,9 +233,9 @@
             $("form").submit();
         });
 
-        $("#RemoveParticipants").click(function () {
+        $("#AddParticipants").click(function () {
             if ($("#totallist li").length == 0) {
-                $("#info").text("Please select at least one record for removal.");
+                $("#info").text("Please select at least one record for addition.");
                 $('#RedictModal').modal();
                 return false;
             }
@@ -240,10 +244,10 @@
                 EIForCache = [EIForCache, $(this).text()].join();
             });
             $.ajax({
-                url: "@(Url.Content("~/HRManage/ConfirmRemove"))",
+                url: "@(Url.Content("~/HRManage/ConfirmAddNew"))",
                 type: "post",
                 dataType: "json",
-                data: { "cycleDateRangeStart": '@(ViewData["Stage1EndDate"].ToString())', "cycleDateRangeEnd": '@(ViewData["Stage3EndDate"].ToString())',"cycleId":'@cycleid', "EIForCache": EIForCache.substr(1) },
+                data: { "cycleDateRangeStart": '@(ViewData["Stage1EndDate"].ToString())', "cycleDateRangeEnd": '@(ViewData["Stage3EndDate"].ToString())', "EIForCache": EIForCache.substr(1) },
                 beforeSend: function () {
                     $('#InfoModal').modal();
                 },

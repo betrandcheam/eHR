@@ -49,27 +49,27 @@ namespace eHR.PMS.Job
          *      appraisal stage = pre-c, gs, pr, fr
          *      appraisal is locked
          *      trails = action appraisal created
-         *  cycle stage is in gs and 1 week before gs end date
+         *  cycle stage is in gs
          *      appraisal stage current stage = gs, status = open
          *      appraisal stage = gs, pr, fr
          *      appraisal is unlocked
          *      appraisal stage date = same as cycle
          *      trails = action appraisal created
-         *      create task
-         *  cycle stage is gs and less than 1 week before gs end date and before pr start date
+         *      create task (address = /stage1/keyperformanceindictors)
+         *  cycle stage is after gs end date and before pr start date
          *      appraisal stage current stage = gs, status = open
          *      appraisal stage = gs, fr
          *      appraisal stage date = same as cycle
          *      appraisal is locked
          *      trails = action appraisal created 
-         *  cycle stage is in pr and 1 week before pr end date
+         *  cycle stage is in pr
          *      appraisal stage current stage = gs, status = open
          *      appraisal stage = gs, fr
          *      appraisal is unlocked
          *      appraisal stage date = same as cycle
          *      trails = action appraisal created 
          *      create task
-         *  cycle stage is pr and less than 1 week before gs end date and before fr start date
+         *  cycle stage after pr end date and before fr start date
          *      appraisal stage current stage = gs, status = open
          *      appraisal stage = gs, fr
          *      appraisal stage date = same as cycle
@@ -98,50 +98,6 @@ namespace eHR.PMS.Job
          *          trails = action appraisal open
          *  if cycle is in pr and to start fr today
          *      
-         * */
-
-
-        /*
-         * On cycle creation
-         *  create cycle : stage = pre-cycle, status = open
-         *  create cylce stages : 4 stages, less post-cycle (pre-cycle start = day of creation, pre-cycle end = one day before goal setting start)
-         *  create appraisals : stage = pre-cycle, status = new
-         *  no need to create trails
-         * 
-         * */
-
-        /*
-         * Get all open cycles and their stages
-         *  if cycle is in pre-cycle: 
-         *      check if today needs to start goal setting stage
-         *          if needs to start:  update cycle stage to goal setting stage
-         *      check if today needs to start progress review stage
-         *          if needs to start:  update cycle stage to progress review stage
-         *      check if today needs to start the final year review date
-         *          if needs to start:  update cycle stage to final year review date
-         *  
-         *  for each appraisal in cycle
-         *      check appraisal stage and status
-         *          if stage = pre-cycle
-         *              if today needs to start start goal setting stage
-         *                  update appraisal stage to goal setting stage
-         *                  create tasks for each appraisal
-         *                  create trials for each appraisal
-         *                  send email notification (reciepients = all appraisal owner)
-         *          if stage = goal setting and status = approved
-         *              if today needs to start progress review stage
-         *                  update appraisal stage to progress review stage
-         *                  update appraisal status to new
-         *                  create tasks for each appraisal
-         *                  create trials for each appraisal
-         *                  send email notification (reciepients = all appraisal owner)
-         *          if stage = progress review and status = approved
-         *              if today needs to start progress review stage
-         *                  update appraisal stage to final review stage
-         *                  update appraisal status to new                 
-         *                  create tasks for each appraisal
-         *                  create trials for each appraisal
-         *                  send email notification (reciepients = all appraisal owner)             *                  
          * */
 
         private static void ManageAppraisalStage(DateTime runDate)
@@ -265,5 +221,8 @@ namespace eHR.PMS.Job
                 Business.AppraisalManager.SendEmailNotification(lst_email_messages);
             }
         }
+
+        private static void ManageCycleInProgressReviewStage(Model.DTO.Cycle.Cycle cycle, DateTime runDate)
+        { }
     }
 }

@@ -27,8 +27,8 @@ namespace eHR.PMS.Web
 
             routes.MapRoute(
                 name: "HRUrl",
-                url: "HRManage/{action}/{cycleDateRangeStart}/{cycleDateRangeEnd}",
-                defaults: new { controller = "HRManage", action = "Index", cycleDateRangeStart = UrlParameter.Optional, cycleDateRangeEnd = UrlParameter.Optional }
+                url: "HRManage/{action}/{cycleDateRangeStart}/{cycleDateRangeEnd}/{cycleId}",
+                defaults: new { controller = "HRManage", action = "Index", cycleDateRangeStart = UrlParameter.Optional, cycleDateRangeEnd = UrlParameter.Optional, cycleId = UrlParameter.Optional }
             );
 
             routes.MapRoute(
