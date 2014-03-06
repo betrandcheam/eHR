@@ -36,25 +36,25 @@ namespace eHR.PMS.Business
             }
             return boo_success;
         }
-
-        public static bool UpdateCycle(PMS.Model.DTO.Cycle.Cycle cycle,int cycleId, List<int> cids, Model.DTO.Core.Employee user, out string message)
+        
+        public static bool UpdateCycle(PMS.Model.DTO.Cycle.Cycle cycle,int cycleId, Model.DTO.Core.Employee user, out string message)
         {
             bool boo_success = false;
             message = string.Empty;
 
             if (!Lib.Utility.Common.IsNullOrEmptyList(cycle.Appriasals))
             {
-                boo_success = Model.PMSModel.UpdateCycleAndCreateAppraisalTasks(cycle, cycleId,cids,out message);
+                boo_success = Model.PMSModel.UpdateCycleAndCreateAppraisalTasks(cycle, cycleId,out message);
 
                 if (boo_success)
                 {
-                    cycle = Model.PMSModel.GetCycleById(Convert.ToInt32(message));
-                    Model.DTO.Cycle.Stage obj_stage = cycle.CycleStages.Where(rec => rec.StageId == Model.PMSConstants.STAGE_ID_GOAL_SETTING).Single();
+                    //cycle = Model.PMSModel.GetCycleById(Convert.ToInt32(message));
+                    Model.DTO.Cycle.Stage obj_gs_stage = cycle.CycleStages.Where(rec => rec.StageId == Model.PMSConstants.STAGE_ID_GOAL_SETTING).SingleOrDefault();
+                    Model.DTO.Cycle.Stage obj_pr_stage = cycle.CycleStages.Where(rec => rec.StageId == Model.PMSConstants.STAGE_ID_PROGRESS_REVIEW).SingleOrDefault();
+                    Model.DTO.Cycle.Stage obj_fr_stage = cycle.CycleStages.Where(rec => rec.StageId == Model.PMSConstants.STAGE_ID_FINAL_YEAR).SingleOrDefault();
 
-                    if (obj_stage.StartDate == DateTime.Now.Date)
-                    {
-                        PreCycleStageManagement(cycle, DateTime.Now.Date, user);
-                    }
+                    int flag = CheckStageDate(obj_gs_stage, obj_pr_stage, obj_fr_stage);
+                    UpdateCycleStageManagement(cycle, DateTime.Now.Date, user,flag);
                 }
             }
             else
@@ -63,7 +63,24 @@ namespace eHR.PMS.Business
             }
             return boo_success;
         }
-
+        public static int CheckStageDate(Model.DTO.Cycle.Stage obj_gs_stage, Model.DTO.Cycle.Stage obj_pr_stage, Model.DTO.Cycle.Stage obj_fr_stage)
+        {
+            if (DateTime.Now < obj_gs_stage.StartDate)
+                return 1;
+            if (DateTime.Now.Date == obj_gs_stage.StartDate)
+                return 2;
+            if (DateTime.Now.Date > obj_gs_stage.StartDate && DateTime.Now.Date < obj_gs_stage.EndDate)
+                return 3;
+            if (DateTime.Now.Date >= obj_gs_stage.EndDate && DateTime.Now.Date < obj_pr_stage.StartDate)
+                return 4;
+            if (DateTime.Now.Date == obj_pr_stage.StartDate)
+                return 5;
+            if (DateTime.Now.Date > obj_pr_stage.StartDate && DateTime.Now.Date < obj_pr_stage.EndDate)
+                return 6;
+            if (DateTime.Now.Date >= obj_pr_stage.EndDate && DateTime.Now.Date < obj_fr_stage.StartDate)
+                return 7;
+            return 0;
+        }
         public static Model.DTO.Master.Stage GetCycleNextStage(Model.DTO.Cycle.Cycle cycle, DateTime stageStartDate)
         {
             Model.DTO.Master.Stage obj_next_stage = null;
@@ -103,6 +120,7 @@ namespace eHR.PMS.Business
             List<Model.DTO.Appraisal.Appraisal> lst_appraisals_to_update = new List<Model.DTO.Appraisal.Appraisal>();
             List<System.Net.Mail.MailMessage> lst_email_messages = new List<System.Net.Mail.MailMessage>();
 
+
             cycle.Stage = GetCycleNextStage(cycle, stageStartDate.Date);
             if (!Lib.Utility.Common.IsNullOrEmptyList(cycle.Appriasals))
             {
@@ -134,6 +152,91 @@ namespace eHR.PMS.Business
             return boo_success;
         }
 
+        public static bool UpdateCycleStageManagement(Model.DTO.Cycle.Cycle cycle, DateTime stageStartDate, Model.DTO.Core.Employee user,int flag)
+        {
+            bool boo_success = false;
+            //List<Model.DTO.Cycle.Cycle> lst_cycles = new List<Model.DTO.Cycle.Cycle>();
+            List<Model.DTO.Core.Task.Task> lst_all_tasks = new List<Model.DTO.Core.Task.Task>();
+            List<Model.DTO.Appraisal.Appraisal> lst_appraisals_to_update = new List<Model.DTO.Appraisal.Appraisal>();
+            List<System.Net.Mail.MailMessage> lst_email_messages = new List<System.Net.Mail.MailMessage>();
+
+            switch (flag)
+            {
+                case 2:
+                case 5:
+                    cycle.Stage = GetCycleNextStage(cycle, stageStartDate.Date);
+                    break;
+                default:
+                    break;
+            }
+            
+            if (!Lib.Utility.Common.IsNullOrEmptyList(cycle.Appriasals))
+            {
+                switch (flag)
+                {
+                    case 2:
+                    case 3:
+                    case 5:
+                    case 6:
+                        foreach (Model.DTO.Appraisal.Appraisal obj_appraisal in cycle.Appriasals)
+                        {
+                            //if (obj_appraisal.Stage.Id == Model.PMSConstants.STAGE_ID_PRE_CYCLE)
+                            //{
+                            obj_appraisal.Locked = false;
+                            obj_appraisal.AddTrail(CreateAppraisalTrail(obj_appraisal, user, new Model.DTO.Master.Action() { Id = Model.PMSConstants.ACTION_ID_APPRAISAL_OPENED }));
+                            obj_appraisal.Stage = Model.Mappers.PMSMapper.MapAppraisalStageDTOToStageDTO(obj_appraisal.AppraisalStages.Where(rec => rec.StageId == Model.PMSConstants.STAGE_ID_GOAL_SETTING).SingleOrDefault());
+                            obj_appraisal.Status = new Model.DTO.Master.Status() { Id = Model.PMSConstants.STATUS_ID_NEW };
+                            lst_all_tasks.Add(CreateTasksForCycleStageChange(obj_appraisal));
+                            lst_appraisals_to_update.Add(obj_appraisal);
+                            if (!string.IsNullOrEmpty(obj_appraisal.Employee.OfficeEmailAddress))
+                            {
+                                lst_email_messages.Add(GenerateEmailMessageForCycleStageStart(obj_appraisal));
+                            }
+                            //}
+                        }
+                        break;
+                    case 4:
+                    case 7:
+                        foreach (Model.DTO.Appraisal.Appraisal obj_appraisal in cycle.Appriasals)
+                        {
+                            //if (obj_appraisal.Stage.Id == Model.PMSConstants.STAGE_ID_PRE_CYCLE)
+                            //{
+                            obj_appraisal.Locked = true;
+                            obj_appraisal.AddTrail(CreateAppraisalTrail(obj_appraisal, user, new Model.DTO.Master.Action() { Id = Model.PMSConstants.ACTION_ID_APPRAISAL_OPENED }));
+                            obj_appraisal.Stage = Model.Mappers.PMSMapper.MapAppraisalStageDTOToStageDTO(obj_appraisal.AppraisalStages.Where(rec => rec.StageId == Model.PMSConstants.STAGE_ID_GOAL_SETTING).SingleOrDefault());
+                            obj_appraisal.Status = new Model.DTO.Master.Status() { Id = Model.PMSConstants.STATUS_ID_NEW };
+                            lst_appraisals_to_update.Add(obj_appraisal);
+                            //}
+                        }
+                        break;
+                }
+                foreach (Model.DTO.Appraisal.Appraisal obj_appraisal in cycle.Appriasals)
+                {
+                    //if (obj_appraisal.Stage.Id == Model.PMSConstants.STAGE_ID_PRE_CYCLE)
+                    //{
+                    obj_appraisal.Locked = false;
+                    obj_appraisal.AddTrail(CreateAppraisalTrail(obj_appraisal, user, new Model.DTO.Master.Action() { Id = Model.PMSConstants.ACTION_ID_APPRAISAL_OPENED }));
+                    obj_appraisal.Stage = Model.Mappers.PMSMapper.MapAppraisalStageDTOToStageDTO(obj_appraisal.AppraisalStages.Where(rec => rec.StageId == Model.PMSConstants.STAGE_ID_GOAL_SETTING).SingleOrDefault());
+                    obj_appraisal.Status = new Model.DTO.Master.Status() { Id = Model.PMSConstants.STATUS_ID_NEW };
+                    lst_all_tasks.Add(CreateTasksForCycleStageChange(obj_appraisal));
+                    lst_appraisals_to_update.Add(obj_appraisal);
+                    if (!string.IsNullOrEmpty(obj_appraisal.Employee.OfficeEmailAddress))
+                    {
+                        lst_email_messages.Add(GenerateEmailMessageForCycleStageStart(obj_appraisal));
+                    }
+                    //}
+                }
+            }
+            //lst_cycles.Add(cycle);
+
+            boo_success = Model.PMSModel.AppraisalStageManager(null, lst_appraisals_to_update, lst_all_tasks, null);
+
+            /*if (boo_success)
+            {
+                SendEmailNotification(lst_email_messages);
+            }*/
+            return boo_success;
+        }
         #endregion Cycle
 
         #region Appraisal
@@ -168,6 +271,96 @@ namespace eHR.PMS.Business
                         };
                         obj_appraisal.AddAppraisalStage(obj_appraisal_stage);
                     }
+
+                    if (obj_participant.Level1Approver != null) { obj_appraisal.AddApprover(Model.Mappers.PMSMapper.MapEmployeeDTOToApproverDTO(obj_participant.Level1Approver, 1)); }
+                    if (obj_participant.Level2Approver != null) { obj_appraisal.AddApprover(Model.Mappers.PMSMapper.MapEmployeeDTOToApproverDTO(obj_participant.Level2Approver, 2)); }
+
+                    Model.DTO.Appraisal.Trail obj_trail = new Model.DTO.Appraisal.Trail()
+                    {
+                        Appraisal = obj_appraisal,
+                        Stage = new Model.DTO.Master.Stage() { Id = PMS.Model.PMSConstants.STAGE_ID_PRE_CYCLE },
+                        Action = new Model.DTO.Master.Action() { Id = PMS.Model.PMSConstants.ACTION_ID_APPRAISAL_CREATED },
+                        ActionTimestamp = DateTime.Now,
+                        Actioner = Model.Mappers.CoreMapper.MapUserDTOToEmployeeDTO(user)
+                    };
+                    obj_appraisal.AddTrail(obj_trail);
+
+                    lst_appraisals.Add(obj_appraisal);
+                }
+            }
+            return lst_appraisals;
+        }
+
+        public static List<Model.DTO.Appraisal.Appraisal> CreateAppraisalsForUpdateCycle(List<Model.DTO.Core.Employee> participants, List<Model.DTO.Cycle.Stage> stages, Model.DTO.Core.Security.User user)
+        {
+            List<Model.DTO.Appraisal.Appraisal> lst_appraisals = null;
+            if (!Lib.Utility.Common.IsNullOrEmptyList(participants))
+            {
+                lst_appraisals = new List<Model.DTO.Appraisal.Appraisal>();
+                foreach (Model.DTO.Core.Employee obj_participant in participants)
+                {
+                    Model.DTO.Appraisal.Appraisal obj_appraisal = new Model.DTO.Appraisal.Appraisal()
+                    {
+                        Stage = new Model.DTO.Master.Stage() { Id = Model.PMSConstants.STAGE_ID_PRE_CYCLE },
+                        Status = new Model.DTO.Master.Status() { Id = Model.PMSConstants.STATUS_ID_NEW },
+                        Employee = obj_participant,
+                        Department = Model.Mappers.CoreMapper.MapDepartmentDTOToMasterDepartmentDTO(obj_participant.Department),
+                        Locked = true
+                    };
+
+                    obj_appraisal.AddAppraisalSection(new Model.DTO.Appraisal.Section() { SectionId = Model.PMSConstants.SECTION_ID_KPI });
+                    obj_appraisal.AddAppraisalSection(new Model.DTO.Appraisal.Section() { SectionId = Model.PMSConstants.SECTION_ID_CORE_VALUES });
+
+                    int flag = CheckStageDate(stages[1], stages[2], stages[3]);
+                    switch (flag)
+                    {
+                        case 1:
+                            foreach (Model.DTO.Cycle.Stage obj_cycle_stage in stages)
+                            {
+
+                                Model.DTO.Appraisal.Stage obj_appraisal_stage = new Model.DTO.Appraisal.Stage()
+                                {
+                                    StageId = obj_cycle_stage.StageId,
+                                    StartDate = obj_cycle_stage.StartDate,
+                                    EndDate = obj_cycle_stage.EndDate
+                                };
+                                obj_appraisal.AddAppraisalStage(obj_appraisal_stage);
+                            }
+                            break;
+                        case 2:
+                        case 3:
+                            foreach (Model.DTO.Cycle.Stage obj_cycle_stage in stages.Where(sec=>sec.StageId>eHR.PMS.Model.PMSConstants.STAGE_ID_PRE_CYCLE))
+                            {
+
+                                Model.DTO.Appraisal.Stage obj_appraisal_stage = new Model.DTO.Appraisal.Stage()
+                                {
+                                    StageId = obj_cycle_stage.StageId,
+                                    StartDate = obj_cycle_stage.StartDate,
+                                    EndDate = obj_cycle_stage.EndDate
+                                };
+                                obj_appraisal.AddAppraisalStage(obj_appraisal_stage);
+                            }
+                            break;
+                        case 4:
+                        case 5:
+                        case 6:
+                        case 7:
+                            foreach (Model.DTO.Cycle.Stage obj_cycle_stage in stages.Where(sec => (sec.StageId == eHR.PMS.Model.PMSConstants.STAGE_ID_GOAL_SETTING || sec.Id == eHR.PMS.Model.PMSConstants.STAGE_ID_FINAL_YEAR)))
+                            {
+
+                                Model.DTO.Appraisal.Stage obj_appraisal_stage = new Model.DTO.Appraisal.Stage()
+                                {
+                                    StageId = obj_cycle_stage.StageId,
+                                    StartDate = obj_cycle_stage.StartDate,
+                                    EndDate = obj_cycle_stage.EndDate
+                                };
+                                obj_appraisal.AddAppraisalStage(obj_appraisal_stage);
+                            }
+                            break;
+                        default:
+                            break;
+                    }
+                    
 
                     if (obj_participant.Level1Approver != null) { obj_appraisal.AddApprover(Model.Mappers.PMSMapper.MapEmployeeDTOToApproverDTO(obj_participant.Level1Approver, 1)); }
                     if (obj_participant.Level2Approver != null) { obj_appraisal.AddApprover(Model.Mappers.PMSMapper.MapEmployeeDTOToApproverDTO(obj_participant.Level2Approver, 2)); }

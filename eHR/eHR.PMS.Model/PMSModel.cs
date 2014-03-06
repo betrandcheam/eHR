@@ -423,7 +423,7 @@ namespace eHR.PMS.Model
             return boo_success;
         }
 
-        public static bool UpdateCycleAndCreateAppraisalTasks(PMS.Model.DTO.Cycle.Cycle cycle, int cycleId, List<int> cids, out string message)
+        public static bool UpdateCycleAndCreateAppraisalTasks(PMS.Model.DTO.Cycle.Cycle cycle, int cycleId, out string message)
         {
             bool boo_success = false;
             message = string.Empty;
@@ -442,67 +442,7 @@ namespace eHR.PMS.Model
                 dc_pms.SaveChanges();
 
                 message = Convert.ToString(cycleId);
-                foreach (int cid in cids)
-                {
-                    foreach (var item in dc_pms.PMS_APPRAISAL_TRAIL.Where(sec => sec.APPRAISAL_ID == cid))
-                    {
-                        dc_pms.PMS_APPRAISAL_TRAIL.DeleteObject(item);
-                    }
-                    foreach (var item in dc_pms.PMS_APPRAISAL_SECTION.Where(sec=>sec.APPRAISAL_ID==cid))
-                    {
-                        foreach (var childitem in dc_pms.PMS_APPRAISAL_SECTION_COMMENT.Where(sec => sec.SECTION_ID == item.ID))
-                        {
-                            dc_pms.PMS_APPRAISAL_SECTION_COMMENT.DeleteObject(childitem);
-                        }
-                        dc_pms.PMS_APPRAISAL_SECTION.DeleteObject(item);
-                    }
-                    foreach (var item in dc_pms.PMS_APPRAISAL_APPROVER.Where(sec => sec.APPRAISAL_ID == cid))
-                    {
-                        dc_pms.PMS_APPRAISAL_APPROVER.DeleteObject(item);
-                    }
-                    foreach (var item in dc_pms.PMS_APPRAISAL_STAGE.Where(sec => sec.APPRAISAL_ID == cid))
-                    {
-                        dc_pms.PMS_APPRAISAL_STAGE.DeleteObject(item);
-                    }
-                    foreach (var item in dc_pms.PMS_APPRAISAL_REVIEWER.Where(sec => sec.APPRAISAL_ID == cid))
-                    {
-                        dc_pms.PMS_APPRAISAL_REVIEWER.DeleteObject(item);
-                    }
-                    foreach (var item in dc_pms.PMS_APPRAISAL_PERFORMANCE_COACHING.Where(sec => sec.APPRAISAL_ID == cid))
-                    {
-                        foreach (var childitem in dc_pms.PMS_APPRAISAL_PERFORMANCE_COACHING_COMMENT.Where(sec => sec.ITEM_ID == cid))
-                        {
-                            dc_pms.PMS_APPRAISAL_PERFORMANCE_COACHING_COMMENT.DeleteObject(childitem);
-                        }
-                        dc_pms.PMS_APPRAISAL_PERFORMANCE_COACHING.DeleteObject(item);
-                    }
-                    foreach (var item in dc_pms.PMS_APPRAISAL_KPI.Where(sec => sec.APPRAISAL_ID == cid))
-                    {
-                        foreach (var childitem in dc_pms.PMS_APPRAISAL_KPI_COMMENT.Where(sec => sec.ITEM_ID == cid))
-                        {
-                            dc_pms.PMS_APPRAISAL_KPI_COMMENT.DeleteObject(childitem);
-                        }
-                        dc_pms.PMS_APPRAISAL_KPI.DeleteObject(item);
-                    }
-                    foreach (var item in dc_pms.PMS_APPRAISAL_CORE_VALUE.Where(sec => sec.APPRAISAL_ID == cid))
-                    {
-                        foreach (var childitem in dc_pms.PMS_APPRAISAL_CORE_VALUE_COMMENT.Where(sec => sec.ITEM_ID == cid))
-                        {
-                            dc_pms.PMS_APPRAISAL_CORE_VALUE_COMMENT.DeleteObject(childitem);
-                        }
-                        dc_pms.PMS_APPRAISAL_CORE_VALUE.DeleteObject(item);
-                    }
-                    foreach (var item in dc_pms.PMS_APPRAISAL_CAREER_DEVELOPMENT.Where(sec => sec.APPRAISAL_ID == cid))
-                    {
-                        foreach (var childitem in dc_pms.PMS_APPRAISAL_CAREER_DEVELOPMENT_COMMENT.Where(sec => sec.ITEM_ID == cid))
-                        {
-                            dc_pms.PMS_APPRAISAL_CAREER_DEVELOPMENT_COMMENT.DeleteObject(childitem);
-                        }
-                        dc_pms.PMS_APPRAISAL_CAREER_DEVELOPMENT.DeleteObject(item);
-                    }
-                    var appr = dc_pms.PMS_APPRAISAL.Where(sec => sec.ID == cid).FirstOrDefault();
-                    dc_pms.PMS_APPRAISAL.DeleteObject(appr);
-                }
+                
                 foreach (Model.DTO.Appraisal.Appraisal dto_appraisal in cycle.Appriasals)
                 {
                     Model.Context.PMS_APPRAISAL entity_appraisal = Mappers.PMSMapper.MapAppraisalDTOToEntity(dto_appraisal);
@@ -568,6 +508,87 @@ namespace eHR.PMS.Model
             return boo_success;
         }
 
+        public static bool DeleteApprisalInCyle(List<int> cids, out string message)
+        {
+            bool boo_success = false;
+            message = string.Empty;
+            PMS.Model.Context.PMSEntities dc_pms = new PMS.Model.Context.PMSEntities();
+            try
+            {
+                foreach (int cid in cids)
+                {
+                    foreach (var item in dc_pms.PMS_APPRAISAL_TRAIL.Where(sec => sec.APPRAISAL_ID == cid))
+                    {
+                        dc_pms.PMS_APPRAISAL_TRAIL.DeleteObject(item);
+                    }
+                    foreach (var item in dc_pms.PMS_APPRAISAL_SECTION.Where(sec => sec.APPRAISAL_ID == cid))
+                    {
+                        foreach (var childitem in dc_pms.PMS_APPRAISAL_SECTION_COMMENT.Where(sec => sec.SECTION_ID == item.ID))
+                        {
+                            dc_pms.PMS_APPRAISAL_SECTION_COMMENT.DeleteObject(childitem);
+                        }
+                        dc_pms.PMS_APPRAISAL_SECTION.DeleteObject(item);
+                    }
+                    foreach (var item in dc_pms.PMS_APPRAISAL_APPROVER.Where(sec => sec.APPRAISAL_ID == cid))
+                    {
+                        dc_pms.PMS_APPRAISAL_APPROVER.DeleteObject(item);
+                    }
+                    foreach (var item in dc_pms.PMS_APPRAISAL_STAGE.Where(sec => sec.APPRAISAL_ID == cid))
+                    {
+                        dc_pms.PMS_APPRAISAL_STAGE.DeleteObject(item);
+                    }
+                    foreach (var item in dc_pms.PMS_APPRAISAL_REVIEWER.Where(sec => sec.APPRAISAL_ID == cid))
+                    {
+                        dc_pms.PMS_APPRAISAL_REVIEWER.DeleteObject(item);
+                    }
+                    foreach (var item in dc_pms.PMS_APPRAISAL_PERFORMANCE_COACHING.Where(sec => sec.APPRAISAL_ID == cid))
+                    {
+                        foreach (var childitem in dc_pms.PMS_APPRAISAL_PERFORMANCE_COACHING_COMMENT.Where(sec => sec.ITEM_ID == cid))
+                        {
+                            dc_pms.PMS_APPRAISAL_PERFORMANCE_COACHING_COMMENT.DeleteObject(childitem);
+                        }
+                        dc_pms.PMS_APPRAISAL_PERFORMANCE_COACHING.DeleteObject(item);
+                    }
+                    foreach (var item in dc_pms.PMS_APPRAISAL_KPI.Where(sec => sec.APPRAISAL_ID == cid))
+                    {
+                        foreach (var childitem in dc_pms.PMS_APPRAISAL_KPI_COMMENT.Where(sec => sec.ITEM_ID == cid))
+                        {
+                            dc_pms.PMS_APPRAISAL_KPI_COMMENT.DeleteObject(childitem);
+                        }
+                        dc_pms.PMS_APPRAISAL_KPI.DeleteObject(item);
+                    }
+                    foreach (var item in dc_pms.PMS_APPRAISAL_CORE_VALUE.Where(sec => sec.APPRAISAL_ID == cid))
+                    {
+                        foreach (var childitem in dc_pms.PMS_APPRAISAL_CORE_VALUE_COMMENT.Where(sec => sec.ITEM_ID == cid))
+                        {
+                            dc_pms.PMS_APPRAISAL_CORE_VALUE_COMMENT.DeleteObject(childitem);
+                        }
+                        dc_pms.PMS_APPRAISAL_CORE_VALUE.DeleteObject(item);
+                    }
+                    foreach (var item in dc_pms.PMS_APPRAISAL_CAREER_DEVELOPMENT.Where(sec => sec.APPRAISAL_ID == cid))
+                    {
+                        foreach (var childitem in dc_pms.PMS_APPRAISAL_CAREER_DEVELOPMENT_COMMENT.Where(sec => sec.ITEM_ID == cid))
+                        {
+                            dc_pms.PMS_APPRAISAL_CAREER_DEVELOPMENT_COMMENT.DeleteObject(childitem);
+                        }
+                        dc_pms.PMS_APPRAISAL_CAREER_DEVELOPMENT.DeleteObject(item);
+                    }
+                    var appr = dc_pms.PMS_APPRAISAL.Where(sec => sec.ID == cid).FirstOrDefault();
+                    dc_pms.PMS_APPRAISAL.DeleteObject(appr);
+                }
+                dc_pms.SaveChanges();
+                boo_success = true;
+            }
+            catch (Exception exc)
+            {
+                message = exc.Message;
+            }
+            finally
+            {
+                dc_pms.Dispose();
+            }
+            return boo_success;
+        }
         public static List<DTO.Cycle.Cycle> GetCycleByStatus(int? statusId)
         {
             PMS.Model.Context.PMSEntities dc_pms = new PMS.Model.Context.PMSEntities();

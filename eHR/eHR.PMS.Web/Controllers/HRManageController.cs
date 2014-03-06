@@ -231,17 +231,22 @@ namespace eHR.PMS.Web.Controllers
                 dict_cycle_stage_dates.Add("Stage3StartDate", DateTime.ParseExact(dict["Stage3StartDate"], "dd/MM/yyyy", null));
                 dict_cycle_stage_dates.Add("Stage3EndDate", DateTime.ParseExact(dict["Stage3EndDate"], "dd/MM/yyyy", null));
 
+                List<int> deleteApprIdList = new List<int>();
+                if (System.Web.HttpContext.Current.Session["TempRemoveApprIds"] != null)
+                {
+                    deleteApprIdList = (List<int>)System.Web.HttpContext.Current.Session["TempRemoveApprIds"];
+                    eHR.PMS.Model.PMSModel.DeleteApprisalInCyle(deleteApprIdList, out message);
+                }
+
                 List<PMS.Model.DTO.Appraisal.Appraisal> ParticipantsListSessionPart = (List<PMS.Model.DTO.Appraisal.Appraisal>)System.Web.HttpContext.Current.Session["CycleExistParticipantsList"];
                 if (ParticipantsListSessionPart != null)
                 {
 
                     obj_cycle.CycleStages = CreateDefaultStagesForNewCycle(dict_cycle_stage_dates);
                     List<Model.DTO.Core.Employee> emplist = ApprListToEmplList(ParticipantsListSessionPart);
-                    obj_cycle.Appriasals = Business.AppraisalManager.CreateAppraisalsForNewCycle(emplist, obj_cycle.CycleStages, CurrentUser);
-                    List<int> deleteApprIdList = new List<int>();
-                    if (System.Web.HttpContext.Current.Session["TempRemoveApprIds"] != null)
-                        deleteApprIdList = (List<int>)System.Web.HttpContext.Current.Session["TempRemoveApprIds"];
-                    if (Business.AppraisalManager.UpdateCycle(obj_cycle, cycleid,deleteApprIdList, Model.Mappers.CoreMapper.MapUserDTOToEmployeeDTO(CurrentUser), out message))
+                    obj_cycle.Appriasals = Business.AppraisalManager.CreateAppraisalsForUpdateCycle(emplist, obj_cycle.CycleStages, CurrentUser);
+                    
+                    if (Business.AppraisalManager.UpdateCycle(obj_cycle, cycleid, Model.Mappers.CoreMapper.MapUserDTOToEmployeeDTO(CurrentUser), out message))
                     {
                         ClearAllCreatedSessionObjects();
                         return Redirect(Url.Content("~/"));

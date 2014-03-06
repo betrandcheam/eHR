@@ -40,11 +40,11 @@
         @{
             if (Model.CurrentCycle != null && Model.CurrentCycle.CycleStages.Count > 0 && Model.CurrentCycle.CycleStages[0].StartDate.HasValue)
             {
-                <input type="text" class="form-control" id="Stage1StartDate" name="Stage1StartDate" value="@Model.CurrentCycle.CycleStages[0].StartDate.Value.ToString("dd/MM/yyyy")"/>                     
+                <input type="text" class="form-control stagedate" id="Stage1StartDate" name="Stage1StartDate" value="@Model.CurrentCycle.CycleStages[0].StartDate.Value.ToString("dd/MM/yyyy")"/>                     
             }
             else
             {
-                <input type="text" class="form-control" id="Stage1StartDate" name="Stage1StartDate" value="" />
+                <input type="text" class="form-control stagedate" id="Stage1StartDate" name="Stage1StartDate" value="" />
             }
            }
           <span class="input-group-addon">
@@ -56,11 +56,11 @@
           @{
               if (Model.CurrentCycle != null && Model.CurrentCycle.CycleStages.Count > 0 && Model.CurrentCycle.CycleStages[0].EndDate.HasValue)
               {
-                <input type="text" class="form-control" id="Stage1EndDate" name="Stage1EndDate" value="@Model.CurrentCycle.CycleStages[0].EndDate.Value.ToString("dd/MM/yyyy")"/>                                                                   
+                <input type="text" class="form-control stagedate" id="Stage1EndDate" name="Stage1EndDate" value="@Model.CurrentCycle.CycleStages[0].EndDate.Value.ToString("dd/MM/yyyy")"/>                                                                   
               }
               else
               {
-                <input type="text" class="form-control" id="Stage1EndDate" name="Stage1EndDate"/>                  
+                <input type="text" class="form-control stagedate" id="Stage1EndDate" name="Stage1EndDate"/>                  
               }
            }
           <span class="input-group-addon">
@@ -74,11 +74,11 @@
            @{
                if (Model.CurrentCycle != null && Model.CurrentCycle.CycleStages.Count > 1 && Model.CurrentCycle.CycleStages[1].StartDate.HasValue)
                {
-                <input type="text" class="form-control" id="Stage2StartDate" name="Stage2StartDate" value="@Model.CurrentCycle.CycleStages[1].StartDate.Value.ToString("dd/MM/yyyy")"/>                                                    
+                <input type="text" class="form-control stagedate" id="Stage2StartDate" name="Stage2StartDate" value="@Model.CurrentCycle.CycleStages[1].StartDate.Value.ToString("dd/MM/yyyy")"/>                                                    
                }
                else
                {
-                   <input type="text" class="form-control" id="Stage2StartDate" name="Stage2StartDate">
+                   <input type="text" class="form-control stagedate" id="Stage2StartDate" name="Stage2StartDate">
                }
            }
           <span class="input-group-addon">
@@ -90,11 +90,11 @@
            @{
                if (Model.CurrentCycle != null && Model.CurrentCycle.CycleStages.Count > 1 && Model.CurrentCycle.CycleStages[1].EndDate.HasValue)
                {
-                <input type="text" class="form-control" id="Stage2EndDate" name="Stage2EndDate" value="@Model.CurrentCycle.CycleStages[1].EndDate.Value.ToString("dd/MM/yyyy")"/>                                                      
+                <input type="text" class="form-control stagedate" id="Stage2EndDate" name="Stage2EndDate" value="@Model.CurrentCycle.CycleStages[1].EndDate.Value.ToString("dd/MM/yyyy")"/>                                                      
                }
                else
                {
-                   <input type="text" class="form-control" id="Stage2EndDate" name="Stage2EndDate">
+                   <input type="text" class="form-control stagedate" id="Stage2EndDate" name="Stage2EndDate">
                }
            }
           <span class="input-group-addon">
@@ -108,11 +108,11 @@
           @{
               if (Model.CurrentCycle != null && Model.CurrentCycle.CycleStages.Count > 2 && Model.CurrentCycle.CycleStages[2].StartDate.HasValue)
               {
-                <input type="text" class="form-control" id="Stage3StartDate" name="Stage3StartDate" value="@Model.CurrentCycle.CycleStages[2].StartDate.Value.ToString("dd/MM/yyyy")"/>                                     
+                <input type="text" class="form-control stagedate" id="Stage3StartDate" name="Stage3StartDate" value="@Model.CurrentCycle.CycleStages[2].StartDate.Value.ToString("dd/MM/yyyy")"/>                                     
               }
               else
               {
-                <input type="text" class="form-control" id="Stage3StartDate" name="Stage3StartDate">                  
+                <input type="text" class="form-control stagedate" id="Stage3StartDate" name="Stage3StartDate">                  
               }
            }
           <span class="input-group-addon">
@@ -124,11 +124,11 @@
            @{
                if (Model.CurrentCycle != null && Model.CurrentCycle.CycleStages.Count > 2 && Model.CurrentCycle.CycleStages[2].EndDate.HasValue)
                {
-                <input type="text" class="form-control" id="Stage3EndDate" name="Stage3EndDate" value="@Model.CurrentCycle.CycleStages[2].EndDate.Value.ToString("dd/MM/yyyy")"/>                                     
+                <input type="text" class="form-control stagedate" id="Stage3EndDate" name="Stage3EndDate" value="@Model.CurrentCycle.CycleStages[2].EndDate.Value.ToString("dd/MM/yyyy")"/>                                     
                }
                else
                {
-                <input type="text" class="form-control" id="Stage3EndDate" name="Stage3EndDate">                  
+                <input type="text" class="form-control stagedate" id="Stage3EndDate" name="Stage3EndDate">                  
                }
            }
           <span class="input-group-addon">
@@ -346,6 +346,42 @@
             $("#updatecycle").val("0");
             $("form").submit();
         });
+        $('#datetimepicker1').datetimepicker({
+            format: "DD/MM/YYYY",
+            pickTime: false
+        });
+        $('#datetimepicker2').datetimepicker({
+            format: "DD/MM/YYYY",
+            pickTime: false
+        });
+        $('#datetimepicker3').datetimepicker({
+            format: "DD/MM/YYYY",
+            pickTime: false
+        });
+        $('#datetimepicker4').datetimepicker({
+            format: "DD/MM/YYYY",
+            pickTime: false
+        });
+        $('#datetimepicker5').datetimepicker({
+            format: "DD/MM/YYYY",
+            pickTime: false
+        });
+        $('#datetimepicker6').datetimepicker({
+            format: "DD/MM/YYYY",
+            pickTime: false
+        });
+        var nowdate=new Date();
+        var settingdate=new Date();
+        var temp=new Array();
+        $.each($(".stagedate"),function(){
+            temp=$(this).val().split('/');
+            if(nowdate.getYear()>parseInt(temp[2],10) || nowdate.getMonth()>parseInt(temp[1],10) || (nowdate.getDay()+1)>parseInt(temp[1],10))
+             {
+                $(this).attr("disabled",true);
+                $(this).parent().datetimepicker('hide');
+                $(this).next().hide();
+             }
+        });
         if($("#whetherpostback").val()!="-1")
         {
             $('.bootstrap-select').find('.filter-option').text($("#whetherpostback").attr("attrname"));
@@ -406,39 +442,16 @@
                window.location.href = "HRManage/RemoveParticipants/" + $("#strStage1EndDate").val() + "/" + $("#strStage3EndDate").val();
             } 
         });*/
-        $('#datetimepicker1').datetimepicker({
-            format: "DD/MM/YYYY",
-            pickTime: false
-        });
-        $('#datetimepicker2').datetimepicker({
-            format: "DD/MM/YYYY",
-            pickTime: false
-        });
-        $('#datetimepicker3').datetimepicker({
-            format: "DD/MM/YYYY",
-            pickTime: false
-        });
-        $('#datetimepicker4').datetimepicker({
-            format: "DD/MM/YYYY",
-            pickTime: false
-        });
-        $('#datetimepicker5').datetimepicker({
-            format: "DD/MM/YYYY",
-            pickTime: false
-        });
-        $('#datetimepicker6').datetimepicker({
-            format: "DD/MM/YYYY",
-            pickTime: false
-        });
+        
 
         $("#btn_start_cycle").click(function () {
-            $("#startcycle").val("1");
+            $("#updatecycle").val("1");
             $("modelmessage").text("Are you sure approve this now?")
             $('#SubmitInfoModal').modal();
         });
 
         $("#btn_retrieve_participants").click(function () {
-            $("#startcycle").val("0");
+            $("#updatecycle").val("0");
             var int_error_count = 0;
             var str_error_message = "";
 
