@@ -212,10 +212,12 @@ namespace eHR.PMS.Web.Controllers
             int cycleid = Int32.Parse(form["cycleid"]);
             if (!boo_update_cycle)
             {
-                
-                obj_cycle_management_page.CurrentCycle = eHR.PMS.Model.PMSModel.GetCycleById(cycleid);
-                obj_cycle_management_page.CurrentCycle.CycleStages = eHR.PMS.Model.PMSModel.GetStagesByCycleId(cycleid);
-                obj_cycle_management_page.Participants = eHR.PMS.Model.PMSModel.GetEmployeesInAppraisalsByCycleId(cycleid);
+                if (cycleid > 0)
+                {
+                    obj_cycle_management_page.CurrentCycle = eHR.PMS.Model.PMSModel.GetCycleById(cycleid);
+                    obj_cycle_management_page.CurrentCycle.CycleStages = eHR.PMS.Model.PMSModel.GetStagesByCycleId(cycleid);
+                    obj_cycle_management_page.Participants = eHR.PMS.Model.PMSModel.GetEmployeesInAppraisalsByCycleId(cycleid);
+                }
             }
             else
             {
