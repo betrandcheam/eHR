@@ -13,10 +13,10 @@ namespace eHR.PMS.Web.Controllers
 
         #region New Cycle
 
-        public ActionResult NewCycle(string cycleDateRangeStart, string cycleDateRangeEnd)
+        public ActionResult NewCycle(string cycleDateRangeStart, string cycleDateRangeEnd, int? cycleId)
         {
             Dictionary<string, string> dict = new Dictionary<string, string>();
-            Models.DTO.CycleManagementPage obj_cycle_management_page = new Models.DTO.CycleManagementPage();
+            Models.DTO.NewCycleManagementPage obj_cycle_management_page = new Models.DTO.NewCycleManagementPage();
 
             if (string.IsNullOrEmpty(cycleDateRangeStart) || string.IsNullOrEmpty(cycleDateRangeEnd))
             {
@@ -33,7 +33,7 @@ namespace eHR.PMS.Web.Controllers
                 cycleDateRangeEnd = Lib.Utility.Common.ChangeDateFormat(cycleDateRangeEnd);
                 string key = cycleDateRangeStart + " " + cycleDateRangeEnd;
 
-                obj_cycle_management_page.Participants = (List<Model.DTO.Appraisal.Appraisal>)System.Web.HttpContext.Current.Session["CycleParticipantsList"];
+                obj_cycle_management_page.Participants = (List<Model.DTO.Core.Employee>)System.Web.HttpContext.Current.Session["CycleParticipantsList"];
 
                 dict.Add("cyclename", (string)System.Web.HttpContext.Current.Session["CycleName"]);
                 dict.Add("Stage1StartDate", (string)System.Web.HttpContext.Current.Session["Stage1StartDate"]);
@@ -47,7 +47,7 @@ namespace eHR.PMS.Web.Controllers
                 TempData["QueryData"] = dict;
             }
 
-            ModelState.Clear();
+            //ModelState.Clear();
             ViewData.Model = obj_cycle_management_page;
             return View();
         }
@@ -665,6 +665,7 @@ namespace eHR.PMS.Web.Controllers
         }
 
         #endregion Add ExistParticipants
+        
         #region Remove ExistParticipants
 
         public ActionResult RemoveParticipants(string cycleDateRangeStart, string cycleDateRangeEnd, int cycleId)
@@ -960,6 +961,42 @@ namespace eHR.PMS.Web.Controllers
 
         }
 
+        [HttpPost]
+        public JsonResult RetrieveAppraisalsByPage(int page)
+        {
+            List<Model.DTO.Appraisal.Appraisal> lst_appraisals = null;
+            StringBuilder sb = new StringBuilder();
+
+            if (System.Web.HttpContext.Current.Session["AppraisalsList"] != null)
+            {
+                lst_appraisals = (List<Model.DTO.Appraisal.Appraisal>)System.Web.HttpContext.Current.Session["AppraisalsList"];
+            }
+            else
+            {
+                return Json("Unable to load retrieved appraisals list.");
+            }
+
+            if (!Lib.Utility.Common.IsNullOrEmptyList(lst_appraisals))
+            {
+                foreach (Model.DTO.Appraisal.Appraisal obj_appraisal in lst_appraisals.Skip((page - 1) * int_page_size).Take(int_page_size))
+                {
+                    sb.Append("<tr>");
+                    sb.Append("<td align=\"center\">");
+                    sb.Append("<a class=\"btn btn-xs btn-danger\" href=\"");
+                    sb.Append(Url.Content("~/stage1/KeyPerformanceIndicators/0/"));
+                    sb.Append(obj_appraisal.Id);
+                    sb.Append("\"><i class=\"glyphicon glyphicon-file\">></i> View</a></td>");
+                    sb.Append("<td>" + obj_appraisal.Employee.PreferredName + "</td>");
+                    sb.Append("<td>" + obj_appraisal.Department.Name + "</td>");
+                    sb.Append("<td>" + obj_appraisal.Stage.Name + "</td>");
+                    sb.Append("<td>" + obj_appraisal.Status.Name + "</td>");
+                    sb.Append("</tr>");
+                }
+            }
+
+            return Json(sb.ToString());
+        }
+
         #endregion Employee List Pagination
 
         public ActionResult CancelAddRemoveNew(string cycleDateRangeStart, string cycleDateRangeEnd)
@@ -967,11 +1004,20 @@ namespace eHR.PMS.Web.Controllers
             System.Web.HttpContext.Current.Session.Remove("CycleNewParticipants");
             return Redirect(Url.Content("~/HRManage/NewCycle/" + cycleDateRangeStart + "/" + cycleDateRangeEnd));
         }
+       
         public ActionResult CancelAddRemove(string cycleDateRangeStart, string cycleDateRangeEnd,string cycleId)
         {
             System.Web.HttpContext.Current.Session.Remove("CycleNewExistParticipants");
             return Redirect(Url.Content("~/HRManage/ManageCycle/" + cycleDateRangeStart + "/" + cycleDateRangeEnd+"/"+cycleId));
         }
+
+        public ActionResult CancelViewAppraisal()
+        {
+            ClearAllCreatedSessionObjects();
+            return Redirect(Url.Content("~/"));
+
+        }
+
         public Dictionary<string, string> FormCollectionToDict(FormCollection form)
         {
             Dictionary<string, string> dict = new Dictionary<string, string>();
@@ -981,6 +1027,7 @@ namespace eHR.PMS.Web.Controllers
             }
             return dict;
         }
+       
         private List<Model.DTO.Core.Employee> ApprListToEmplList(List<Model.DTO.Appraisal.Appraisal> applist)
         {
             List<Model.DTO.Core.Employee> result=new List<Model.DTO.Core.Employee>();
@@ -990,6 +1037,7 @@ namespace eHR.PMS.Web.Controllers
             }
             return result;
         }
+        
         private Model.DTO.Cycle.Stage CreateCycleStage(int id, DateTime startDate, DateTime endDate)
         {
             Model.DTO.Cycle.Stage obj_cycle_stage = new Model.DTO.Cycle.Stage()
@@ -1032,6 +1080,53 @@ namespace eHR.PMS.Web.Controllers
             System.Web.HttpContext.Current.Session.Remove("CycleNewExistParticipants");
 
             System.Web.HttpContext.Current.Session.Remove("TempRemoveApprIds");
+
+            System.Web.HttpContext.Current.Session.Remove("AppraisalsList");
         }
+
+        #region View Appraisal
+
+        public ActionResult ViewAppraisal()
+        {
+            Models.DTO.ViewAppraisalPage obj_view_appraisal_page = new Models.DTO.ViewAppraisalPage()
+            {
+                Cycles = Model.PMSModel.GetCycleByStatus(null),
+                Appraisals = new List<Model.DTO.Appraisal.Appraisal>()
+            };
+
+            ViewData.Model = obj_view_appraisal_page;
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult ViewAppraisal(FormCollection form)
+        {
+            Dictionary<string, string> dict_form = FormCollectionToDict(form);
+
+            Models.DTO.ViewAppraisalPage obj_view_appraisal_page = new Models.DTO.ViewAppraisalPage()
+            {
+                Cycles = Model.PMSModel.GetCycleByStatus(null),
+                Appraisals = new List<Model.DTO.Appraisal.Appraisal>()
+            };
+
+            if (dict_form["cycleid"] != null)
+            {
+                string str_employeeName = dict_form["EmployeeName"] == null ? null : dict_form["EmployeeName"];
+                string str_employeeDomainId = dict_form["DomainID"] == null ? null : dict_form["DomainID"];
+                string str_departmentName = dict_form["DepartmentName"] == null ? null : dict_form["DepartmentName"];
+
+                obj_view_appraisal_page.Appraisals = Business.AppraisalManager.GetAppraisalsForView(Convert.ToInt32(dict_form["cycleid"]), str_employeeName, str_employeeDomainId, str_departmentName);
+                obj_view_appraisal_page.Appraisals = obj_view_appraisal_page.Appraisals.OrderBy(rec => rec.Employee.PreferredName).OrderBy(rec => rec.Department.Name).ToList();
+
+            }
+
+            System.Web.HttpContext.Current.Session.Add("AppraisalsList", obj_view_appraisal_page.Appraisals);
+
+            TempData["QueryData"] = dict_form;
+            ViewData.Model = obj_view_appraisal_page;
+            return View();
+        }
+
+        #endregion
     }
 }

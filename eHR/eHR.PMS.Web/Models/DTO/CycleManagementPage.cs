@@ -207,4 +207,22 @@ namespace eHR.PMS.Web.Models.DTO
             set { str_eligibility_range_end_date = value; }
         }
     }
+
+    public class ViewAppraisalPage
+    {
+        private List<PMS.Model.DTO.Cycle.Cycle> lst_cycles;
+        private List<PMS.Model.DTO.Appraisal.Appraisal> lst_appraisals;
+
+        public List<PMS.Model.DTO.Cycle.Cycle> Cycles
+        {
+            get { return lst_cycles; }
+            set { lst_cycles = value; }
+        }
+
+        public List<PMS.Model.DTO.Appraisal.Appraisal> Appraisals
+        {
+            get { return lst_appraisals; }
+            set { lst_appraisals = value; }
+        }
+    }
 }

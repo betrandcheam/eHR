@@ -650,6 +650,71 @@ namespace eHR.PMS.Business
             return Model.PMSModel.UpdateApproversAndTasks(appraisal, newApprovers, lst_owners_to_update, out message);
         }
 
+        public static List<PMS.Model.DTO.Appraisal.Appraisal> GetAppraisalsForView(int cycleId, string employeeName, string employeeDomainId, string departmentName)
+        {
+            List<PMS.Model.DTO.Appraisal.Appraisal> lst_appraisals = new List<Model.DTO.Appraisal.Appraisal>();
+
+            if (cycleId > 0)
+            {
+                lst_appraisals = Model.PMSModel.GetEmployeesInAppraisalsByCycleId(cycleId);
+            }
+
+            if (!Lib.Utility.Common.IsNullOrEmptyList(lst_appraisals))
+            {
+                if (!string.IsNullOrEmpty(employeeName))
+                {
+                    if (!string.IsNullOrEmpty(employeeDomainId))
+                    {
+                        if (!string.IsNullOrEmpty(departmentName))
+                        {
+                            lst_appraisals = lst_appraisals.Where(rec => rec.Employee.PreferredName.ToUpper().Contains(employeeName.ToUpper()) &&
+                                                                                   rec.Employee.DomainId.ToUpper().Contains(employeeDomainId.ToUpper()) &&
+                                                                                   rec.Department.Name.ToUpper().Contains(departmentName.ToUpper())).ToList();
+                        }
+                        else 
+                        {
+                            lst_appraisals = lst_appraisals.Where(rec => rec.Employee.PreferredName.ToUpper().Contains(employeeName.ToUpper()) &&
+                                                                rec.Employee.DomainId.ToUpper().Contains(employeeDomainId.ToUpper())).ToList();
+                        }
+                    }
+                    else
+                    {
+                        if (string.IsNullOrEmpty(departmentName))
+                        {
+                            lst_appraisals = lst_appraisals.Where(rec => rec.Employee.PreferredName.ToUpper().Contains(employeeName.ToUpper())).ToList();
+                        }
+                        else
+                        {
+                            lst_appraisals = lst_appraisals.Where(rec => rec.Employee.PreferredName.ToUpper().Contains(employeeName.ToUpper()) &&
+                                                                    rec.Department.Name.ToUpper().Contains(departmentName.ToUpper())).ToList();
+                        }
+                    }
+                }
+                else
+                {
+                    if (string.IsNullOrEmpty(employeeDomainId))
+                    {
+                        if (!string.IsNullOrEmpty(departmentName))
+                        {
+                            lst_appraisals = lst_appraisals.Where(rec => rec.Department.Name.ToUpper().Contains(departmentName.ToUpper())).ToList();
+                        }
+                    }
+                    else 
+                    {
+                        if (string.IsNullOrEmpty(departmentName))
+                        {
+                            lst_appraisals = lst_appraisals.Where(rec => rec.Employee.DomainId.ToUpper().Contains(employeeDomainId.ToUpper())).ToList();
+                        }
+                        else
+                        {
+                            lst_appraisals = lst_appraisals.Where(rec => rec.Employee.DomainId.ToUpper().Contains(employeeDomainId.ToUpper()) &&
+                                                                    rec.Department.Name.ToUpper().Contains(departmentName.ToUpper())).ToList();
+                        }
+                    }
+                }
+            }
+            return lst_appraisals;
+        }
 
         #endregion Appraisal
 

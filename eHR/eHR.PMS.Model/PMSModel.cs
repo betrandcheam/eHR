@@ -876,10 +876,12 @@ namespace eHR.PMS.Model
                          select ent_appraisal) as System.Data.Objects.ObjectQuery<PMS.Model.Context.PMS_APPRAISAL>)
                             .Include("EMPLOYEE")
                             .Include("MST_DEPARTMENT")
-                             .Include("PMS_APPRAISAL_APPROVER")
-                                .Include("PMS_APPRAISAL_APPROVER.EMPLOYEE");
+                            .Include("PMS_MST_STAGE")
+                            .Include("PMS_MST_STATUS")
+                            .Include("PMS_APPRAISAL_APPROVER")
+                            .Include("PMS_APPRAISAL_APPROVER.EMPLOYEE");
 
-                             //.Include("PMS_APPRAISAL_APPROVER");
+
             if (!Lib.Utility.Common.IsNullOrEmptyList(entities))
             {
                 lst_employees = Mappers.PMSMapper.MapAppraisalEntitiesToDTOs(entities.ToList(), true);

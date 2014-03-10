@@ -1,0 +1,338 @@
+﻿@model eHR.PMS.Web.Models.DTO.ViewAppraisalPage
+@{
+    var message = TempData["AlertMessage"] ?? string.Empty;
+    var msg_error = TempData["ErrorMessage"] ?? string.Empty;
+    Dictionary<string, string> form = (Dictionary<string, string>)TempData["QueryData"];
+    int int_appraisal_page_size = 10;
+}
+<div class="well" style="margin:35px;">
+    <form method="post" action="@(Url.Content("~/HRManage/ViewAppraisal"))" class="form-horizontal" role="form">
+      <div id="div_error" class="div_error"></div>
+      <div class="form-group">
+        <label for="cyclename" class="col-sm-2 control-label">Cycle Name: </label>
+        <div class="col-sm-4">
+            <select name="cycleid" id="cycleid" class="selectpicker show-tick">
+                <option value="0">choose cycle</option>
+                @{if (!eHR.PMS.Lib.Utility.Common.IsNullOrEmptyList(Model.Cycles))
+                  {
+                    foreach(eHR.PMS.Model.DTO.Cycle.Cycle obj_cycle in Model.Cycles)
+                    {
+                        if (form==null)
+                        {
+                            <option value="@(obj_cycle.Id)">@(obj_cycle.Name)</option>
+                        }
+                        else
+                        {
+                            if(Convert.ToInt32(form["cycleid"]) == obj_cycle.Id)
+                            {
+                                <option value="@(obj_cycle.Id)" selected="selected">@(obj_cycle.Name)</option>  
+                            }
+                            else
+                            {
+                                <option value="@(obj_cycle.Id)">@(obj_cycle.Name)</option>  
+                            }
+                        }
+                    }
+                  } 
+                 }
+            </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="DomainID" class="col-sm-2 control-label">Department: </label>
+        <div class="col-sm-2 input-group">
+          @{
+              if (form == null)
+              {
+                <input type="text" class="form-control" id="DepartmentName" name="DepartmentName" />
+              }
+              else
+              {
+                <input type="text" class="form-control" id="DepartmentName" name="DepartmentName" value="@form["DepartmentName"]">
+                <input type="hidden" id="hidDepartmentName" value="@form["DepartmentName"]" />                  
+              }
+           }
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="DomainID" class="col-sm-2 control-label">Employee Name: </label>
+        <div class="col-sm-2 input-group">
+          @{
+              if (form == null)
+              {
+                <input type="text" class="form-control" id="EmployeeName" name="EmployeeName" />
+              }
+              else
+              {
+                <input type="text" class="form-control" id="EmployeeName" name="EmployeeName" value="@form["EmployeeName"]">
+                <input type="hidden" id="hidEmployeeName" value="@form["EmployeeName"]" />                  
+              }
+           }
+        </div>
+        <label for="DomainID" class="col-sm-2 control-label">Domain ID: </label>
+        <div class="col-sm-2 input-group">
+          @{
+              if (form == null)
+              {
+                <input type="text" class="form-control" id="DomainID" name="DomainID" />
+              }
+              else
+              {
+                <input type="text" class="form-control" id="DomainID" name="DomainID" value="@form["DomainID"]">
+                <input type="hidden" id="hidDomainID" value="@form["DomainID"]" />                  
+              }
+           }
+        </div>
+      <div class="form-group">
+            <div class="col-sm-offset-1 col-sm-10" align="right">
+                <button id="btn_search" class="btn btn-xs btn-success"><i class="glyphicon glyphicon-search"></i> Search</button>
+                <button type="button" id="btn_cancel" class="btn btn-danger btn-xs"><i class="glyphicon glyphicon-stop"></i> Cancel</button>
+            </div>
+        </div>
+      </div> 
+<div id="AfterRetrieve" style="display:none;"> 
+<div id="Participants" class="row maintable" >
+    <div class="panel-group" id="accordion1" style="padding:20px 50px;">           
+            <div class="panel panel-success" style="overflow:visible;">
+                <div class="panel-heading">
+                  <h4 class="panel-title">
+                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#collapseOne">
+                      <i class="glyphicon glyphicon-list"></i> Appraisal List
+                    </a>
+                  </h4>
+                  @{if (!eHR.PMS.Lib.Utility.Common.IsNullOrEmptyList(Model.Appraisals))
+                    {
+                        <h5>
+                        <span class="label label-info">Total number of appraisals: <label style="color:Red;">@Model.Appraisals.Count</label></span>                                                           
+                        </h5>
+                    }
+                   }
+                </div>
+                <div id="collapseOne" class="panel-collapse collapse in">
+                  <div class="panel-body" style="padding:0px;">
+                       <table class="table table-bordered" style="border-collapse:collapse;border-spacing:0px 0px;">
+                          <thead>
+                          <tr class="success">
+                            <th></th>
+                            <th>Name</th>
+                            <th>Department</th>
+                            <th>Stage</th>  
+                            <th>Status</th>                           
+                          </tr>
+                          </thead>
+                          <tbody id="eicontent">
+                          @if (!eHR.PMS.Lib.Utility.Common.IsNullOrEmptyList(Model.Appraisals))
+                          {
+                              foreach (eHR.PMS.Model.DTO.Appraisal.Appraisal appr in Model.Appraisals)
+                              {
+                              <tr>
+                                <td align="center">
+                                    <a class="btn btn-xs btn-danger" href="@(Url.Content("~/stage1/KeyPerformanceIndicators/0/"))@(appr.Id)"><i class="glyphicon glyphicon-file"></i> View</a>
+                                </td>
+                                <td>@(appr.Employee.PreferredName)</td>
+                                <td>@(appr.Department.Name)</td>
+                                <td>@(appr.Stage.Name)</td>
+                                <td>@(appr.Status.Name)</td>
+                              </tr>
+                              }
+                          }
+                          </tbody>
+                       </table> 
+                       <div style="text-align:center;">
+                            <span id="pages"></span>
+                            <!--<span>Go to Page: <select id="showpage">
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                                <option value="6">6</option>
+                                <option value="7">7</option>
+                                <option value="8">8</option>
+                                <option value="9">9</option>
+                                <option value="10">10</option>
+                            </select>
+                            </span>-->
+                       </div>     
+                 <!-- <div id="buttongroup" style="float:right;">
+             <div>
+                 <button type="button" class="btn btn-success btn-xs" id="btn_start_cycle"><i class="glyphicon glyphicon-play"></i> Start</button>
+                 <button type="button" id="btn_cancel" class="btn btn-danger btn-xs"><i class="glyphicon glyphicon-stop"></i> Cancel</button>
+             </div>
+            </div>-->
+                  </div>
+                  
+                </div>
+            </div>
+        </div>
+        </div>
+            </div>
+
+
+            <!--pop up info for submit -->
+            <div style="top:50%;" class="modal fade" id="SubmitInfoModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+              <div class="modal-dialog" style="text-align:center;">
+                <div  class="modal-content">
+                  <div class="modal-body" style="padding-bottom:0px;">
+                        <div class="alert alert-warning alert-dismissable">
+                          <strong>Are you sure you want to start the appraisal cycle now?</strong>
+                        </div>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="submit" data-loading-text="Submit...." class="btn btn-primary">Yes</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">No</button>
+                  </div>
+
+                </div><!-- /.modal-content -->
+              </div><!-- /.modal-dialog -->
+            </div><!-- /.modal -->
+
+ 
+    </form>
+</div> 
+
+
+
+                       <!--pop up info for cancel -->
+    <div style="top:50%;" class="modal fade" id="CancelInfoModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+              <div class="modal-dialog" style="text-align:center;">
+                <div  class="modal-content">
+                  <div class="modal-body" style="padding-bottom:0px;">
+                    <div class="alert alert-warning alert-dismissable">
+                        <strong>All information that are not saved will be discarded. Are you sure you want to return to the main menu?</strong>
+                    </div>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" id="btn_cancel_modal_ok" class="btn btn-primary">Yes</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">No</button>
+                  </div>
+                </div><!-- /.modal-content -->
+              </div><!-- /.modal-dialog -->
+            </div><!-- /.modal -->
+
+<!--pop up info for ajaxsave -->
+    <div style="top:50%;" class="modal fade" id="InfoModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+      <div class="modal-dialog" style="text-align:center;">
+        <div id="loadingcontent" class="modal-content">
+          <div class="modal-body">
+                <img alt="" src="@(Url.Content("~/Content/img/ajax-loader.gif"))" />
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+<!--pop up info for redirect -->
+    <div style="top:50%;" class="modal fade" id="RedirectModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+      <div class="modal-dialog" style="text-align:center;">
+        <div id="resultcontent" class="modal-content">
+          <div class="modal-body" style="padding-bottom:0px;">
+                <div class="alert alert-success alert-dismissable">
+                  <strong>@message</strong>
+                </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" data-dismiss="modal">OK</button>
+          </div>
+
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+<!--pop up info for redirect -->
+    <div style="top:50%;" class="modal fade" id="ErrorModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+      <div class="modal-dialog" style="text-align:center;">
+        <div id="resultcontent" class="modal-content">
+          <div class="modal-body" style="padding-bottom:0px;">
+                <div class="alert alert-warning alert-dismissable">
+                  <strong>@msg_error</strong>
+                </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" data-dismiss="modal">OK</button>
+          </div>
+
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+<!--pop up info for redirect -->
+    <div style="top:50%;" class="modal fade" id="RemoveParticipantModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+      <div class="modal-dialog" style="text-align:center;">
+        <div id="resultcontent" class="modal-content">
+          <div class="modal-body" style="padding-bottom:0px;">
+                <div class="alert alert-warning alert-dismissable">
+                  <strong>There are no employees to remove.</strong>
+                </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" data-dismiss="modal">OK</button>
+          </div>
+
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+
+<script type="text/javascript" src="@Url.Content("~/Scripts/moment.min.js")"></script>
+<script type="text/javascript" src="@(Url.Content("~/Scripts/bootstrap-paginator.js"))"></script>
+<script type="text/javascript">
+    $(function () {
+        var total = '@(Model.Appraisals.Count())';
+        var intTotal = parseInt(total);
+        if (intTotal != 0) {
+            $("#AfterRetrieve").show('slow');
+            var pagenum = (intTotal % 10 != 0 ? (intTotal / 10 + 1) : (intTotal / 10));
+            var options = {
+                currentPage: 1,
+                totalPages: pagenum,
+                size: 'small',
+                useBootstrapTooltip: true,
+                onPageClicked: function (e, originalEvent, type, page) {
+                    $.ajax({
+                        url: "@(Url.Content("~/HRManage/RetrieveAppraisalsByPage"))",
+                        type: "post",
+                        dataType: "json",
+                        data: { "page": page, "Stage1EndDate": $("#Stage1EndDate").val(), "Stage3EndDate": $("#Stage3EndDate").val() },
+                        beforeSend: function () {
+                            $('#resultcontent').hide();
+                            $('#loadingcontent').show();
+                            $('#InfoModal').modal(); ;
+                        },
+                        success: function (data) {
+                            $("#eicontent").html(data);
+                            $('#InfoModal').modal('hide');
+                        }
+                    });
+                }
+            }
+
+            $('#pages').bootstrapPaginator(options);
+        }
+
+        $('#showpage').change(function () {
+            var page = $(this).val();
+            $('#pages').bootstrapPaginator("show", page);
+        })
+
+        $("#btn_search").click(function (){
+            if ($("#cycleid").val() <= 0)
+            {
+                $("div.div_error").html("Please select the cycle required.");
+                $("div.div_error").addClass("warningclass");
+                return false;
+            }
+            else
+            {
+                $("div.div_error").text("");
+                $("div.div_error").removeClass("warningclass");
+                return true;
+            }
+            
+        })
+
+       $("#btn_cancel").click(function () {
+            window.location.href("@(Url.Content("~/HRManage/CancelViewAppraisal"))");
+        });
+    });
+</script>
+
