@@ -159,6 +159,7 @@
     <Content Include="Content\img\loading-bars.gif" />
     <Content Include="Content\img\loading.gif" />
     <Content Include="Content\img\logo.gif" />
+    <Content Include="Content\img\new.png" />
     <Content Include="Content\img\ops.png" />
     <Content Include="Content\img\pms_corevalue_rating_description.jpg" />
     <Content Include="Content\img\products_corners.png" />

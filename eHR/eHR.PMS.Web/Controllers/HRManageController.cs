@@ -575,6 +575,7 @@ namespace eHR.PMS.Web.Controllers
                     Model.DTO.Appraisal.Appraisal newapp = new Model.DTO.Appraisal.Appraisal();
                     newapp.Id = -1;
                     newapp.Employee = e;
+                    newapp.Department = e.Department;
                     obj_cycle_management_page.Participants.Add(newapp);
                 }
 
@@ -775,7 +776,7 @@ namespace eHR.PMS.Web.Controllers
 
                 if (System.Web.HttpContext.Current.Session["CycleExistParticipantsList"] != null)
                 {
-                    lst_current_participantssessionpart.AddRange((List<Model.DTO.Appraisal.Appraisal>)System.Web.HttpContext.Current.Session["CycleExistParticipantsList"]);
+                    lst_current_participantssessionpart=(List<Model.DTO.Appraisal.Appraisal>)System.Web.HttpContext.Current.Session["CycleExistParticipantsList"];
                 }
 
                 string[] splitString = { "ONERECORDENDED," };

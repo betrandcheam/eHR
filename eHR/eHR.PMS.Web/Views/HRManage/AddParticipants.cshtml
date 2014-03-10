@@ -86,10 +86,10 @@
                               {
                               <tr>
                                 <td style="text-align:center;">
-                                    <input eid="@ei.Employee.Id" objectvalue="@(ei.Employee.Id)^&*@(ei.Employee.DomainId)^&*@(ei.Employee.FirstName)^&*@(ei.Employee.LastName)^&*@(ei.Employee.Department != null ? ei.Employee.Department.Name : null)^&*@(ei.Employee.GetNumberOfApprovers())^&*@(ei.Employee.Department != null ? ei.Employee.Department.Id:0)^&*ONERECORDENDED" type="checkbox" class="isadd" />
+                                    <input eid="@ei.Employee.Id" objectvalue="@(ei.Employee.Id)^&*@(ei.Employee.DomainId)^&*@(ei.Employee.FirstName)^&*@(ei.Employee.LastName)^&*@(ei.Department != null ? ei.Department.Name : null)^&*@(ei.Employee.GetNumberOfApprovers())^&*@(ei.Department != null ? ei.Department.Id:0)^&*ONERECORDENDED" type="checkbox" class="isadd" />
                                 </td>
                                 <td>@(ei.Employee.PreferredName)</td>
-                                <td>@(ei.Employee.Department.Name)</td>
+                                <td>@(ei.Department.Name)</td>
                                 <td>@(ei.Employee.GetNumberOfApprovers())</td>
                               </tr>
                               }

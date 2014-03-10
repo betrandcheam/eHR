@@ -217,10 +217,17 @@
                               foreach (eHR.PMS.Model.DTO.Appraisal.Appraisal ei in Model.Participants)
                               {
                               <tr>
-                                <td><input type="hidden" class="eid" value="@ei.Id" /></td>
+                                <td align="center"><input type="hidden" class="eid" value="@ei.Id" />
+                                    @{
+                                        if(ei.Id==-1)
+                                        {   
+                                            <img src="@Url.Content("~/Content/img/new.png")" />
+                                        }
+                                     }
+                                </td>
                                 <td>@(ei.Employee.PreferredName)</td>
-                                <td>@(ei.Employee.Department!=null?ei.Employee.Department.Name:"")</td>
-                                <td>@ei.Employee.GetNumberOfApprovers()</td>
+                                <td>@(ei.Department!=null?ei.Department.Name:"")</td>
+                                <td>@(ei.Id>0?ei.Approvers.Count:ei.Employee.GetNumberOfApprovers())</td>
                               </tr>
                               }
                           }
@@ -375,7 +382,7 @@
         var temp=new Array();
         $.each($(".stagedate"),function(){
             temp=$(this).val().split('/');
-            if(nowdate.getYear()>parseInt(temp[2],10) || nowdate.getMonth()>parseInt(temp[1],10) || (nowdate.getDay()+1)>parseInt(temp[1],10))
+            if(nowdate.getFullYear()>parseInt(temp[2],10) || (nowdate.getMonth()+1)>parseInt(temp[1],10) || nowdate.getDate()>parseInt(temp[1],10))
              {
                 $(this).attr("disabled",true);
                 $(this).parent().datetimepicker('hide');

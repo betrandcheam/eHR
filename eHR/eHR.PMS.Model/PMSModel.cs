@@ -874,7 +874,12 @@ namespace eHR.PMS.Model
                          join ent_employee in dc_pms.EMPLOYEEs on ent_appraisal.EMPLOYEE_ID equals ent_employee.ID
                          where ent_appraisal.CYCLE_ID == cycleId
                          select ent_appraisal) as System.Data.Objects.ObjectQuery<PMS.Model.Context.PMS_APPRAISAL>)
-                             .Include("EMPLOYEE");
+                            .Include("EMPLOYEE")
+                            .Include("MST_DEPARTMENT")
+                             .Include("PMS_APPRAISAL_APPROVER")
+                                .Include("PMS_APPRAISAL_APPROVER.EMPLOYEE");
+
+                             //.Include("PMS_APPRAISAL_APPROVER");
             if (!Lib.Utility.Common.IsNullOrEmptyList(entities))
             {
                 lst_employees = Mappers.PMSMapper.MapAppraisalEntitiesToDTOs(entities.ToList(), true);
