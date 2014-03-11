@@ -623,7 +623,7 @@ namespace eHR.PMS.Web.Controllers
 
                 string[] splitString = { "ONERECORDENDED," };
                 string[] result = EIForCache.Split(splitString, StringSplitOptions.None);
-                string[] obj = new string[6];
+                string[] obj = new string[7];
                 string[] splitString2 = { "^&*" };
 
                 if (!Lib.Utility.Common.IsNullOrEmptyList(result))
@@ -633,7 +633,7 @@ namespace eHR.PMS.Web.Controllers
                         obj = str_result.Split(splitString2, StringSplitOptions.None);
                         if (!Lib.Utility.Common.IsNullOrEmptyList(obj))
                         {
-                            Model.DTO.Appraisal.Appraisal obj_employee = lst_new_participants.Where(rec => rec.Employee.Id == Convert.ToInt32(obj[0])).SingleOrDefault();
+                            Model.DTO.Appraisal.Appraisal obj_employee = lst_new_participants.Where(rec => rec.Employee.Id == Convert.ToInt32(obj[1])).SingleOrDefault();
 
                             if (obj_employee == null)
                             {
@@ -820,7 +820,7 @@ namespace eHR.PMS.Web.Controllers
         #region Employee List Pagination
 
         [HttpPost]
-        public JsonResult RetrieveByPage(int page, string Stage1EndDate, string Stage3EndDate)
+        public JsonResult RetrieveByPageNew(int page, string Stage1EndDate, string Stage3EndDate)
         {
             List<Model.DTO.Core.Employee> lst_eligible_employees = null;
             StringBuilder sb = new StringBuilder();
@@ -865,7 +865,48 @@ namespace eHR.PMS.Web.Controllers
         }
 
         [HttpPost]
-        public JsonResult RetriveAddParticipantsByPage(string cycleDateRangeStart, string cycleDateRangeEnd, int page, string EmployeeName, string DomainID, string DepartmentName)
+        public JsonResult RetrieveByPage(int page, string Stage1EndDate, string Stage3EndDate,string cycleId)
+        {
+            List<Model.DTO.Appraisal.Appraisal> lst_eligible_employees = null;
+            StringBuilder sb = new StringBuilder();
+            int iCycleID = Int32.Parse(cycleId);
+            try
+            {
+                List<Model.DTO.Appraisal.Appraisal> templist = eHR.PMS.Model.PMSModel.GetEmployeesInAppraisalsByCycleId(iCycleID);
+                if (System.Web.HttpContext.Current.Session["TempRemoveApprIds"] != null)
+                {
+                    List<int> tempRemoveApprIds = (List<int>)System.Web.HttpContext.Current.Session["TempRemoveApprIds"];
+                    templist = templist.Where(sec => !tempRemoveApprIds.Contains(sec.Id)).ToList();
+                }
+                if (System.Web.HttpContext.Current.Session["CycleExistParticipantsList"] != null)
+                    templist.AddRange((List<Model.DTO.Appraisal.Appraisal>)System.Web.HttpContext.Current.Session["CycleExistParticipantsList"]);
+                lst_eligible_employees = templist;
+                    
+                if (!Lib.Utility.Common.IsNullOrEmptyList(lst_eligible_employees))
+                {
+                    foreach (Model.DTO.Appraisal.Appraisal ei in lst_eligible_employees.Skip((page - 1) * int_page_size).Take(int_page_size))
+                    {
+                        sb.Append("<tr>");
+                        sb.Append("<td><input type='hidden' class='eid' value='" + ei.Id + "' /></td>");
+                        sb.Append("<td>" + ei.Employee.PreferredName + "</td>");
+                        sb.Append("<td>" + (ei.Department != null ? ei.Department.Name : "") + "</td>");
+                        sb.Append("<td>" + (ei.Id > 0 ? ei.Approvers.Count : ei.Employee.GetNumberOfApprovers()) + "</td>");
+                        sb.Append("</tr>");
+                    }
+                }
+                else
+                {
+                    return Json("There are no employees.");
+                }
+            }
+            catch (Exception exc)
+            {
+                return Json("Unable to load next page of participants list. Please try again.");
+            }
+            return Json(sb.ToString());
+        }
+        [HttpPost]
+        public JsonResult RetriveAddNewParticipantsByPage(string cycleDateRangeStart, string cycleDateRangeEnd, int page, string EmployeeName, string DomainID, string DepartmentName)
         {
             List<Model.DTO.Core.Employee> lst_eligible_employees = null;
             StringBuilder sb = new StringBuilder();
@@ -887,7 +928,10 @@ namespace eHR.PMS.Web.Controllers
                 {
                     return Json("Unable to load retrieved participants list.");
                 }
-
+                if (!string.IsNullOrEmpty(dict["EmployeeName"]) || !string.IsNullOrEmpty(dict["DomainID"]) || !string.IsNullOrEmpty(dict["DepartmentName"]))
+                {
+                    lst_eligible_employees = Business.AppraisalManager.GetEmployeesToAddToCycle(dict["EmployeeName"].Trim(), dict["DomainID"].Trim(), dict["DepartmentName"].Trim(), lst_eligible_employees);
+                }
                 if (!Lib.Utility.Common.IsNullOrEmptyList(lst_eligible_employees))
                 {
                     foreach (Model.DTO.Core.Employee ei in lst_eligible_employees.Skip((page - 1) * int_page_size).Take(int_page_size))
@@ -913,7 +957,57 @@ namespace eHR.PMS.Web.Controllers
         }
 
         [HttpPost]
-        public JsonResult RetriveRemoveParticipantsByPage(string cycleDateRangeStart, string cycleDateRangeEnd, int page, string EmployeeName, string DomainID, string DepartmentName)
+        public JsonResult RetriveAddParticipantsByPage(string cycleDateRangeStart, string cycleDateRangeEnd, int page, string EmployeeName, string DomainID, string DepartmentName)
+        {
+            List<Model.DTO.Appraisal.Appraisal> lst_eligible_employees = null;
+            StringBuilder sb = new StringBuilder();
+
+            try
+            {
+                Dictionary<string, string> dict = new Dictionary<string, string>();
+                dict.Add("Stage1EndDate", cycleDateRangeStart);
+                dict.Add("Stage3EndDate", cycleDateRangeEnd);
+                dict.Add("EmployeeName", EmployeeName);
+                dict.Add("DomainID", DomainID);
+                dict.Add("DepartmentName", DepartmentName);
+
+                if (System.Web.HttpContext.Current.Session["CycleNewExistParticipants"] != null)
+                {
+                    lst_eligible_employees = (List<Model.DTO.Appraisal.Appraisal>)System.Web.HttpContext.Current.Session["CycleNewExistParticipants"];
+                }
+                else
+                {
+                    return Json("Unable to load retrieved participants list.");
+                }
+                if (!string.IsNullOrEmpty(dict["EmployeeName"]) || !string.IsNullOrEmpty(dict["DomainID"]) || !string.IsNullOrEmpty(dict["DepartmentName"]))
+                {
+                    lst_eligible_employees = Business.AppraisalManager.GetApprisalsToRemoveFromCycle(dict["EmployeeName"].Trim(), dict["DomainID"].Trim(), dict["DepartmentName"].Trim(), lst_eligible_employees);
+                }
+                if (!Lib.Utility.Common.IsNullOrEmptyList(lst_eligible_employees))
+                {
+                    foreach (Model.DTO.Appraisal.Appraisal ei in lst_eligible_employees.Skip((page - 1) * int_page_size).Take(int_page_size))
+                    {
+                        sb.Append("<tr>");
+                        sb.Append("<td style='text-align:center;'><input eid='" + ei.Id + "' objectvalue='" + ei.Id + "^&*" + ei.Employee.Id + "^&*" + ei.Employee.DomainId+"^&*" + ei.Employee.FirstName + "^&*" + ei.Employee.LastName + "^&*" + (ei.Department.Name != null ? ei.Department.Name : null) + "^&*" + (ei.Id > 0 ? ei.Approvers.Count : ei.Employee.GetNumberOfApprovers()) + "^&*ONERECORDENDED' type='checkbox' class='isadd' /></td>");
+                        sb.Append("<td>" + ei.Employee.PreferredName + "</td>");
+                        sb.Append("<td>" + (ei.Department != null ? ei.Department.Name : "") + "</td>");
+                        sb.Append("<td>" + (ei.Id > 0 ? ei.Approvers.Count : ei.Employee.GetNumberOfApprovers()) + "</td>");
+                        sb.Append("</tr>");
+                    }
+                }
+                else
+                {
+                    return Json("There are no employees.");
+                }
+            }
+            catch (Exception exc)
+            {
+                return Json("Unable to load next page of participants list. Please try again.");
+            }
+            return Json(sb.ToString());
+        }
+        [HttpPost]
+        public JsonResult RetriveRemoveNewParticipantsByPage(string cycleDateRangeStart, string cycleDateRangeEnd, int page, string EmployeeName, string DomainID, string DepartmentName)
         {
             List<Model.DTO.Core.Employee> lst_employees = null;
             StringBuilder sb = new StringBuilder();
@@ -935,7 +1029,10 @@ namespace eHR.PMS.Web.Controllers
                 {
                     return Json("Unable to load retrieved participants list.");
                 }
-
+                if (!string.IsNullOrEmpty(dict["EmployeeName"]) || !string.IsNullOrEmpty(dict["DomainID"]) || !string.IsNullOrEmpty(dict["DepartmentName"]))
+                {
+                    lst_employees = Business.AppraisalManager.GetEmployeesToRemoveFromCycle(dict["EmployeeName"], dict["DomainID"], dict["DepartmentName"], lst_employees);
+                }
                 if (!Lib.Utility.Common.IsNullOrEmptyList(lst_employees))
                 {
                     foreach (Model.DTO.Core.Employee ei in lst_employees.Skip((page - 1) * int_page_size).Take(int_page_size))
@@ -945,6 +1042,62 @@ namespace eHR.PMS.Web.Controllers
                         sb.Append("<td>" + ei.PreferredName + "</td>");
                         sb.Append("<td>" + ei.Department.Name + "</td>");
                         sb.Append("<td>" + ei.GetNumberOfApprovers() + "</td>");
+                        sb.Append("</tr>");
+                    }
+                }
+                else
+                {
+                    return Json("There are no employees.");
+                }
+            }
+            catch (Exception e)
+            {
+                return Json("Ops! There is an error. Please check and try again");
+            }
+            return Json(sb.ToString());
+
+        }
+
+        [HttpPost]
+        public JsonResult RetriveRemoveParticipantsByPage(string cycleDateRangeStart, string cycleDateRangeEnd, int page, string EmployeeName, string DomainID, string DepartmentName,string cycleId)
+        {
+            List<Model.DTO.Appraisal.Appraisal> lst_employees = null;
+            StringBuilder sb = new StringBuilder();
+            int iCycleID = Int32.Parse(cycleId);
+            try
+            {
+                Dictionary<string, string> dict = new Dictionary<string, string>();
+                dict.Add("Stage1EndDate", cycleDateRangeStart);
+                dict.Add("Stage3EndDate", cycleDateRangeEnd);
+                dict.Add("EmployeeName", EmployeeName);
+                dict.Add("DomainID", DomainID);
+                dict.Add("DepartmentName", DepartmentName);
+
+                if (System.Web.HttpContext.Current.Session["TempRemoveApprIds"] != null)
+                {
+                    List<int> tempRemoveApprIds = (List<int>)System.Web.HttpContext.Current.Session["TempRemoveApprIds"];
+                    lst_employees = eHR.PMS.Model.PMSModel.GetEmployeesInAppraisalsByCycleId(iCycleID).Where(sec => !tempRemoveApprIds.Contains(sec.Id)).ToList();
+                }
+                else
+                    lst_employees = eHR.PMS.Model.PMSModel.GetEmployeesInAppraisalsByCycleId(iCycleID);
+
+                if (System.Web.HttpContext.Current.Session["CycleExistParticipantsList"] != null)
+                {
+                    lst_employees.AddRange((List<Model.DTO.Appraisal.Appraisal>)System.Web.HttpContext.Current.Session["CycleExistParticipantsList"]);
+                }
+                if (!string.IsNullOrEmpty(dict["EmployeeName"]) || !string.IsNullOrEmpty(dict["DomainID"]) || !string.IsNullOrEmpty(dict["DepartmentName"]))
+                {
+                    lst_employees = Business.AppraisalManager.GetApprisalsToRemoveFromCycle(dict["EmployeeName"], dict["DomainID"], dict["DepartmentName"], lst_employees);
+                }
+                if (!Lib.Utility.Common.IsNullOrEmptyList(lst_employees))
+                {
+                    foreach (Model.DTO.Appraisal.Appraisal ei in lst_employees.Skip((page - 1) * int_page_size).Take(int_page_size))
+                    {
+                        sb.Append("<tr>");
+                        sb.Append("<td style='text-align:center;'><input eid='" + ei.Id + "' objectvalue='" + ei.Id + "^&*" + ei.Employee.Id + "^&*" + ei.Employee.DomainId + "^&*" + ei.Employee.FirstName + "^&*" + ei.Employee.LastName + "^&*" + (ei.Department.Name != null ? ei.Department.Name : null) + "^&*" + (ei.Id > 0 ? ei.Approvers.Count : ei.Employee.GetNumberOfApprovers()) + "^&*ONERECORDENDED' type='checkbox' class='isadd' /></td>");
+                        sb.Append("<td>" + ei.Employee.PreferredName + "</td>");
+                        sb.Append("<td>" + (ei.Department != null ? ei.Department.Name : "") + "</td>");
+                        sb.Append("<td>" + (ei.Id > 0 ? ei.Approvers.Count : ei.Employee.GetNumberOfApprovers()) + "</td>");
                         sb.Append("</tr>");
                     }
                 }

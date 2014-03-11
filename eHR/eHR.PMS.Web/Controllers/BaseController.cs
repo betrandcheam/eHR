@@ -6,7 +6,7 @@ using System.Web.Mvc;
 
 namespace eHR.PMS.Web.Controllers
 { 
-    [HandleError]
+    //[HandleError]
     [Helpers.CustomAuthorization]
     [Filters.CustomAppFilter]
     public class BaseController : Controller

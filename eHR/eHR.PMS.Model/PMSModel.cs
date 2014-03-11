@@ -543,7 +543,7 @@ namespace eHR.PMS.Model
                     }
                     foreach (var item in dc_pms.PMS_APPRAISAL_PERFORMANCE_COACHING.Where(sec => sec.APPRAISAL_ID == cid))
                     {
-                        foreach (var childitem in dc_pms.PMS_APPRAISAL_PERFORMANCE_COACHING_COMMENT.Where(sec => sec.ITEM_ID == cid))
+                        foreach (var childitem in dc_pms.PMS_APPRAISAL_PERFORMANCE_COACHING_COMMENT.Where(sec => sec.ITEM_ID == item.ID))
                         {
                             dc_pms.PMS_APPRAISAL_PERFORMANCE_COACHING_COMMENT.DeleteObject(childitem);
                         }
@@ -551,7 +551,7 @@ namespace eHR.PMS.Model
                     }
                     foreach (var item in dc_pms.PMS_APPRAISAL_KPI.Where(sec => sec.APPRAISAL_ID == cid))
                     {
-                        foreach (var childitem in dc_pms.PMS_APPRAISAL_KPI_COMMENT.Where(sec => sec.ITEM_ID == cid))
+                        foreach (var childitem in dc_pms.PMS_APPRAISAL_KPI_COMMENT.Where(sec => sec.ITEM_ID == item.ID))
                         {
                             dc_pms.PMS_APPRAISAL_KPI_COMMENT.DeleteObject(childitem);
                         }
@@ -559,7 +559,7 @@ namespace eHR.PMS.Model
                     }
                     foreach (var item in dc_pms.PMS_APPRAISAL_CORE_VALUE.Where(sec => sec.APPRAISAL_ID == cid))
                     {
-                        foreach (var childitem in dc_pms.PMS_APPRAISAL_CORE_VALUE_COMMENT.Where(sec => sec.ITEM_ID == cid))
+                        foreach (var childitem in dc_pms.PMS_APPRAISAL_CORE_VALUE_COMMENT.Where(sec => sec.ITEM_ID == item.ID))
                         {
                             dc_pms.PMS_APPRAISAL_CORE_VALUE_COMMENT.DeleteObject(childitem);
                         }
@@ -567,7 +567,7 @@ namespace eHR.PMS.Model
                     }
                     foreach (var item in dc_pms.PMS_APPRAISAL_CAREER_DEVELOPMENT.Where(sec => sec.APPRAISAL_ID == cid))
                     {
-                        foreach (var childitem in dc_pms.PMS_APPRAISAL_CAREER_DEVELOPMENT_COMMENT.Where(sec => sec.ITEM_ID == cid))
+                        foreach (var childitem in dc_pms.PMS_APPRAISAL_CAREER_DEVELOPMENT_COMMENT.Where(sec => sec.ITEM_ID == item.ID))
                         {
                             dc_pms.PMS_APPRAISAL_CAREER_DEVELOPMENT_COMMENT.DeleteObject(childitem);
                         }

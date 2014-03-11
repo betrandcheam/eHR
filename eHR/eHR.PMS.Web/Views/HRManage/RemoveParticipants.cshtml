@@ -16,7 +16,7 @@
             }
             else
             {
-                <input type="text" class="form-control" id="EmployeeName" name="EmployeeName" />
+                <input type="text" class="form-control" id="EmployeeName" name="EmployeeName" value="@form["EmployeeName"]" />
                 <input type="hidden" id="hidEmployeeName" value="@form["EmployeeName"]" />                
             }
            }
@@ -30,7 +30,7 @@
               }
               else
               {
-                <input type="text" class="form-control" id="DomainID" name="DomainID" />
+                <input type="text" class="form-control" id="DomainID" name="DomainID" value="@form["DomainID"]" />
                 <input type="hidden" id="hidDomainID" value="@form["DomainID"]" />                  
               }
            }
@@ -44,7 +44,7 @@
               }
               else
               {
-                <input type="text" class="form-control" id="DepartmentName" name="DepartmentName" />
+                <input type="text" class="form-control" id="DepartmentName" name="DepartmentName" value="@form["DepartmentName"]" />
                 <input type="hidden" id="hidDepartmentName" value="@form["DepartmentName"]" />
               }
            }
@@ -86,11 +86,11 @@
                               {
                               <tr>
                                 <td style="text-align:center;">
-                                    <input eid="@ei.Employee.Id" objectvalue="@(ei.Id)^&*@(ei.Employee.Id)^&*@(ei.Employee.DomainId)^&*@(ei.Employee.FirstName)^&*@(ei.Employee.LastName)^&*@(ei.Employee.Department != null ? ei.Employee.Department.Name : null)^&*@(ei.Employee.GetNumberOfApprovers())^&*ONERECORDENDED" type="checkbox" class="isadd" />
+                                    <input eid="@ei.Employee.Id" objectvalue="@(ei.Id)^&*@(ei.Employee.Id)^&*@(ei.Employee.DomainId)^&*@(ei.Employee.FirstName)^&*@(ei.Employee.LastName)^&*@(ei.Department != null ? ei.Department.Name : null)^&*@(ei.Id>0?ei.Approvers.Count:ei.Employee.GetNumberOfApprovers())^&*ONERECORDENDED" type="checkbox" class="isadd" />
                                 </td>
                                 <td>@(ei.Employee.PreferredName)</td>
-                                <td>@(ei.Employee.Department!=null?ei.Employee.Department.Name:"")</td>
-                                <td>@(ei.Employee.GetNumberOfApprovers())</td>
+                                <td>@(ei.Department!=null?ei.Department.Name:"")</td>
+                                <td>@((ei.Id > 0 ? ei.Approvers.Count : ei.Employee.GetNumberOfApprovers()))</td>
                               </tr>
                               }
                           }
@@ -193,7 +193,7 @@
                         url: "@(Url.Content("~/HRManage/RetriveRemoveParticipantsByPage"))",
                         type: "post",
                         dataType: "json",
-                        data: { "page": page, "Stage1EndDate": '@(ViewData["Stage1EndDate"].ToString())', "Stage3EndDate": '@(ViewData["Stage3EndDate"].ToString())', "EmployeeName": $("#hidEmployeeName").val(), "DomainID": $("#hidDomainID").val(), "DepartmentName": $("#hidDepartmentName").val() },
+                        data: { "page": page, "Stage1EndDate": '@(ViewData["Stage1EndDate"].ToString())', "Stage3EndDate": '@(ViewData["Stage3EndDate"].ToString())', "EmployeeName": $("#hidEmployeeName").val(), "DomainID": $("#hidDomainID").val(), "DepartmentName": $("#hidDepartmentName").val(),"cycleId":'@cycleid' },
                         beforeSend: function () {
                             $('#InfoModal').modal(); ;
                         },

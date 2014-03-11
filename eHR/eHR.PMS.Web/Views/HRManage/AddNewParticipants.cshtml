@@ -194,7 +194,7 @@
                 useBootstrapTooltip: true,
                 onPageClicked: function (e, originalEvent, type, page) {
                     $.ajax({
-                        url: "@(Url.Content("~/HRManage/RetriveAddParticipantsByPage"))",
+                        url: "@(Url.Content("~/HRManage/RetriveAddNewParticipantsByPage"))",
                         type: "post",
                         dataType: "json",
                         data: { "page": page, "Stage1EndDate": '@(ViewData["Stage1EndDate"].ToString())', "Stage3EndDate": '@(ViewData["Stage3EndDate"].ToString())', "EmployeeName": $("#hidEmployeeName").val(), "DomainID": $("#hidDomainID").val(), "DepartmentName": $("#hidDepartmentName").val() },

@@ -341,7 +341,7 @@
                 useBootstrapTooltip: true,
                 onPageClicked: function (e, originalEvent, type, page) {
                     $.ajax({
-                        url: "@(Url.Content("~/HRManage/RetrieveByPage"))",
+                        url: "@(Url.Content("~/HRManage/RetrieveByPageNew"))",
                         type: "post",
                         dataType: "json",
                         data: { "page": page, "Stage1EndDate": $("#Stage1EndDate").val(), "Stage3EndDate": $("#Stage3EndDate").val() },

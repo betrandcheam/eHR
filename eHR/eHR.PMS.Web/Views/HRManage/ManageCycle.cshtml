@@ -40,7 +40,7 @@
         @{
             if (Model.CurrentCycle != null && Model.CurrentCycle.CycleStages.Count > 0 && Model.CurrentCycle.CycleStages[0].StartDate.HasValue)
             {
-                <input type="text" class="form-control stagedate" id="Stage1StartDate" name="Stage1StartDate" value="@Model.CurrentCycle.CycleStages[0].StartDate.Value.ToString("dd/MM/yyyy")"/>                     
+                <input readonly="readonly" type="text" class="form-control stagedate" id="Stage1StartDate" name="Stage1StartDate" value="@Model.CurrentCycle.CycleStages[0].StartDate.Value.ToString("dd/MM/yyyy")"/>                     
             }
             else
             {
@@ -384,7 +384,7 @@
             temp=$(this).val().split('/');
             if(nowdate.getFullYear()>parseInt(temp[2],10) || (nowdate.getMonth()+1)>parseInt(temp[1],10) || nowdate.getDate()>parseInt(temp[1],10))
              {
-                $(this).attr("disabled",true);
+                $(this).attr("readonly",true);
                 $(this).parent().datetimepicker('hide');
                 $(this).next().hide();
              }
@@ -409,7 +409,7 @@
                         url: "@(Url.Content("~/HRManage/RetrieveByPage"))",
                         type: "post",
                         dataType: "json",
-                        data: { "page": page, "Stage1EndDate": $("#Stage1EndDate").val(), "Stage3EndDate": $("#Stage3EndDate").val() },
+                        data: { "page": page, "Stage1EndDate": $("#Stage1EndDate").val(), "Stage3EndDate": $("#Stage3EndDate").val(),"cycleId":$('#cycleid').val() },
                         beforeSend: function () {
                             $('#resultcontent').hide();
                             $('#loadingcontent').show();

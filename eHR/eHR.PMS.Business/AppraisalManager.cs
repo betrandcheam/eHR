@@ -954,6 +954,73 @@ namespace eHR.PMS.Business
 
         #region Employee Retrieval
 
+        private static List<Model.DTO.Core.Employee> FilterEmployees(string employeeName, string employeeDomainId, string employeeDepartmentName, IEnumerable<PMS.Model.DTO.Core.Employee> lst_filtered_employees)
+        {
+            if (!string.IsNullOrEmpty(employeeName))
+            {
+                if (!string.IsNullOrEmpty(employeeDomainId))
+                {
+                    if (!string.IsNullOrEmpty(employeeDepartmentName))
+                    {
+                        // all 3 search criteria provided
+                        lst_filtered_employees = lst_filtered_employees.Where(rec => rec.PreferredName.ToUpper().Contains(employeeName.ToUpper()) &&
+                                                                                        rec.DomainId.ToUpper().Contains(employeeDomainId.ToUpper()) &&
+                                                                                        rec.Department.Name.ToUpper().Contains(employeeDepartmentName.ToUpper()));
+                    }
+                    else
+                    {
+                        // employ name and domain id provided
+                        lst_filtered_employees = lst_filtered_employees.Where(rec => rec.PreferredName.ToUpper().Contains(employeeName.ToUpper()) &&
+                                                                                         rec.DomainId.ToUpper().Contains(employeeDomainId.ToUpper()));
+                    }
+                }
+                else
+                {
+                    if (!string.IsNullOrEmpty(employeeDepartmentName))
+                    {
+                        //employee name and department name provided
+                        lst_filtered_employees = lst_filtered_employees.Where(rec => rec.PreferredName.ToUpper().Contains(employeeName.ToUpper()) &&
+                                                                                        rec.Department.Name.ToUpper().Contains(employeeDepartmentName.ToUpper()));
+                    }
+                    else
+                    {
+                        //employee name provided
+                        lst_filtered_employees = lst_filtered_employees.Where(rec => rec.PreferredName.ToUpper().Contains(employeeName.ToUpper()));
+                    }
+                }
+            }
+            else
+            {
+                if (!string.IsNullOrEmpty(employeeDomainId))
+                {
+                    if (!string.IsNullOrEmpty(employeeDepartmentName))
+                    {
+                        // domain id and department name provided
+                        lst_filtered_employees = lst_filtered_employees.Where(rec => rec.DomainId.ToUpper().Contains(employeeDomainId.ToUpper()) &&
+                                                                                        rec.Department.Name.ToUpper().Contains(employeeDepartmentName.ToUpper()));
+
+                    }
+                    else
+                    {
+                        //only domain id provided
+                        lst_filtered_employees = lst_filtered_employees.Where(rec => rec.DomainId.ToUpper().Contains(employeeDomainId.ToUpper()));
+
+                    }
+                }
+                else
+                {
+                    // only department name is provided
+                    lst_filtered_employees = lst_filtered_employees.Where(rec => rec.Department.Name.ToUpper().Contains(employeeDepartmentName.ToUpper()));
+                }
+            }
+
+            if (!Lib.Utility.Common.IsNullOrEmptyList(lst_filtered_employees))
+            {
+                return lst_filtered_employees.ToList();
+            }
+            else
+                return null;
+        }
         public static List<Model.DTO.Core.Employee> GetEmployeesToAddToCycle(string employeeName, string employeeDomainId, string employeeDepartmentName, List<Model.DTO.Core.Employee> currentParticipants)
         {
             List<PMS.Model.DTO.Core.Employee> lst_active_employees = null; 
@@ -980,68 +1047,7 @@ namespace eHR.PMS.Business
                                                                                                                        rec.EmploymentType != null &&
                                                                                                                        rec.GetNumberOfApprovers() == 2 &&
                                                                                                                        !lst_current_participant_ids.Contains(rec.Id));
-                    if (!string.IsNullOrEmpty(employeeName))
-                    {
-                        if (!string.IsNullOrEmpty(employeeDomainId))
-                        {
-                            if (!string.IsNullOrEmpty(employeeDepartmentName))
-                            {
-                                // all 3 search criteria provided
-                                lst_filtered_employees = lst_filtered_employees.Where(rec => rec.PreferredName.ToUpper().Contains(employeeName.ToUpper()) &&
-                                                                                                rec.DomainId.ToUpper().Contains(employeeDomainId.ToUpper()) &&
-                                                                                                rec.Department.Name.ToUpper().Contains(employeeDepartmentName.ToUpper()));
-                            }
-                            else
-                            {
-                                // employ name and domain id provided
-                                lst_filtered_employees = lst_filtered_employees.Where(rec => rec.PreferredName.ToUpper().Contains(employeeName.ToUpper()) &&
-                                                                                                 rec.DomainId.ToUpper().Contains(employeeDomainId.ToUpper()));
-                            }
-                        }
-                        else
-                        {
-                            if (!string.IsNullOrEmpty(employeeDepartmentName))
-                            {
-                                //employee name and department name provided
-                                lst_filtered_employees = lst_filtered_employees.Where(rec => rec.PreferredName.ToUpper().Contains(employeeName.ToUpper()) &&
-                                                                                                rec.Department.Name.ToUpper().Contains(employeeDepartmentName.ToUpper()));
-                            }
-                            else
-                            {
-                                //employee name provided
-                                lst_filtered_employees = lst_filtered_employees.Where(rec => rec.PreferredName.ToUpper().Contains(employeeName.ToUpper()));
-                            }
-                        }
-                    }
-                    else
-                    {
-                        if (!string.IsNullOrEmpty(employeeDomainId))
-                        {
-                            if (!string.IsNullOrEmpty(employeeDepartmentName))
-                            {
-                                // domain id and department name provided
-                                lst_filtered_employees = lst_filtered_employees.Where(rec => rec.DomainId.ToUpper().Contains(employeeDomainId.ToUpper()) &&
-                                                                                                rec.Department.Name.ToUpper().Contains(employeeDepartmentName.ToUpper()));
-
-                            }
-                            else
-                            {
-                                //only domain id provided
-                                lst_filtered_employees = lst_filtered_employees.Where(rec => rec.DomainId.ToUpper().Contains(employeeDomainId.ToUpper()));
-
-                            }
-                        }
-                        else
-                        {
-                            // only department name is provided
-                            lst_filtered_employees = lst_filtered_employees.Where(rec => rec.Department.Name.ToUpper().Contains(employeeDepartmentName.ToUpper()));
-                        }
-                    }
-
-                    if (!Lib.Utility.Common.IsNullOrEmptyList(lst_filtered_employees))
-                    {
-                        lst_eligible_employees = lst_filtered_employees.ToList();
-                    }
+                    lst_eligible_employees = FilterEmployees(employeeName, employeeDomainId, employeeDepartmentName, lst_filtered_employees);
                 }
             }
             return lst_eligible_employees;
