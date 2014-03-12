@@ -72,7 +72,7 @@
                        <table class="table table-bordered" style="border-collapse:collapse;border-spacing:0px 0px;">
                           <thead>
                           <tr class="success">
-                            <th></th>
+                            <th style="text-align:center;"><input type="checkbox" id="SelectAll"/></th>
                             <th>Name</th>
                             <th>Department</th>
                             <th>Number of level of approvers</th>                           
@@ -205,6 +205,21 @@
 
             $('#pages').bootstrapPaginator(options);
         }
+        $("#SelectAll").click(function(){
+            if($(this).prop("checked")){
+                $(".isadd").prop("checked",true);
+                var html="";
+                $.each($(".isadd"),function(){
+                    html=[html,"<li class='participant' eid='" , $(this).attr("eid") , "'>" , $(this).attr("objectvalue") , "</li>"].join("");
+                });
+                $(html).appendTo($("#totallist"));
+            }
+            else{
+                $(".isadd").prop("checked",false);
+                $("#totallist li").remove();
+            }
+
+        });
         $('#showpage').change(function () {
             var page = $(this).val();
             $('#pages').bootstrapPaginator("show", page);

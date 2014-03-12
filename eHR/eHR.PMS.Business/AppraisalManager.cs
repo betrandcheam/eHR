@@ -48,7 +48,7 @@ namespace eHR.PMS.Business
 
                 if (boo_success)
                 {
-                    //cycle = Model.PMSModel.GetCycleById(Convert.ToInt32(message));
+                    cycle = Model.PMSModel.GetCycleById(Convert.ToInt32(message));
                     Model.DTO.Cycle.Stage obj_gs_stage = cycle.CycleStages.Where(rec => rec.StageId == Model.PMSConstants.STAGE_ID_GOAL_SETTING).SingleOrDefault();
                     Model.DTO.Cycle.Stage obj_pr_stage = cycle.CycleStages.Where(rec => rec.StageId == Model.PMSConstants.STAGE_ID_PROGRESS_REVIEW).SingleOrDefault();
                     Model.DTO.Cycle.Stage obj_fr_stage = cycle.CycleStages.Where(rec => rec.StageId == Model.PMSConstants.STAGE_ID_FINAL_YEAR).SingleOrDefault();

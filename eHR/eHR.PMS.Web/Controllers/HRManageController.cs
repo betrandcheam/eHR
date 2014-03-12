@@ -221,7 +221,7 @@ namespace eHR.PMS.Web.Controllers
             }
             else
             {
-                PMS.Model.DTO.Cycle.Cycle obj_cycle = new PMS.Model.DTO.Cycle.Cycle();
+                PMS.Model.DTO.Cycle.Cycle obj_cycle = eHR.PMS.Model.PMSModel.GetCycleById(cycleid);
 
                 Dictionary<string, DateTime> dict_cycle_stage_dates = new Dictionary<string, DateTime>();
                 dict_cycle_stage_dates.Add("PreCStart", DateTime.Now.Date);
@@ -237,7 +237,16 @@ namespace eHR.PMS.Web.Controllers
                 if (System.Web.HttpContext.Current.Session["TempRemoveApprIds"] != null)
                 {
                     deleteApprIdList = (List<int>)System.Web.HttpContext.Current.Session["TempRemoveApprIds"];
-                    eHR.PMS.Model.PMSModel.DeleteApprisalInCyle(deleteApprIdList, out message);
+                    if (eHR.PMS.Model.PMSModel.DeleteApprisalInCyle(deleteApprIdList, out message))
+                    {
+                        ClearAllCreatedSessionObjects();
+                        return Redirect(Url.Content("~/"));
+                    }
+                    else
+                    {
+                        TempData["ErrorMessage"] = "Unable to save cycle information. Please try again or contact IT Department.";
+                        return View();
+                    }
                 }
 
                 List<PMS.Model.DTO.Appraisal.Appraisal> ParticipantsListSessionPart = (List<PMS.Model.DTO.Appraisal.Appraisal>)System.Web.HttpContext.Current.Session["CycleExistParticipantsList"];
@@ -1209,7 +1218,7 @@ namespace eHR.PMS.Web.Controllers
         {
             List<Model.DTO.Cycle.Stage> lst_stages = new List<Model.DTO.Cycle.Stage>();
 
-            lst_stages.Add(CreateCycleStage(Model.PMSConstants.STAGE_ID_PRE_CYCLE, stageDates["PreCStart"], stageDates["PreCStart"]));
+            lst_stages.Add(CreateCycleStage(Model.PMSConstants.STAGE_ID_PRE_CYCLE, stageDates["PreCStart"], stageDates["PreCEnd"]));
             lst_stages.Add(CreateCycleStage(Model.PMSConstants.STAGE_ID_GOAL_SETTING, stageDates["Stage1StartDate"], stageDates["Stage1EndDate"]));
             lst_stages.Add(CreateCycleStage(Model.PMSConstants.STAGE_ID_PROGRESS_REVIEW, stageDates["Stage2StartDate"], stageDates["Stage2EndDate"]));
             lst_stages.Add(CreateCycleStage(Model.PMSConstants.STAGE_ID_FINAL_YEAR, stageDates["Stage3StartDate"], stageDates["Stage3EndDate"]));
