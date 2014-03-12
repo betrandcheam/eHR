@@ -381,7 +381,7 @@
                 Updatediv = div.find(".Updatediv");
                 KPItextHidSelectforEdit = div.parent().find(".bootstrap-select");
                 KPItextSelectEdit = div.find(".selectpicker");
-                PTtextforEdit = div.find(".PTtext");
+                PTtextforEdit = div.find(".corevaluetext");
                 KPItextHidSelectforEdit.find('.filter-option').text($(this).parent().prev().prev().prev().text());
                 KPItextSelectEdit.val($(this).parent().prev().prev().prev().prev().text());
                 PTtextforEdit.val($(this).parent().prev().prev().text());
@@ -444,6 +444,15 @@
             });
             $(".panel-body").on('click', '.UpdateKPIItem', function () {
             //aaaa
+                if ($.trim(KPItextforEdit.val()) == "" || KPItextforEdit.val().indexOf("Type something here") == 0) {
+                    KPItextforEdit.addClass("warningclass");
+                    return false;
+                }
+
+                if ($.trim(PTtextforEdit.val()) == "" || PTtextforEdit.val().indexOf("Type something here") == 0) {
+                    PTtextforEdit.addClass("warningclass");
+                    return false;
+                }
                 editbuttonobject.parent().prev().prev().prev().text(KPItextSelectForEdit.find("option:selected").text());
                 editbuttonobject.parent().prev().prev().prev().prev().text(KPItextSelect.val());
                 editbuttonobject.parent().prev().prev().text(PTtext.text());
@@ -454,12 +463,26 @@
                 editbuttonobject.next().removeClass("disabled");
                 Updatediv.hide("slow");
                 Adddiv.show("slow");
+
+                //resetting input box values
+                KPItextforEdit.val("");
+                PTtextforEdit.val("");
+
+                KPItextforEdit.removeClass("warningclass");
+                PTtextforEdit.removeClass("warningclass");
             });
             $(".panel-body").on('click', '.CancelKPIItem', function () {
                 editbuttonobject.removeClass("disabled");
                 editbuttonobject.next().removeClass("disabled");
                 Updatediv.hide("slow");
                 Adddiv.show("slow");
+
+                //resetting input box values
+                KPItextforEdit.val("");
+                PTtextforEdit.val("");
+
+                KPItextforEdit.removeClass("warningclass");
+                PTtextforEdit.removeClass("warningclass");
             });
             $(".AddKPIItem").click(function () {
                 var KPItextSelect = $(this).parent().parent().parent().find(".selectpicker");
