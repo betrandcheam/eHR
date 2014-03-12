@@ -165,4 +165,7 @@
   <data name="MSG_SAVE_SUCCESS_PERFORMANCE_COACHING" xml:space="preserve">
     <value>All Performance Coaching information is saved successfully.</value>
   </data>
+  <data name="MSG_UPDATE_CYCLE" xml:space="preserve">
+    <value>Update cycle information now?</value>
+  </data>
 </root>
