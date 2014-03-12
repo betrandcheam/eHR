@@ -41,14 +41,15 @@ namespace eHR.PMS.Business
         {
             bool boo_success = false;
             message = string.Empty;
-
+            List<Model.DTO.Appraisal.Appraisal> NewAddAppraisals = new List<Model.DTO.Appraisal.Appraisal>();
             if (!Lib.Utility.Common.IsNullOrEmptyList(cycle.Appriasals))
             {
-                boo_success = Model.PMSModel.UpdateCycleAndCreateAppraisalTasks(cycle, cycleId,out message);
-
+                boo_success = Model.PMSModel.UpdateCycleAndCreateAppraisalTasks(cycle, cycleId,out message,out NewAddAppraisals);
+                
                 if (boo_success)
                 {
                     cycle = Model.PMSModel.GetCycleById(Convert.ToInt32(message));
+                    cycle.Appriasals = NewAddAppraisals;
                     Model.DTO.Cycle.Stage obj_gs_stage = cycle.CycleStages.Where(rec => rec.StageId == Model.PMSConstants.STAGE_ID_GOAL_SETTING).SingleOrDefault();
                     Model.DTO.Cycle.Stage obj_pr_stage = cycle.CycleStages.Where(rec => rec.StageId == Model.PMSConstants.STAGE_ID_PROGRESS_REVIEW).SingleOrDefault();
                     Model.DTO.Cycle.Stage obj_fr_stage = cycle.CycleStages.Where(rec => rec.StageId == Model.PMSConstants.STAGE_ID_FINAL_YEAR).SingleOrDefault();
@@ -210,7 +211,7 @@ namespace eHR.PMS.Business
                         }
                         break;
                 }
-                foreach (Model.DTO.Appraisal.Appraisal obj_appraisal in cycle.Appriasals)
+                /*foreach (Model.DTO.Appraisal.Appraisal obj_appraisal in cycle.Appriasals)
                 {
                     //if (obj_appraisal.Stage.Id == Model.PMSConstants.STAGE_ID_PRE_CYCLE)
                     //{
@@ -225,7 +226,7 @@ namespace eHR.PMS.Business
                         lst_email_messages.Add(GenerateEmailMessageForCycleStageStart(obj_appraisal));
                     }
                     //}
-                }
+                }*/
             }
             //lst_cycles.Add(cycle);
 

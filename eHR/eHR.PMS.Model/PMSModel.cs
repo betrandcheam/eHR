@@ -423,12 +423,12 @@ namespace eHR.PMS.Model
             return boo_success;
         }
 
-        public static bool UpdateCycleAndCreateAppraisalTasks(PMS.Model.DTO.Cycle.Cycle cycle, int cycleId, out string message)
+        public static bool UpdateCycleAndCreateAppraisalTasks(PMS.Model.DTO.Cycle.Cycle cycle, int cycleId, out string message,out List<DTO.Appraisal.Appraisal> NewAddAppraisals)
         {
             bool boo_success = false;
             message = string.Empty;
             PMS.Model.Context.PMSEntities dc_pms = new PMS.Model.Context.PMSEntities();
-
+            NewAddAppraisals = new List<DTO.Appraisal.Appraisal>();
             try
             {
                 List<PMS.Model.Context.PMS_CYCLE_STAGE> stages = dc_pms.PMS_CYCLE_STAGE.Where(sec => sec.CYCLE_ID == cycleId).OrderBy(sec=>sec.STAGE_ID).ToList();
@@ -449,7 +449,7 @@ namespace eHR.PMS.Model
                     entity_appraisal.CYCLE_ID = cycleId;
                     dc_pms.PMS_APPRAISAL.AddObject(entity_appraisal);
                     dc_pms.SaveChanges();
-
+                    
                     foreach (Model.DTO.Appraisal.Section dto_appraisal_section in dto_appraisal.AppraisalSections)
                     {
                         Model.Context.PMS_APPRAISAL_SECTION entity_appraisal_section = Model.Mappers.PMSMapper.MapAppraisalSectionDTOToEntity(dto_appraisal_section);
@@ -477,7 +477,7 @@ namespace eHR.PMS.Model
                         entity_appraisal_approver.APPRAISAL_ID = entity_appraisal.ID;
                         dc_pms.PMS_APPRAISAL_APPROVER.AddObject(entity_appraisal_approver);
                     }
-
+                    NewAddAppraisals.Add(Mappers.PMSMapper.MapAppraisalEntityToDTO(entity_appraisal, true));
                     /*
                     if (dto_appraisal.Task != null)
                     {
@@ -573,8 +573,18 @@ namespace eHR.PMS.Model
                         }
                         dc_pms.PMS_APPRAISAL_CAREER_DEVELOPMENT.DeleteObject(item);
                     }
+                    foreach (var item in dc_pms.TASKs.Where(sec => sec.RECORD_ID == cid && sec.MODULE_ID == eHR.PMS.Model.PMSConstants.MODULE_ID_PMS))
+                    {
+                        foreach (var childitem in dc_pms.TASK_OWNER.Where(sec => sec.TASK_ID == item.ID))
+                        {
+                            dc_pms.TASK_OWNER.DeleteObject(childitem);
+                        }
+                        dc_pms.TASKs.DeleteObject(item);
+                    }
                     var appr = dc_pms.PMS_APPRAISAL.Where(sec => sec.ID == cid).FirstOrDefault();
                     dc_pms.PMS_APPRAISAL.DeleteObject(appr);
+
+
                 }
                 dc_pms.SaveChanges();
                 boo_success = true;
@@ -1704,6 +1714,7 @@ namespace eHR.PMS.Model
 
                     ent_appraisal.STAGE_ID = obj_appraisal.Stage.Id;
                     ent_appraisal.STATUS_ID = obj_appraisal.Status.Id;
+                    ent_appraisal.LOCKED = obj_appraisal.Locked;
 
                     if (!Lib.Utility.Common.IsNullOrEmptyList(obj_appraisal.Trails))
                     {

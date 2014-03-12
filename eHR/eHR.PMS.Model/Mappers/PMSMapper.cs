@@ -831,9 +831,9 @@ namespace eHR.PMS.Model.Mappers
                 Stage = entity.PMS_MST_STAGE == null ? null : MapStageEntityToDTO(entity.PMS_MST_STAGE),
                 Action = entity.PMS_MST_ACTION == null ? null : MapActionEntityToDTO(entity.PMS_MST_ACTION),
                 ActionTimestamp = entity.ACTION_TIMESTAMP,
-                //Actioner = entity.EMPLOYEE == null ? null : CoreMapper.MapEmployeeEntityToDTO(entity.EMPLOYEE)
+                Actioner = entity.ACTION_BY_ID > 0 ? new Model.DTO.Core.Employee(){ Id = Convert.ToInt32(entity.ACTION_BY_ID) } : null
             };
-            
+
             obj_dto.Appraisal = entity.PMS_APPRAISAL == null ? null : MapAppraisalEntityToDTO(entity.PMS_APPRAISAL, false);
 
             return obj_dto;

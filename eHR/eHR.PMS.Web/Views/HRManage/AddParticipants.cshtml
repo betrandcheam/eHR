@@ -210,6 +210,11 @@
 
             $('#pages').bootstrapPaginator(options);
         }
+        if($(".isadd").length>0){
+            $("#SelectAll").show();
+        }
+        else
+            $("#SelectAll").hide();
         $("#SelectAll").click(function(){
             if($(this).prop("checked")){
                 $(".isadd").prop("checked",true);

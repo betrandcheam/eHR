@@ -38,9 +38,9 @@
         <label for="Stage1StartDate" class="col-sm-2 control-label">Goal Setting Start Date: </label>
         <div class="col-sm-4 input-group" id="datetimepicker1">
         @{
-            if (Model.CurrentCycle != null && Model.CurrentCycle.CycleStages.Count > 0 && Model.CurrentCycle.CycleStages[0].StartDate.HasValue)
+            if (Model.CurrentCycle != null && Model.CurrentCycle.CycleStages.Count > 0 && Model.CurrentCycle.CycleStages[1].StartDate.HasValue)
             {
-                <input readonly="readonly" type="text" class="form-control stagedate" id="Stage1StartDate" name="Stage1StartDate" value="@Model.CurrentCycle.CycleStages[0].StartDate.Value.ToString("dd/MM/yyyy")"/>                     
+                <input readonly="readonly" type="text" class="form-control stagedate" id="Stage1StartDate" name="Stage1StartDate" value="@Model.CurrentCycle.CycleStages[1].StartDate.Value.ToString("dd/MM/yyyy")"/>                     
             }
             else
             {
@@ -54,9 +54,9 @@
         <label for="Stage1EndDate" class="col-sm-2 control-label">Goal Setting End Date: </label>
         <div class="col-sm-4 input-group" id="datetimepicker2">
           @{
-              if (Model.CurrentCycle != null && Model.CurrentCycle.CycleStages.Count > 0 && Model.CurrentCycle.CycleStages[0].EndDate.HasValue)
+              if (Model.CurrentCycle != null && Model.CurrentCycle.CycleStages.Count > 0 && Model.CurrentCycle.CycleStages[1].EndDate.HasValue)
               {
-                <input type="text" class="form-control stagedate" id="Stage1EndDate" name="Stage1EndDate" value="@Model.CurrentCycle.CycleStages[0].EndDate.Value.ToString("dd/MM/yyyy")"/>                                                                   
+                <input type="text" class="form-control stagedate" id="Stage1EndDate" name="Stage1EndDate" value="@Model.CurrentCycle.CycleStages[1].EndDate.Value.ToString("dd/MM/yyyy")"/>                                                                   
               }
               else
               {
@@ -72,9 +72,9 @@
         <label for="Stage2StartDate" class="col-sm-2 control-label">Progess Review Start Date: </label>
         <div class="col-sm-4 input-group" id="datetimepicker3">
            @{
-               if (Model.CurrentCycle != null && Model.CurrentCycle.CycleStages.Count > 1 && Model.CurrentCycle.CycleStages[1].StartDate.HasValue)
+               if (Model.CurrentCycle != null && Model.CurrentCycle.CycleStages.Count > 1 && Model.CurrentCycle.CycleStages[2].StartDate.HasValue)
                {
-                <input type="text" class="form-control stagedate" id="Stage2StartDate" name="Stage2StartDate" value="@Model.CurrentCycle.CycleStages[1].StartDate.Value.ToString("dd/MM/yyyy")"/>                                                    
+                <input type="text" class="form-control stagedate" id="Stage2StartDate" name="Stage2StartDate" value="@Model.CurrentCycle.CycleStages[2].StartDate.Value.ToString("dd/MM/yyyy")"/>                                                    
                }
                else
                {
@@ -88,9 +88,9 @@
         <label for="Stage2EndDate" class="col-sm-2 control-label">Progress Review End Date: </label>
         <div class="col-sm-4 input-group" id="datetimepicker4">
            @{
-               if (Model.CurrentCycle != null && Model.CurrentCycle.CycleStages.Count > 1 && Model.CurrentCycle.CycleStages[1].EndDate.HasValue)
+               if (Model.CurrentCycle != null && Model.CurrentCycle.CycleStages.Count > 1 && Model.CurrentCycle.CycleStages[2].EndDate.HasValue)
                {
-                <input type="text" class="form-control stagedate" id="Stage2EndDate" name="Stage2EndDate" value="@Model.CurrentCycle.CycleStages[1].EndDate.Value.ToString("dd/MM/yyyy")"/>                                                      
+                <input type="text" class="form-control stagedate" id="Stage2EndDate" name="Stage2EndDate" value="@Model.CurrentCycle.CycleStages[2].EndDate.Value.ToString("dd/MM/yyyy")"/>                                                      
                }
                else
                {
@@ -106,9 +106,9 @@
         <label for="Stage3StartDate" class="col-sm-2 control-label">Final Year Review Start Date: </label>
         <div class="col-sm-4 input-group" id="datetimepicker5">
           @{
-              if (Model.CurrentCycle != null && Model.CurrentCycle.CycleStages.Count > 2 && Model.CurrentCycle.CycleStages[2].StartDate.HasValue)
+              if (Model.CurrentCycle != null && Model.CurrentCycle.CycleStages.Count > 2 && Model.CurrentCycle.CycleStages[3].StartDate.HasValue)
               {
-                <input type="text" class="form-control stagedate" id="Stage3StartDate" name="Stage3StartDate" value="@Model.CurrentCycle.CycleStages[2].StartDate.Value.ToString("dd/MM/yyyy")"/>                                     
+                <input type="text" class="form-control stagedate" id="Stage3StartDate" name="Stage3StartDate" value="@Model.CurrentCycle.CycleStages[3].StartDate.Value.ToString("dd/MM/yyyy")"/>                                     
               }
               else
               {
@@ -122,9 +122,9 @@
         <label for="Stage3EndDate" class="col-sm-2 control-label">Final Year Review End Date: </label>
         <div class="col-sm-4 input-group" id="datetimepicker6">
            @{
-               if (Model.CurrentCycle != null && Model.CurrentCycle.CycleStages.Count > 2 && Model.CurrentCycle.CycleStages[2].EndDate.HasValue)
+               if (Model.CurrentCycle != null && Model.CurrentCycle.CycleStages.Count > 2 && Model.CurrentCycle.CycleStages[3].EndDate.HasValue)
                {
-                <input type="text" class="form-control stagedate" id="Stage3EndDate" name="Stage3EndDate" value="@Model.CurrentCycle.CycleStages[2].EndDate.Value.ToString("dd/MM/yyyy")"/>                                     
+                <input type="text" class="form-control stagedate" id="Stage3EndDate" name="Stage3EndDate" value="@Model.CurrentCycle.CycleStages[3].EndDate.Value.ToString("dd/MM/yyyy")"/>                                     
                }
                else
                {
