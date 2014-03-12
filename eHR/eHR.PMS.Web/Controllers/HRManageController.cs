@@ -275,6 +275,7 @@ namespace eHR.PMS.Web.Controllers
                 }*/
             }
             TempData["QueryData"] = dict;
+            ViewData["NowDate"] = DateTime.Now.ToString("yyyy-MM-dd");
             ViewData.Model = obj_cycle_management_page;
             return View();
         }

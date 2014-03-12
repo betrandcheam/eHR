@@ -378,12 +378,12 @@
             format: "DD/MM/YYYY",
             pickTime: false
         });
-        var nowdate=new Date();
-        var settingdate=new Date();
+        var nowdate='@ViewData["NowDate"]';
+        var tempnow=nowdate.split('-');
         var temp=new Array();
         $.each($(".stagedate"),function(){
             temp=$(this).val().split('/');
-            if(nowdate.getFullYear()>parseInt(temp[2],10) || (nowdate.getMonth()+1)>parseInt(temp[1],10) || nowdate.getDate()>parseInt(temp[1],10))
+            if(parseInt(tempnow[0],10)>parseInt(temp[2],10) || parseInt(tempnow[1],10)>parseInt(temp[1],10) || parseInt(tempnow[2],10)>=parseInt(temp[0],10))
              {
                 $(this).attr("readonly",true);
                 $(this).parent().datetimepicker('hide');
