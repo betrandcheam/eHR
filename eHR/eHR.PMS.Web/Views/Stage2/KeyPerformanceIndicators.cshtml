@@ -465,6 +465,13 @@
                 editbuttonobject.next().removeClass("disabled");
                 UpdatedivforEdit.hide("slow");
                 AdddivforEdit.show("slow");
+
+                //resetting input box values
+                KPItextforEdit.val("");
+                PTtextforEdit.val("");
+
+                KPItextforEdit.removeClass("warningclass");
+                PTtextforEdit.removeClass("warningclass");
             });
 
             $(".panel-body").on('click', '.CancelKPIItem', function () {
@@ -472,6 +479,13 @@
                 editbuttonobject.next().removeClass("disabled");
                 UpdatedivforEdit.hide("slow");
                 AdddivforEdit.show("slow");
+
+                //resetting input box values
+                KPItextforEdit.val("");
+                PTtextforEdit.val("");
+
+                KPItextforEdit.removeClass("warningclass");
+                PTtextforEdit.removeClass("warningclass");
             });
             $(".AddKPIItem").click(function () {
                 //$(this).parent().parent().parent().parent().find(".panel-heading").removeClass(".warningclass");
