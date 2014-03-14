@@ -197,7 +197,7 @@ namespace eHR.PMS.Web.Controllers
 
             ModelState.Clear();
             ViewData.Model = obj_cycle_management_page;
-
+            ViewData["NowDate"] = DateTime.Now.ToString("yyyy-MM-dd");
             return View();
         }
 

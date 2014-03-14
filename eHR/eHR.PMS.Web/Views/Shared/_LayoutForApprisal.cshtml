@@ -4,7 +4,6 @@
         <meta http-equiv="X-UA-Compatible" content="IE=9; IE=8; IE=7" />
         <meta charset="utf-8" />
         <title>@ViewBag.Title -  @ViewData["moduleName"]</title>
-        <script type="text/javascript" src="@(Url.Content("~/Scripts/css3-mediaqueries.js"))"></script>
         <link href="@(Url.Content("~/Content/bootstrap.css"))" rel="stylesheet" media="screen" />
         <meta name="viewport" content="width=device-width" />
         
@@ -161,18 +160,7 @@
             color:Red;
             border-color:Red;
         }
-    </style>
-    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!--if lt IE 9-->
-        <script type="text/javascript" src="@(Url.Content("~/Scripts/html5shiv.js"))"></script>
-        <script type="text/javascript" src="@(Url.Content("~/Scripts/respond.min.js"))"></script>
-    <!---------------->
-
-    <!--if lt IE 8-->
-       <script type="text/javascript" src="@(Url.Content("~/Scripts/json3.min.js"))"></script>
-    <!---------------->
-     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script type="text/javascript" src="@(Url.Content("~/Scripts/jquery-1.9.1.js"))"></script>    
+    </style>  
     </head>
     <body data-target="#sidenav" data-spy="scroll" data-offset="0">
         <!--<header>
@@ -293,68 +281,17 @@
         </div>
     </div>
     </div>
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--if lt IE 9-->
+        <script type="text/javascript" src="@(Url.Content("~/Scripts/html5shiv.js"))"></script>
+        <script type="text/javascript" src="@(Url.Content("~/Scripts/respond.min.js"))"></script>
+        <script type="text/javascript" src="@(Url.Content("~/Scripts/css3-mediaqueries.js"))"></script>
+    <!---------------->
 
-
-
-
-        @RenderSection("scripts", required: false)
-        <script type="text/javascript" src="@(Url.Content("~/Scripts/bootstrap.js"))"></script>
-    <script type="text/javascript" src="@(Url.Content("~/Scripts/bootstrap-select.min.js"))"></script>
-    <script type="text/javascript">
-        var stop = $(".navbar").offset().top;
-        $(window).scroll(function () {
-            /*if ($(this).scrollTop() > (stop + $(".navbar").height()) && $(".navbar-static-top").length > 0) {
-            //$(".navbar").removeClass("navbar-static-top").addClass("navbar-fixed-top");
-            $("#fixedtopnav").show();
-            }
-            else if ($(this).scrollTop() <= (stop + $(".navbar").height()) && $(".navbar-fixed-top").length > 0) {
-            //$(".navbar").removeClass("navbar-fixed-top").addClass("navbar-static-top");
-            $("#fixedtopnav").hide();
-            }*/
-            ;
-        });
-        $(function () {
-            $('input[type="text"]').addClass("idleField");
-            $('input[type="text"]').focus(function () {
-                $(this).removeClass("idleField").addClass("focusField").removeClass("warningclass");
-                if (this.value == this.defaultValue && this.value.indexOf("Type something here") == 0) {
-                    this.value = '';
-                }
-                if (this.value != this.defaultValue) {
-                    this.select();
-                }
-            });
-            $('input[type="text"]').blur(function () {
-                $(this).removeClass("focusField").addClass("idleField");
-                if ($.trim(this.value) == '') {
-                    this.value = (this.defaultValue ? this.defaultValue : '');
-                }
-            });
-            $('textarea').focus(function () {
-                $(this).removeClass("idleField").addClass("focusField").removeClass("warningclass");
-                if (this.value == this.defaultValue && this.value.indexOf("Type something here") == 0) {
-                    this.value = '';
-                }
-                if (this.value != this.defaultValue) {
-                    this.select();
-                }
-            });
-            $('textarea').blur(function () {
-                $(this).removeClass("focusField").addClass("idleField");
-                if ($.trim(this.value) == '') {
-                    this.value = (this.defaultValue ? this.defaultValue : '');
-                }
-            });
-
-            $(document).on("click", function (e) {
-                var $target = $(e.target);
-                isPopover = $(e.target).is('.ViewKpiComments');
-                inPopover = $(e.target).closest('.popover').length > 0;
-
-                //hide only if clicked on button or inside popover
-                if (!isPopover && !inPopover) $(".ViewKpiComments").popover('destroy');
-            });
-        });
-    </script>
+    <!--if lt IE 8-->
+       <script type="text/javascript" src="@(Url.Content("~/Scripts/json3.min.js"))"></script>
+    <!---------------->
+    <script type="text/javascript" data-main="@(Url.Content("~/Scripts/main.js"))" src="@(Url.Content("~/Scripts/require.js"))"></script>
+    @RenderSection("scripts", required: false)
     </body>
 </html>

@@ -118,7 +118,7 @@
                     <table class="table table-bordered" style="border-collapse:collapse;border-spacing:0px 0px;">
                         <tr class="success">
                             <th>Name</th>
-                            <th>Domain ID</th>
+                            <th>Employee ID</th>
                             <th>Approval Level</th>
                         </tr>
                         @{
@@ -162,7 +162,7 @@
                     <table class="table table-bordered" style="border-collapse:collapse;border-spacing:0px 0px;">
                         <tr style="background-color: #D9EDF7;">
                             <th>Name</th>
-                            <th>Domain ID</th>
+                            <th>Employee ID</th>
                         </tr>
                         @{ if (!eHR.PMS.Lib.Utility.Common.IsNullOrEmptyList(Model.MyAppraisalsToReview))
                             {
@@ -190,7 +190,7 @@
     </div>
 </div>
         <!--pop up info for redirect-->
-    <div style="top:50%;" class="modal fade" id="RedirectModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+<div style="top:50%;" class="modal fade" id="RedirectModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
       <div class="modal-dialog" style="text-align:center;">
         <div id="submitcontent" class="modal-content">
           <div class="modal-body" style="padding-bottom:0px;">
@@ -205,10 +205,13 @@
         </div><!-- /.modal-content -->
       </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
-        <script type="text/javascript">
-            var message = '@message';
-            $(function(){
-                if (message)
-                    $('#RedirectModal').modal();
-            });
-        </script>
+
+<input type="hidden" id="forRazorValue" message="@message" />
+        @section scripts
+        {
+        <!--<script type="text/javascript">
+            require["~/Scripts/module/home/Index"];
+        </script>-->
+        <script type="text/javascript" src="@(Url.Content("~/Scripts/module/home/Index.js"))"></script>
+        }
+       
