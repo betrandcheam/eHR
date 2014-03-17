@@ -149,6 +149,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resource.resx</DependentUpon>
     </Compile>
+    <Content Include="Scripts\module\stage1approval\CareerDevelopment.js" />
+    <Content Include="Scripts\module\stage1approval\CoreValues.js" />
+    <Content Include="Scripts\module\stage1approval\KeyPerformanceIndicators.js" />
+    <Content Include="Scripts\module\stage1approval\PerformanceCoachingandreview.js" />
+    <Content Include="Scripts\module\stage1\CareerDevelopment.js" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap-select.min.css" />
@@ -246,6 +251,16 @@
     <Content Include="Scripts\module\hrmanage\RemoveNewParticipants.js" />
     <Content Include="Scripts\module\hrmanage\RemoveParticipants.js" />
     <Content Include="Scripts\module\hrmanage\NewCycle.js" />
+    <Content Include="Scripts\module\stage1\CoreValues.js" />
+    <Content Include="Scripts\module\stage1\PerformanceCoachingandreview.js" />
+    <Content Include="Scripts\module\stage2approval\CareerDevelopment.js" />
+    <Content Include="Scripts\module\stage2approval\CoreValues.js" />
+    <Content Include="Scripts\module\stage2approval\KeyPerformanceIndicators.js" />
+    <Content Include="Scripts\module\stage2approval\PerformanceCoachingandreview.js" />
+    <Content Include="Scripts\module\stage2\CareerDevelopment.js" />
+    <Content Include="Scripts\module\stage2\CoreValues.js" />
+    <Content Include="Scripts\module\stage2\KeyPerformanceIndicators.js" />
+    <Content Include="Scripts\module\stage2\PerformanceCoachingandreview.js" />
     <Content Include="Scripts\MVC4lib\jquery-1.7.1-vsdoc.js" />
     <Content Include="Scripts\MVC4lib\jquery-1.7.1.js" />
     <Content Include="Scripts\MVC4lib\jquery-1.7.1.min.js" />
@@ -263,6 +278,7 @@
     <Content Include="Scripts\MVC4lib\modernizr-2.5.3.js" />
     <Content Include="Scripts\MVC4lib\_references.js" />
     <Content Include="Scripts\require.js" />
+    <Content Include="Scripts\module\stage1\KeyPerformanceIndicators.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>

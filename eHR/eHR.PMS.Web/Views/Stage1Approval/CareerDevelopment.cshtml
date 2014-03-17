@@ -188,70 +188,14 @@
       </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
 
-
-    <script type="text/javascript">
-        var savefunction = function () {
-            $.ajax({
-                url: "@(Url.Content("~/Stage1Approval/CareerDevelopmentSave"))",
-                type: "POST",
-                dataType: "Json",
-                data: { "ApprID": $("#apprid").val(), "SectionID": $("#sectionlist li.active").attr("sectionid"), "Short-termCareerGoal": $("#Short-termCareerGoal").val(), "DevelopmentPlan": $("#DevelopmentPlan").val(), "Learninganddevelopment": $("#Learninganddevelopment").val(), "Comments" : $('#Comments').val(), "KPIID" : $("#Comments").attr("KPIID") },
-                beforeSend: function () {
-                    //$("#stage1kpisave").button('loading');
-                    //$("#buttongroup").showLoading();
-                    $('#resultcontent').hide();
-                    $('#loadingcontent').show();
-                    $('#InfoModal').modal();
-                },
-                success: function (data) {
-                    //$("#stage1kpisave").button('reset');
-                    $('#loadingcontent').hide();
-                    $('#resultcontent').show();
-                    //$('#InfoModal').modal();
-                }
-            });
-        };
-        var autosavefunction = function () {
-            $.ajax({
-                url: "@(Url.Content("~/Stage1/CareerDevelopmentSave"))",
-                type: "POST",
-                dataType: "Json",
-                data: { "ApprID":$("#apprid").val(),"SectionID":$("#sectionlist li.active").attr("sectionid"),"ShorttermCareerGoal": $("#Short-termCareerGoal").val(), "DevelopmentPlan": $("#DevelopmentPlan").val(), "Learninganddevelopment": $("#Learninganddevelopment").val(), "Comments" : $("#Comments").val(), "KPIID" : $("#Comments").attr("KPIID") },
-                beforeSend: function () {
-                    $("#autosaveloading").show('slow');
-                    $("#stage1kpisave").attr("disabled", true);
-                },
-                success: function (data) {
-                    $("#autosaveloading").hide('slow');
-                    $("#stage1kpisave").attr("disabled", false);
-                }
-            });
-        };
-        $(function () {
-            $('body').scrollspy({ target: '#sidenav' });
-            $('button[data-loading-text]').click(function () {
-                $(this).button('loading');
-            });
-            $("#stage1kpiapproval").click(function () {
-                $("#ApORRe").val("1");
-                $("#modalmessage").text("@(eHR.PMS.Web.Resources.Resource.MSG_APPROVE_SUBMISSION)")
-                $('#SubmitInfoModal').modal();
-            });
-            $("#stage1kpireject").click(function () {
-                $("#ApORRe").val("0");
-                $("#modalmessage").text("@(eHR.PMS.Web.Resources.Resource.MSG_REJECT_SUBMISSION)")
-                $('#SubmitInfoModal').modal();
-            });
-            $("#stage1kpisave").click(savefunction);
-
-            $("#btn_appraisal_cancel").click(function () {
-                $('#CancelInfoModal').modal();
-            });
-
-            $("#btn_cancel_modal_ok").click(function () {
-                window.location.href("@(Url.Content("~/"))");
-            });
-        });
-        //setInterval(autosavefunction, 300000); 
-    </script>
+<input type="hidden" id="forRazorValue" approvemessage="@(eHR.PMS.Web.Resources.Resource.MSG_APPROVE_SUBMISSION)" rejectmessage="@(eHR.PMS.Web.Resources.Resource.MSG_REJECT_SUBMISSION)"
+ saveurl="@(Url.Content("~/Stage1Approval/CareerDevelopmentSave"))" apprid='@Model.Appraisal.Id'
+    rooturl="@(Url.Content("~/"))"/>
+@section scripts
+        {
+        <!--<script type="text/javascript">
+            require["~/Scripts/module/home/Index"];
+        </script>-->
+        <script type="text/javascript" src="@(Url.Content("~/Scripts/module/stage1approval/CareerDevelopment.js"))"></script>
+        }
 

@@ -272,69 +272,13 @@
       </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
 
-
-<script type="text/javascript" src="@Url.Content("~/Scripts/moment.min.js")"></script>
-<script type="text/javascript" src="@(Url.Content("~/Scripts/bootstrap-paginator.js"))"></script>
-<script type="text/javascript">
-    $(function () {
-        $('.selectpicker').selectpicker(); 
-
-        var total = '@(Model.Appraisals.Count())';
-        var intTotal = parseInt(total);
-        if (intTotal != 0) {
-            $("#AfterRetrieve").show('slow');
-            var pagenum = (intTotal % 10 != 0 ? (intTotal / 10 + 1) : (intTotal / 10));
-            var options = {
-                currentPage: 1,
-                totalPages: pagenum,
-                size: 'small',
-                useBootstrapTooltip: true,
-                onPageClicked: function (e, originalEvent, type, page) {
-                    $.ajax({
-                        url: "@(Url.Content("~/HRManage/RetrieveAppraisalsByPage"))",
-                        type: "post",
-                        dataType: "json",
-                        data: { "page": page, "Stage1EndDate": $("#Stage1EndDate").val(), "Stage3EndDate": $("#Stage3EndDate").val() },
-                        beforeSend: function () {
-                            $('#resultcontent').hide();
-                            $('#loadingcontent').show();
-                            $('#InfoModal').modal(); ;
-                        },
-                        success: function (data) {
-                            $("#eicontent").html(data);
-                            $('#InfoModal').modal('hide');
-                        }
-                    });
-                }
-            }
-
-            $('#pages').bootstrapPaginator(options);
+<input type="hidden" id="forRazorValue" apprcount='@(Model.Appraisals.Count())' pageurl="@(Url.Content("~/HRManage/RetrieveAppraisalsByPage"))",
+    cancelurl="@(Url.Content("~/HRManage/CancelViewAppraisal"))" /> 
+@section scripts
+        {
+        <!--<script type="text/javascript">
+            require["~/Scripts/module/home/Index"];
+        </script>-->
+        <script type="text/javascript" src="@(Url.Content("~/Scripts/module/hrmanage/ViewAppraisal.js"))"></script>
         }
-
-        $('#showpage').change(function () {
-            var page = $(this).val();
-            $('#pages').bootstrapPaginator("show", page);
-        })
-
-        $("#btn_search").click(function (){
-            if ($("#cycleid").val() <= 0)
-            {
-                $("div.div_error").html("Please select the cycle required.");
-                $("div.div_error").addClass("warningclass");
-                return false;
-            }
-            else
-            {
-                $("div.div_error").text("");
-                $("div.div_error").removeClass("warningclass");
-                return true;
-            }
-            
-        })
-
-       $("#btn_cancel").click(function () {
-            window.location.href("@(Url.Content("~/HRManage/CancelViewAppraisal"))");
-        });
-    });
-</script>
 

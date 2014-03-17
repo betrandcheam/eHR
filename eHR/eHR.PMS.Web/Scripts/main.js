@@ -1,6 +1,6 @@
 ﻿require(['Config'], function () {
     require(['layout']);
-}
+})
 , define("layout", ['jquery', 'bootstrap'], function ($) {
     var stop = $(".navbar").offset().top;
     $(window).scroll(function () {
