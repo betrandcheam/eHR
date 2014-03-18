@@ -8,9 +8,11 @@
 <div class="well" style="margin:35px;">
     <form method="post" action="@(Url.Content("~/HRManage/NewCycle"))" class="form-horizontal" role="form">
       <div class="form-group">
-      <div id="div_error" class="div_error">
-        
-      </div>
+      <div class="alert alert-danger alert-dismissable" style="display:none;">
+          <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+          <strong id="errormsg"></strong>
+        </div>
+
       <input type="hidden" value="0" id="startcycle" name="startcycle" /> 
         <label for="cyclename" class="col-sm-2 control-label">Cycle Name: </label>
         <div class="col-sm-4">
@@ -32,11 +34,11 @@
         @{
             if (form == null || !form.Keys.Contains("Stage1StartDate"))
             {
-                <input type="text" class="form-control" id="Stage1StartDate" name="Stage1StartDate" value="@(DateTime.Now.ToString("dd/MM/yyyy"))" />
+                <input type="text" class="form-control date" id="Stage1StartDate" name="Stage1StartDate" forerrormsg="Goal Setting Stage Start Date" value="@(DateTime.Now.ToString("dd/MM/yyyy"))" />
             }
             else
             {
-                <input type="text" class="form-control" id="Stage1StartDate" name="Stage1StartDate" value="@form["Stage1StartDate"]"/>                   
+                <input type="text" class="form-control date" id="Stage1StartDate" name="Stage1StartDate" forerrormsg="Goal Setting Stage Start Date" value="@form["Stage1StartDate"]"/>                   
             }
            }
           <span class="input-group-addon">
@@ -48,12 +50,12 @@
           @{
               if (form == null || !form.Keys.Contains("Stage1EndDate"))
               {
-                <input type="text" class="form-control" id="Stage1EndDate" name="Stage1EndDate"/>
+                <input type="text" class="form-control date" id="Stage1EndDate" name="Stage1EndDate" forerrormsg="Goal Setting Stage End Date"/>
               }
               else
               {
-                <input type="text" class="form-control" id="Stage1EndDate" name="Stage1EndDate" value="@form["Stage1EndDate"]"/>                   
-                <input type="hidden" class="form-control" id="strStage1EndDate" value="@form["strStage1EndDate"]"/>                                                   
+                <input type="text" class="form-control date" id="Stage1EndDate" name="Stage1EndDate" forerrormsg="Goal Setting Stage End Date" value="@form["Stage1EndDate"]"/>                   
+                <input type="hidden"  class="form-control" id="strStage1EndDate" value="@form["strStage1EndDate"]"/>                                                   
               }
            }
           <span class="input-group-addon">
@@ -67,11 +69,11 @@
            @{
                if (form == null || !form.Keys.Contains("Stage2StartDate"))
                {
-                <input type="text" class="form-control" id="Stage2StartDate" name="Stage2StartDate">
+                <input type="text" class="form-control date" id="Stage2StartDate" name="Stage2StartDate" forerrormsg="Progress Review Stage Start Date">
                }
                else
                {
-                <input type="text" class="form-control" id="Stage2StartDate" name="Stage2StartDate" value="@form["Stage2StartDate"]"/>                   
+                <input type="text" class="form-control date" id="Stage2StartDate" name="Stage2StartDate" forerrormsg="Progress Review Stage Start Date" value="@form["Stage2StartDate"]"/>                   
                }
            }
           <span class="input-group-addon">
@@ -83,11 +85,11 @@
            @{
                if (form == null || !form.Keys.Contains("Stage2EndDate"))
                {
-                <input type="text" class="form-control" id="Stage2EndDate" name="Stage2EndDate">
+                <input type="text" class="form-control date" id="Stage2EndDate" name="Stage2EndDate" forerrormsg="Progress Review Stage End Date">
                }
                else
                {
-                <input type="text" class="form-control" id="Stage2EndDate" name="Stage2EndDate" value="@form["Stage2EndDate"]"/>                   
+                <input type="text" class="form-control date" id="Stage2EndDate" name="Stage2EndDate" forerrormsg="Progress Review Stage End Date" value="@form["Stage2EndDate"]"/>                   
                }
            }
           <span class="input-group-addon">
@@ -101,11 +103,11 @@
           @{
               if (form == null || !form.Keys.Contains("Stage3StartDate"))
               {
-                <input type="text" class="form-control" id="Stage3StartDate" name="Stage3StartDate">
+                <input type="text" class="form-control date" id="Stage3StartDate" name="Stage3StartDate" forerrormsg="Final Year Review Stage Start Date">
               }
               else
               {
-                <input type="text" class="form-control" id="Stage3StartDate" name="Stage3StartDate" value="@form["Stage3StartDate"]"/>                   
+                <input type="text" class="form-control date" id="Stage3StartDate" name="Stage3StartDate" forerrormsg="Final Year Review Stage Start Date" value="@form["Stage3StartDate"]"/>                   
               }
            }
           <span class="input-group-addon">
@@ -117,11 +119,11 @@
            @{
                if (form == null || !form.Keys.Contains("Stage3EndDate"))
                {
-                <input type="text" class="form-control" id="Stage3EndDate" name="Stage3EndDate">
+                <input type="text" class="form-control date" id="Stage3EndDate" name="Stage3EndDate" forerrormsg="Final Year Review Stage End Date">
                }
                else
                {
-                <input type="text" class="form-control" id="Stage3EndDate" name="Stage3EndDate" value="@form["Stage3EndDate"]"/>                   
+                <input type="text" class="form-control date" id="Stage3EndDate" name="Stage3EndDate" forerrormsg="Final Year Review Stage End Date" value="@form["Stage3EndDate"]"/>                   
                 <input type="hidden" class="form-control" id="strStage3EndDate" value="@form["strStage3EndDate"]"/>                                   
                }
            }

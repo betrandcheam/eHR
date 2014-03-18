@@ -8,9 +8,10 @@
 <div class="well" style="margin:35px;">
     <form method="post" action="@(Url.Content("~/HRManage/ManageCycle"))" class="form-horizontal" role="form">
       <div class="form-group">
-      <div id="div_error" class="div_error">
-        
-      </div>
+      <div class="alert alert-danger alert-dismissable" style="display:none;">
+          <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+          <strong id="errormsg"></strong>
+        </div>
       <input type="hidden" value="0" id="updatecycle" name="updatecycle" /> 
       @{
           if(Model.CurrentCycle!=null)
@@ -40,11 +41,11 @@
         @{
             if (Model.CurrentCycle != null && Model.CurrentCycle.CycleStages.Count > 0 && Model.CurrentCycle.CycleStages[1].StartDate.HasValue)
             {
-                <input readonly="readonly" type="text" class="form-control stagedate" id="Stage1StartDate" name="Stage1StartDate" value="@Model.CurrentCycle.CycleStages[1].StartDate.Value.ToString("dd/MM/yyyy")"/>                     
+                <input readonly="readonly" type="text" class="form-control stagedate" id="Stage1StartDate" name="Stage1StartDate" forerrormsg="Goal Setting Stage Start Date" value="@Model.CurrentCycle.CycleStages[1].StartDate.Value.ToString("dd/MM/yyyy")"/>                     
             }
             else
             {
-                <input type="text" class="form-control stagedate" id="Stage1StartDate" name="Stage1StartDate" value="" />
+                <input type="text" class="form-control stagedate" id="Stage1StartDate" name="Stage1StartDate" forerrormsg="Goal Setting Stage Start Date" value="" />
             }
            }
           <span class="input-group-addon">
@@ -56,11 +57,11 @@
           @{
               if (Model.CurrentCycle != null && Model.CurrentCycle.CycleStages.Count > 0 && Model.CurrentCycle.CycleStages[1].EndDate.HasValue)
               {
-                <input type="text" class="form-control stagedate" id="Stage1EndDate" name="Stage1EndDate" value="@Model.CurrentCycle.CycleStages[1].EndDate.Value.ToString("dd/MM/yyyy")"/>                                                                   
+                <input type="text" class="form-control stagedate" id="Stage1EndDate" name="Stage1EndDate" forerrormsg="Goal Setting Stage End Date" value="@Model.CurrentCycle.CycleStages[1].EndDate.Value.ToString("dd/MM/yyyy")"/>                                                                   
               }
               else
               {
-                <input type="text" class="form-control stagedate" id="Stage1EndDate" name="Stage1EndDate"/>                  
+                <input type="text" class="form-control stagedate" id="Stage1EndDate" name="Stage1EndDate" forerrormsg="Goal Setting Stage End Date"/>                  
               }
            }
           <span class="input-group-addon">
@@ -74,11 +75,11 @@
            @{
                if (Model.CurrentCycle != null && Model.CurrentCycle.CycleStages.Count > 1 && Model.CurrentCycle.CycleStages[2].StartDate.HasValue)
                {
-                <input type="text" class="form-control stagedate" id="Stage2StartDate" name="Stage2StartDate" value="@Model.CurrentCycle.CycleStages[2].StartDate.Value.ToString("dd/MM/yyyy")"/>                                                    
+                <input type="text" class="form-control stagedate" id="Stage2StartDate" name="Stage2StartDate" forerrormsg="Progress Review Stage Start Date" value="@Model.CurrentCycle.CycleStages[2].StartDate.Value.ToString("dd/MM/yyyy")"/>                                                    
                }
                else
                {
-                   <input type="text" class="form-control stagedate" id="Stage2StartDate" name="Stage2StartDate">
+                   <input type="text" class="form-control stagedate" id="Stage2StartDate" name="Stage2StartDate" forerrormsg="Progress Review Stage Start Date">
                }
            }
           <span class="input-group-addon">
@@ -90,11 +91,11 @@
            @{
                if (Model.CurrentCycle != null && Model.CurrentCycle.CycleStages.Count > 1 && Model.CurrentCycle.CycleStages[2].EndDate.HasValue)
                {
-                <input type="text" class="form-control stagedate" id="Stage2EndDate" name="Stage2EndDate" value="@Model.CurrentCycle.CycleStages[2].EndDate.Value.ToString("dd/MM/yyyy")"/>                                                      
+                <input type="text" class="form-control stagedate" id="Stage2EndDate" name="Stage2EndDate" forerrormsg="Progress Review Stage End Date" value="@Model.CurrentCycle.CycleStages[2].EndDate.Value.ToString("dd/MM/yyyy")"/>                                                      
                }
                else
                {
-                   <input type="text" class="form-control stagedate" id="Stage2EndDate" name="Stage2EndDate">
+                   <input type="text" class="form-control stagedate" id="Stage2EndDate" name="Stage2EndDate" forerrormsg="Progress Review Stage End Date">
                }
            }
           <span class="input-group-addon">
@@ -108,11 +109,11 @@
           @{
               if (Model.CurrentCycle != null && Model.CurrentCycle.CycleStages.Count > 2 && Model.CurrentCycle.CycleStages[3].StartDate.HasValue)
               {
-                <input type="text" class="form-control stagedate" id="Stage3StartDate" name="Stage3StartDate" value="@Model.CurrentCycle.CycleStages[3].StartDate.Value.ToString("dd/MM/yyyy")"/>                                     
+                <input type="text" class="form-control stagedate" id="Stage3StartDate" name="Stage3StartDate" forerrormsg="Final Year Review Stage Start Date" value="@Model.CurrentCycle.CycleStages[3].StartDate.Value.ToString("dd/MM/yyyy")"/>                                     
               }
               else
               {
-                <input type="text" class="form-control stagedate" id="Stage3StartDate" name="Stage3StartDate">                  
+                <input type="text" class="form-control stagedate" id="Stage3StartDate" name="Stage3StartDate" forerrormsg="Final Year Review Stage Start Date">                  
               }
            }
           <span class="input-group-addon">
@@ -124,11 +125,11 @@
            @{
                if (Model.CurrentCycle != null && Model.CurrentCycle.CycleStages.Count > 2 && Model.CurrentCycle.CycleStages[3].EndDate.HasValue)
                {
-                <input type="text" class="form-control stagedate" id="Stage3EndDate" name="Stage3EndDate" value="@Model.CurrentCycle.CycleStages[3].EndDate.Value.ToString("dd/MM/yyyy")"/>                                     
+                <input type="text" class="form-control stagedate" id="Stage3EndDate" name="Stage3EndDate" forerrormsg="Final Year Review Stage End Date" value="@Model.CurrentCycle.CycleStages[3].EndDate.Value.ToString("dd/MM/yyyy")"/>                                     
                }
                else
                {
-                <input type="text" class="form-control stagedate" id="Stage3EndDate" name="Stage3EndDate">                  
+                <input type="text" class="form-control stagedate" id="Stage3EndDate" name="Stage3EndDate" forerrormsg="Final Year Review Stage End Date">                  
                }
            }
           <span class="input-group-addon">
