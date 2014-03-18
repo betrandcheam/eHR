@@ -14,7 +14,7 @@
         </div>
       <input type="hidden" value="0" id="updatecycle" name="updatecycle" /> 
       @{
-          if(Model.CurrentCycle!=null)
+          if (Model.CurrentCycle != null)
           {
               <input type="hidden" attrname="@Model.CurrentCycle.Name" value="@Model.CurrentCycle.Id" id="whetherpostback"/>
           }
@@ -70,6 +70,60 @@
         </div>
       </div>
       <div class="form-group">
+        <label for="Stage1SubmissionDeadline" class="col-sm-2 control-label">Submission Deadline: </label>
+        <div class="col-sm-4 input-group" id="datetimepicker_stage1submissiondeadline">
+        @{
+            if (form == null || !form.Keys.Contains("Stage1SubmissionDeadline"))
+            {
+                <input type="text" class="form-control" id="Stage1SubmissionDeadline" name="Stage1SubmissionDeadline" />
+                }
+                else
+                {
+                <input type="text" class="form-control" id="Stage1SubmissionDeadline" name="Stage1SubmissionDeadline" value="@form["Stage1SubmissionDeadline"]"/>                   
+                }
+            }
+          <span class="input-group-addon">
+              <span class="glyphicon glyphicon-calendar"></span>
+          </span>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="Stage1Level1ApprovalDeadline" class="col-sm-2 control-label">Level 1 Approval Deadline: </label>
+        <div class="col-sm-4 input-group" id="datetimepicker_stage1level1approvaldeadline">
+        @{
+            if (form == null || !form.Keys.Contains("Stage1Level1ApprovalDeadline"))
+            {
+                <input type="text" class="form-control" id="Stage1Level1ApprovalDeadline" name="Stage1Level1ApprovalDeadline" />
+            }
+            else
+            {
+                <input type="text" class="form-control" id="Stage1Level1ApprovalDeadline" name="Stage1Level1ApprovalDeadline" value="@form["Stage1Level1ApprovalDeadline"]"/>                   
+            }
+           }
+          <span class="input-group-addon">
+              <span class="glyphicon glyphicon-calendar"></span>
+          </span>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="Stage1Level2ApprovalDeadline" class="col-sm-2 control-label">Level 2 Approval Deadline: </label>
+        <div class="col-sm-4 input-group" id="datetimepicker_stage1level2approvaldeadline">
+        @{
+            if (form == null || !form.Keys.Contains("Stage1Level2ApprovalDeadline"))
+            {
+                <input type="text" class="form-control" id="Stage1Level2ApprovalDeadline" name="Stage1Level2ApprovalDeadline" />
+            }
+            else
+            {
+                <input type="text" class="form-control" id="Stage1Level2ApprovalDeadline" name="Stage1Level2ApprovalDeadline" value="@form["Stage1Level2ApprovalDeadline"]"/>                   
+            }
+           }
+          <span class="input-group-addon">
+              <span class="glyphicon glyphicon-calendar"></span>
+          </span>
+        </div>
+      </div>
+      <div class="form-group">
         <label for="Stage2StartDate" class="col-sm-2 control-label">Progess Review Start Date: </label>
         <div class="col-sm-4 input-group" id="datetimepicker3">
            @{
@@ -97,6 +151,60 @@
                {
                    <input type="text" class="form-control stagedate" id="Stage2EndDate" name="Stage2EndDate" forerrormsg="Progress Review Stage End Date">
                }
+           }
+          <span class="input-group-addon">
+              <span class="glyphicon glyphicon-calendar"></span>
+          </span>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="Stage2SubmissionDeadline" class="col-sm-2 control-label">Submission Deadline: </label>
+        <div class="col-sm-4 input-group" id="datetimepicker_stage2submissiondeadline">
+        @{
+            if (form == null || !form.Keys.Contains("Stage2SubmissionDeadline"))
+            {
+                <input type="text" class="form-control" id="Stage2SubmissionDeadline" name="Stage2SubmissionDeadline" />
+            }
+            else
+            {
+                <input type="text" class="form-control" id="Stage2SubmissionDeadline" name="Stage2SubmissionDeadline" value="@form["Stage2SubmissionDeadline"]"/>                   
+            }
+           }
+          <span class="input-group-addon">
+              <span class="glyphicon glyphicon-calendar"></span>
+          </span>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="Stage2Level1ApprovalDeadline" class="col-sm-2 control-label">Level 1 Approval Deadline: </label>
+        <div class="col-sm-4 input-group" id="datetimepicker_stage2level1approvaldeadline">
+        @{
+            if (form == null || !form.Keys.Contains("Stage2Level1ApprovalDeadline"))
+            {
+                <input type="text" class="form-control" id="Stage2Level1ApprovalDeadline" name="Stage2Level1ApprovalDeadline" />
+            }
+            else
+            {
+                <input type="text" class="form-control" id="Stage2Level1ApprovalDeadline" name="Stage2Level1ApprovalDeadline" value="@form["Stage2Level1ApprovalDeadline"]"/>                   
+            }
+           }
+          <span class="input-group-addon">
+              <span class="glyphicon glyphicon-calendar"></span>
+          </span>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="Stage2Level2ApprovalDeadline" class="col-sm-2 control-label">Level 2 Approval Deadline: </label>
+        <div class="col-sm-4 input-group" id="datetimepicker_stage2level2approvaldeadline">
+        @{
+            if (form == null || !form.Keys.Contains("Stage2Level2ApprovalDeadline"))
+            {
+                <input type="text" class="form-control" id="Stage2Level2ApprovalDeadline" name="Stage2Level2ApprovalDeadline" />
+            }
+            else
+            {
+                <input type="text" class="form-control" id="Stage2Level2ApprovalDeadline" name="Stage2Level2ApprovalDeadline" value="@form["Stage2Level2ApprovalDeadline"]"/>                   
+            }
            }
           <span class="input-group-addon">
               <span class="glyphicon glyphicon-calendar"></span>
@@ -177,7 +285,7 @@
                           if (Model.CurrentCycle != null)
                           {
                             <li><a id="AddParticipants" href="@(Url.Content("~/HRManage/AddParticipants/" + (Model.CurrentCycle.CycleStages[0].EndDate.HasValue ? Model.CurrentCycle.CycleStages[0].EndDate.Value.ToString("yyyy-MM-dd") : "") + "/" + (Model.CurrentCycle.CycleStages[2].EndDate.HasValue ? Model.CurrentCycle.CycleStages[2].EndDate.Value.ToString("yyyy-MM-dd") : "") + "/" + Model.CurrentCycle.Id))">Add Participants</a></li>                              
-                            <li><a id="RemoveParticipants" href="@(Url.Content("~/HRManage/RemoveParticipants/" + (Model.CurrentCycle.CycleStages[0].EndDate.HasValue ? Model.CurrentCycle.CycleStages[0].EndDate.Value.ToString("yyyy-MM-dd") : "") + "/" + (Model.CurrentCycle.CycleStages[2].EndDate.HasValue ? Model.CurrentCycle.CycleStages[2].EndDate.Value.ToString("yyyy-MM-dd") : "")+"/" + Model.CurrentCycle.Id))">Remove Participants</a></li>
+                            <li><a id="RemoveParticipants" href="@(Url.Content("~/HRManage/RemoveParticipants/" + (Model.CurrentCycle.CycleStages[0].EndDate.HasValue ? Model.CurrentCycle.CycleStages[0].EndDate.Value.ToString("yyyy-MM-dd") : "") + "/" + (Model.CurrentCycle.CycleStages[2].EndDate.HasValue ? Model.CurrentCycle.CycleStages[2].EndDate.Value.ToString("yyyy-MM-dd") : "") + "/" + Model.CurrentCycle.Id))">Remove Participants</a></li>
                           }
                           else
                           {
@@ -220,15 +328,15 @@
                               <tr>
                                 <td align="center"><input type="hidden" class="eid" value="@ei.Id" />
                                     @{
-                                        if(ei.Id==-1)
-                                        {   
+                                  if (ei.Id == -1)
+                                  {   
                                             <img src="@Url.Content("~/Content/img/new.png")" />
-                                        }
+                                  }
                                      }
                                 </td>
                                 <td>@(ei.Employee.PreferredName)</td>
-                                <td>@(ei.Department!=null?ei.Department.Name:"")</td>
-                                <td>@(ei.Id>0?ei.Approvers.Count:ei.Employee.GetNumberOfApprovers())</td>
+                                <td>@(ei.Department != null ? ei.Department.Name : "")</td>
+                                <td>@(ei.Id > 0 ? ei.Approvers.Count : ei.Employee.GetNumberOfApprovers())</td>
                               </tr>
                               }
                           }

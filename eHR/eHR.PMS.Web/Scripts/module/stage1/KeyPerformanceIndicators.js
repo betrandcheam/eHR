@@ -263,5 +263,5 @@ define("stage1.kpi", ['jquery', 'bootstrap', 'bootstrap.select'], function ($) {
             });
         });
         
-        setInterval(autosavefunction, 600000); 
+        //setInterval(autosavefunction, 600000); 
 });

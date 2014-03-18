@@ -105,6 +105,7 @@ namespace eHR.PMS.Web.Controllers
                 if (result[result.Length - 1].IndexOf("^&*ONERECORDENDED") > 0)
                 {
                     result[result.Length - 1] = result[result.Length - 1].Substring(0, result[result.Length - 1].IndexOf("^&*ONERECORDENDED"));
+                   
                     PMS.Model.PMSModel.UpdateAppraisalKPIs(
                                         Business.AppraisalManager.GetKPIItemsToInsert(result),
                                         Business.AppraisalManager.GetKPIItemsToUpdate(result),

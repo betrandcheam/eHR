@@ -199,7 +199,10 @@ namespace eHR.PMS.Model.Mappers
                 Name = entity.PMS_MST_STAGE.NAME,
                 SortOrder = entity.PMS_MST_STAGE.SORT_ORDER,
                 StartDate = entity.START_DATE,
-                EndDate = entity.END_DATE
+                EndDate = entity.END_DATE,
+                SubmissionDeadline = entity.SUBMISSION_DEADLINE,
+                Level1ApprovalDeadline = entity.LEVEL_1_APPROVAL_DEADLINE,
+                Level2ApprovalDeadline = entity.LEVEL_2_APPROVAL_DEADLINE
             };
 
             obj_dto.Appraisal = entity.PMS_APPRAISAL == null ? null : MapAppraisalEntityToDTO(entity.PMS_APPRAISAL, false);
@@ -225,7 +228,10 @@ namespace eHR.PMS.Model.Mappers
                 APPRAISAL_ID = dto.Appraisal == null ? (int?)null : dto.Appraisal.Id,
                 STAGE_ID = dto.StageId,
                 START_DATE = dto.StartDate,
-                END_DATE = dto.EndDate
+                END_DATE = dto.EndDate,
+                SUBMISSION_DEADLINE = dto.SubmissionDeadline,
+                LEVEL_1_APPROVAL_DEADLINE = dto.Level1ApprovalDeadline,
+                LEVEL_2_APPROVAL_DEADLINE = dto.Level2ApprovalDeadline
             };
             return obj_entity;
         }

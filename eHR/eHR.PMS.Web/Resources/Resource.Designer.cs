@@ -79,7 +79,7 @@ namespace eHR.PMS.Web.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Proceed to submit?.
+        ///   Looks up a localized string similar to Your goals will be submitted to your Manager for approval. You will not be able to edit your goals from this point. Do you want to proceed?.
         /// </summary>
         public static string MSG_APPRAISAL_SUBMISSION {
             get {
@@ -169,7 +169,7 @@ namespace eHR.PMS.Web.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to All Career Development information is saved successfully..
+        ///   Looks up a localized string similar to You have successfully saved your draft. Please be reminded to submit your goal document for your Manager&apos;s review by [%DEADLINE%].
         /// </summary>
         public static string MSG_SAVE_SUCCESS_CAREER_DEVELOPMENT {
             get {
@@ -178,7 +178,7 @@ namespace eHR.PMS.Web.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to All Core Value information saved is successfully..
+        ///   Looks up a localized string similar to You have successfully saved your draft. Please be reminded to submit your goal document for your Manager&apos;s review by [%DEADLINE%].
         /// </summary>
         public static string MSG_SAVE_SUCCESS_CORE_VALUE {
             get {
@@ -187,7 +187,7 @@ namespace eHR.PMS.Web.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to All KPI information saved successfully..
+        ///   Looks up a localized string similar to You have successfully saved your draft. Please be reminded to submit your goal document for your Manager&apos;s review by [%DEADLINE%].
         /// </summary>
         public static string MSG_SAVE_SUCCESS_KPI {
             get {
@@ -196,7 +196,7 @@ namespace eHR.PMS.Web.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to All Performance Coaching information is saved successfully..
+        ///   Looks up a localized string similar to You have successfully saved your draft. Please be reminded to submit your goal document for your Manager&apos;s review by [%DEADLINE%].
         /// </summary>
         public static string MSG_SAVE_SUCCESS_PERFORMANCE_COACHING {
             get {

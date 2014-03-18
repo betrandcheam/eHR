@@ -12,6 +12,9 @@ namespace eHR.PMS.Model.DTO.Appraisal
         private int? int_stage_id;
         private DateTime? d_start_date;
         private DateTime? d_end_date;
+        private DateTime? d_submission_deadline;
+        private DateTime? d_level_1_approval_deadline;
+        private DateTime? d_level_2_approval_deadline;
         private PMS.Model.DTO.Core.Employee obj_modifier;
         private DateTime? dt_modified_timestamp;
 
@@ -43,6 +46,24 @@ namespace eHR.PMS.Model.DTO.Appraisal
         {
             get { return d_end_date; }
             set { d_end_date = value; }
+        }
+
+        public DateTime? SubmissionDeadline
+        {
+            get { return d_submission_deadline; }
+            set { d_submission_deadline = value; }
+        }
+
+        public DateTime? Level1ApprovalDeadline
+        {
+            get { return d_level_1_approval_deadline; }
+            set { d_level_1_approval_deadline = value; }
+        }
+
+        public DateTime? Level2ApprovalDeadline
+        {
+            get { return d_level_2_approval_deadline; }
+            set { d_level_2_approval_deadline = value; }
         }
 
         public new PMS.Model.DTO.Core.Employee Modifier

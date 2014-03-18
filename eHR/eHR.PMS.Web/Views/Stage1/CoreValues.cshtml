@@ -38,6 +38,8 @@
             <p>
                 The ACR Core Values guides our behaviours, the way we conduct business and how we treat our clients and colleagues. 
                 Living the values is essential to creating and reinforcing our corporate values.<br />
+            </p>
+            <p>
                 All Core Values (RIPPLES) must be evaluated for the year.<br />
             </p>
             <br />
@@ -273,7 +275,7 @@
         <div id="resultcontent" class="modal-content" style="display:none;">
           <div class="modal-body" style="padding-bottom:0px;">
                 <div class="alert alert-success alert-dismissable">
-                  <strong>@(eHR.PMS.Web.Resources.Resource.MSG_SAVE_SUCCESS_CORE_VALUE)</strong>
+                  <strong>@(eHR.PMS.Web.Resources.Resource.MSG_SAVE_SUCCESS_CORE_VALUE.Replace("[%DEADLINE%]",Model.SubmissionDeadline))</strong>
                 </div>
           </div>
           <div class="modal-footer">

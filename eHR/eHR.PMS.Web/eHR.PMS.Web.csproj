@@ -326,6 +326,7 @@
     <Content Include="Views\HRManage\RemoveParticipants.cshtml" />
     <Content Include="Views\HRManage\AddParticipants.cshtml" />
     <Content Include="Views\HRManage\ViewAppraisal.cshtml" />
+    <None Include="Documents\User Guide.pdf" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

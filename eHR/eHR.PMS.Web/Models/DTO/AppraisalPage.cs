@@ -102,5 +102,20 @@ namespace eHR.PMS.Web.Models.DTO
 
             return sb.ToString();
         }
+
+        public string SubmissionDeadline
+        {
+            get 
+            {
+                if (obj_appraisal != null)
+                {
+                    return Convert.ToDateTime(obj_appraisal.AppraisalStages.Where(rec => rec.StageId == obj_appraisal.Stage.Id).Single().SubmissionDeadline).ToString("dd/MM/yyyy");
+                }
+                else 
+                {
+                    return "";
+                }
+            }
+        }
     }
 }

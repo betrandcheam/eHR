@@ -124,7 +124,7 @@
     <value>The appraisal is rejected. It will be routed to the employee for re-submission.</value>
   </data>
   <data name="MSG_APPRAISAL_SUBMISSION" xml:space="preserve">
-    <value>Proceed to submit?</value>
+    <value>Your goals will be submitted to your Manager for approval. You will not be able to edit your goals from this point. Do you want to proceed?</value>
   </data>
   <data name="MSG_APPRAISAL_SUBMITTED" xml:space="preserve">
     <value>Your appraisal is submitted.</value>
@@ -154,16 +154,16 @@
     <value>Appraisal information is saved successfully.</value>
   </data>
   <data name="MSG_SAVE_SUCCESS_CAREER_DEVELOPMENT" xml:space="preserve">
-    <value>All Career Development information is saved successfully.</value>
+    <value>You have successfully saved your draft. Please be reminded to submit your goal document for your Manager's review by [%DEADLINE%]</value>
   </data>
   <data name="MSG_SAVE_SUCCESS_CORE_VALUE" xml:space="preserve">
-    <value>All Core Value information saved is successfully.</value>
+    <value>You have successfully saved your draft. Please be reminded to submit your goal document for your Manager's review by [%DEADLINE%]</value>
   </data>
   <data name="MSG_SAVE_SUCCESS_KPI" xml:space="preserve">
-    <value>All KPI information saved successfully.</value>
+    <value>You have successfully saved your draft. Please be reminded to submit your goal document for your Manager's review by [%DEADLINE%]</value>
   </data>
   <data name="MSG_SAVE_SUCCESS_PERFORMANCE_COACHING" xml:space="preserve">
-    <value>All Performance Coaching information is saved successfully.</value>
+    <value>You have successfully saved your draft. Please be reminded to submit your goal document for your Manager's review by [%DEADLINE%]</value>
   </data>
   <data name="MSG_UPDATE_CYCLE" xml:space="preserve">
     <value>Update cycle information now?</value>
