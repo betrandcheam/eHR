@@ -1391,7 +1391,7 @@ namespace eHR.PMS.Business
             if (!Lib.Utility.Common.IsNullOrEmptyList(result))
             {
                 lst_core_values = new List<Model.DTO.Appraisal.CoreValue>();
-                string[] arr_values = new string[6];
+                string[] arr_values = new string[5];
                 string[] arr_seperator = { "^&*" };
 
                 foreach (string str_result in result)
@@ -1409,8 +1409,8 @@ namespace eHR.PMS.Business
                                 Appraisal = new Model.DTO.Appraisal.Appraisal() { Id = Convert.ToInt32(arr_values[1]) },
                                 Section = new Model.DTO.Master.Section() { Id = Convert.ToInt32(arr_values[2]) },
                                 Block = new Model.DTO.Master.Block() { Id = Convert.ToInt32(arr_values[3]) },
-                                CoreValueCompetency = new Model.DTO.Master.CoreValueCompetency() { Id = Convert.ToInt32(arr_values[4]) },
-                                Target = arr_values[5].Trim()
+                                //CoreValueCompetency = new Model.DTO.Master.CoreValueCompetency() { Id = Convert.ToInt32(arr_values[4]) },
+                                Target = arr_values[4].Trim()
                             };
                             lst_core_values.Add(obj_kpi);
                         }
@@ -1427,7 +1427,7 @@ namespace eHR.PMS.Business
             if (!Lib.Utility.Common.IsNullOrEmptyList(result))
             {
                 lst_core_values = new List<Model.DTO.Appraisal.CoreValue>();
-                string[] arr_values = new string[6];
+                string[] arr_values = new string[5];
                 string[] arr_seperator = { "^&*" };
 
                 foreach (string str_result in result) 
@@ -1442,8 +1442,8 @@ namespace eHR.PMS.Business
                                 Appraisal = new Model.DTO.Appraisal.Appraisal() { Id = Convert.ToInt32(arr_values[1]) },
                                 Section = new Model.DTO.Master.Section() { Id = Convert.ToInt32(arr_values[2]) },
                                 Block = new Model.DTO.Master.Block() { Id = Convert.ToInt32(arr_values[3]) },
-                                CoreValueCompetency = new Model.DTO.Master.CoreValueCompetency() { Id = Convert.ToInt32(arr_values[4]) },
-                                Target = arr_values[5].Trim()
+                                //CoreValueCompetency = new Model.DTO.Master.CoreValueCompetency() { Id = Convert.ToInt32(arr_values[4]) },
+                                Target = arr_values[4].Trim()
                             };
                             lst_core_values.Add(obj_kpi);
                         }

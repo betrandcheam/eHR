@@ -11,14 +11,14 @@
                   bool flag = false;
                   foreach (eHR.PMS.Model.DTO.Master.Section sc in Model.Sections)
                   {
-                      if (sc.Name.Replace(" ", "") == ViewContext.RouteData.Values["Action"].ToString() || Model.ViewOnly)
+                      if (sc.Name.Replace(" ", "").ToLower() == ViewContext.RouteData.Values["Action"].ToString().ToLower())
                       {
                           flag = true;
                           <li class="active"><a sectionid="@sc.Id" href="@(Url.Content("~/Stage2/"))@(sc.Name.Replace(" ", ""))/@(Model.CurrentTaskId)/@(Model.Appraisal.Id)#" >@sc.Name</a><input type="hidden" value="@sc.Id" name="SectionID" /></li>  
                       }
                       else
                       {
-                          if (flag)
+                          if (flag && (!Model.ViewOnly))
                           {
                                     <li><a sectionid="@sc.Id" class="Next" href="#" >@sc.Name</a></li>
                           }
@@ -55,22 +55,61 @@
             <div class="panel panel-default" style="overflow: visible;">
                 <div class="panel-heading">
                   <h4 class="panel-title">
-                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#Financials" href="#collapse(@index)">
+                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#Financials" href="#collapse@(index)">
                       @(kpinfo.Name)
                     </a>
                   </h4>
                   <h6><span class="help-block">@(kpinfo.Description)</span></h6>
                 </div>
-                <div id="collapse(@index)" class="panel-collapse collapse in">
+                <div id="collapse@(index)" class="panel-collapse collapse in">
                   <div class="panel-body">
                   
+                    
+                   <div class="row">
+                        <div class="panel panel-info" style="margin:20px;">
+                            <div class="panel-heading">Core Competency:</div>
+                              <div class="panel-body">
+                                <ul class="list-group">
+                                    @{ if (!eHR.PMS.Lib.Utility.Common.IsNullOrEmptyList(Model.CoreValueCompetencies))
+                                       {
+                                           IEnumerable<eHR.PMS.Model.DTO.GradeCompetency> lst_competencies = Model.CoreValueCompetencies.Where(rec => rec.Block.Id == kpinfo.Id);
+                                           foreach (eHR.PMS.Model.DTO.GradeCompetency c in lst_competencies)
+                                           { 
+                                                <li class="list-group-item">@c.Name</li>
+                                           }
+                                       }
+
+                                    }
+                                </ul>
+                              </div>
+                              @{ if (!Model.ViewOnly)
+                                 {
+                                      <div class="panel-footer">
+                                            <span class="label label-danger">Performance Target:</span>
+                                            <br />
+                                            <textarea class="corevaluetext idleField" rows="3"></textarea>
+                                      </div>
+                                 }
+                                }
+                        </div>
+                    </div>
+                    @{ if (!Model.ViewOnly)
+                       {
+                            <div class="Adddiv">
+                              <button type="button" class="AddKPIItem btn btn-success btn-xs"><i class="glyphicon glyphicon-plus"></i> Add</button>                               
+                            </div>
+                            <div class="Updatediv" style="display:none;">
+                              <button type="button" class="UpdateKPIItem btn btn-primary btn-xs"><i class="glyphicon glyphicon-ok"></i> Update</button>
+                              <button type="button" class="CancelKPIItem btn btn-xs"><i class="glyphicon glyphicon-remove"></i> Cancel</button>
+                            </div> 
+                       }
+                     }  
                     <div blockid="@(kpinfo.Id)" class="tablediv" style="display:none;">
                         
                         <table class="table">
                             <thead class="">
                                 <tr class="thead-color">
                                     <th></th>
-                                    <th style="width:30%">Core Value Competency</th>
                                     <th style="width:35%">Performance Target</th>                                   
                                     <th style="width:30%"></th>
                                 </tr>
@@ -83,10 +122,9 @@
                                       {
                                             <tr>
                                                 <td><input type="hidden" class="KPIID" value="@(kpi.Id)" /></td>
-                                                <td>@(kpi.CoreValueCompetency.Name)</td>
                                                 <td>@(kpi.Target)</td>
                                                 <td style="display:none;">
-                                                <input type="text" class="KPIforDatabase" name="KPIforDatabase@(kpiindex++)Block@(kpinfo.Id)" value="@(kpi.Id)^&*@(kpi.Appraisal.Id)^&*@(Model.CurrentSection.Id)^&*@(kpi.Block.Id)^&*@(kpi.CoreValueCompetency.Id)^&*@(kpi.Target)^&*ONERECORDENDED"/>
+                                                <input type="text" class="KPIforDatabase" name="KPIforDatabase@(kpiindex++)Block@(kpinfo.Id)" value="@(kpi.Id)^&*@(kpi.Appraisal.Id)^&*@(Model.CurrentSection.Id)^&*@(kpi.Block.Id)^&*@(kpi.Target)^&*ONERECORDENDED"/>
                                                 @{if (!eHR.PMS.Lib.Utility.Common.IsNullOrEmptyList(kpi.Comments))
                                                   {
                                                     <div class="Comments">
@@ -128,41 +166,7 @@
                                 }
                             </tbody>
                          </table>
-                    </div>
-                    @{ if (!Model.ViewOnly)
-                       {
-                    <div class="row">
-                        <div class="col-md-6">
-                            <span class="label label-info">Core Competency:</span>
-                            <br />
-                            <select class="selectpicker show-tick">
-                                @{ if (!eHR.PMS.Lib.Utility.Common.IsNullOrEmptyList(Model.CoreValueCompetencies))
-                                   {
-                                       IEnumerable<eHR.PMS.Model.DTO.GradeCompetency> lst_competencies = Model.CoreValueCompetencies.Where(rec => rec.Block.Id == kpinfo.Id);
-                                       foreach (eHR.PMS.Model.DTO.GradeCompetency c in lst_competencies)
-                                       { 
-                                            <option value="@c.CoreValueCompetencyId">@c.Name</option>
-                                       }
-                                   }
-
-                                }
-                            </select>
-                        </div>
-                        <div class="col-md-6">
-                            <span class="label label-info">Performance Target:</span>
-                            <br />
-                             <textarea class="corevaluetext idleField" rows="3"></textarea>
-                        </div>
-                    </div>
-                    <div class="Adddiv" style="margin-top:20px;">
-                      <button type="button" class="AddKPIItem btn btn-success btn-xs"><i class="glyphicon glyphicon-plus"></i> Add</button>                               
-                    </div>
-                    <div class="Updatediv" style="display:none;">
-                      <button type="button" class="UpdateKPIItem btn btn-primary btn-xs"><i class="glyphicon glyphicon-ok"></i> Update</button>
-                      <button type="button" class="CancelKPIItem btn btn-xs"><i class="glyphicon glyphicon-remove"></i> Cancel</button>
-                    </div> 
-                       }
-                     }           
+                    </div>      
                   </div>
                 </div>
             </div>
@@ -238,7 +242,7 @@
             </div><!-- /.modal -->
            </form>
           </div>
-          <div id="sidenav" data-spy="affix" class="col-md-2" style="right:2%;">
+          <div id="sidenav" data-spy="affix" class="col-md-2 affix" style="right:2%;">
                 <ul class="nav nav-pills nav-stacked" style="border:1px solid #E1E1E8">
                   <li><h5 style="padding:10px 15px;">Quick link</h5></li>
                   <li class="divider"></li>

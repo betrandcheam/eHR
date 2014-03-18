@@ -430,7 +430,7 @@ namespace eHR.PMS.Model.Mappers
                 Id = entity.ID,
                 //Section = MapSectionEntityToDTO(entity.PMS_MST_SECTION, true),
                 Block = MapBlockEntityToDTO(entity.PMS_MST_BLOCK),
-                CoreValueCompetency = MapCoreValueCompetencyEntityToDTO(entity.PMS_MST_CORE_VALUE_COMPETENCY),
+                //CoreValueCompetency = MapCoreValueCompetencyEntityToDTO(entity.PMS_MST_CORE_VALUE_COMPETENCY),
                 Target = entity.TARGET,
                 SelfScore = entity.SELF_SCORE,
                 Level1Score = entity.LEVEL_1_SCORE,
@@ -482,7 +482,7 @@ namespace eHR.PMS.Model.Mappers
                 APPRAISAL_ID = dto.Appraisal == null ? (int?)null : dto.Appraisal.Id,
                 //SECTION_ID = dto.Section == null ? (int?)null : dto.Section.Id,
                 BLOCK_MASTER_ID = dto.Block == null ? (int?)null : dto.Block.Id,
-                COMPETENCY_MASTER_ID = dto.CoreValueCompetency == null ? (int?)null : dto.CoreValueCompetency.Id,
+                //COMPETENCY_MASTER_ID = dto.CoreValueCompetency == null ? (int?)null : dto.CoreValueCompetency.Id,
                 TARGET = dto.Target,
                 SELF_SCORE = dto.SelfScore,
                 LEVEL_1_SCORE = dto.Level1Score,
@@ -804,7 +804,7 @@ namespace eHR.PMS.Model.Mappers
             PMS.Model.DTO.GradeCompetency obj_dto = new PMS.Model.DTO.GradeCompetency()
             {
                 Id = entity.ID,
-                CoreValueCompetencyId = entity.COMPETENCY_MASTER_ID,
+                //CoreValueCompetencyId = entity.COMPETENCY_MASTER_ID,
                 Block = MapBlockEntityToDTO(entity.PMS_MST_BLOCK),
                 Grade = CoreMapper.MapGradeEntityToDTO(entity.MST_ACR_GRADE),
                 Name = entity.PMS_MST_CORE_VALUE_COMPETENCY.NAME,

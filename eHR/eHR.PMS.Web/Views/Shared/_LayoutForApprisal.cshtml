@@ -7,11 +7,11 @@
         <link href="@(Url.Content("~/Content/bootstrap.css"))" rel="stylesheet" media="screen" />
         <meta name="viewport" content="width=device-width" />
             <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!--if lt IE 9-->
-        <script type="text/javascript" src="@(Url.Content("~/Scripts/lib/html5shiv.js"))"></script>
-        <script type="text/javascript" src="@(Url.Content("~/Scripts/lib/respond.min.js"))"></script>
-        <script type="text/javascript" src="@(Url.Content("~/Scripts/lib/css3-mediaqueries.js"))"></script>
-    <!---------------->
+            <!--[if lt IE 9]>
+                <script type="text/javascript" src="@(Url.Content("~/Scripts/lib/html5shiv.js"))"></script>
+                <script type="text/javascript" src="@(Url.Content("~/Scripts/lib/respond.min.js"))"></script>
+                <script type="text/javascript" src="@(Url.Content("~/Scripts/lib/css3-mediaqueries.js"))"></script>
+            <![endif]-->
         <style type="text/css">
         #main
         {
@@ -288,9 +288,9 @@
     </div>
 
 
-    <!--if lt IE 8-->
+    <!--[if lt IE 8]>
        <script type="text/javascript" src="@(Url.Content("~/Scripts/lib/json3.min.js"))"></script>
-    <!---------------->
+    <![endif]-->
     <script type="text/javascript" data-main="@(Url.Content("~/Scripts/main.js"))" src="@(Url.Content("~/Scripts/require.js"))"></script>
     @RenderSection("scripts", required: false)
     </body>

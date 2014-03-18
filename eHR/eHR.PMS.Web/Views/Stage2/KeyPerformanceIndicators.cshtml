@@ -11,14 +11,14 @@
                   bool flag = false;
                   foreach (eHR.PMS.Model.DTO.Master.Section sc in Model.Sections)
                   {
-                      if (sc.Name.Replace(" ", "") == ViewContext.RouteData.Values["Action"].ToString() || Model.ViewOnly)
+                      if (sc.Name.Replace(" ", "").ToLower() == ViewContext.RouteData.Values["Action"].ToString().ToLower())
                       {
                           flag = true;
                           <li class="active"><a sectionid="@sc.Id" href="@(Url.Content("~/Stage2/"))@(sc.Name.Replace(" ", ""))/@(Model.CurrentTaskId)/@(Model.Appraisal.Id)#" >@sc.Name</a><input type="hidden" value="@sc.Id" name="SectionID" /></li>  
                       }
                       else
                       {
-                          if (flag)
+                          if (flag && (!Model.ViewOnly))
                           {
                                     <li><a sectionid="@sc.Id" class="Next" href="#" >@sc.Name</a></li>
                           }
@@ -62,12 +62,12 @@
             <div class="panel panel-default" style="overflow: visible;">
                 <div class="panel-heading">
                   <h4 class="panel-title">
-                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#Financials" href="#collapse(@index)">
+                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#Financials" href="#collapse@(index)">
                       @kpinfo.Name
                     </a>
                   </h4>
                 </div>
-                <div id="collapse(@index)" class="panel-collapse collapse in">
+                <div id="collapse@(index)" class="panel-collapse collapse in">
                   <div class="panel-body">
                     
 
@@ -258,7 +258,7 @@
             </div><!-- /.modal -->
            </form>
           </div>
-          <div id="sidenav" data-spy="affix" class="col-md-2" style="right:2%;">
+          <div id="sidenav" data-spy="affix" class="col-md-2 affix" style="right:2%;">
                 <ul class="nav nav-pills nav-stacked" style="border:1px solid #E1E1E8">
                   <li><h5 style="padding:10px 15px;">Quick link</h5></li>
                   <li class="divider"></li>

@@ -46,7 +46,16 @@
                 this.value = (this.defaultValue ? this.defaultValue : '');
             }
         });
+        $.each($('.panel-collapse'), function () {
+            $(this).on('shown.bs.collapse', function () {
+                $(this).prev().find(".forcollapseicon").removeClass("glyphicon-chevron-down").addClass("glyphicon-chevron-up");
+            });
 
+            $(this).on('hidden.bs.collapse', function () {
+                $(this).prev().find(".forcollapseicon").removeClass("glyphicon-chevron-up").addClass("glyphicon-chevron-down");
+            });
+        });
+        
         $(document).on("click", function (e) {
             var $target = $(e.target);
             isPopover = $(e.target).is('.ViewKpiComments');

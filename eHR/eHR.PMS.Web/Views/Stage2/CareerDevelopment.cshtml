@@ -12,14 +12,14 @@
                   bool flag = false;
                   foreach (eHR.PMS.Model.DTO.Master.Section sc in Model.Sections)
                   {
-                      if (sc.Name.Replace(" ", "") == ViewContext.RouteData.Values["Action"].ToString() || Model.ViewOnly)
+                      if (sc.Name.Replace(" ", "").ToLower() == ViewContext.RouteData.Values["Action"].ToString().ToLower())
                       {
                           flag = true;
-                          <li class="active"><a sectionid="@sc.Id" href="@(Url.Content("~/Stage2/"))@(sc.Name.Replace(" ", ""))/@(Model.CurrentTaskId)/@(Model.Appraisal.Id)#" >@sc.Name</a><input type="hidden" value="@sc.Id" name="SectionID" /></li>  
+                          <li class="active"><a sectionid="@sc.Id" href="#" >@sc.Name</a><input type="hidden" value="@sc.Id" name="SectionID" /></li>  
                       }
                       else
                       {
-                          if (flag)
+                          if (flag && (!Model.ViewOnly))
                           {
                                     <li><a sectionid="@sc.Id" class="Next" href="#" >@sc.Name</a></li>
                           }

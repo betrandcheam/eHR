@@ -64,52 +64,13 @@
                 <div id="collapse@(index)" class="panel-collapse collapse in">
                   <div class="panel-body">
                   
-                    
-                    <div class="row">
-                        <div class="panel panel-info" style="margin:20px;">
-                            <div class="panel-heading">Core Competency:</div>
-                              <div class="panel-body">
-                                <ul class="list-group">
-                                    @{ if (!eHR.PMS.Lib.Utility.Common.IsNullOrEmptyList(Model.CoreValueCompetencies))
-                                       {
-                                           IEnumerable<eHR.PMS.Model.DTO.GradeCompetency> lst_competencies = Model.CoreValueCompetencies.Where(rec => rec.Block.Id == kpinfo.Id);
-                                           foreach (eHR.PMS.Model.DTO.GradeCompetency c in lst_competencies)
-                                           { 
-                                                <li class="list-group-item">@c.Name</li>
-                                           }
-                                       }
-
-                                    }
-                                </ul>
-                              </div>
-                              @{ if (!Model.ViewOnly)
-                                 {
-                                      <div class="panel-footer">
-                                            <span class="label label-danger">Performance Target:</span>
-                                            <br />
-                                            <textarea class="corevaluetext idleField" rows="3"></textarea>
-                                      </div>
-                                 }
-                                }
-                        </div>
-                    </div>
-                    @{ if (!Model.ViewOnly)
-                       {
-                            <div class="Adddiv">
-                              <button type="button" class="AddKPIItem btn btn-success btn-xs"><i class="glyphicon glyphicon-plus"></i> Add</button>                               
-                            </div>
-                            <div class="Updatediv" style="display:none;">
-                              <button type="button" class="UpdateKPIItem btn btn-primary btn-xs"><i class="glyphicon glyphicon-ok"></i> Update</button>
-                              <button type="button" class="CancelKPIItem btn btn-xs"><i class="glyphicon glyphicon-remove"></i> Cancel</button>
-                            </div> 
-                       }
-                     }   
-                     <div blockid="@(kpinfo.Id)" class="tablediv" style="display:none;">
+                    <div blockid="@(kpinfo.Id)" class="tablediv" style="display:none;">
                         
                         <table class="table">
                             <thead class="">
                                 <tr class="thead-color">
-                                    <th style="width:5%"></th>
+                                    <th></th>
+                                    <th style="width:30%">Core Value Competency</th>
                                     <th style="width:35%">Performance Target</th>                                   
                                     <th style="width:30%"></th>
                                 </tr>
@@ -122,9 +83,10 @@
                                       {
                                             <tr>
                                                 <td><input type="hidden" class="KPIID" value="@(kpi.Id)" /></td>
+                                                <td>@(kpi.CoreValueCompetency.Name)</td>
                                                 <td>@(kpi.Target)</td>
                                                 <td style="display:none;">
-                                                <input type="text" class="KPIforDatabase" name="KPIforDatabase@(kpiindex++)Block@(kpinfo.Id)" value="@(kpi.Id)^&*@(kpi.Appraisal.Id)^&*@(Model.CurrentSection.Id)^&*@(kpi.Block.Id)^&*@(kpi.Target)^&*ONERECORDENDED"/>
+                                                <input type="text" class="KPIforDatabase" name="KPIforDatabase@(kpiindex++)Block@(kpinfo.Id)" value="@(kpi.Id)^&*@(kpi.Appraisal.Id)^&*@(Model.CurrentSection.Id)^&*@(kpi.Block.Id)^&*@(kpi.CoreValueCompetency.Id)^&*@(kpi.Target)^&*ONERECORDENDED"/>
                                                 @{if (!eHR.PMS.Lib.Utility.Common.IsNullOrEmptyList(kpi.Comments))
                                                   {
                                                     <div class="Comments">
@@ -166,7 +128,55 @@
                                 }
                             </tbody>
                          </table>
-                    </div>        
+                    </div>
+                    @{ if (!Model.ViewOnly)
+                       {
+                    <div class="row">
+                        <div class="panel panel-info" style="margin:20px;">
+                            <div class="panel-heading">Core Competency:</div>
+                              <div class="panel-body">
+                                <ul class="list-group">
+                                    @{ if (!eHR.PMS.Lib.Utility.Common.IsNullOrEmptyList(Model.CoreValueCompetencies))
+                                       {
+                                           IEnumerable<eHR.PMS.Model.DTO.GradeCompetency> lst_competencies = Model.CoreValueCompetencies.Where(rec => rec.Block.Id == kpinfo.Id);
+                                           foreach (eHR.PMS.Model.DTO.GradeCompetency c in lst_competencies)
+                                           { 
+                                                <li class="list-group-item">@c.Name</li>
+                                           }
+                                       }
+
+                                    }
+                                </ul>
+                              </div>
+                              <div class="panel-footer">
+                                    <span class="label label-danger">Performance Target:</span>
+                                    <br />
+                                    <textarea class="corevaluetext idleField" rows="3"></textarea>
+                              </div>
+                        </div>
+
+                        <!--<div class="col-md-6">
+                            <span class="label label-info">Core Competency:</span>
+                            <br />
+                            <select class="selectpicker show-tick">
+                                
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <span class="label label-danger">Performance Target:</span>
+                            <br />
+                             <textarea class="corevaluetext idleField" rows="3"></textarea>
+                        </div>-->
+                    </div>
+                    <div class="Adddiv" style="margin-top:20px;">
+                      <button type="button" class="AddKPIItem btn btn-success btn-xs"><i class="glyphicon glyphicon-plus"></i> Add</button>                               
+                    </div>
+                    <div class="Updatediv" style="display:none;">
+                      <button type="button" class="UpdateKPIItem btn btn-primary btn-xs"><i class="glyphicon glyphicon-ok"></i> Update</button>
+                      <button type="button" class="CancelKPIItem btn btn-xs"><i class="glyphicon glyphicon-remove"></i> Cancel</button>
+                    </div> 
+                       }
+                     }           
                   </div>
                 </div>
             </div>

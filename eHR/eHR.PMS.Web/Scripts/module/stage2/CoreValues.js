@@ -66,8 +66,8 @@ define("stage2.corevalues", ['jquery', 'bootstrap', 'bootstrap.select'], functio
             var editbuttonobject = new Object();
             var AdddivforEdit = new Object();
             var UpdatedivforEdit = new Object();
-            var KPItextHidSelectforEdit = new Object();
-            var KPItextSelectEdit = new Object();
+            //var KPItextHidSelectforEdit = new Object();
+            //var KPItextSelectEdit = new Object();
             //added
 
             var PTtextforEdit = new Object();
@@ -82,11 +82,11 @@ define("stage2.corevalues", ['jquery', 'bootstrap', 'bootstrap.select'], functio
                 UpdatedivforEdit = div.find(".Updatediv");
 
                 Updatediv = div.find(".Updatediv");
-                KPItextHidSelectforEdit = div.parent().find(".bootstrap-select");
-                KPItextSelectEdit = div.find(".selectpicker");
+                //KPItextHidSelectforEdit = div.parent().find(".bootstrap-select");
+                //KPItextSelectEdit = div.find(".selectpicker");
                 PTtextforEdit = div.find(".corevaluetext");
-                KPItextHidSelectforEdit.find('.filter-option').text($(this).parent().prev().prev().prev().text());
-                KPItextSelectEdit.val($(this).parent().prev().prev().prev().prev().text());
+                //KPItextHidSelectforEdit.find('.filter-option').text($(this).parent().prev().prev().prev().text());
+                //KPItextSelectEdit.val($(this).parent().prev().prev().prev().prev().text());
                 PTtextforEdit.val($(this).parent().prev().prev().text());
                 $(this).addClass("disabled");
                 $(this).next().addClass("disabled");
@@ -156,9 +156,9 @@ define("stage2.corevalues", ['jquery', 'bootstrap', 'bootstrap.select'], functio
                     PTtextforEdit.addClass("warningclass");
                     return false;
                 }
-                editbuttonobject.parent().prev().prev().prev().text(KPItextSelectForEdit.find("option:selected").text());
-                editbuttonobject.parent().prev().prev().prev().prev().text(KPItextSelect.val());
-                editbuttonobject.parent().prev().prev().text(PTtext.text());
+                //editbuttonobject.parent().prev().prev().prev().text(KPItextSelectForEdit.find("option:selected").text());
+                //editbuttonobject.parent().prev().prev().prev().prev().text(KPItextSelect.val());
+                editbuttonobject.parent().prev().prev().text(PTtextforEdit.val());
                 var oldhidValue = editbuttonobject.parent().prev().find('.KPIforDatabase').val();
                 var tempArray = oldhidValue.split("^&*");
                 editbuttonobject.parent().prev().find('.KPIforDatabase').val([tempArray[0], '^&*', tempArray[1], '^&*', tempArray[2], '^&*', tempArray[3], '^&*', KPItextSelect.val(), '^&*', PTtext.val(), '^&*ONERECORDENDED'].join(''));
@@ -168,10 +168,10 @@ define("stage2.corevalues", ['jquery', 'bootstrap', 'bootstrap.select'], functio
                 Adddiv.show("slow");
 
                 //resetting input box values
-                KPItextforEdit.val("");
+                //KPItextforEdit.val("");
                 PTtextforEdit.val("");
 
-                KPItextforEdit.removeClass("warningclass");
+                //KPItextforEdit.removeClass("warningclass");
                 PTtextforEdit.removeClass("warningclass");
             });
             $(".panel-body").on('click', '.CancelKPIItem', function () {
@@ -181,16 +181,16 @@ define("stage2.corevalues", ['jquery', 'bootstrap', 'bootstrap.select'], functio
                 Adddiv.show("slow");
 
                 //resetting input box values
-                KPItextforEdit.val("");
+                //KPItextforEdit.val("");
                 PTtextforEdit.val("");
 
-                KPItextforEdit.removeClass("warningclass");
+                //KPItextforEdit.removeClass("warningclass");
                 PTtextforEdit.removeClass("warningclass");
             });
             $(".AddKPIItem").click(function () {
-                var KPItextSelect = $(this).parent().parent().parent().find(".selectpicker");
-                var KPItextHidSelect = $(this).parent().parent().parent().find(".bootstrap-select");
-                var PTtext = $(this).parent().parent().parent().find(".corevaluetext");
+                //var KPItextSelect = $(this).parent().parent().parent().find(".selectpicker");
+                //var KPItextHidSelect = $(this).parent().parent().parent().find(".bootstrap-select");
+                var PTtext = $(this).parent().prev().find(".corevaluetext"); ;
                 
                 if ($.trim(PTtext.val()) == "") {
                     PTtext.addClass("warningclass");
@@ -200,12 +200,12 @@ define("stage2.corevalues", ['jquery', 'bootstrap', 'bootstrap.select'], functio
                 var Adddiv = $(this).parent();
                 var Updatediv = $(this).parent().next();
                 var KPINumforThisSection = $(this).parent().parent().find(".KPItbody tr").length;
-                var KPItbody = $(this).parent().parent().parent().find(".KPItbody");
-                var tablediv = $(this).parent().parent().parent().find(".tablediv");
+                var KPItbody = $(this).parent().parent().find(".KPItbody");
+                var tablediv = $(this).parent().parent().find(".tablediv");
                 var blockid = tablediv.attr("blockid");
                 var apprid = $("#forRazorValue").attr("apprid");
                 var sectionid = $("#sectionlist li.active a").attr("sectionid");
-                var html = ['<tr><td><input type="hidden" class="KPIID" value="NewKPI" /></td><td style="display:none">', KPItextSelect.val(), '</td><td>', KPItextSelect.find("option:selected").text(), '</td><td>', PTtext.val(), '</td><td style="display:none;"><input type="text" class="KPIforDatabase" name="KPIforDatabase', KPINumforThisSection, 'Block', blockid, '"value="NewKPI^&*', apprid, '^&*', sectionid, '^&*', blockid, '^&*', KPItextSelect.val(), "^&*", PTtext.val(), '^&*ONERECORDENDED"/><td align="right"><a href="javascript:void(0)" class="EditKPI btn btn-info btn-xs"><i class="glyphicon glyphicon-wrench"></i> Edit</a> <a href="javascript:void(0)" class="RemoveKPI btn btn-danger btn-xs"><i class="glyphicon glyphicon-trash"></i> Remove</a> <a href="javascript:void(0)" class="ViewKpiComments btn btn-warning btn-xs disabled"><i class="glyphicon glyphicon-pencil"></i> View Comments</a></td></tr>'].join('');
+                var html = ['<tr><td><input type="hidden" class="KPIID" value="NewKPI" /></td><td>', PTtext.val(), '</td><td style="display:none;"><input type="text" class="KPIforDatabase" name="KPIforDatabase', KPINumforThisSection, 'Block', blockid, '"value="NewKPI^&*', apprid, '^&*', sectionid, '^&*', blockid, "^&*", PTtext.val(), '^&*ONERECORDENDED"/><td align="right"><a href="javascript:void(0)" class="EditKPI btn btn-info btn-xs"><i class="glyphicon glyphicon-wrench"></i> Edit</a> <a href="javascript:void(0)" class="RemoveKPI btn btn-danger btn-xs"><i class="glyphicon glyphicon-trash"></i> Remove</a> <a href="javascript:void(0)" class="ViewKpiComments btn btn-warning btn-xs disabled"><i class="glyphicon glyphicon-pencil"></i> View Comments</a></td></tr>'].join('');
                 $(html).appendTo(KPItbody);
 
 

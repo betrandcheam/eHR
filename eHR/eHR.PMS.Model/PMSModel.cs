@@ -1228,7 +1228,7 @@ namespace eHR.PMS.Model
                     foreach (PMS.Model.DTO.Appraisal.CoreValue obj_core_value in updateList)
                     {
                         Model.Context.PMS_APPRAISAL_CORE_VALUE entity = dc_pms.PMS_APPRAISAL_CORE_VALUE.Where(rec => rec.ID == obj_core_value.Id).Single();
-                        entity.COMPETENCY_MASTER_ID = obj_core_value.CoreValueCompetency.Id;
+                        //entity.COMPETENCY_MASTER_ID = obj_core_value.CoreValueCompetency.Id;
                         entity.TARGET = obj_core_value.Target;
                         entity.LEVEL_1_SCORE = obj_core_value.Level1Score;
                         entity.LEVEL_2_SCORE = obj_core_value.Level2Score;
