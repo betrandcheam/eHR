@@ -209,7 +209,7 @@
           <!-- Collect the nav links, forms, and other content for toggling -->
           <div class="collapse navbar-collapse navbar-ex1-collapse">
             <ul class="nav navbar-nav">         
-              <li class="active"><a href="#"><i class="glyphicon glyphicon-question-sign glyphicon-white"></i> Help</a></li>
+              <li class="active"><a href="@(Url.Content("~/Documents/User Guide.pdf"))" target="_blank"><i class="glyphicon glyphicon-question-sign glyphicon-white"></i> Help</a></li>
               <li><a href="http://ssgws03/default.aspx"><i class="glyphicon glyphicon-globe glyphicon-white"></i> Intranet</a></li>
                         @{if (ViewData["hr_user"].Equals("Y")) 
                           { 

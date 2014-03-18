@@ -9981,6 +9981,78 @@ namespace eHR.PMS.Model.Context
         private Nullable<global::System.DateTime> _MODIFIED_TIMESTAMP;
         partial void OnMODIFIED_TIMESTAMPChanging(Nullable<global::System.DateTime> value);
         partial void OnMODIFIED_TIMESTAMPChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.DateTime> SUBMISSION_DEADLINE
+        {
+            get
+            {
+                return _SUBMISSION_DEADLINE;
+            }
+            set
+            {
+                OnSUBMISSION_DEADLINEChanging(value);
+                ReportPropertyChanging("SUBMISSION_DEADLINE");
+                _SUBMISSION_DEADLINE = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("SUBMISSION_DEADLINE");
+                OnSUBMISSION_DEADLINEChanged();
+            }
+        }
+        private Nullable<global::System.DateTime> _SUBMISSION_DEADLINE;
+        partial void OnSUBMISSION_DEADLINEChanging(Nullable<global::System.DateTime> value);
+        partial void OnSUBMISSION_DEADLINEChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.DateTime> LEVEL_1_APPROVAL_DEADLINE
+        {
+            get
+            {
+                return _LEVEL_1_APPROVAL_DEADLINE;
+            }
+            set
+            {
+                OnLEVEL_1_APPROVAL_DEADLINEChanging(value);
+                ReportPropertyChanging("LEVEL_1_APPROVAL_DEADLINE");
+                _LEVEL_1_APPROVAL_DEADLINE = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("LEVEL_1_APPROVAL_DEADLINE");
+                OnLEVEL_1_APPROVAL_DEADLINEChanged();
+            }
+        }
+        private Nullable<global::System.DateTime> _LEVEL_1_APPROVAL_DEADLINE;
+        partial void OnLEVEL_1_APPROVAL_DEADLINEChanging(Nullable<global::System.DateTime> value);
+        partial void OnLEVEL_1_APPROVAL_DEADLINEChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.DateTime> LEVEL_2_APPROVAL_DEADLINE
+        {
+            get
+            {
+                return _LEVEL_2_APPROVAL_DEADLINE;
+            }
+            set
+            {
+                OnLEVEL_2_APPROVAL_DEADLINEChanging(value);
+                ReportPropertyChanging("LEVEL_2_APPROVAL_DEADLINE");
+                _LEVEL_2_APPROVAL_DEADLINE = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("LEVEL_2_APPROVAL_DEADLINE");
+                OnLEVEL_2_APPROVAL_DEADLINEChanged();
+            }
+        }
+        private Nullable<global::System.DateTime> _LEVEL_2_APPROVAL_DEADLINE;
+        partial void OnLEVEL_2_APPROVAL_DEADLINEChanging(Nullable<global::System.DateTime> value);
+        partial void OnLEVEL_2_APPROVAL_DEADLINEChanged();
 
         #endregion
 
