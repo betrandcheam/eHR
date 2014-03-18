@@ -94,7 +94,10 @@ namespace eHR.PMS.Model.Mappers
                 STAGE_ID = dto.StageId,
                 START_DATE = dto.StartDate,
                 END_DATE = dto.EndDate,
-                PRE_START_EMAIL_SENT = dto.PreStartEmailSent
+                PRE_START_EMAIL_SENT = dto.PreStartEmailSent,
+                SUBMISSION_DEADLINE = dto.SubmissionDeadline,
+                LEVEL_1_APPROVAL_DEADLINE = dto.Level1ApprovalDeadline,
+                LEVEL_2_APPROVAL_DEADLINE = dto.Level2ApprovalDeadline
 
             };
             return obj_entity;
@@ -112,7 +115,10 @@ namespace eHR.PMS.Model.Mappers
                 SortOrder = entity.PMS_MST_STAGE.SORT_ORDER,
                 StartDate = entity.START_DATE,
                 EndDate = entity.END_DATE,
-                PreStartEmailSent = entity.PRE_START_EMAIL_SENT
+                PreStartEmailSent = entity.PRE_START_EMAIL_SENT,
+                SubmissionDeadline = entity.SUBMISSION_DEADLINE,
+                Level1ApprovalDeadline = entity.LEVEL_1_APPROVAL_DEADLINE,
+                Level2ApprovalDeadline = entity.LEVEL_2_APPROVAL_DEADLINE
             };
 
             obj_dto.Cycle = entity.PMS_CYCLE == null ? null : MapCycleEntityToDTO(entity.PMS_CYCLE, false);

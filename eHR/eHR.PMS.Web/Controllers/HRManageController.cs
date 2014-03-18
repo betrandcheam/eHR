@@ -25,6 +25,13 @@ namespace eHR.PMS.Web.Controllers
                 dict.Add("Stage3EndDate", "");
                 dict.Add("strStage1EndDate", "");
                 dict.Add("strStage3EndDate", "");
+
+                dict.Add("Stage1SubmissionDeadline", "");
+                dict.Add("Stage1Level1ApprovalDeadline", "");
+                dict.Add("Stage1Level2ApprovalDeadline", "");
+                dict.Add("Stage2SubmissionDeadline", "");
+                dict.Add("Stage2Level1ApprovalDeadline", "");
+                dict.Add("Stage2Level2ApprovalDeadline", "");
                 TempData["QueryData"] = dict;
             }
             else
@@ -44,6 +51,15 @@ namespace eHR.PMS.Web.Controllers
                 dict.Add("Stage3EndDate", (string)System.Web.HttpContext.Current.Session["Stage3EndDate"]);
                 dict.Add("strStage1EndDate", Lib.Utility.Common.ChangeDateFormatVS(dict["Stage1EndDate"]));
                 dict.Add("strStage3EndDate", Lib.Utility.Common.ChangeDateFormatVS(dict["Stage3EndDate"]));
+
+                dict.Add("Stage1SubmissionDeadline", (string)System.Web.HttpContext.Current.Session["Stage1SubmissionDeadline"]);
+                dict.Add("Stage1Level1ApprovalDeadline", (string)System.Web.HttpContext.Current.Session["Stage1Level1ApprovalDeadline"]);
+                dict.Add("Stage1Level2ApprovalDeadline", (string)System.Web.HttpContext.Current.Session["Stage1Level2ApprovalDeadline"]);
+
+                dict.Add("Stage2SubmissionDeadline", (string)System.Web.HttpContext.Current.Session["Stage2SubmissionDeadline"]);
+                dict.Add("Stage2Level1ApprovalDeadline", (string)System.Web.HttpContext.Current.Session["Stage2Level1ApprovalDeadline"]);
+                dict.Add("Stage2Level2ApprovalDeadline", (string)System.Web.HttpContext.Current.Session["Stage2Level2ApprovalDeadline"]);
+
                 TempData["QueryData"] = dict;
             }
 
@@ -93,6 +109,14 @@ namespace eHR.PMS.Web.Controllers
                     System.Web.HttpContext.Current.Session.Add("Stage2EndDate", dict["Stage2EndDate"].ToString());
                     System.Web.HttpContext.Current.Session.Add("Stage3StartDate", dict["Stage3StartDate"].ToString());
                     System.Web.HttpContext.Current.Session.Add("Stage3EndDate", dict["Stage3EndDate"].ToString());
+
+                    System.Web.HttpContext.Current.Session.Add("Stage1SubmissionDeadline", dict["Stage1SubmissionDeadline"].ToString());
+                    System.Web.HttpContext.Current.Session.Add("Stage1Level1ApprovalDeadline", dict["Stage1Level1ApprovalDeadline"].ToString());
+                    System.Web.HttpContext.Current.Session.Add("Stage1Level2ApprovalDeadline", dict["Stage1Level2ApprovalDeadline"].ToString());
+
+                    System.Web.HttpContext.Current.Session.Add("Stage2SubmissionDeadline", dict["Stage1SubmissionDeadline"].ToString());
+                    System.Web.HttpContext.Current.Session.Add("Stage2Level1ApprovalDeadline", dict["Stage1Level1ApprovalDeadline"].ToString());
+                    System.Web.HttpContext.Current.Session.Add("Stage2Level2ApprovalDeadline", dict["Stage1Level2ApprovalDeadline"].ToString());                
                 }
 
                 ViewData.Model = obj_cycle_management_page;
@@ -124,6 +148,14 @@ namespace eHR.PMS.Web.Controllers
                     dict_cycle_stage_dates.Add("Stage2EndDate", DateTime.ParseExact(dict["Stage2EndDate"], "dd/MM/yyyy", null));
                     dict_cycle_stage_dates.Add("Stage3StartDate", DateTime.ParseExact(dict["Stage3StartDate"], "dd/MM/yyyy", null));
                     dict_cycle_stage_dates.Add("Stage3EndDate", DateTime.ParseExact(dict["Stage3EndDate"], "dd/MM/yyyy", null));
+
+                    dict_cycle_stage_dates.Add("Stage1SubmissionDeadline", DateTime.ParseExact(dict["Stage1SubmissionDeadline"], "dd/MM/yyyy", null));
+                    dict_cycle_stage_dates.Add("Stage1Level1ApprovalDeadline", DateTime.ParseExact(dict["Stage1Level1ApprovalDeadline"], "dd/MM/yyyy", null));
+                    dict_cycle_stage_dates.Add("Stage1Level2ApprovalDeadline", DateTime.ParseExact(dict["Stage1Level2ApprovalDeadline"], "dd/MM/yyyy", null));
+                    dict_cycle_stage_dates.Add("Stage2SubmissionDeadline", DateTime.ParseExact(dict["Stage2SubmissionDeadline"], "dd/MM/yyyy", null));
+                    dict_cycle_stage_dates.Add("Stage2Level1ApprovalDeadline", DateTime.ParseExact(dict["Stage2Level1ApprovalDeadline"], "dd/MM/yyyy", null));
+                    dict_cycle_stage_dates.Add("Stage2Level2ApprovalDeadline", DateTime.ParseExact(dict["Stage2Level2ApprovalDeadline"], "dd/MM/yyyy", null));
+
                     obj_cycle.CycleStages = CreateDefaultStagesForNewCycle(dict_cycle_stage_dates);
 
                     obj_cycle.Appriasals = Business.AppraisalManager.CreateAppraisalsForNewCycle((List<Model.DTO.Core.Employee>)System.Web.HttpContext.Current.Session["CycleParticipantsList"], obj_cycle.CycleStages, CurrentUser);
@@ -1201,14 +1233,17 @@ namespace eHR.PMS.Web.Controllers
             return result;
         }
         
-        private Model.DTO.Cycle.Stage CreateCycleStage(int id, DateTime startDate, DateTime endDate)
+        private Model.DTO.Cycle.Stage CreateCycleStage(int id, DateTime startDate, DateTime endDate, DateTime? submissionDeadline, DateTime? level1ApprovalDeadline, DateTime? level2ApprovalDeadline)
         {
             Model.DTO.Cycle.Stage obj_cycle_stage = new Model.DTO.Cycle.Stage()
             {
                 StageId = id,
                 StartDate = startDate,
                 EndDate = endDate,
-                PreStartEmailSent = false
+                PreStartEmailSent = false,
+                SubmissionDeadline = submissionDeadline,
+                Level1ApprovalDeadline = level1ApprovalDeadline,
+                Level2ApprovalDeadline = level2ApprovalDeadline
             };
 
 
@@ -1218,11 +1253,10 @@ namespace eHR.PMS.Web.Controllers
         private List<Model.DTO.Cycle.Stage> CreateDefaultStagesForNewCycle(Dictionary<string, DateTime> stageDates)
         {
             List<Model.DTO.Cycle.Stage> lst_stages = new List<Model.DTO.Cycle.Stage>();
-
-            lst_stages.Add(CreateCycleStage(Model.PMSConstants.STAGE_ID_PRE_CYCLE, stageDates["PreCStart"], stageDates["PreCEnd"]));
-            lst_stages.Add(CreateCycleStage(Model.PMSConstants.STAGE_ID_GOAL_SETTING, stageDates["Stage1StartDate"], stageDates["Stage1EndDate"]));
-            lst_stages.Add(CreateCycleStage(Model.PMSConstants.STAGE_ID_PROGRESS_REVIEW, stageDates["Stage2StartDate"], stageDates["Stage2EndDate"]));
-            lst_stages.Add(CreateCycleStage(Model.PMSConstants.STAGE_ID_FINAL_YEAR, stageDates["Stage3StartDate"], stageDates["Stage3EndDate"]));
+            lst_stages.Add(CreateCycleStage(Model.PMSConstants.STAGE_ID_PRE_CYCLE, stageDates["PreCStart"], stageDates["PreCEnd"],null,null,null));
+            lst_stages.Add(CreateCycleStage(Model.PMSConstants.STAGE_ID_GOAL_SETTING, stageDates["Stage1StartDate"], stageDates["Stage1EndDate"], stageDates["Stage1SubmissionDeadline"], stageDates["Stage1Level1ApprovalDeadline"], stageDates["Stage1Level2ApprovalDeadline"]));
+            lst_stages.Add(CreateCycleStage(Model.PMSConstants.STAGE_ID_PROGRESS_REVIEW, stageDates["Stage2StartDate"], stageDates["Stage2EndDate"], stageDates["Stage2SubmissionDeadline"], stageDates["Stage2Level1ApprovalDeadline"], stageDates["Stage2Level2ApprovalDeadline"]));
+            lst_stages.Add(CreateCycleStage(Model.PMSConstants.STAGE_ID_FINAL_YEAR, stageDates["Stage3StartDate"], stageDates["Stage3EndDate"], null, null, null));
 
             return lst_stages;
         }
@@ -1245,6 +1279,13 @@ namespace eHR.PMS.Web.Controllers
             System.Web.HttpContext.Current.Session.Remove("TempRemoveApprIds");
 
             System.Web.HttpContext.Current.Session.Remove("AppraisalsList");
+
+            System.Web.HttpContext.Current.Session.Remove("Stage1SubmissionDeadline");
+            System.Web.HttpContext.Current.Session.Remove("Stage1Level1ApprovalDeadline");
+            System.Web.HttpContext.Current.Session.Remove("Stage1Level2ApprovalDeadline");
+            System.Web.HttpContext.Current.Session.Remove("Stage2SubmissionDeadline");
+            System.Web.HttpContext.Current.Session.Remove("Stage2Level1ApprovalDeadline");
+            System.Web.HttpContext.Current.Session.Remove("Stage2Level2ApprovalDeadline");
         }
 
         #region View Appraisal

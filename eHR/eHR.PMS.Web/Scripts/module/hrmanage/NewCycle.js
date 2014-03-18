@@ -82,6 +82,31 @@ define("hrmanage.newcycle", ['jquery', 'bootstrap', 'moment', 'bootstrap.datetim
             format: "DD/MM/YYYY",
             pickTime: false
         });
+        $('#datetimepicker_stage1submissiondeadline').datetimepicker({
+            format: "DD/MM/YYYY",
+            pickTime: false
+        });
+        $('#datetimepicker_stage1level1approvaldeadline').datetimepicker({
+            format: "DD/MM/YYYY",
+            pickTime: false
+        });
+        $('#datetimepicker_stage1level2approvaldeadline').datetimepicker({
+            format: "DD/MM/YYYY",
+            pickTime: false
+        });
+        $('#datetimepicker_stage2submissiondeadline').datetimepicker({
+            format: "DD/MM/YYYY",
+            pickTime: false
+        });
+        $('#datetimepicker_stage2level1approvaldeadline').datetimepicker({
+            format: "DD/MM/YYYY",
+            pickTime: false
+        });
+        $('#datetimepicker_stage2level2approvaldeadline').datetimepicker({
+            format: "DD/MM/YYYY",
+            pickTime: false
+        });
+
 
         $("#btn_start_cycle").click(function () {
             $("#startcycle").val("1");

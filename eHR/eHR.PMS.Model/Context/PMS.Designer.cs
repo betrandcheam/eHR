@@ -75,6 +75,7 @@ using System.Xml.Serialization;
 [assembly: EdmRelationshipAttribute("PMSModel", "FK_PMS_APPRAISAL_SECTION_COMMENT_EMPLOYEE", "EMPLOYEE", System.Data.Metadata.Edm.RelationshipMultiplicity.ZeroOrOne, typeof(eHR.PMS.Model.Context.EMPLOYEE), "PMS_APPRAISAL_SECTION_COMMENT", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(eHR.PMS.Model.Context.PMS_APPRAISAL_SECTION_COMMENT), true)]
 [assembly: EdmRelationshipAttribute("PMSModel", "FK_PMS_APPRAISAL_PERFORMANCE_COACHING_COMMENT_EMPLOYEE", "EMPLOYEE", System.Data.Metadata.Edm.RelationshipMultiplicity.ZeroOrOne, typeof(eHR.PMS.Model.Context.EMPLOYEE), "PMS_APPRAISAL_PERFORMANCE_COACHING_COMMENT", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(eHR.PMS.Model.Context.PMS_APPRAISAL_PERFORMANCE_COACHING_COMMENT), true)]
 [assembly: EdmRelationshipAttribute("PMSModel", "FK_PMS_APPRAISAL_PERFORMANCE_COACHING_COMMENT_PMS_APPRAISAL_PERFORMANCE_COACHING", "PMS_APPRAISAL_PERFORMANCE_COACHING", System.Data.Metadata.Edm.RelationshipMultiplicity.ZeroOrOne, typeof(eHR.PMS.Model.Context.PMS_APPRAISAL_PERFORMANCE_COACHING), "PMS_APPRAISAL_PERFORMANCE_COACHING_COMMENT", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(eHR.PMS.Model.Context.PMS_APPRAISAL_PERFORMANCE_COACHING_COMMENT), true)]
+[assembly: EdmRelationshipAttribute("PMSModel", "FK_PMS_APPRAISAL_TRAIL_EMPLOYEE", "EMPLOYEE", System.Data.Metadata.Edm.RelationshipMultiplicity.ZeroOrOne, typeof(eHR.PMS.Model.Context.EMPLOYEE), "PMS_APPRAISAL_TRAIL", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(eHR.PMS.Model.Context.PMS_APPRAISAL_TRAIL), true)]
 
 #endregion
 
@@ -2632,6 +2633,342 @@ namespace eHR.PMS.Model.Context
         private Nullable<global::System.Int32> _COST_CENTER_ID;
         partial void OnCOST_CENTER_IDChanging(Nullable<global::System.Int32> value);
         partial void OnCOST_CENTER_IDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String ENTITY_LOCATION_DISPLAY
+        {
+            get
+            {
+                return _ENTITY_LOCATION_DISPLAY;
+            }
+            set
+            {
+                OnENTITY_LOCATION_DISPLAYChanging(value);
+                ReportPropertyChanging("ENTITY_LOCATION_DISPLAY");
+                _ENTITY_LOCATION_DISPLAY = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("ENTITY_LOCATION_DISPLAY");
+                OnENTITY_LOCATION_DISPLAYChanged();
+            }
+        }
+        private global::System.String _ENTITY_LOCATION_DISPLAY;
+        partial void OnENTITY_LOCATION_DISPLAYChanging(global::System.String value);
+        partial void OnENTITY_LOCATION_DISPLAYChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String DEPARTMENT_DISPLAY
+        {
+            get
+            {
+                return _DEPARTMENT_DISPLAY;
+            }
+            set
+            {
+                OnDEPARTMENT_DISPLAYChanging(value);
+                ReportPropertyChanging("DEPARTMENT_DISPLAY");
+                _DEPARTMENT_DISPLAY = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("DEPARTMENT_DISPLAY");
+                OnDEPARTMENT_DISPLAYChanged();
+            }
+        }
+        private global::System.String _DEPARTMENT_DISPLAY;
+        partial void OnDEPARTMENT_DISPLAYChanging(global::System.String value);
+        partial void OnDEPARTMENT_DISPLAYChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String ACR_GRADE_DISPLAY
+        {
+            get
+            {
+                return _ACR_GRADE_DISPLAY;
+            }
+            set
+            {
+                OnACR_GRADE_DISPLAYChanging(value);
+                ReportPropertyChanging("ACR_GRADE_DISPLAY");
+                _ACR_GRADE_DISPLAY = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("ACR_GRADE_DISPLAY");
+                OnACR_GRADE_DISPLAYChanged();
+            }
+        }
+        private global::System.String _ACR_GRADE_DISPLAY;
+        partial void OnACR_GRADE_DISPLAYChanging(global::System.String value);
+        partial void OnACR_GRADE_DISPLAYChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String COST_CENTER_DISPLAY
+        {
+            get
+            {
+                return _COST_CENTER_DISPLAY;
+            }
+            set
+            {
+                OnCOST_CENTER_DISPLAYChanging(value);
+                ReportPropertyChanging("COST_CENTER_DISPLAY");
+                _COST_CENTER_DISPLAY = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("COST_CENTER_DISPLAY");
+                OnCOST_CENTER_DISPLAYChanged();
+            }
+        }
+        private global::System.String _COST_CENTER_DISPLAY;
+        partial void OnCOST_CENTER_DISPLAYChanging(global::System.String value);
+        partial void OnCOST_CENTER_DISPLAYChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String GENDER_DISPLAY
+        {
+            get
+            {
+                return _GENDER_DISPLAY;
+            }
+            set
+            {
+                OnGENDER_DISPLAYChanging(value);
+                ReportPropertyChanging("GENDER_DISPLAY");
+                _GENDER_DISPLAY = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("GENDER_DISPLAY");
+                OnGENDER_DISPLAYChanged();
+            }
+        }
+        private global::System.String _GENDER_DISPLAY;
+        partial void OnGENDER_DISPLAYChanging(global::System.String value);
+        partial void OnGENDER_DISPLAYChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String MARITIAL_STATUS_DISPLAY
+        {
+            get
+            {
+                return _MARITIAL_STATUS_DISPLAY;
+            }
+            set
+            {
+                OnMARITIAL_STATUS_DISPLAYChanging(value);
+                ReportPropertyChanging("MARITIAL_STATUS_DISPLAY");
+                _MARITIAL_STATUS_DISPLAY = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("MARITIAL_STATUS_DISPLAY");
+                OnMARITIAL_STATUS_DISPLAYChanged();
+            }
+        }
+        private global::System.String _MARITIAL_STATUS_DISPLAY;
+        partial void OnMARITIAL_STATUS_DISPLAYChanging(global::System.String value);
+        partial void OnMARITIAL_STATUS_DISPLAYChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String NATIONALITY_DISPLAY
+        {
+            get
+            {
+                return _NATIONALITY_DISPLAY;
+            }
+            set
+            {
+                OnNATIONALITY_DISPLAYChanging(value);
+                ReportPropertyChanging("NATIONALITY_DISPLAY");
+                _NATIONALITY_DISPLAY = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("NATIONALITY_DISPLAY");
+                OnNATIONALITY_DISPLAYChanged();
+            }
+        }
+        private global::System.String _NATIONALITY_DISPLAY;
+        partial void OnNATIONALITY_DISPLAYChanging(global::System.String value);
+        partial void OnNATIONALITY_DISPLAYChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String CITIZENSHIP_DISPLAY
+        {
+            get
+            {
+                return _CITIZENSHIP_DISPLAY;
+            }
+            set
+            {
+                OnCITIZENSHIP_DISPLAYChanging(value);
+                ReportPropertyChanging("CITIZENSHIP_DISPLAY");
+                _CITIZENSHIP_DISPLAY = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("CITIZENSHIP_DISPLAY");
+                OnCITIZENSHIP_DISPLAYChanged();
+            }
+        }
+        private global::System.String _CITIZENSHIP_DISPLAY;
+        partial void OnCITIZENSHIP_DISPLAYChanging(global::System.String value);
+        partial void OnCITIZENSHIP_DISPLAYChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String EMPLOYMENT_TYPE_DISPLAY
+        {
+            get
+            {
+                return _EMPLOYMENT_TYPE_DISPLAY;
+            }
+            set
+            {
+                OnEMPLOYMENT_TYPE_DISPLAYChanging(value);
+                ReportPropertyChanging("EMPLOYMENT_TYPE_DISPLAY");
+                _EMPLOYMENT_TYPE_DISPLAY = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("EMPLOYMENT_TYPE_DISPLAY");
+                OnEMPLOYMENT_TYPE_DISPLAYChanged();
+            }
+        }
+        private global::System.String _EMPLOYMENT_TYPE_DISPLAY;
+        partial void OnEMPLOYMENT_TYPE_DISPLAYChanging(global::System.String value);
+        partial void OnEMPLOYMENT_TYPE_DISPLAYChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String IDENTIFICATION_TYPE_DISPLAY
+        {
+            get
+            {
+                return _IDENTIFICATION_TYPE_DISPLAY;
+            }
+            set
+            {
+                OnIDENTIFICATION_TYPE_DISPLAYChanging(value);
+                ReportPropertyChanging("IDENTIFICATION_TYPE_DISPLAY");
+                _IDENTIFICATION_TYPE_DISPLAY = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("IDENTIFICATION_TYPE_DISPLAY");
+                OnIDENTIFICATION_TYPE_DISPLAYChanged();
+            }
+        }
+        private global::System.String _IDENTIFICATION_TYPE_DISPLAY;
+        partial void OnIDENTIFICATION_TYPE_DISPLAYChanging(global::System.String value);
+        partial void OnIDENTIFICATION_TYPE_DISPLAYChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String HIGHEST_ACADEMIC_QUALIFICATION_DISPLAY
+        {
+            get
+            {
+                return _HIGHEST_ACADEMIC_QUALIFICATION_DISPLAY;
+            }
+            set
+            {
+                OnHIGHEST_ACADEMIC_QUALIFICATION_DISPLAYChanging(value);
+                ReportPropertyChanging("HIGHEST_ACADEMIC_QUALIFICATION_DISPLAY");
+                _HIGHEST_ACADEMIC_QUALIFICATION_DISPLAY = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("HIGHEST_ACADEMIC_QUALIFICATION_DISPLAY");
+                OnHIGHEST_ACADEMIC_QUALIFICATION_DISPLAYChanged();
+            }
+        }
+        private global::System.String _HIGHEST_ACADEMIC_QUALIFICATION_DISPLAY;
+        partial void OnHIGHEST_ACADEMIC_QUALIFICATION_DISPLAYChanging(global::System.String value);
+        partial void OnHIGHEST_ACADEMIC_QUALIFICATION_DISPLAYChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String SENIOR_MANAGEMENT_TEAM_MEMBER_DISPLAY
+        {
+            get
+            {
+                return _SENIOR_MANAGEMENT_TEAM_MEMBER_DISPLAY;
+            }
+            set
+            {
+                OnSENIOR_MANAGEMENT_TEAM_MEMBER_DISPLAYChanging(value);
+                ReportPropertyChanging("SENIOR_MANAGEMENT_TEAM_MEMBER_DISPLAY");
+                _SENIOR_MANAGEMENT_TEAM_MEMBER_DISPLAY = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("SENIOR_MANAGEMENT_TEAM_MEMBER_DISPLAY");
+                OnSENIOR_MANAGEMENT_TEAM_MEMBER_DISPLAYChanged();
+            }
+        }
+        private global::System.String _SENIOR_MANAGEMENT_TEAM_MEMBER_DISPLAY;
+        partial void OnSENIOR_MANAGEMENT_TEAM_MEMBER_DISPLAYChanging(global::System.String value);
+        partial void OnSENIOR_MANAGEMENT_TEAM_MEMBER_DISPLAYChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String PERFORMANCE_APPRAISAL_LEVEL1_APPROVER_DISPLAY
+        {
+            get
+            {
+                return _PERFORMANCE_APPRAISAL_LEVEL1_APPROVER_DISPLAY;
+            }
+            set
+            {
+                OnPERFORMANCE_APPRAISAL_LEVEL1_APPROVER_DISPLAYChanging(value);
+                ReportPropertyChanging("PERFORMANCE_APPRAISAL_LEVEL1_APPROVER_DISPLAY");
+                _PERFORMANCE_APPRAISAL_LEVEL1_APPROVER_DISPLAY = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("PERFORMANCE_APPRAISAL_LEVEL1_APPROVER_DISPLAY");
+                OnPERFORMANCE_APPRAISAL_LEVEL1_APPROVER_DISPLAYChanged();
+            }
+        }
+        private global::System.String _PERFORMANCE_APPRAISAL_LEVEL1_APPROVER_DISPLAY;
+        partial void OnPERFORMANCE_APPRAISAL_LEVEL1_APPROVER_DISPLAYChanging(global::System.String value);
+        partial void OnPERFORMANCE_APPRAISAL_LEVEL1_APPROVER_DISPLAYChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String PERFORMANCE_APPRAISAL_LEVEL2_APPROVER_DISPLAY
+        {
+            get
+            {
+                return _PERFORMANCE_APPRAISAL_LEVEL2_APPROVER_DISPLAY;
+            }
+            set
+            {
+                OnPERFORMANCE_APPRAISAL_LEVEL2_APPROVER_DISPLAYChanging(value);
+                ReportPropertyChanging("PERFORMANCE_APPRAISAL_LEVEL2_APPROVER_DISPLAY");
+                _PERFORMANCE_APPRAISAL_LEVEL2_APPROVER_DISPLAY = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("PERFORMANCE_APPRAISAL_LEVEL2_APPROVER_DISPLAY");
+                OnPERFORMANCE_APPRAISAL_LEVEL2_APPROVER_DISPLAYChanged();
+            }
+        }
+        private global::System.String _PERFORMANCE_APPRAISAL_LEVEL2_APPROVER_DISPLAY;
+        partial void OnPERFORMANCE_APPRAISAL_LEVEL2_APPROVER_DISPLAYChanging(global::System.String value);
+        partial void OnPERFORMANCE_APPRAISAL_LEVEL2_APPROVER_DISPLAYChanged();
 
         #endregion
 
@@ -3170,6 +3507,28 @@ namespace eHR.PMS.Model.Context
                 if ((value != null))
                 {
                     ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<PMS_APPRAISAL_PERFORMANCE_COACHING_COMMENT>("PMSModel.FK_PMS_APPRAISAL_PERFORMANCE_COACHING_COMMENT_EMPLOYEE", "PMS_APPRAISAL_PERFORMANCE_COACHING_COMMENT", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("PMSModel", "FK_PMS_APPRAISAL_TRAIL_EMPLOYEE", "PMS_APPRAISAL_TRAIL")]
+        public EntityCollection<PMS_APPRAISAL_TRAIL> PMS_APPRAISAL_TRAIL
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<PMS_APPRAISAL_TRAIL>("PMSModel.FK_PMS_APPRAISAL_TRAIL_EMPLOYEE", "PMS_APPRAISAL_TRAIL");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<PMS_APPRAISAL_TRAIL>("PMSModel.FK_PMS_APPRAISAL_TRAIL_EMPLOYEE", "PMS_APPRAISAL_TRAIL", value);
                 }
             }
         }
@@ -10070,6 +10429,44 @@ namespace eHR.PMS.Model.Context
                 }
             }
         }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("PMSModel", "FK_PMS_APPRAISAL_TRAIL_EMPLOYEE", "EMPLOYEE")]
+        public EMPLOYEE EMPLOYEE
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<EMPLOYEE>("PMSModel.FK_PMS_APPRAISAL_TRAIL_EMPLOYEE", "EMPLOYEE").Value;
+            }
+            set
+            {
+                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<EMPLOYEE>("PMSModel.FK_PMS_APPRAISAL_TRAIL_EMPLOYEE", "EMPLOYEE").Value = value;
+            }
+        }
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [BrowsableAttribute(false)]
+        [DataMemberAttribute()]
+        public EntityReference<EMPLOYEE> EMPLOYEEReference
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<EMPLOYEE>("PMSModel.FK_PMS_APPRAISAL_TRAIL_EMPLOYEE", "EMPLOYEE");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<EMPLOYEE>("PMSModel.FK_PMS_APPRAISAL_TRAIL_EMPLOYEE", "EMPLOYEE", value);
+                }
+            }
+        }
 
         #endregion
 
@@ -10691,6 +11088,78 @@ namespace eHR.PMS.Model.Context
         private Nullable<global::System.DateTime> _MODIFIED_TIMESTAMP;
         partial void OnMODIFIED_TIMESTAMPChanging(Nullable<global::System.DateTime> value);
         partial void OnMODIFIED_TIMESTAMPChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.DateTime> SUBMISSION_DEADLINE
+        {
+            get
+            {
+                return _SUBMISSION_DEADLINE;
+            }
+            set
+            {
+                OnSUBMISSION_DEADLINEChanging(value);
+                ReportPropertyChanging("SUBMISSION_DEADLINE");
+                _SUBMISSION_DEADLINE = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("SUBMISSION_DEADLINE");
+                OnSUBMISSION_DEADLINEChanged();
+            }
+        }
+        private Nullable<global::System.DateTime> _SUBMISSION_DEADLINE;
+        partial void OnSUBMISSION_DEADLINEChanging(Nullable<global::System.DateTime> value);
+        partial void OnSUBMISSION_DEADLINEChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.DateTime> LEVEL_1_APPROVAL_DEADLINE
+        {
+            get
+            {
+                return _LEVEL_1_APPROVAL_DEADLINE;
+            }
+            set
+            {
+                OnLEVEL_1_APPROVAL_DEADLINEChanging(value);
+                ReportPropertyChanging("LEVEL_1_APPROVAL_DEADLINE");
+                _LEVEL_1_APPROVAL_DEADLINE = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("LEVEL_1_APPROVAL_DEADLINE");
+                OnLEVEL_1_APPROVAL_DEADLINEChanged();
+            }
+        }
+        private Nullable<global::System.DateTime> _LEVEL_1_APPROVAL_DEADLINE;
+        partial void OnLEVEL_1_APPROVAL_DEADLINEChanging(Nullable<global::System.DateTime> value);
+        partial void OnLEVEL_1_APPROVAL_DEADLINEChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.DateTime> LEVEL_2_APPROVAL_DEADLINE
+        {
+            get
+            {
+                return _LEVEL_2_APPROVAL_DEADLINE;
+            }
+            set
+            {
+                OnLEVEL_2_APPROVAL_DEADLINEChanging(value);
+                ReportPropertyChanging("LEVEL_2_APPROVAL_DEADLINE");
+                _LEVEL_2_APPROVAL_DEADLINE = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("LEVEL_2_APPROVAL_DEADLINE");
+                OnLEVEL_2_APPROVAL_DEADLINEChanged();
+            }
+        }
+        private Nullable<global::System.DateTime> _LEVEL_2_APPROVAL_DEADLINE;
+        partial void OnLEVEL_2_APPROVAL_DEADLINEChanging(Nullable<global::System.DateTime> value);
+        partial void OnLEVEL_2_APPROVAL_DEADLINEChanged();
 
         #endregion
 

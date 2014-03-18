@@ -149,6 +149,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resource.resx</DependentUpon>
     </Compile>
+    <Content Include="Scripts\lib\betrand.js" />
     <Content Include="Scripts\module\stage1approval\CareerDevelopment.js" />
     <Content Include="Scripts\module\stage1approval\CoreValues.js" />
     <Content Include="Scripts\module\stage1approval\KeyPerformanceIndicators.js" />
@@ -367,7 +368,7 @@
         <WebProjectProperties>
           <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>54287</DevelopmentServerPort>
+          <DevelopmentServerPort>54129</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>
           </IISUrl>
