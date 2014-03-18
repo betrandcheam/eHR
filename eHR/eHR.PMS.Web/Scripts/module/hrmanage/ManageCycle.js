@@ -106,224 +106,90 @@ define("hrmanage.managecycle", ['jquery', 'bootstrap', 'bootstrap.select', 'mome
 
 
         $("#btn_start_cycle").click(function () {
-            $("#updatecycle").val("1");
-            $("modelmessage").text("Are you sure approve this now?")
-            $('#SubmitInfoModal').modal();
-        });
-
-        $("#btn_retrieve_participants").click(function () {
-            $("#updatecycle").val("0");
             var int_error_count = 0;
             var str_error_message = "";
+            $(".form-control").removeClass("warningclass");
 
-            $("#cyclename").removeClass("warningclass");
-            $("#Stage1StartDate").removeClass("warningclass");
-            $("#Stage1EndDate").removeClass("warningclass");
-            $("#Stage2StartDate").removeClass("warningclass");
-            $("#Stage2EndDate").removeClass("warningclass");
-            $("#Stage3StartDate").removeClass("warningclass");
-            $("#Stage3EndDate").removeClass("warningclass");
+            /*if ($.trim($("#cyclename").val()).length == 0) {
+            $("#cyclename").addClass("warningclass");
+            str_error_message = "Please provide the name of the cycle.";
+            $("#errormsg").text(str_error_message);
+            $(".alert").show();
+            return false;
+            }*/
 
-            if ($.trim($("#cyclename").val()).length == 0) {
-                int_error_count++;
-                $("#cyclename").addClass("warningclass");
-
-                str_error_message = "Please provide the name of the cycle.";
-            }
-
-            if ($.trim($("#Stage1StartDate").val()).length == 0) {
-                int_error_count++;
-                $("#Stage1StartDate").addClass("warningclass");
-
-                if (str_error_message == "") {
-                    str_error_message = "Please provide the start date of Goal Setting Stage for cycle.";
+            $.each($(".stagedate"), function () {
+                if ($.trim($(this).val()).length == 0) {
+                    int_error_count++;
+                    $(this).addClass("warningclass");
+                    str_error_message = "Please provide the " + $(this).attr("forerrormsg") + " for cycle.";
+                    $("#errormsg").text(str_error_message);
+                    $(".alert").show();
+                    return false;
                 }
                 else {
-                    str_error_message = str_error_message + "<br/> Please provide the start date of Goal Setting Stage for cycle.";
-                }
-            }
-            else {
-                if (!validators_boo_checkDate($.trim($("#Stage1StartDate").val()), "/")) {
-                    int_error_count++;
-                    $("#Stage1StartDate").addClass("warningclass");
-
-                    if (str_error_message == "") {
-                        str_error_message = "Goal Setting Stage Start Date is not valid. It should be in DD/MM/YYYY format.";
-                    }
-                    else {
-                        str_error_message = str_error_message + "<br/> Goal Setting Stage Start Date is not valid. It should be in DD/MM/YYYY format.";
+                    if (!validators_boo_checkDate($.trim($(this).val()), "/")) {
+                        int_error_count++;
+                        $(this).addClass("warningclass");
+                        str_error_message = $(this).attr("forerrormsg") + " is not valid. It should be in DD/MM/YYYY format.";
+                        $("#errormsg").text(str_error_message);
+                        $(".alert").show();
+                        return false;
                     }
                 }
-            }
-
-            if ($.trim($("#Stage1EndDate").val()).length == 0) {
-                int_error_count++;
-                $("#Stage1EndDate").addClass("warningclass");
-
-                if (str_error_message == "") {
-                    str_error_message = "Please provide the end date of Goal Setting Stage for cycle.";
-                }
-                else {
-                    str_error_message = str_error_message + "<br/> Please provide the end date of Goal Setting Stage for cycle.";
-                }
-            }
-            else {
-                if (!validators_boo_checkDate($.trim($("#Stage1EndDate").val()), "/")) {
-                    int_error_count++;
-                    $("#Stage1EndDate").addClass("warningclass");
-
-                    if (str_error_message == "") {
-                        str_error_message = "Goal Setting Stage End Date is not valid. It should be in DD/MM/YYYY format.";
-                    }
-                    else {
-                        str_error_message = str_error_message + "<br/> Goal Setting Stage End Date is not valid. It should be in DD/MM/YYYY format.";
-                    }
-                }
-            }
-
-            if ($.trim($("#Stage2StartDate").val()).length == 0) {
-                int_error_count++;
-                $("#Stage2StartDate").addClass("warningclass");
-
-                if (str_error_message == "") {
-                    str_error_message = "Please provide the start date of Progress Review Stage for cycle.";
-                }
-                else {
-                    str_error_message = str_error_message + "<br/> Please provide the start date of Progress Review Stage for cycle.";
-                }
-            }
-            else {
-                if (!validators_boo_checkDate($.trim($("#Stage2StartDate").val()), "/")) {
-                    int_error_count++;
-                    $("#Stage2StartDate").addClass("warningclass");
-
-                    if (str_error_message == "") {
-                        str_error_message = "Progress Review Stage Start Date is not valid. It should be in DD/MM/YYYY format.";
-                    }
-                    else {
-                        str_error_message = str_error_message + "<br/> Progress Review Stage Start Date is not valid. It should be in DD/MM/YYYY format.";
-                    }
-                }
-            }
-
-            if ($.trim($("#Stage2EndDate").val()).length == 0) {
-                int_error_count++;
-                $("#Stage2EndDate").addClass("warningclass");
-
-                if (str_error_message == "") {
-                    str_error_message = "Please provide the end date of Progress Review Stage for cycle.";
-                }
-                else {
-                    str_error_message = str_error_message + "<br/> Please provide the end date of Progress Review Stage for cycle.";
-                }
-            }
-            else {
-                if (!validators_boo_checkDate($.trim($("#Stage2EndDate").val()), "/")) {
-                    int_error_count++;
-                    $("#Stage2EndDate").addClass("warningclass");
-                }
-
-                if (str_error_message == "") {
-                    str_error_message = "Progress Review Stage End Date is not valid. It should be in DD/MM/YYYY format.";
-                }
-                else {
-                    str_error_message = str_error_message + "<br/> Progress Review End Date is not valid. It should be in DD/MM/YYYY format.";
-                }
-            }
-
-            if ($.trim($("#Stage3StartDate").val()).length == 0) {
-                int_error_count++;
-                $("#Stage3StartDate").addClass("warningclass");
-
-                if (str_error_message == "") {
-                    str_error_message = "Please provide the start date of Final Year Review Stage for cycle.";
-                }
-                else {
-                    str_error_message = str_error_message + "<br/> Please provide the start date of Final Year Review Stage for cycle.";
-                }
-            }
-            else {
-                if (!validators_boo_checkDate($.trim($("#Stage3StartDate").val()), "/")) {
-                    int_error_count++;
-                    $("#Stage3StartDate").addClass("warningclass");
-                }
-
-                if (str_error_message == "") {
-                    str_error_message = "Final Year Review Stage Start Date is not valid. It should be in DD/MM/YYYY format.";
-                }
-                else {
-                    str_error_message = str_error_message + "<br/> Final Year Review Stage Start Date is not valid. It should be in DD/MM/YYYY format.";
-                }
-            }
-
-            if ($.trim($("#Stage3EndDate").val()).length == 0) {
-                int_error_count++;
-                $("#Stage3EndDate").addClass("warningclass");
-
-                if (str_error_message == "") {
-                    str_error_message = "Please provide the end date of Final Year Review Stage for cycle.";
-                }
-                else {
-                    str_error_message = str_error_message + "<br/> Please provide the end date of Final Year Review Stage for cycle.";
-                }
-            }
-            else {
-                if (!validators_boo_checkDate($.trim($("#Stage3EndDate").val()), "/")) {
-                    int_error_count++;
-                    $("#Stage3EndDate").addClass("warningclass");
-                }
-
-                if (str_error_message == "") {
-                    str_error_message = "Final Year Review Stage End Date is not valid. It should be in DD/MM/YYYY format.";
-                }
-                else {
-                    str_error_message = str_error_message + "<br/> Final Year Review Stage End Date is not valid. It should be in DD/MM/YYYY format.";
-                }
-            }
+            });
 
             if (int_error_count == 0) {
-                if (getDate($("#Stage1StartDate").val()).getTime() < getDate($("#forRazorValue").attr("nowdateformat")).getTime()) {
-                    int_error_count++;
+                if (getDate($("#Stage1StartDate").val()).getTime() < getDate($("#forRazorValue").attr("nowdate")).getTime()) {
                     $("#Stage1StartDate").addClass("warningclass");
                     str_error_message = "Goal Setting Start Date must not be earlier than today.";
+                    $("#errormsg").text(str_error_message);
+                    $(".alert").show();
+                    return false;
                 }
                 else if (getDate($("#Stage1StartDate").val()).getTime() >= getDate($("#Stage1EndDate").val()).getTime()) {
-                    int_error_count++;
                     $("#Stage1StartDate").addClass("warningclass");
                     str_error_message = "Goal Setting Start Date must be earlier than the Goal Setting End Date.";
+                    $("#errormsg").text(str_error_message);
+                    $(".alert").show();
+                    return false;
                 }
                 else if (getDate($("#Stage1EndDate").val()).getTime() >= getDate($("#Stage2StartDate").val()).getTime()) {
-                    int_error_count++;
                     $("#Stage1EndDate").addClass("warningclass");
                     str_error_message = "Goal Setting End Date must be earlier than the Progress Review Start Date.";
+                    $("#errormsg").text(str_error_message);
+                    $(".alert").show();
+                    return false;
                 }
                 else if (getDate($("#Stage2StartDate").val()).getTime() >= getDate($("#Stage2EndDate").val()).getTime()) {
-                    int_error_count++;
                     $("#Stage2StartDate").addClass("warningclass");
                     str_error_message = "Progress Review End Date must be later than the Progress Review Start Date.";
+                    $("#errormsg").text(str_error_message);
+                    $(".alert").show();
+                    return false;
                 }
                 else if (getDate($("#Stage2EndDate").val()).getTime() >= getDate($("#Stage3StartDate").val()).getTime()) {
-                    int_error_count++;
                     $("#Stage2EndDate").addClass("warningclass");
                     str_error_message = "Progress Review End Date must be earlier than the Final Year Review Start Date.";
+                    $("#errormsg").text(str_error_message);
+                    $(".alert").show();
+                    return false;
                 }
                 else if (getDate($("#Stage3StartDate").val()).getTime() >= getDate($("#Stage3EndDate").val()).getTime()) {
-                    int_error_count++;
                     $("#Stage3StartDate").addClass("warningclass");
                     str_error_message = "Final Year Review End Date must be later than the Final Year Review Start Date.";
+                    $("#errormsg").text(str_error_message);
+                    $(".alert").show();
+                    return false;
                 }
             }
-
             if (int_error_count == 0) {
-                $("div.div_error").text("");
-                $("div.div_error").removeClass("warningclass");
-                $("form").submit();
-            }
-            else {
-                $("div.div_error").html(str_error_message + "<br/><br/>");
-                $("div.div_error").addClass("warningclass");
+                $("#updatecycle").val("1");
+                $("modelmessage").text("Are you sure approve this now?")
+                $('#SubmitInfoModal').modal();
             }
         });
+
 
         $("#btn_cancel").click(function () {
             $('#CancelInfoModal').modal();
