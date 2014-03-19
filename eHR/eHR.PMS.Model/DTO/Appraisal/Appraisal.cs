@@ -191,6 +191,18 @@ namespace eHR.PMS.Model.DTO.Appraisal
             set { lst_reviewers = value; }
         }
 
+        public void AddReviewer(PMS.Model.DTO.Appraisal.Reviewer reviewer)
+        {
+            if (reviewer != null)
+            {
+                if (Lib.Utility.Common.IsNullOrEmptyList(lst_reviewers))
+                {
+                    lst_reviewers = new List<PMS.Model.DTO.Appraisal.Reviewer>();
+                }
+                lst_reviewers.Add(reviewer);
+            }
+        }
+
         public string ReviewersNamesInString
         {
             get
@@ -201,12 +213,15 @@ namespace eHR.PMS.Model.DTO.Appraisal
                 {
                     foreach (PMS.Model.DTO.Appraisal.Reviewer obj_reviewer in lst_reviewers)
                     {
-                        sb_names.Append(obj_reviewer.PreferredName);
-                        if (int_counter != lst_reviewers.Count() - 1)
+                        if (!Convert.ToBoolean(obj_reviewer.SMT)) 
                         {
-                            sb_names.Append(", ");
+                            sb_names.Append(obj_reviewer.PreferredName);
+                            if (int_counter != lst_reviewers.Count() - 1)
+                            {
+                                sb_names.Append(", ");
+                            }
+                            int_counter++;
                         }
-                        int_counter++;
                     }
                 }
                 return sb_names.ToString();

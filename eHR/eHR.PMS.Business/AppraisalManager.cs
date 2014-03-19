@@ -154,7 +154,11 @@ namespace eHR.PMS.Business
                     //if (obj_appraisal.Stage.Id == Model.PMSConstants.STAGE_ID_PRE_CYCLE)
                     //{
                         obj_appraisal.Locked = false;
-                        obj_appraisal.AddTrail(CreateAppraisalTrail(obj_appraisal, user, new Model.DTO.Master.Action() { Id = Model.PMSConstants.ACTION_ID_APPRAISAL_OPENED }));
+
+                        if (user.Id != null && user.Id > 0)
+                        {
+                            obj_appraisal.AddTrail(CreateAppraisalTrail(obj_appraisal, user, new Model.DTO.Master.Action() { Id = Model.PMSConstants.ACTION_ID_APPRAISAL_OPENED }));
+                        }                       
                         obj_appraisal.Stage = Model.Mappers.PMSMapper.MapAppraisalStageDTOToStageDTO(obj_appraisal.AppraisalStages.Where(rec => rec.StageId == Model.PMSConstants.STAGE_ID_GOAL_SETTING).SingleOrDefault());
                         obj_appraisal.Status = new Model.DTO.Master.Status() { Id = Model.PMSConstants.STATUS_ID_NEW };
                         lst_all_tasks.Add(CreateTasksForCycleStageChange(obj_appraisal));
@@ -312,6 +316,17 @@ namespace eHR.PMS.Business
                         Actioner = Model.Mappers.CoreMapper.MapUserDTOToEmployeeDTO(user)
                     };
                     obj_appraisal.AddTrail(obj_trail);
+
+                    if (obj_participant.SMPEmploeeId != null && obj_participant.SMPEmploeeId > 0)
+                    {
+                        Model.DTO.Appraisal.Reviewer obj_reviewer = new Model.DTO.Appraisal.Reviewer() 
+                        { 
+                            EmployeeId = obj_participant.SMPEmploeeId,
+                            Appraisal = obj_appraisal,
+                            SMT = true
+                        };
+                        obj_appraisal.AddReviewer(obj_reviewer);
+                    }
 
                     lst_appraisals.Add(obj_appraisal);
                 }
@@ -676,6 +691,12 @@ namespace eHR.PMS.Business
             }
 
             return Model.PMSModel.UpdateApproversAndTasks(appraisal, newApprovers, lst_owners_to_update, out message);
+        }
+
+        public static bool ManageChangeSMTMember(Model.DTO.Appraisal.Appraisal appraisal, Model.DTO.Appraisal.Reviewer smtMember, out string message)
+        {
+            message = string.Empty;
+            return Model.PMSModel.UpdateSMTMember(appraisal,smtMember,out message);
         }
 
         public static List<PMS.Model.DTO.Appraisal.Appraisal> GetAppraisalsForView(int cycleId, string employeeName, string employeeDomainId, string departmentName)

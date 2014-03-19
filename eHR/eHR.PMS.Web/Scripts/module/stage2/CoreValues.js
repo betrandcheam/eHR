@@ -29,6 +29,7 @@ define("stage2.corevalues", ['jquery', 'bootstrap', 'bootstrap.select'], functio
                 }
             });
         };
+        /*
         var autosavefunction = function () {
             var KPIArray = new Array();
             $.each($(".KPIforDatabase"), function () {
@@ -49,6 +50,7 @@ define("stage2.corevalues", ['jquery', 'bootstrap', 'bootstrap.select'], functio
                 }
             });
         };
+        */
         $(function () {
             //if (message)
             //    $('#RedirectModal').modal();
@@ -228,5 +230,5 @@ define("stage2.corevalues", ['jquery', 'bootstrap', 'bootstrap.select'], functio
                 window.location.href($("#forRazorValue").attr("rooturl"));
             });
         });
-        setInterval(autosavefunction, 600000); 
+        //setInterval(autosavefunction, 600000); 
 });

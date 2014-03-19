@@ -23,6 +23,7 @@ define("stage2approval.careerdevelopment", ['jquery', 'bootstrap'], function ($)
                 }
             });
         };
+        /*
         var autosavefunction = function () {
             $.ajax({
                 url: $("#forRazorValue").attr("saveurl"),
@@ -39,6 +40,7 @@ define("stage2approval.careerdevelopment", ['jquery', 'bootstrap'], function ($)
                 }
             });
         };
+        */
         $(function () {
             $('body').scrollspy({ target: '#sidenav' });
             $('button[data-loading-text]').click(function () {

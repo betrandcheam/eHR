@@ -3162,7 +3162,7 @@ namespace eHR.PMS.Model.Context
         [SoapIgnoreAttribute()]
         [DataMemberAttribute()]
         [EdmRelationshipNavigationPropertyAttribute("PMSModel", "FK_EMPLOYEE_EMPLOYEE_SMT", "EMPLOYEE1")]
-        public EntityCollection<EMPLOYEE> EMPLOYEE12
+        public EntityCollection<EMPLOYEE> SENIOR_MANAGEMENT_TEAM_REPORTEEs
         {
             get
             {
@@ -3184,7 +3184,7 @@ namespace eHR.PMS.Model.Context
         [SoapIgnoreAttribute()]
         [DataMemberAttribute()]
         [EdmRelationshipNavigationPropertyAttribute("PMSModel", "FK_EMPLOYEE_EMPLOYEE_SMT", "EMPLOYEE")]
-        public EMPLOYEE EMPLOYEE4
+        public EMPLOYEE SENIOR_MANAGEMENT_TEAM_MEMBER
         {
             get
             {
@@ -3200,7 +3200,7 @@ namespace eHR.PMS.Model.Context
         /// </summary>
         [BrowsableAttribute(false)]
         [DataMemberAttribute()]
-        public EntityReference<EMPLOYEE> EMPLOYEE4Reference
+        public EntityReference<EMPLOYEE> SENIOR_MANAGEMENT_TEAM_MEMBERReference
         {
             get
             {

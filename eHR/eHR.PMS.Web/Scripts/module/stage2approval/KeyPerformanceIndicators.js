@@ -29,6 +29,7 @@ define("stage2approval.kpi", ['jquery', 'bootstrap', 'bootstrap.select'], functi
             });
         };
 
+        /*
         var autosavefunction = function () {
             var KPIArray = new Array();
             $.each($(".KPIforDatabase"), function () {
@@ -49,6 +50,7 @@ define("stage2approval.kpi", ['jquery', 'bootstrap', 'bootstrap.select'], functi
                 }
             });
         };
+        */
         $(function () {
             $('body').scrollspy({ target: '#sidenav' });
             $('.selectpicker').selectpicker();

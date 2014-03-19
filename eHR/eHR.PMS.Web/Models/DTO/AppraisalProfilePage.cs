@@ -60,14 +60,31 @@ namespace eHR.PMS.Web.Models.DTO
             }
         }
 
+        private List<Model.DTO.Appraisal.Reviewer> GetReviewers()
+        {
+            List<Model.DTO.Appraisal.Reviewer> lst_reviewers = null;
+            if (!Lib.Utility.Common.IsNullOrEmptyList(Appraisal.Reviewers))
+            {
+                var var_reviewers = Appraisal.Reviewers.Where(rec => rec.SMT == false);
+
+                if (!Lib.Utility.Common.IsNullOrEmptyList(var_reviewers))
+                {
+                    lst_reviewers = var_reviewers.ToList();
+                }
+            }
+            return lst_reviewers;
+        }
+
         public string GetAppraisalFirstReviewerName()
         {
             string str_name = null;
-            if (!Lib.Utility.Common.IsNullOrEmptyList(Appraisal.Reviewers))
+            List<Model.DTO.Appraisal.Reviewer> lst_reviewers = GetReviewers();
+
+            if (!Lib.Utility.Common.IsNullOrEmptyList(lst_reviewers))
             {
-                if (Appraisal.Reviewers.Count() > 0)
+                if (lst_reviewers.Count() > 0)
                 {
-                    str_name = Appraisal.Reviewers[0].PreferredName;
+                    str_name = lst_reviewers[0].PreferredName;
                 }
             }
             return str_name;
@@ -76,14 +93,61 @@ namespace eHR.PMS.Web.Models.DTO
         public string GetAppraisalSecondReviewerName()
         {
             string str_name = null;
-            if (!Lib.Utility.Common.IsNullOrEmptyList(Appraisal.Reviewers))
+            List<Model.DTO.Appraisal.Reviewer> lst_reviewers = GetReviewers();
+
+            if (!Lib.Utility.Common.IsNullOrEmptyList(lst_reviewers))
             {
-                if (Appraisal.Reviewers.Count() > 1)
+                if (lst_reviewers.Count() > 1)
                 {
-                    str_name = Appraisal.Reviewers[1].PreferredName;
+                    str_name = lst_reviewers[1].PreferredName;
                 }
             }
             return str_name;
+        }
+
+        public string GetSeniorManagementTeamMemberName()
+        {
+            string str_name = null;
+            if (!Lib.Utility.Common.IsNullOrEmptyList(Appraisal.Reviewers))
+            {
+                Model.DTO.Appraisal.Reviewer obj_reviewer = Appraisal.Reviewers.Where(rec => rec.SMT == true).SingleOrDefault();
+
+                if (obj_reviewer != null)
+                {
+                    str_name = obj_reviewer.PreferredName;
+                }
+            }
+            return str_name;
+        }
+
+        public string GetSeniorManagementTeamMemberDomainId()
+        {
+            string str_domain_id = null;
+            if (!Lib.Utility.Common.IsNullOrEmptyList(Appraisal.Reviewers))
+            {
+                Model.DTO.Appraisal.Reviewer obj_reviewer = Appraisal.Reviewers.Where(rec => rec.SMT == true).SingleOrDefault();
+
+                if (obj_reviewer != null)
+                {
+                    str_domain_id = obj_reviewer.DomainId;
+                }
+            }
+            return str_domain_id;
+        }
+
+        public string GetSeniorManagementTeamMemberId()
+        {
+            string str_id = null;
+            if (!Lib.Utility.Common.IsNullOrEmptyList(Appraisal.Reviewers))
+            {
+                Model.DTO.Appraisal.Reviewer obj_reviewer = Appraisal.Reviewers.Where(rec => rec.SMT == true).SingleOrDefault();
+
+                if (obj_reviewer != null)
+                {
+                    str_id = Convert.ToString(obj_reviewer.EmployeeId);
+                }
+            }
+            return str_id;
         }
     }
 }

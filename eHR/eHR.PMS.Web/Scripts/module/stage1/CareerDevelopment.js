@@ -24,6 +24,7 @@ define("stage1.careerdevelopment", ['jquery', 'bootstrap'], function ($) {
                 }
             });
         };
+        /*
         var autosavefunction = function () {
             $.ajax({
                 url: $("#forRazorValue").attr("saveurl"),
@@ -40,6 +41,7 @@ define("stage1.careerdevelopment", ['jquery', 'bootstrap'], function ($) {
                 }
             });
         };
+        */
         $(function () {
             if (message)
                 $('#RedirectModal').modal();

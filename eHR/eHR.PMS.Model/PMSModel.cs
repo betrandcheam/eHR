@@ -246,7 +246,8 @@ namespace eHR.PMS.Model
                                 .Include("MST_EMPLOYMENT_TYPE")
                                 .Include("DEPARTMENT")
                                 .Include("DEPARTMENT.MST_DEPARTMENT")
-                                .Include("MST_ACR_GRADE");
+                                .Include("MST_ACR_GRADE")
+                                .Include("SENIOR_MANAGEMENT_TEAM_MEMBER");
             }
             else
             {
@@ -258,7 +259,8 @@ namespace eHR.PMS.Model
                                 .Include("MST_EMPLOYMENT_TYPE")
                                 .Include("DEPARTMENT")
                                 .Include("DEPARTMENT.MST_DEPARTMENT")
-                                .Include("MST_ACR_GRADE");
+                                .Include("MST_ACR_GRADE")
+                                .Include("SENIOR_MANAGEMENT_TEAM_MEMBER");
             }
 
             if (!Lib.Utility.Common.IsNullOrEmptyList(entities))
@@ -391,6 +393,13 @@ namespace eHR.PMS.Model
                         Model.Context.PMS_APPRAISAL_APPROVER entity_appraisal_approver = Model.Mappers.PMSMapper.MapApproverDTOToEntity(dto_appraisal_approver);
                         entity_appraisal_approver.APPRAISAL_ID = entity_appraisal.ID;
                         dc_pms.PMS_APPRAISAL_APPROVER.AddObject(entity_appraisal_approver);
+                    }
+
+                    foreach (Model.DTO.Appraisal.Reviewer dto_appraisal_reviewer in dto_appraisal.Reviewers)
+                    {
+                        Model.Context.PMS_APPRAISAL_REVIEWER entity_appraisal_reviewer = Model.Mappers.PMSMapper.MapReviewerDTOTOEntity(dto_appraisal_reviewer);
+                        entity_appraisal_reviewer.APPRAISAL_ID = entity_appraisal.ID;
+                        dc_pms.PMS_APPRAISAL_REVIEWER.AddObject(entity_appraisal_reviewer);
                     }
 
                     /*
@@ -883,16 +892,20 @@ namespace eHR.PMS.Model
                              join ent_cycle in dc_pms.PMS_CYCLE on ent_appraisal.CYCLE_ID equals ent_cycle.ID
                              join ent_reviewer in dc_pms.PMS_APPRAISAL_REVIEWER on ent_appraisal.ID equals ent_reviewer.APPRAISAL_ID
                              where
-                              ent_reviewer.REVIEWER_ID == reviewerEmployeeId && (ent_reviewer.IS_SMT==null || ent_reviewer.IS_SMT==false)
+                              ent_reviewer.REVIEWER_ID == reviewerEmployeeId && (ent_reviewer.IS_SMT == null || ent_reviewer.IS_SMT == false)
                              select ent_appraisal) as System.Data.Objects.ObjectQuery<PMS.Model.Context.PMS_APPRAISAL>)
-                                .Include("EMPLOYEE");
+                                .Include("EMPLOYEE")
+                                .Include("EMPLOYEE.DEPARTMENT")
+                                .Include("EMPLOYEE.DEPARTMENT.MST_DEPARTMENT");
                 entitiessmt = ((from ent_appraisal in dc_pms.PMS_APPRAISAL
                              join ent_cycle in dc_pms.PMS_CYCLE on ent_appraisal.CYCLE_ID equals ent_cycle.ID
                              join ent_reviewer in dc_pms.PMS_APPRAISAL_REVIEWER on ent_appraisal.ID equals ent_reviewer.APPRAISAL_ID
                              where
                               ent_reviewer.REVIEWER_ID == reviewerEmployeeId && ent_reviewer.IS_SMT == true
                              select ent_appraisal) as System.Data.Objects.ObjectQuery<PMS.Model.Context.PMS_APPRAISAL>)
-                                .Include("EMPLOYEE");
+                                .Include("EMPLOYEE")
+                                .Include("EMPLOYEE.DEPARTMENT")
+                                .Include("EMPLOYEE.DEPARTMENT.MST_DEPARTMENT");
             }
             else
             {
@@ -903,7 +916,9 @@ namespace eHR.PMS.Model
                               ent_reviewer.REVIEWER_ID == reviewerEmployeeId &&
                               ent_cycle.ID == cycleId && (ent_reviewer.IS_SMT==null || ent_reviewer.IS_SMT==false)
                              select ent_appraisal) as System.Data.Objects.ObjectQuery<PMS.Model.Context.PMS_APPRAISAL>)
-                                .Include("EMPLOYEE");
+                                .Include("EMPLOYEE")
+                                .Include("EMPLOYEE.DEPARTMENT")
+                                .Include("EMPLOYEE.DEPARTMENT.MST_DEPARTMENT");
                 entitiessmt = ((from ent_appraisal in dc_pms.PMS_APPRAISAL
                              join ent_cycle in dc_pms.PMS_CYCLE on ent_appraisal.CYCLE_ID equals ent_cycle.ID
                              join ent_reviewer in dc_pms.PMS_APPRAISAL_REVIEWER on ent_appraisal.ID equals ent_reviewer.APPRAISAL_ID
@@ -911,7 +926,9 @@ namespace eHR.PMS.Model
                               ent_reviewer.REVIEWER_ID == reviewerEmployeeId &&
                               ent_cycle.ID == cycleId && ent_reviewer.IS_SMT == true
                              select ent_appraisal) as System.Data.Objects.ObjectQuery<PMS.Model.Context.PMS_APPRAISAL>)
-                                .Include("EMPLOYEE");
+                                .Include("EMPLOYEE")
+                                .Include("EMPLOYEE.DEPARTMENT")
+                                .Include("EMPLOYEE.DEPARTMENT.MST_DEPARTMENT");
             }
 
             if (!Lib.Utility.Common.IsNullOrEmptyList(entities))
@@ -1107,7 +1124,9 @@ namespace eHR.PMS.Model
             {
                 // remove all reviewers for appraisal
                 IEnumerable<Model.Context.PMS_APPRAISAL_REVIEWER> lst_ent_reviewers = from ent_reviewers in dc_pms.PMS_APPRAISAL_REVIEWER
-                                                                                      where ent_reviewers.APPRAISAL_ID == appraisalId
+                                                                                      where 
+                                                                                       ent_reviewers.APPRAISAL_ID == appraisalId &&
+                                                                                       ent_reviewers.IS_SMT == false
                                                                                       select ent_reviewers;
 
                 if (!Lib.Utility.Common.IsNullOrEmptyList(lst_ent_reviewers))
@@ -1147,6 +1166,7 @@ namespace eHR.PMS.Model
         {
             bool boo_success = false;
             message = string.Empty;
+            int int_appraisal_id = 0;
             PMS.Model.Context.PMSEntities dc_pms = new PMS.Model.Context.PMSEntities();
 
             try
@@ -1156,6 +1176,7 @@ namespace eHR.PMS.Model
                     foreach (PMS.Model.DTO.Appraisal.KPI obj_kpi in insertList)
                     {
                         dc_pms.PMS_APPRAISAL_KPI.AddObject(Mappers.PMSMapper.MapAppraisalKPIDTOToEntity(obj_kpi));
+                        int_appraisal_id = obj_kpi.Appraisal.Id;
                     }
                 }
 
@@ -1170,6 +1191,8 @@ namespace eHR.PMS.Model
 
                         Model.Context.PMS_APPRAISAL_KPI entity = dc_pms.PMS_APPRAISAL_KPI.Where(rec => rec.ID == obj_kpi.Id).Single();
                         dc_pms.PMS_APPRAISAL_KPI.DeleteObject(entity);
+
+                        if (int_appraisal_id == 0) { int_appraisal_id = obj_kpi.Appraisal.Id; }
                     }
                 }
 
@@ -1184,7 +1207,15 @@ namespace eHR.PMS.Model
                         entity.LEVEL_2_SCORE = obj_kpi.Level2Score;
                         entity.SELF_SCORE = obj_kpi.SelfScore;
                         entity.PRIORITY_MASTER_ID = obj_kpi.Priority.Id;
+
+                        if (int_appraisal_id == 0) { int_appraisal_id = obj_kpi.Appraisal.Id; }
                     }
+                }
+
+                if (int_appraisal_id > 0)
+                {
+                    Model.Context.PMS_APPRAISAL ent_appraisal = dc_pms.PMS_APPRAISAL.Where(rec => rec.ID == int_appraisal_id).Single();
+                    ent_appraisal.STATUS_ID = PMS.Model.PMSConstants.STATUS_ID_DRAFT;
                 }
 
                 dc_pms.SaveChanges();
@@ -1252,6 +1283,7 @@ namespace eHR.PMS.Model
         {
             bool boo_success = false;
             message = string.Empty;
+            int int_appraisal_id = 0;
             PMS.Model.Context.PMSEntities dc_pms = new PMS.Model.Context.PMSEntities();
 
             try
@@ -1261,6 +1293,7 @@ namespace eHR.PMS.Model
                     foreach (PMS.Model.DTO.Appraisal.CoreValue obj_core_value in insertList)
                     {
                         dc_pms.PMS_APPRAISAL_CORE_VALUE.AddObject(Mappers.PMSMapper.MapAppraisalCoreValueDTOToEntity(obj_core_value));
+                        int_appraisal_id = obj_core_value.Appraisal.Id;
                     }
                 }
 
@@ -1275,6 +1308,8 @@ namespace eHR.PMS.Model
 
                         Model.Context.PMS_APPRAISAL_CORE_VALUE entity = dc_pms.PMS_APPRAISAL_CORE_VALUE.Where(rec => rec.ID == obj_core_value.Id).Single();
                         dc_pms.PMS_APPRAISAL_CORE_VALUE.DeleteObject(entity);
+
+                        if (int_appraisal_id == 0) { int_appraisal_id = obj_core_value.Appraisal.Id; }
                     }
                 }
 
@@ -1288,7 +1323,15 @@ namespace eHR.PMS.Model
                         entity.LEVEL_1_SCORE = obj_core_value.Level1Score;
                         entity.LEVEL_2_SCORE = obj_core_value.Level2Score;
                         entity.SELF_SCORE = obj_core_value.SelfScore;
+
+                        if (int_appraisal_id == 0) { int_appraisal_id = obj_core_value.Appraisal.Id; }
                     }
+                }
+
+                if (int_appraisal_id > 0)
+                {
+                    Model.Context.PMS_APPRAISAL ent_appraisal = dc_pms.PMS_APPRAISAL.Where(rec => rec.ID == int_appraisal_id).Single();
+                    ent_appraisal.STATUS_ID = PMS.Model.PMSConstants.STATUS_ID_DRAFT;
                 }
 
                 dc_pms.SaveChanges();
@@ -1356,6 +1399,7 @@ namespace eHR.PMS.Model
         {
             bool boo_success = false;
             message = string.Empty;
+            int int_appraisal_id = 0;
             Model.Context.PMS_APPRAISAL_PERFORMANCE_COACHING entity;
             PMS.Model.Context.PMSEntities dc_pms = new PMS.Model.Context.PMSEntities();
 
@@ -1373,6 +1417,14 @@ namespace eHR.PMS.Model
                     {
                         entity.STRENGTH_AREA = performanceCoaching.AreasOfStrength;
                         entity.IMPROVEMENT_AREA = performanceCoaching.AreasOfImprovement;
+                    }
+
+                    int_appraisal_id = performanceCoaching.Appraisal.Id;
+
+                    if (int_appraisal_id > 0)
+                    {
+                        Model.Context.PMS_APPRAISAL ent_appraisal = dc_pms.PMS_APPRAISAL.Where(rec => rec.ID == int_appraisal_id).Single();
+                        ent_appraisal.STATUS_ID = PMS.Model.PMSConstants.STATUS_ID_DRAFT;
                     }
 
                     dc_pms.SaveChanges();
@@ -1442,6 +1494,55 @@ namespace eHR.PMS.Model
 
         #region Career Development
 
+        public static bool UpdateAppraisalCareerDevelopment(PMS.Model.DTO.Appraisal.CareerDevelopment careerDevelopment, out string message)
+        {
+            bool boo_success = false;
+            message = string.Empty;
+            int int_appraisal_id = 0;
+            Model.Context.PMS_APPRAISAL_CAREER_DEVELOPMENT entity;
+            PMS.Model.Context.PMSEntities dc_pms = new PMS.Model.Context.PMSEntities();
+
+            try
+            {
+                if (careerDevelopment != null)
+                {
+                    entity = dc_pms.PMS_APPRAISAL_CAREER_DEVELOPMENT.Where(rec => rec.APPRAISAL_ID == careerDevelopment.Appraisal.Id).SingleOrDefault();
+                    if (entity == null)
+                    {
+                        entity = Mappers.PMSMapper.MapAppraisalCareerDevelopmentDTOToEntity(careerDevelopment);
+                        dc_pms.PMS_APPRAISAL_CAREER_DEVELOPMENT.AddObject(entity);
+                    }
+                    else
+                    {
+                        entity.SHORT_TERM_GOALS = careerDevelopment.ShortTermGoals;
+                        entity.LEARNING_PLAN = careerDevelopment.LearningPlans;
+                        entity.CAREER_PLAN = careerDevelopment.CareerPlans;
+                    }
+
+                    int_appraisal_id = careerDevelopment.Appraisal.Id;
+
+                    if (int_appraisal_id > 0)
+                    {
+                        Model.Context.PMS_APPRAISAL ent_appraisal = dc_pms.PMS_APPRAISAL.Where(rec => rec.ID == int_appraisal_id).Single();
+                        ent_appraisal.STATUS_ID = PMS.Model.PMSConstants.STATUS_ID_DRAFT;
+                    }
+
+                    dc_pms.SaveChanges();
+                    boo_success = true;
+                }
+            }
+            catch (Exception exc)
+            {
+                message = exc.Message;
+            }
+            finally
+            {
+                dc_pms.Dispose();
+            }
+
+            return boo_success;
+        }
+
         public static bool UpdateAppraisalCareerDevelopmentComment(List<PMS.Model.DTO.Appraisal.CareerDevelopmentComment> updateList, out string message)
         {
             bool boo_success = false;
@@ -1487,49 +1588,9 @@ namespace eHR.PMS.Model
             return boo_success;
         }
 
-
         #endregion Career Development
 
-        public static bool UpdateAppraisalCareerDevelopment(PMS.Model.DTO.Appraisal.CareerDevelopment careerDevelopment, out string message)
-        {
-            bool boo_success = false;
-            message = string.Empty;
-            Model.Context.PMS_APPRAISAL_CAREER_DEVELOPMENT entity;
-            PMS.Model.Context.PMSEntities dc_pms = new PMS.Model.Context.PMSEntities();
-
-            try
-            {
-                if (careerDevelopment != null)
-                {
-                    entity = dc_pms.PMS_APPRAISAL_CAREER_DEVELOPMENT.Where(rec => rec.APPRAISAL_ID == careerDevelopment.Appraisal.Id).SingleOrDefault();
-                    if (entity == null)
-                    {
-                        entity = Mappers.PMSMapper.MapAppraisalCareerDevelopmentDTOToEntity(careerDevelopment);
-                        dc_pms.PMS_APPRAISAL_CAREER_DEVELOPMENT.AddObject(entity);
-                    }
-                    else
-                    {
-                        entity.SHORT_TERM_GOALS = careerDevelopment.ShortTermGoals;
-                        entity.LEARNING_PLAN = careerDevelopment.LearningPlans;
-                        entity.CAREER_PLAN = careerDevelopment.CareerPlans;
-                    }
-
-                    dc_pms.SaveChanges();
-                    boo_success = true;
-                }
-            }
-            catch (Exception exc)
-            {
-                message = exc.Message;
-            }
-            finally
-            {
-                dc_pms.Dispose();
-            }
-
-            return boo_success;
-        }
-
+       
         #endregion
 
         #region Approver
@@ -1610,6 +1671,43 @@ namespace eHR.PMS.Model
                     dc_pms.SaveChanges();
                 }
                 boo_success = true;
+            }
+            catch (Exception exc)
+            {
+                message = exc.Message;
+            }
+            finally
+            {
+                dc_pms.Dispose();
+            }
+
+            return boo_success;
+        }
+
+        public static bool UpdateSMTMember(PMS.Model.DTO.Appraisal.Appraisal appraisal, PMS.Model.DTO.Appraisal.Reviewer smtMember, out string message)
+        {
+            bool boo_success = false;
+            message = string.Empty;
+            PMS.Model.Context.PMSEntities dc_pms = new PMS.Model.Context.PMSEntities();
+
+            try
+            {
+                Model.Context.PMS_APPRAISAL_REVIEWER ent_reviewer = (from ent_reviewers in dc_pms.PMS_APPRAISAL_REVIEWER
+                                                                     where
+                                                                      ent_reviewers.APPRAISAL_ID == appraisal.Id &&
+                                                                      ent_reviewers.IS_SMT == true
+                                                                     select ent_reviewers).SingleOrDefault();
+
+                if (ent_reviewer != null)
+                {
+                    ent_reviewer.REVIEWER_ID = smtMember.EmployeeId;
+                }
+                else 
+                { 
+                    Model.Context.PMS_APPRAISAL_REVIEWER ent_smt_reviewer = Model.Mappers.PMSMapper.MapReviewerDTOTOEntity(smtMember);
+                    dc_pms.PMS_APPRAISAL_REVIEWER.AddObject(ent_smt_reviewer);
+                }
+                dc_pms.SaveChanges();
             }
             catch (Exception exc)
             {

@@ -155,7 +155,7 @@ namespace eHR.PMS.Job
                         {
                             // force close for those that are not approved.
                             obj_appraisal.Locked = false;
-                            obj_appraisal.AddTrail(Business.AppraisalManager.CreateAppraisalTrail(obj_appraisal, new Model.DTO.Core.Employee(), new Model.DTO.Master.Action() { Id = Model.PMSConstants.ACTION_ID_APPRAISAL_HR_ADMINISTERED }));
+                            //obj_appraisal.AddTrail(Business.AppraisalManager.CreateAppraisalTrail(obj_appraisal, new Model.DTO.Core.Employee(), new Model.DTO.Master.Action() { Id = Model.PMSConstants.ACTION_ID_APPRAISAL_HR_ADMINISTERED }));
                             obj_appraisal.Status = new Model.DTO.Master.Status() { Id = Model.PMSConstants.STATUS_ID_HR_ADMINISTERED };
                             obj_appraisal.Stage = cycle.Stage;
 
@@ -174,7 +174,7 @@ namespace eHR.PMS.Job
                 lst_cycles.Add(cycle);
                 if (!Lib.Utility.Common.IsNullOrEmptyList(cycle.Appriasals))
                 {
-                    IEnumerable<Model.DTO.Appraisal.Appraisal> lst_appraisals_to_convert_stage = cycle.Appriasals.Where(rec => rec.Stage.Id == Model.PMSConstants.STAGE_ID_GOAL_SETTING && rec.Status.Id != Model.PMSConstants.STATUS_ID_APPROVED);
+                    IEnumerable<Model.DTO.Appraisal.Appraisal> lst_appraisals_to_convert_stage = cycle.Appriasals.Where(rec => rec.Stage.Id == Model.PMSConstants.STAGE_ID_GOAL_SETTING && rec.Status.Id == Model.PMSConstants.STATUS_ID_APPROVED);
                     IEnumerable<Model.DTO.Appraisal.Appraisal> lst_new_appraisals = cycle.Appriasals.Where(rec => rec.Stage.Id == Model.PMSConstants.STAGE_ID_PRE_CYCLE);
 
                     if (!Lib.Utility.Common.IsNullOrEmptyList(lst_appraisals_to_convert_stage))
@@ -182,7 +182,7 @@ namespace eHR.PMS.Job
                         foreach (Model.DTO.Appraisal.Appraisal obj_appraisal in lst_appraisals_to_convert_stage)
                         {
                             obj_appraisal.Locked = false;
-                            obj_appraisal.AddTrail(Business.AppraisalManager.CreateAppraisalTrail(obj_appraisal, new Model.DTO.Core.Employee(), new Model.DTO.Master.Action() { Id = Model.PMSConstants.ACTION_ID_APPRAISAL_OPENED }));
+                            //obj_appraisal.AddTrail(Business.AppraisalManager.CreateAppraisalTrail(obj_appraisal, new Model.DTO.Core.Employee(), new Model.DTO.Master.Action() { Id = Model.PMSConstants.ACTION_ID_APPRAISAL_OPENED }));
                             obj_appraisal.Status = new Model.DTO.Master.Status() { Id = Model.PMSConstants.STATUS_ID_NEW };
                             obj_appraisal.Stage = Model.Mappers.PMSMapper.MapAppraisalStageDTOToStageDTO(obj_appraisal.AppraisalStages.Where(rec => rec.StageId == Model.PMSConstants.STAGE_ID_PROGRESS_REVIEW).SingleOrDefault());
 
@@ -201,7 +201,7 @@ namespace eHR.PMS.Job
                         {
                             // these are appraisals that are created after the goal setting stage of cycle
                             obj_appraisal.Locked = false;
-                            obj_appraisal.AddTrail(Business.AppraisalManager.CreateAppraisalTrail(obj_appraisal, new Model.DTO.Core.Employee(), new Model.DTO.Master.Action() { Id = Model.PMSConstants.ACTION_ID_APPRAISAL_OPENED }));
+                            //obj_appraisal.AddTrail(Business.AppraisalManager.CreateAppraisalTrail(obj_appraisal, new Model.DTO.Core.Employee(), new Model.DTO.Master.Action() { Id = Model.PMSConstants.ACTION_ID_APPRAISAL_OPENED }));
                             obj_appraisal.Status = new Model.DTO.Master.Status() { Id = Model.PMSConstants.STATUS_ID_NEW };
                             obj_appraisal.Stage = new Model.DTO.Master.Stage() { Id = Model.PMSConstants.STAGE_ID_GOAL_SETTING };
 

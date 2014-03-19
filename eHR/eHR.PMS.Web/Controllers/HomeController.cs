@@ -86,19 +86,20 @@ namespace eHR.PMS.Web.Controllers
                             Model.DTO.Appraisal.Reviewer obj_reviewer = new Model.DTO.Appraisal.Reviewer()
                             {
                                 EmployeeId = Convert.ToInt32(str_reviewer_id),
-                                Appraisal = new Model.DTO.Appraisal.Appraisal() { Id = apprid }
+                                Appraisal = new Model.DTO.Appraisal.Appraisal() { Id = apprid },
+                                SMT = false
                             };
                             lst_reviewers.Add(obj_reviewer);
                         }
-                    }
-
-                    if (!Model.PMSModel.UpdateReviewersForAppraisal(apprid, lst_reviewers, out message))
-                    {
-                        return Json(message);
-                    }
-                    
+                    } 
                 }
             }
+
+            if (!Model.PMSModel.UpdateReviewersForAppraisal(apprid, lst_reviewers, out message))
+            {
+                return Json(message);
+            }
+
             return Json(message);
         }
 
@@ -146,6 +147,30 @@ namespace eHR.PMS.Web.Controllers
                     {
                         return Json(message);
                     }
+                }
+            }
+            return Json(message);
+        }
+
+        [HttpPost]
+        public JsonResult SaveProfileSMT(string smt, int appraisalId)
+        {
+            string message = string.Empty;
+            Model.DTO.Appraisal.Reviewer obj_reviewer = null;
+
+            if (!string.IsNullOrEmpty(smt))
+            {
+                Model.DTO.Appraisal.Appraisal obj_appraisal = Model.PMSModel.GetAppraisalById(appraisalId);
+                obj_reviewer = new Model.DTO.Appraisal.Reviewer() 
+                { 
+                    EmployeeId = Convert.ToInt32(smt),
+                    Appraisal = obj_appraisal,
+                    SMT = true
+                };
+
+                if (!Business.AppraisalManager.ManageChangeSMTMember(obj_appraisal, obj_reviewer, out message))
+                {
+                    return Json(message);
                 }
             }
             return Json(message);

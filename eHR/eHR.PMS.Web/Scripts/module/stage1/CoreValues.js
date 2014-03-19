@@ -29,6 +29,7 @@ define("stage1.corevalues", ['jquery', 'bootstrap', 'bootstrap.select'], functio
                 }
             });
         };
+        /*
         var autosavefunction = function () {
             var KPIArray = new Array();
             $.each($(".KPIforDatabase"), function () {
@@ -49,6 +50,7 @@ define("stage1.corevalues", ['jquery', 'bootstrap', 'bootstrap.select'], functio
                 }
             });
         };
+        */
         $(function () {
             //if (message)
             //    $('#RedirectModal').modal();

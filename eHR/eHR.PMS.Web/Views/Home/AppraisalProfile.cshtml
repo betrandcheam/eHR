@@ -107,6 +107,30 @@
                   </div>
                   -->
                   <div class="form-group">
+                    <label class="col-sm-2 control-label">Senior Management Team Member: </label>
+                    <div class="col-sm-4">
+                    @{if (Model.User.Id != Model.Appraisal.Employee.Id && ViewData["hr_user"].Equals("Y"))
+                        {
+                            <input usrid="@(Model.GetSeniorManagementTeamMemberId())" type="text" class="form-control SMT" value="@(Model.GetSeniorManagementTeamMemberName()) (@(Model.GetSeniorManagementTeamMemberDomainId()))" >
+                            <span class="tt-dropdown-menu" style="position: absolute; top: 100%; left: 0px; z-index: 100; display: none; right: auto;"></span>
+                        }
+                        else
+                        {
+                            <input type="text" class="form-control" disabled="disabled" value="@(Model.GetSeniorManagementTeamMemberName()) (@(Model.GetSeniorManagementTeamMemberDomainId()))">
+                        }
+                     }
+                    </div>
+                  </div>
+                    @{if (Model.User.Id != Model.Appraisal.Employee.Id && ViewData["hr_user"].Equals("Y"))
+                      {
+                        <div class="form-group">
+                            <div class="col-sm-4 col-sm-offset-2">
+                                <button type="button" data-loading-text="Saving...." id="smtsave" class="btn btn-xs btn-success"><i class="glyphicon glyphicon-save"></i> Save SMT Member</button>
+                            </div>
+                        </div>
+                      }
+                    }
+                  <div class="form-group">
                     <label class="col-sm-2 control-label">Level 1 Approver: </label>
                     <div class="col-sm-4">
                         @{if (Model.User.Id != Model.Appraisal.Employee.Id && ViewData["hr_user"].Equals("Y"))
@@ -120,11 +144,6 @@
                           }
                          }
                     </div>                    
-                    <!--
-                    <div class="col-sm-4">
-                      <input type="text" class="form-control" disabled="disabled" value="@(Model.Appraisal.GetApproverByLevel(1).PreferredName)">
-                    </div>
-                    -->
                     <label class="col-sm-2 control-label">Level 2 Approver: </label>
                     <div class="col-sm-4">
                         @{if (Model.User.Id != Model.Appraisal.Employee.Id && ViewData["hr_user"].Equals("Y"))
@@ -138,27 +157,22 @@
                           }
                          }
                     </div>  
-                    <!--
-                    <div class="col-sm-4">
-                      <input type="text" class="form-control" disabled="disabled" value="@(Model.Appraisal.GetApproverByLevel(2).PreferredName)">
-                    </div>
-                    -->
                   </div>
                     @{if (Model.User.Id != Model.Appraisal.Employee.Id && ViewData["hr_user"].Equals("Y"))
-                        {
+                      {
                         <div class="form-group">
                             <div class="col-sm-4 col-sm-offset-2">
                                 <button type="button" data-loading-text="Saving...." id="approversave" class="btn btn-xs btn-success"><i class="glyphicon glyphicon-save"></i> Save Approvers</button>
                             </div>
                         </div>
-                        }
+                      }
                     }
                   <div class="form-group">
                     <label class="col-sm-2 control-label">Reviewer 1 : </label>
                     <div class="col-sm-4">
                         @{if (Model.User.Id == Model.Appraisal.Employee.Id || ViewData["hr_user"].Equals("Y"))
                           {
-                            <input usrid="" type="text" class="form-control Reviewer" value="@(Model.GetAppraisalFirstReviewerName() == null ? "" : Model.GetAppraisalFirstReviewerName() + " (" + Model.Appraisal.Reviewers[0].DomainId +")")" >
+                            <input usrid="" type="text" class="form-control Reviewer" value="@(Model.GetAppraisalFirstReviewerName() == null ? "" : Model.GetAppraisalFirstReviewerName() + " (" + Model.Appraisal.Reviewers[0].DomainId + ")")" >
                             <span class="tt-dropdown-menu" style="position: absolute; top: 100%; left: 0px; z-index: 100; display: none; right: auto;"></span>
                           }
                           else
@@ -255,7 +269,7 @@
             </div><!-- /.modal -->
 
 <input type="hidden" id="forRazorValue" searchurl="@(Url.Content("~/Home/SearchEmployeeByName"))" 
-    saveurl="@(Url.Content("~/Home/SaveProfile"))" saveapprurl="@(Url.Content("~/Home/SaveProfileApprovers"))"
+    saveurl="@(Url.Content("~/Home/SaveProfile"))" saveapprurl="@(Url.Content("~/Home/SaveProfileApprovers"))" savesmturl="@(Url.Content("~/Home/SaveProfileSMT"))"
     previousurl="@str_previous_url" />    
         @section scripts
         {

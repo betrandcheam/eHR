@@ -28,6 +28,7 @@ define("stage2approval.corevalues", ['jquery', 'bootstrap', 'bootstrap.select'],
                 }
             });
         };
+        /*
         var autosavefunction = function () {
             var KPIArray = new Array();
             $.each($(".KPIID"), function () {
@@ -48,6 +49,7 @@ define("stage2approval.corevalues", ['jquery', 'bootstrap', 'bootstrap.select'],
                 }
             });
         };
+        */
         $(function () {
             if (message)
                 $('#RedirectModal').modal();

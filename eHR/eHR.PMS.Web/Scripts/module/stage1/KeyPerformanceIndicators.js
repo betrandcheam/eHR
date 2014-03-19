@@ -29,6 +29,7 @@ define("stage1.kpi", ['jquery', 'bootstrap', 'bootstrap.select'], function ($) {
             });
         };
 
+        /*
         var autosavefunction = function () {
             var KPIArray = new Array();
             $.each($(".KPIforDatabase"), function () {
@@ -49,6 +50,7 @@ define("stage1.kpi", ['jquery', 'bootstrap', 'bootstrap.select'], function ($) {
                 }
             });
         };
+        */
         $(function () {
             $('body').scrollspy({ target: '#sidenav' });
             $('.selectpicker').selectpicker();
