@@ -73,15 +73,15 @@
         <label for="Stage1SubmissionDeadline" class="col-sm-2 control-label">Submission Deadline: </label>
         <div class="col-sm-4 input-group" id="datetimepicker_stage1submissiondeadline">
         @{
-            if (form == null || !form.Keys.Contains("Stage1SubmissionDeadline"))
+            if (Model.CurrentCycle != null && Model.CurrentCycle.CycleStages.Count > 0 && Model.CurrentCycle.CycleStages[1].SubmissionDeadline.HasValue)
+            {
+                <input type="text" class="form-control" id="Stage1SubmissionDeadline" name="Stage1SubmissionDeadline" value="@(Model.CurrentCycle.CycleStages[1].SubmissionDeadline.Value.ToString("dd/MM/yyyy"))"/>
+            }
+            else
             {
                 <input type="text" class="form-control" id="Stage1SubmissionDeadline" name="Stage1SubmissionDeadline" />
-                }
-                else
-                {
-                <input type="text" class="form-control" id="Stage1SubmissionDeadline" name="Stage1SubmissionDeadline" value="@form["Stage1SubmissionDeadline"]"/>                   
-                }
             }
+         }
           <span class="input-group-addon">
               <span class="glyphicon glyphicon-calendar"></span>
           </span>
@@ -91,15 +91,15 @@
         <label for="Stage1Level1ApprovalDeadline" class="col-sm-2 control-label">Level 1 Approval Deadline: </label>
         <div class="col-sm-4 input-group" id="datetimepicker_stage1level1approvaldeadline">
         @{
-            if (form == null || !form.Keys.Contains("Stage1Level1ApprovalDeadline"))
+            if (Model.CurrentCycle != null && Model.CurrentCycle.CycleStages.Count > 0 && Model.CurrentCycle.CycleStages[1].Level1ApprovalDeadline.HasValue)
             {
-                <input type="text" class="form-control" id="Stage1Level1ApprovalDeadline" name="Stage1Level1ApprovalDeadline" />
+                <input type="text" class="form-control" id="Stage1Level1ApprovalDeadline" name="Stage1Level1ApprovalDeadline" value="@(Model.CurrentCycle.CycleStages[1].Level1ApprovalDeadline.Value.ToString("dd/MM/yyyy"))"/>
             }
             else
             {
-                <input type="text" class="form-control" id="Stage1Level1ApprovalDeadline" name="Stage1Level1ApprovalDeadline" value="@form["Stage1Level1ApprovalDeadline"]"/>                   
+                <input type="text" class="form-control" id="Stage1Level1ApprovalDeadline" name="Stage1Level1ApprovalDeadline" />
             }
-           }
+         }
           <span class="input-group-addon">
               <span class="glyphicon glyphicon-calendar"></span>
           </span>
@@ -109,13 +109,13 @@
         <label for="Stage1Level2ApprovalDeadline" class="col-sm-2 control-label">Level 2 Approval Deadline: </label>
         <div class="col-sm-4 input-group" id="datetimepicker_stage1level2approvaldeadline">
         @{
-            if (form == null || !form.Keys.Contains("Stage1Level2ApprovalDeadline"))
+            if (Model.CurrentCycle != null && Model.CurrentCycle.CycleStages.Count > 0 && Model.CurrentCycle.CycleStages[1].Level2ApprovalDeadline.HasValue)
             {
-                <input type="text" class="form-control" id="Stage1Level2ApprovalDeadline" name="Stage1Level2ApprovalDeadline" />
+                <input type="text" class="form-control" id="Stage1Level2ApprovalDeadline" name="Stage1Level2ApprovalDeadline" value="@(Model.CurrentCycle.CycleStages[1].Level2ApprovalDeadline.Value.ToString("dd/MM/yyyy"))"/> 
             }
             else
             {
-                <input type="text" class="form-control" id="Stage1Level2ApprovalDeadline" name="Stage1Level2ApprovalDeadline" value="@form["Stage1Level2ApprovalDeadline"]"/>                   
+                <input type="text" class="form-control" id="Stage1Level2ApprovalDeadline" name="Stage1Level2ApprovalDeadline" />
             }
            }
           <span class="input-group-addon">
@@ -161,13 +161,13 @@
         <label for="Stage2SubmissionDeadline" class="col-sm-2 control-label">Submission Deadline: </label>
         <div class="col-sm-4 input-group" id="datetimepicker_stage2submissiondeadline">
         @{
-            if (form == null || !form.Keys.Contains("Stage2SubmissionDeadline"))
+            if (Model.CurrentCycle != null && Model.CurrentCycle.CycleStages.Count > 1 && Model.CurrentCycle.CycleStages[2].SubmissionDeadline.HasValue)
             {
-                <input type="text" class="form-control" id="Stage2SubmissionDeadline" name="Stage2SubmissionDeadline" />
+                <input type="text" class="form-control" id="Stage2SubmissionDeadline" name="Stage2SubmissionDeadline" value="@(Model.CurrentCycle.CycleStages[2].SubmissionDeadline.Value.ToString("dd/MM/yyyy"))"/>  
             }
             else
             {
-                <input type="text" class="form-control" id="Stage2SubmissionDeadline" name="Stage2SubmissionDeadline" value="@form["Stage2SubmissionDeadline"]"/>                   
+                <input type="text" class="form-control" id="Stage2SubmissionDeadline" name="Stage2SubmissionDeadline" />
             }
            }
           <span class="input-group-addon">
@@ -179,13 +179,13 @@
         <label for="Stage2Level1ApprovalDeadline" class="col-sm-2 control-label">Level 1 Approval Deadline: </label>
         <div class="col-sm-4 input-group" id="datetimepicker_stage2level1approvaldeadline">
         @{
-            if (form == null || !form.Keys.Contains("Stage2Level1ApprovalDeadline"))
+            if (Model.CurrentCycle != null && Model.CurrentCycle.CycleStages.Count > 1 && Model.CurrentCycle.CycleStages[2].Level1ApprovalDeadline.HasValue)
             {
-                <input type="text" class="form-control" id="Stage2Level1ApprovalDeadline" name="Stage2Level1ApprovalDeadline" />
+                <input type="text" class="form-control" id="Stage2Level1ApprovalDeadline" name="Stage2Level1ApprovalDeadline" value="@(Model.CurrentCycle.CycleStages[2].Level1ApprovalDeadline.Value.ToString("dd/MM/yyyy"))"/> 
             }
             else
             {
-                <input type="text" class="form-control" id="Stage2Level1ApprovalDeadline" name="Stage2Level1ApprovalDeadline" value="@form["Stage2Level1ApprovalDeadline"]"/>                   
+                <input type="text" class="form-control" id="Stage2Level1ApprovalDeadline" name="Stage2Level1ApprovalDeadline" />
             }
            }
           <span class="input-group-addon">
@@ -197,13 +197,13 @@
         <label for="Stage2Level2ApprovalDeadline" class="col-sm-2 control-label">Level 2 Approval Deadline: </label>
         <div class="col-sm-4 input-group" id="datetimepicker_stage2level2approvaldeadline">
         @{
-            if (form == null || !form.Keys.Contains("Stage2Level2ApprovalDeadline"))
+            if (Model.CurrentCycle != null && Model.CurrentCycle.CycleStages.Count > 1 && Model.CurrentCycle.CycleStages[2].Level2ApprovalDeadline.HasValue)
             {
-                <input type="text" class="form-control" id="Stage2Level2ApprovalDeadline" name="Stage2Level2ApprovalDeadline" />
+                 <input type="text" class="form-control" id="Stage2Level2ApprovalDeadline" name="Stage2Level2ApprovalDeadline" value="@(Model.CurrentCycle.CycleStages[2].Level2ApprovalDeadline.Value.ToString("dd/MM/yyyy"))"/>
             }
             else
             {
-                <input type="text" class="form-control" id="Stage2Level2ApprovalDeadline" name="Stage2Level2ApprovalDeadline" value="@form["Stage2Level2ApprovalDeadline"]"/>                   
+                <input type="text" class="form-control" id="Stage2Level2ApprovalDeadline" name="Stage2Level2ApprovalDeadline" />
             }
            }
           <span class="input-group-addon">

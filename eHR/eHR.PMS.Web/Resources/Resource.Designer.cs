@@ -106,6 +106,24 @@ namespace eHR.PMS.Web.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You have clicked “Approve” and the goals of [%EMPLOYEE_NAME%] will be sent to the Level 2 Manager for approval. You will not be able to edit this document from this point. Do you want to proceed?.
+        /// </summary>
+        public static string MSG_APPROVE_LEVEL1 {
+            get {
+                return ResourceManager.GetString("MSG_APPROVE_LEVEL1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You have clicked “Approve” and the [%APPRAISAL_STAGE_NAME%] phase of [%EMPLOYEE_NAME%] will be completed. You will not be able to edit this document from this point. Do you want to proceed?.
+        /// </summary>
+        public static string MSG_APPROVE_LEVEL2 {
+            get {
+                return ResourceManager.GetString("MSG_APPROVE_LEVEL2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Proceed to approve?.
         /// </summary>
         public static string MSG_APPROVE_SUBMISSION {

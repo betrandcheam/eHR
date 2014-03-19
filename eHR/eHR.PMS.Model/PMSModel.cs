@@ -508,6 +508,40 @@ namespace eHR.PMS.Model
             return boo_success;
         }
 
+        public static bool UpdateCycleStages(List<PMS.Model.DTO.Cycle.Stage> cycleStages, out string message)
+        {
+            bool boo_success = false;
+            message = string.Empty;
+            PMS.Model.Context.PMSEntities dc_pms = new PMS.Model.Context.PMSEntities();
+
+            try
+            {
+                foreach (PMS.Model.DTO.Cycle.Stage obj_cycle_stage in cycleStages)
+                {
+                    PMS.Model.Context.PMS_CYCLE_STAGE ent_cycle_stage = dc_pms.PMS_CYCLE_STAGE.Where(rec => rec.ID == obj_cycle_stage.Id).Single();
+
+                    ent_cycle_stage.START_DATE = obj_cycle_stage.StartDate;
+                    ent_cycle_stage.END_DATE = obj_cycle_stage.EndDate;
+                    ent_cycle_stage.PRE_START_EMAIL_SENT = obj_cycle_stage.PreStartEmailSent;
+                    ent_cycle_stage.SUBMISSION_DEADLINE = obj_cycle_stage.SubmissionDeadline;
+                    ent_cycle_stage.LEVEL_1_APPROVAL_DEADLINE = obj_cycle_stage.Level1ApprovalDeadline;
+                    ent_cycle_stage.LEVEL_2_APPROVAL_DEADLINE = obj_cycle_stage.Level2ApprovalDeadline;
+                }
+                dc_pms.SaveChanges();
+                boo_success = true;
+            }
+            catch (Exception exc)
+            {
+                message = exc.Message;
+            }
+            finally
+            {
+                dc_pms.Dispose();
+            }
+
+            return boo_success;
+        }
+
         public static bool DeleteApprisalInCyle(List<int> cids, out string message)
         {
             bool boo_success = false;
@@ -599,6 +633,7 @@ namespace eHR.PMS.Model
             }
             return boo_success;
         }
+        
         public static List<DTO.Cycle.Cycle> GetCycleByStatus(int? statusId)
         {
             PMS.Model.Context.PMSEntities dc_pms = new PMS.Model.Context.PMSEntities();

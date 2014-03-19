@@ -187,7 +187,7 @@
         </div><!-- /.modal-content -->
       </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
-<input type="hidden" id="forRazorValue" approvemessage="@(eHR.PMS.Web.Resources.Resource.MSG_APPROVE_SUBMISSION)" rejectmessage="@(eHR.PMS.Web.Resources.Resource.MSG_REJECT_SUBMISSION)"
+<input type="hidden" id="forRazorValue" approvemessage="@(eHR.PMS.Web.Resources.Resource.MSG_APPROVE_LEVEL2.Replace("[%APPRAISAL_STAGE_NAME%]",Model.Appraisal.Stage.Name.ToLower()).Replace("[%EMPLOYEE_NAME%]",Model.Appraisal.Employee.PreferredName))" rejectmessage="@(eHR.PMS.Web.Resources.Resource.MSG_REJECT_SUBMISSION)"
  saveurl="@(Url.Content("~/Stage2Approval/CareerDevelopmentSave"))" apprid='@Model.Appraisal.Id'
     rooturl="@(Url.Content("~/"))"/>
 @section scripts

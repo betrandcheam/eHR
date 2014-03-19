@@ -265,6 +265,13 @@ namespace eHR.PMS.Web.Controllers
                 dict_cycle_stage_dates.Add("Stage3StartDate", DateTime.ParseExact(dict["Stage3StartDate"], "dd/MM/yyyy", null));
                 dict_cycle_stage_dates.Add("Stage3EndDate", DateTime.ParseExact(dict["Stage3EndDate"], "dd/MM/yyyy", null));
 
+                dict_cycle_stage_dates.Add("Stage1SubmissionDeadline", DateTime.ParseExact(dict["Stage1SubmissionDeadline"], "dd/MM/yyyy", null));
+                dict_cycle_stage_dates.Add("Stage1Level1ApprovalDeadline", DateTime.ParseExact(dict["Stage1Level1ApprovalDeadline"], "dd/MM/yyyy", null));
+                dict_cycle_stage_dates.Add("Stage1Level2ApprovalDeadline", DateTime.ParseExact(dict["Stage1Level2ApprovalDeadline"], "dd/MM/yyyy", null));
+                dict_cycle_stage_dates.Add("Stage2SubmissionDeadline", DateTime.ParseExact(dict["Stage2SubmissionDeadline"], "dd/MM/yyyy", null));
+                dict_cycle_stage_dates.Add("Stage2Level1ApprovalDeadline", DateTime.ParseExact(dict["Stage2Level1ApprovalDeadline"], "dd/MM/yyyy", null));
+                dict_cycle_stage_dates.Add("Stage2Level2ApprovalDeadline", DateTime.ParseExact(dict["Stage2Level2ApprovalDeadline"], "dd/MM/yyyy", null));
+
                 List<int> deleteApprIdList = new List<int>();
                 if (System.Web.HttpContext.Current.Session["TempRemoveApprIds"] != null)
                 {
@@ -284,11 +291,10 @@ namespace eHR.PMS.Web.Controllers
                 List<PMS.Model.DTO.Appraisal.Appraisal> ParticipantsListSessionPart = (List<PMS.Model.DTO.Appraisal.Appraisal>)System.Web.HttpContext.Current.Session["CycleExistParticipantsList"];
                 if (ParticipantsListSessionPart != null)
                 {
-
                     obj_cycle.CycleStages = CreateDefaultStagesForNewCycle(dict_cycle_stage_dates);
                     List<Model.DTO.Core.Employee> emplist = ApprListToEmplList(ParticipantsListSessionPart);
                     obj_cycle.Appriasals = Business.AppraisalManager.CreateAppraisalsForUpdateCycle(emplist, obj_cycle.CycleStages, CurrentUser);
-                    
+
                     if (Business.AppraisalManager.UpdateCycle(obj_cycle, cycleid, Model.Mappers.CoreMapper.MapUserDTOToEmployeeDTO(CurrentUser), out message))
                     {
                         ClearAllCreatedSessionObjects();
@@ -300,6 +306,50 @@ namespace eHR.PMS.Web.Controllers
                         return View();
                     }
                 }
+                else 
+                { 
+                    // only for updating of cycle dates
+                    foreach (PMS.Model.DTO.Cycle.Stage obj_cycle_stage in obj_cycle.CycleStages)
+                    {
+                        if (obj_cycle_stage.StageId == PMS.Model.PMSConstants.STAGE_ID_GOAL_SETTING)
+                        {
+                            obj_cycle_stage.StartDate = dict_cycle_stage_dates["Stage1StartDate"];
+                            obj_cycle_stage.EndDate = dict_cycle_stage_dates["Stage1EndDate"];
+                            obj_cycle_stage.SubmissionDeadline = dict_cycle_stage_dates["Stage1SubmissionDeadline"];
+                            obj_cycle_stage.Level1ApprovalDeadline = dict_cycle_stage_dates["Stage1Level1ApprovalDeadline"];
+                            obj_cycle_stage.Level2ApprovalDeadline = dict_cycle_stage_dates["Stage1Level2ApprovalDeadline"];
+                        }
+
+                        if (obj_cycle_stage.StageId == PMS.Model.PMSConstants.STAGE_ID_PROGRESS_REVIEW)
+                        {
+                            obj_cycle_stage.StartDate = dict_cycle_stage_dates["Stage2StartDate"];
+                            obj_cycle_stage.EndDate = dict_cycle_stage_dates["Stage2EndDate"];
+                            obj_cycle_stage.SubmissionDeadline = dict_cycle_stage_dates["Stage2SubmissionDeadline"];
+                            obj_cycle_stage.Level1ApprovalDeadline = dict_cycle_stage_dates["Stage2Level1ApprovalDeadline"];
+                            obj_cycle_stage.Level2ApprovalDeadline = dict_cycle_stage_dates["Stage2Level2ApprovalDeadline"];
+                        }
+
+                        if (obj_cycle_stage.StageId == PMS.Model.PMSConstants.STAGE_ID_FINAL_YEAR)
+                        {
+                            obj_cycle_stage.StartDate = dict_cycle_stage_dates["Stage3StartDate"];
+                            obj_cycle_stage.EndDate = dict_cycle_stage_dates["Stage3EndDate"];
+                        } 
+                    }
+
+                    //UpdateCycleStage
+                    if (Business.AppraisalManager.UpdateCycleStage(obj_cycle.CycleStages, out message))
+                    {
+                        ClearAllCreatedSessionObjects();
+                        return Redirect(Url.Content("~/"));
+                    }
+                    else
+                    {
+                        TempData["ErrorMessage"] = "Unable to save cycle information. Please try again or contact IT Department.";
+                        return View();
+                    }
+
+                }
+
                 /*else
                 {
                     TempData["ErrorMessage"] = "Unable to save cycle information. Please try again or contact IT Department.";

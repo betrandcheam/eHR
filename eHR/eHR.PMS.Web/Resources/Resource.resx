@@ -132,6 +132,12 @@
   <data name="MSG_APPROVAL_FAIL" xml:space="preserve">
     <value>Unable to process approval for appraisal. Please try again or contact IT Department.</value>
   </data>
+  <data name="MSG_APPROVE_LEVEL1" xml:space="preserve">
+    <value>You have clicked “Approve” and the goals of [%EMPLOYEE_NAME%] will be sent to the Level 2 Manager for approval. You will not be able to edit this document from this point. Do you want to proceed?</value>
+  </data>
+  <data name="MSG_APPROVE_LEVEL2" xml:space="preserve">
+    <value>You have clicked “Approve” and the [%APPRAISAL_STAGE_NAME%] phase of [%EMPLOYEE_NAME%] will be completed. You will not be able to edit this document from this point. Do you want to proceed?</value>
+  </data>
   <data name="MSG_APPROVE_SUBMISSION" xml:space="preserve">
     <value>Proceed to approve?</value>
   </data>

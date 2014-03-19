@@ -33,6 +33,31 @@ define("hrmanage.managecycle", ['jquery', 'bootstrap', 'bootstrap.select', 'mome
             format: "DD/MM/YYYY",
             pickTime: false
         });
+        $('#datetimepicker_stage1submissiondeadline').datetimepicker({
+            format: "DD/MM/YYYY",
+            pickTime: false
+        });
+        $('#datetimepicker_stage1level1approvaldeadline').datetimepicker({
+            format: "DD/MM/YYYY",
+            pickTime: false
+        });
+        $('#datetimepicker_stage1level2approvaldeadline').datetimepicker({
+            format: "DD/MM/YYYY",
+            pickTime: false
+        });
+        $('#datetimepicker_stage2submissiondeadline').datetimepicker({
+            format: "DD/MM/YYYY",
+            pickTime: false
+        });
+        $('#datetimepicker_stage2level1approvaldeadline').datetimepicker({
+            format: "DD/MM/YYYY",
+            pickTime: false
+        });
+        $('#datetimepicker_stage2level2approvaldeadline').datetimepicker({
+            format: "DD/MM/YYYY",
+            pickTime: false
+        });
+
         var nowdate = $("#forRazorValue").attr("nowdate");
         var tempnow = nowdate.split('-');
         var temp = new Array();

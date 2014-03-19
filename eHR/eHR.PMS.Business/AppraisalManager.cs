@@ -36,7 +36,25 @@ namespace eHR.PMS.Business
             }
             return boo_success;
         }
-        
+
+
+        public static bool UpdateCycleStage(List<PMS.Model.DTO.Cycle.Stage> cycleStages, out string message)
+        {
+            message = string.Empty;
+            bool boo_success = false;
+
+            if (!Lib.Utility.Common.IsNullOrEmptyList(cycleStages))
+            {
+                boo_success = Model.PMSModel.UpdateCycleStages(cycleStages, out message);
+            }
+            else
+            {
+                boo_success = true;
+            }
+
+            return boo_success;
+        }
+ 
         public static bool UpdateCycle(PMS.Model.DTO.Cycle.Cycle cycle,int cycleId, Model.DTO.Core.Employee user, out string message)
         {
             bool boo_success = false;
@@ -64,6 +82,7 @@ namespace eHR.PMS.Business
             }
             return boo_success;
         }
+       
         public static int CheckStageDate(Model.DTO.Cycle.Stage obj_gs_stage, Model.DTO.Cycle.Stage obj_pr_stage, Model.DTO.Cycle.Stage obj_fr_stage)
         {
             if (DateTime.Now < obj_gs_stage.StartDate)
@@ -82,6 +101,7 @@ namespace eHR.PMS.Business
                 return 7;
             return 0;
         }
+       
         public static Model.DTO.Master.Stage GetCycleNextStage(Model.DTO.Cycle.Cycle cycle, DateTime stageStartDate)
         {
             Model.DTO.Master.Stage obj_next_stage = null;
@@ -530,7 +550,7 @@ namespace eHR.PMS.Business
                 sb_task_name.Append("'s appraisal.");
 
                 string str_task_address = null;
-                if (appraisal.Stage.Id == Model.PMSConstants.STAGE_ID_GOAL_SETTING) { str_task_address = "/Stage1Approval/KeyPerformanceIndicators"; }
+                if (appraisal.Stage.Id == Model.PMSConstants.STAGE_ID_GOAL_SETTING) { str_task_address = "/Stage2Approval/KeyPerformanceIndicators"; }
                 if (appraisal.Stage.Id == Model.PMSConstants.STAGE_ID_PROGRESS_REVIEW) { str_task_address = "/Stage2Approval/KeyPerformanceIndicators"; }
 
 

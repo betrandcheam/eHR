@@ -84,13 +84,13 @@ namespace eHR.PMS.Model.Mappers
             return lst_entities;
         
         }
-        
+
         public static PMS.Model.Context.PMS_CYCLE_STAGE MapCycleStageDTOToEntity(PMS.Model.DTO.Cycle.Stage dto)
         {
-            PMS.Model.Context.PMS_CYCLE_STAGE obj_entity = new Context.PMS_CYCLE_STAGE() 
-            { 
+            PMS.Model.Context.PMS_CYCLE_STAGE obj_entity = new Context.PMS_CYCLE_STAGE()
+            {
                 ID = dto.Id,
-                CYCLE_ID = dto.Cycle == null ? (int?) null : dto.Cycle.Id,
+                CYCLE_ID = dto.Cycle == null ? (int?)null : dto.Cycle.Id,
                 STAGE_ID = dto.StageId,
                 START_DATE = dto.StartDate,
                 END_DATE = dto.EndDate,

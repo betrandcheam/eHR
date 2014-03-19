@@ -19,7 +19,7 @@
            @{
                if (form == null || !form.Keys.Contains("cyclename"))
                {
-                    <input type="text" class="form-control" id="cyclename" name="cyclename" value="" />
+                    <input type="text" class="form-control" id="cyclename" name="cyclename" value="Performance Appraisal for FY @(Convert.ToString(DateTime.Now.Year).Substring(2,2))/@(Convert.ToString(DateTime.Now.AddYears(1).Year).Substring(2,2))" />
                }
                else
                {
