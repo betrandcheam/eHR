@@ -772,7 +772,8 @@ namespace eHR.PMS.Model.Mappers
                 FirstName = entity.EMPLOYEE.FIRST_NAME,
                 LastName = entity.EMPLOYEE.LAST_NAME,
                 PreferredName = entity.EMPLOYEE.PREFERRED_NAME,
-                DomainId = entity.EMPLOYEE.DOMAIN_ID
+                DomainId = entity.EMPLOYEE.DOMAIN_ID,
+                SMT=entity.IS_SMT
             };
 
             obj_dto.Appraisal = entity.PMS_APPRAISAL == null ? null : MapAppraisalEntityToDTO(entity.PMS_APPRAISAL, false);
@@ -786,7 +787,8 @@ namespace eHR.PMS.Model.Mappers
             {
                 ID = dto.Id,
                 APPRAISAL_ID = dto.Appraisal.Id,
-                REVIEWER_ID = dto.EmployeeId
+                REVIEWER_ID = dto.EmployeeId,
+                IS_SMT=dto.SMT
             };
             return obj_entity;
         }

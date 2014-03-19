@@ -12,7 +12,7 @@ namespace eHR.PMS.Web.Models.DTO
         private List<PMS.Model.DTO.Appraisal.Appraisal> lst_my_appraisals;
         private List<PMS.Model.DTO.Appraisal.Appraisal> lst_my_appraisals_to_approve;
         private List<PMS.Model.DTO.Appraisal.Appraisal> lst_my_appraisals_to_review;
-
+        private List<PMS.Model.DTO.Appraisal.Appraisal> lst_my_appraisals_to_review_smt;
         public PMS.Model.DTO.Core.Security.User User
         {
             get { return obj_user; }
@@ -43,5 +43,10 @@ namespace eHR.PMS.Web.Models.DTO
             set { lst_my_appraisals_to_review = value; }
         }
 
+        public List<PMS.Model.DTO.Appraisal.Appraisal> MyAppraisalsToReviewSMT
+        {
+            get { return lst_my_appraisals_to_review_smt; }
+            set { lst_my_appraisals_to_review_smt = value; }
+        }
     }
 }

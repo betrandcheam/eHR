@@ -8996,6 +8996,30 @@ namespace eHR.PMS.Model.Context
         private Nullable<global::System.DateTime> _MODIFIED_TIMESTAMP;
         partial void OnMODIFIED_TIMESTAMPChanging(Nullable<global::System.DateTime> value);
         partial void OnMODIFIED_TIMESTAMPChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Boolean> IS_SMT
+        {
+            get
+            {
+                return _IS_SMT;
+            }
+            set
+            {
+                OnIS_SMTChanging(value);
+                ReportPropertyChanging("IS_SMT");
+                _IS_SMT = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("IS_SMT");
+                OnIS_SMTChanged();
+            }
+        }
+        private Nullable<global::System.Boolean> _IS_SMT;
+        partial void OnIS_SMTChanging(Nullable<global::System.Boolean> value);
+        partial void OnIS_SMTChanged();
 
         #endregion
 

@@ -582,6 +582,7 @@
           <Property Name="MODIFIED_BY_ID" Type="int" />
           <Property Name="MODIFIED_BY_DOMAIN_ID" Type="varchar" MaxLength="100" />
           <Property Name="MODIFIED_TIMESTAMP" Type="datetime" />
+          <Property Name="IS_SMT" Type="bit" />
         </EntityType>
         <EntityType Name="PMS_APPRAISAL_SECTION">
           <Key>
@@ -2121,6 +2122,7 @@
           <Property Type="DateTime" Name="MODIFIED_TIMESTAMP" />
           <NavigationProperty Name="EMPLOYEE" Relationship="PMSModel.FK_PMS_APPRAISAL_REVIEWER_EMPLOYEE" FromRole="PMS_APPRAISAL_REVIEWER" ToRole="EMPLOYEE" />
           <NavigationProperty Name="PMS_APPRAISAL" Relationship="PMSModel.FK_PMS_APPRAISAL_REVIEWER_PMS_APPRAISAL" FromRole="PMS_APPRAISAL_REVIEWER" ToRole="PMS_APPRAISAL" />
+          <Property Type="Boolean" Name="IS_SMT" />
         </EntityType>
         <EntityType Name="PMS_APPRAISAL_SECTION">
           <Key>
@@ -3410,6 +3412,7 @@
           <EntitySetMapping Name="PMS_APPRAISAL_REVIEWER">
             <EntityTypeMapping TypeName="PMSModel.PMS_APPRAISAL_REVIEWER">
               <MappingFragment StoreEntitySet="PMS_APPRAISAL_REVIEWER">
+                <ScalarProperty Name="IS_SMT" ColumnName="IS_SMT" />
                 <ScalarProperty Name="MODIFIED_TIMESTAMP" ColumnName="MODIFIED_TIMESTAMP" />
                 <ScalarProperty Name="MODIFIED_BY_DOMAIN_ID" ColumnName="MODIFIED_BY_DOMAIN_ID" />
                 <ScalarProperty Name="MODIFIED_BY_ID" ColumnName="MODIFIED_BY_ID" />

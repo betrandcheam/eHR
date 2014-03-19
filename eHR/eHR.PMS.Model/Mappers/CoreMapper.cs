@@ -25,7 +25,8 @@ namespace eHR.PMS.Model.Mappers
                 Active = entity.ACTIVE,
                 OfficeEmailAddress = entity.OFFICE_EMAIL_ADDRESS,
                 DateOfDeparture = entity.DATE_OF_DEPARTURE,
-                DateOfHire = entity.DATE_OF_HIRE
+                DateOfHire = entity.DATE_OF_HIRE,
+                SMPEmploeeId=entity.SENIOR_MANAGEMENT_TEAM_MEMBER_ID
             };
             return obj_dto;
         }

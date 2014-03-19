@@ -11,14 +11,18 @@ namespace eHR.PMS.Web.Controllers
         [HandleError]
         public ActionResult Index()
         {
+            List<PMS.Model.DTO.Appraisal.Appraisal> tempapprlist = new List<Model.DTO.Appraisal.Appraisal>();
+            List<PMS.Model.DTO.Appraisal.Appraisal> tempapprlistsmt = new List<Model.DTO.Appraisal.Appraisal>();
             Web.Models.DTO.HomePage homePageDTO = new Models.DTO.HomePage()
             {
                 User = CurrentUser,
                 MyTasks = PMS.Business.AppraisalManager.GetTasksByOwner(CurrentUser.Id, Model.PMSConstants.STATUS_CORE_ID_OPEN),
                 MyAppraisals = PMS.Business.AppraisalManager.GetAppraisalsByEmployeeForDisplay(CurrentUser.Id, null),
-                MyAppraisalsToApprove = PMS.Business.AppraisalManager.GetAppraisalsToApproveByApproverId(CurrentUser.Id,LatestCycleId),
-                MyAppraisalsToReview = PMS.Model.PMSModel.GetAppraisalsInCycleToReview(CurrentUser.Id, LatestCycleId),
+                MyAppraisalsToApprove = PMS.Business.AppraisalManager.GetAppraisalsToApproveByApproverId(CurrentUser.Id,LatestCycleId)
             };
+            PMS.Model.PMSModel.GetAppraisalsInCycleToReview(CurrentUser.Id, LatestCycleId, out tempapprlist, out tempapprlistsmt);
+            homePageDTO.MyAppraisalsToReview = tempapprlist;
+            homePageDTO.MyAppraisalsToReviewSMT = tempapprlistsmt;
             ViewData.Model = homePageDTO;
             return View();
         }

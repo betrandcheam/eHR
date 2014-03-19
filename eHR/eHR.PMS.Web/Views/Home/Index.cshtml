@@ -189,6 +189,50 @@
         </div>
     </div>
 </div>
+<div class="row maintable">
+    <div class="panel-group" id="accordion5" style="padding:20px 50px;">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion5" href="#collapseFive">
+                        <i class="glyphicon glyphicon-eye-open"></i> SMT - Review of my Direct & Indirect Reports
+                    </a>
+                </h4>
+            </div>
+            <div id="collapseFive" class="panel-collapse collapse in">
+                <div class="panel-body" style="padding:0px;">
+                    <table class="table table-bordered" style="border-collapse:collapse;border-spacing:0px 0px;">
+                        <tr style="background-color: #D9EDF7;">
+                            <th>Name</th>
+                            <th>Employee ID</th>
+                            <th>Department</th>
+                        </tr>
+                        @{ if (!eHR.PMS.Lib.Utility.Common.IsNullOrEmptyList(Model.MyAppraisalsToReview))
+                            {
+                                foreach (eHR.PMS.Model.DTO.Appraisal.Appraisal obj_appraisal in Model.MyAppraisalsToReview)
+                                {
+                                    <tr>
+                                        <td><a href="@(Url.Content("~/stage1/KeyPerformanceIndicators/0/"))@(obj_appraisal.Id)">@obj_appraisal.Employee.PreferredName</a></td>
+                                        <td>@obj_appraisal.Employee.DomainId</td>
+                                        <td>@(obj_appraisal.Employee.Department==null?obj_appraisal.Employee.Department.Name:"")</td>
+                                    </tr>
+                                }
+                            }
+                            else
+                            {
+                                <tr>
+                                <td colspan="2">
+                                    There are no colleagues' appraisals for you to review.
+                                </td>
+                                </tr>
+                            }
+                        }
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
         <!--pop up info for redirect-->
 <div style="top:50%;" class="modal fade" id="RedirectModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
       <div class="modal-dialog" style="text-align:center;">

@@ -832,12 +832,14 @@ namespace eHR.PMS.Model
             return lst_appraisals;
         }
 
-        public static List<PMS.Model.DTO.Appraisal.Appraisal> GetAppraisalsInCycleToReview(int reviewerEmployeeId, int? cycleId)
+        public static void GetAppraisalsInCycleToReview(int reviewerEmployeeId, int? cycleId, out List<PMS.Model.DTO.Appraisal.Appraisal> MyAppraisalsToReview, out List<PMS.Model.DTO.Appraisal.Appraisal>  MyAppraisalsToReviewSMT)
         {
             PMS.Model.Context.PMSEntities dc_pms = new PMS.Model.Context.PMSEntities();
-            List<PMS.Model.DTO.Appraisal.Appraisal> lst_appraisals = null;
+            //List<PMS.Model.DTO.Appraisal.Appraisal> lst_appraisals = null;
+            MyAppraisalsToReview = new List<DTO.Appraisal.Appraisal>();
+            MyAppraisalsToReviewSMT = new List<DTO.Appraisal.Appraisal>();
             System.Data.Objects.ObjectQuery<PMS.Model.Context.PMS_APPRAISAL> entities;
-
+            System.Data.Objects.ObjectQuery<PMS.Model.Context.PMS_APPRAISAL> entitiessmt;
             dc_pms.ContextOptions.LazyLoadingEnabled = false;
 
             if (cycleId == null)
@@ -846,7 +848,14 @@ namespace eHR.PMS.Model
                              join ent_cycle in dc_pms.PMS_CYCLE on ent_appraisal.CYCLE_ID equals ent_cycle.ID
                              join ent_reviewer in dc_pms.PMS_APPRAISAL_REVIEWER on ent_appraisal.ID equals ent_reviewer.APPRAISAL_ID
                              where
-                              ent_reviewer.REVIEWER_ID == reviewerEmployeeId
+                              ent_reviewer.REVIEWER_ID == reviewerEmployeeId && (ent_reviewer.IS_SMT==null || ent_reviewer.IS_SMT==false)
+                             select ent_appraisal) as System.Data.Objects.ObjectQuery<PMS.Model.Context.PMS_APPRAISAL>)
+                                .Include("EMPLOYEE");
+                entitiessmt = ((from ent_appraisal in dc_pms.PMS_APPRAISAL
+                             join ent_cycle in dc_pms.PMS_CYCLE on ent_appraisal.CYCLE_ID equals ent_cycle.ID
+                             join ent_reviewer in dc_pms.PMS_APPRAISAL_REVIEWER on ent_appraisal.ID equals ent_reviewer.APPRAISAL_ID
+                             where
+                              ent_reviewer.REVIEWER_ID == reviewerEmployeeId && ent_reviewer.IS_SMT == true
                              select ent_appraisal) as System.Data.Objects.ObjectQuery<PMS.Model.Context.PMS_APPRAISAL>)
                                 .Include("EMPLOYEE");
             }
@@ -857,19 +866,30 @@ namespace eHR.PMS.Model
                              join ent_reviewer in dc_pms.PMS_APPRAISAL_REVIEWER on ent_appraisal.ID equals ent_reviewer.APPRAISAL_ID
                              where
                               ent_reviewer.REVIEWER_ID == reviewerEmployeeId &&
-                              ent_cycle.ID == cycleId
+                              ent_cycle.ID == cycleId && (ent_reviewer.IS_SMT==null || ent_reviewer.IS_SMT==false)
                              select ent_appraisal) as System.Data.Objects.ObjectQuery<PMS.Model.Context.PMS_APPRAISAL>)
                                 .Include("EMPLOYEE");
-
+                entitiessmt = ((from ent_appraisal in dc_pms.PMS_APPRAISAL
+                             join ent_cycle in dc_pms.PMS_CYCLE on ent_appraisal.CYCLE_ID equals ent_cycle.ID
+                             join ent_reviewer in dc_pms.PMS_APPRAISAL_REVIEWER on ent_appraisal.ID equals ent_reviewer.APPRAISAL_ID
+                             where
+                              ent_reviewer.REVIEWER_ID == reviewerEmployeeId &&
+                              ent_cycle.ID == cycleId && ent_reviewer.IS_SMT == true
+                             select ent_appraisal) as System.Data.Objects.ObjectQuery<PMS.Model.Context.PMS_APPRAISAL>)
+                                .Include("EMPLOYEE");
             }
 
             if (!Lib.Utility.Common.IsNullOrEmptyList(entities))
             {
-                lst_appraisals = PMS.Model.Mappers.PMSMapper.MapAppraisalEntitiesToDTOs(entities.ToList(), true);
+                MyAppraisalsToReview = PMS.Model.Mappers.PMSMapper.MapAppraisalEntitiesToDTOs(entities.ToList(), true);
             }
-
+            if (!Lib.Utility.Common.IsNullOrEmptyList(entitiessmt))
+            {
+                MyAppraisalsToReviewSMT = PMS.Model.Mappers.PMSMapper.MapAppraisalEntitiesToDTOs(entitiessmt.ToList(), true);
+            }
             dc_pms.Dispose();
-            return lst_appraisals;
+            return;
+            //return lst_appraisals;
         }
 
         public static List<PMS.Model.DTO.Appraisal.Appraisal> GetEmployeesInAppraisalsByCycleId(int cycleId)

@@ -23,6 +23,7 @@ namespace eHR.PMS.Model.DTO.Core
         private PMS.Model.DTO.Core.Employee obj_pms_level_2_approver;
         private PMS.Model.DTO.Core.Employee obj_modifier;
         private DateTime? dt_modified_timestamp;
+        private int? int_smtemployeeid;
 
         public int Id
         {
@@ -136,6 +137,12 @@ namespace eHR.PMS.Model.DTO.Core
         {
             get { return dt_modified_timestamp; }
             set { dt_modified_timestamp = value; }
+        }
+
+        public int? SMPEmploeeId
+        {
+            get { return int_smtemployeeid; }
+            set { int_smtemployeeid = value; }
         }
     }
 }

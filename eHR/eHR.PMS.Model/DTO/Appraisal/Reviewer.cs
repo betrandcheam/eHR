@@ -12,7 +12,7 @@ namespace eHR.PMS.Model.DTO.Appraisal
         private PMS.Model.DTO.Appraisal.Appraisal obj_appraisal;
         private PMS.Model.DTO.Core.Employee obj_modifier;
         private DateTime? dt_modified_timestamp;
-
+        private bool? boo_smt;
         public new int Id
         {
             get { return int_id; }
@@ -41,6 +41,11 @@ namespace eHR.PMS.Model.DTO.Appraisal
         {
             get { return dt_modified_timestamp; }
             set { dt_modified_timestamp = value; }
+        }
+        public bool? SMT
+        {
+            get { return boo_smt; }
+            set { boo_smt = value; }
         }
     }
 }
