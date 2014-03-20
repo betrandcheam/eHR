@@ -486,6 +486,17 @@ namespace eHR.PMS.Model
                         entity_appraisal_approver.APPRAISAL_ID = entity_appraisal.ID;
                         dc_pms.PMS_APPRAISAL_APPROVER.AddObject(entity_appraisal_approver);
                     }
+
+                    if (!Lib.Utility.Common.IsNullOrEmptyList(dto_appraisal.Reviewers))
+                    {
+                        foreach (Model.DTO.Appraisal.Reviewer dto_appraisal_reviewer in dto_appraisal.Reviewers)
+                        {
+                            Model.Context.PMS_APPRAISAL_REVIEWER entity_appraisal_reviewer = Model.Mappers.PMSMapper.MapReviewerDTOTOEntity(dto_appraisal_reviewer);
+                            entity_appraisal_reviewer.APPRAISAL_ID = entity_appraisal.ID;
+                            dc_pms.PMS_APPRAISAL_REVIEWER.AddObject(entity_appraisal_reviewer);
+                        }
+                    }
+
                     NewAddAppraisals.Add(Mappers.PMSMapper.MapAppraisalEntityToDTO(entity_appraisal, true));
                     /*
                     if (dto_appraisal.Task != null)
@@ -517,7 +528,7 @@ namespace eHR.PMS.Model
             return boo_success;
         }
 
-        public static bool UpdateCycleStages(List<PMS.Model.DTO.Cycle.Stage> cycleStages, out string message)
+        public static bool UpdateCycleStages(List<PMS.Model.DTO.Cycle.Stage> cycleStages, List<PMS.Model.DTO.Appraisal.Appraisal> appraisals, out string message)
         {
             bool boo_success = false;
             message = string.Empty;
@@ -536,6 +547,24 @@ namespace eHR.PMS.Model
                     ent_cycle_stage.LEVEL_1_APPROVAL_DEADLINE = obj_cycle_stage.Level1ApprovalDeadline;
                     ent_cycle_stage.LEVEL_2_APPROVAL_DEADLINE = obj_cycle_stage.Level2ApprovalDeadline;
                 }
+
+                if (!Lib.Utility.Common.IsNullOrEmptyList(appraisals))
+                {
+                    foreach (PMS.Model.DTO.Appraisal.Appraisal obj_appraisal in appraisals)
+                    {
+                        foreach (PMS.Model.DTO.Appraisal.Stage obj_appraisal_stage in obj_appraisal.AppraisalStages)
+                        {
+                            PMS.Model.Context.PMS_APPRAISAL_STAGE ent_appraisal_stage = dc_pms.PMS_APPRAISAL_STAGE.Where(rec => rec.ID == obj_appraisal_stage.Id).Single();
+
+                            ent_appraisal_stage.START_DATE = obj_appraisal_stage.StartDate;
+                            ent_appraisal_stage.END_DATE = obj_appraisal_stage.EndDate;
+                            ent_appraisal_stage.SUBMISSION_DEADLINE = obj_appraisal_stage.SubmissionDeadline;
+                            ent_appraisal_stage.LEVEL_1_APPROVAL_DEADLINE = obj_appraisal_stage.Level1ApprovalDeadline;
+                            ent_appraisal_stage.LEVEL_2_APPROVAL_DEADLINE = obj_appraisal_stage.Level2ApprovalDeadline;
+                        }
+                    }
+                }
+
                 dc_pms.SaveChanges();
                 boo_success = true;
             }
@@ -884,7 +913,7 @@ namespace eHR.PMS.Model
             MyAppraisalsToReviewSMT = new List<DTO.Appraisal.Appraisal>();
             System.Data.Objects.ObjectQuery<PMS.Model.Context.PMS_APPRAISAL> entities;
             System.Data.Objects.ObjectQuery<PMS.Model.Context.PMS_APPRAISAL> entitiessmt;
-            dc_pms.ContextOptions.LazyLoadingEnabled = false;
+            dc_pms.ContextOptions.LazyLoadingEnabled = true;
 
             if (cycleId == null)
             {
@@ -893,19 +922,19 @@ namespace eHR.PMS.Model
                              join ent_reviewer in dc_pms.PMS_APPRAISAL_REVIEWER on ent_appraisal.ID equals ent_reviewer.APPRAISAL_ID
                              where
                               ent_reviewer.REVIEWER_ID == reviewerEmployeeId && (ent_reviewer.IS_SMT == null || ent_reviewer.IS_SMT == false)
-                             select ent_appraisal) as System.Data.Objects.ObjectQuery<PMS.Model.Context.PMS_APPRAISAL>)
-                                .Include("EMPLOYEE")
-                                .Include("EMPLOYEE.DEPARTMENT")
-                                .Include("EMPLOYEE.DEPARTMENT.MST_DEPARTMENT");
+                             select ent_appraisal) as System.Data.Objects.ObjectQuery<PMS.Model.Context.PMS_APPRAISAL>);
+                                //.Include("EMPLOYEE")
+                                //.Include("EMPLOYEE.DEPARTMENT")
+                                //.Include("EMPLOYEE.DEPARTMENT.MST_DEPARTMENT");
                 entitiessmt = ((from ent_appraisal in dc_pms.PMS_APPRAISAL
                              join ent_cycle in dc_pms.PMS_CYCLE on ent_appraisal.CYCLE_ID equals ent_cycle.ID
                              join ent_reviewer in dc_pms.PMS_APPRAISAL_REVIEWER on ent_appraisal.ID equals ent_reviewer.APPRAISAL_ID
                              where
                               ent_reviewer.REVIEWER_ID == reviewerEmployeeId && ent_reviewer.IS_SMT == true
-                             select ent_appraisal) as System.Data.Objects.ObjectQuery<PMS.Model.Context.PMS_APPRAISAL>)
-                                .Include("EMPLOYEE")
-                                .Include("EMPLOYEE.DEPARTMENT")
-                                .Include("EMPLOYEE.DEPARTMENT.MST_DEPARTMENT");
+                             select ent_appraisal) as System.Data.Objects.ObjectQuery<PMS.Model.Context.PMS_APPRAISAL>);
+                                //.Include("EMPLOYEE")
+                                //.Include("EMPLOYEE.DEPARTMENT")
+                                //.Include("EMPLOYEE.DEPARTMENT.MST_DEPARTMENT");
             }
             else
             {
@@ -915,20 +944,20 @@ namespace eHR.PMS.Model
                              where
                               ent_reviewer.REVIEWER_ID == reviewerEmployeeId &&
                               ent_cycle.ID == cycleId && (ent_reviewer.IS_SMT==null || ent_reviewer.IS_SMT==false)
-                             select ent_appraisal) as System.Data.Objects.ObjectQuery<PMS.Model.Context.PMS_APPRAISAL>)
-                                .Include("EMPLOYEE")
-                                .Include("EMPLOYEE.DEPARTMENT")
-                                .Include("EMPLOYEE.DEPARTMENT.MST_DEPARTMENT");
+                             select ent_appraisal) as System.Data.Objects.ObjectQuery<PMS.Model.Context.PMS_APPRAISAL>);
+                                //.Include("EMPLOYEE")
+                                //.Include("EMPLOYEE.DEPARTMENT")
+                                //.Include("EMPLOYEE.DEPARTMENT.MST_DEPARTMENT");
                 entitiessmt = ((from ent_appraisal in dc_pms.PMS_APPRAISAL
-                             join ent_cycle in dc_pms.PMS_CYCLE on ent_appraisal.CYCLE_ID equals ent_cycle.ID
-                             join ent_reviewer in dc_pms.PMS_APPRAISAL_REVIEWER on ent_appraisal.ID equals ent_reviewer.APPRAISAL_ID
-                             where
-                              ent_reviewer.REVIEWER_ID == reviewerEmployeeId &&
-                              ent_cycle.ID == cycleId && ent_reviewer.IS_SMT == true
-                             select ent_appraisal) as System.Data.Objects.ObjectQuery<PMS.Model.Context.PMS_APPRAISAL>)
-                                .Include("EMPLOYEE")
-                                .Include("EMPLOYEE.DEPARTMENT")
-                                .Include("EMPLOYEE.DEPARTMENT.MST_DEPARTMENT");
+                                join ent_cycle in dc_pms.PMS_CYCLE on ent_appraisal.CYCLE_ID equals ent_cycle.ID
+                                join ent_reviewer in dc_pms.PMS_APPRAISAL_REVIEWER on ent_appraisal.ID equals ent_reviewer.APPRAISAL_ID
+                                where
+                                 ent_reviewer.REVIEWER_ID == reviewerEmployeeId &&
+                                 ent_cycle.ID == cycleId && ent_reviewer.IS_SMT == true
+                                select ent_appraisal) as System.Data.Objects.ObjectQuery<PMS.Model.Context.PMS_APPRAISAL>);
+                                //.Include("EMPLOYEE")
+                                //.Include("EMPLOYEE.DEPARTMENT")
+                                //.Include("EMPLOYEE.DEPARTMENT.MST_DEPARTMENT");
             }
 
             if (!Lib.Utility.Common.IsNullOrEmptyList(entities))

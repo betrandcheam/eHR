@@ -38,14 +38,14 @@ namespace eHR.PMS.Business
         }
 
 
-        public static bool UpdateCycleStage(List<PMS.Model.DTO.Cycle.Stage> cycleStages, out string message)
+        public static bool UpdateCycleStage(List<PMS.Model.DTO.Cycle.Stage> cycleStages, List<PMS.Model.DTO.Appraisal.Appraisal> appraisals, out string message)
         {
             message = string.Empty;
             bool boo_success = false;
 
             if (!Lib.Utility.Common.IsNullOrEmptyList(cycleStages))
             {
-                boo_success = Model.PMSModel.UpdateCycleStages(cycleStages, out message);
+                boo_success = Model.PMSModel.UpdateCycleStages(cycleStages, appraisals, out message);
             }
             else
             {
@@ -365,7 +365,10 @@ namespace eHR.PMS.Business
                                 {
                                     StageId = obj_cycle_stage.StageId,
                                     StartDate = obj_cycle_stage.StartDate,
-                                    EndDate = obj_cycle_stage.EndDate
+                                    EndDate = obj_cycle_stage.EndDate,
+                                    SubmissionDeadline = obj_cycle_stage.SubmissionDeadline,
+                                    Level1ApprovalDeadline = obj_cycle_stage.Level1ApprovalDeadline,
+                                    Level2ApprovalDeadline = obj_cycle_stage.Level2ApprovalDeadline
                                 };
                                 obj_appraisal.AddAppraisalStage(obj_appraisal_stage);
                             }
@@ -379,7 +382,10 @@ namespace eHR.PMS.Business
                                 {
                                     StageId = obj_cycle_stage.StageId,
                                     StartDate = obj_cycle_stage.StartDate,
-                                    EndDate = obj_cycle_stage.EndDate
+                                    EndDate = obj_cycle_stage.EndDate,
+                                    SubmissionDeadline = obj_cycle_stage.SubmissionDeadline,
+                                    Level1ApprovalDeadline = obj_cycle_stage.Level1ApprovalDeadline,
+                                    Level2ApprovalDeadline = obj_cycle_stage.Level2ApprovalDeadline
                                 };
                                 obj_appraisal.AddAppraisalStage(obj_appraisal_stage);
                             }
@@ -395,7 +401,10 @@ namespace eHR.PMS.Business
                                 {
                                     StageId = obj_cycle_stage.StageId,
                                     StartDate = obj_cycle_stage.StartDate,
-                                    EndDate = obj_cycle_stage.EndDate
+                                    EndDate = obj_cycle_stage.EndDate,
+                                    SubmissionDeadline = obj_cycle_stage.SubmissionDeadline,
+                                    Level1ApprovalDeadline = obj_cycle_stage.Level1ApprovalDeadline,
+                                    Level2ApprovalDeadline = obj_cycle_stage.Level2ApprovalDeadline
                                 };
                                 obj_appraisal.AddAppraisalStage(obj_appraisal_stage);
                             }
@@ -407,6 +416,17 @@ namespace eHR.PMS.Business
 
                     if (obj_participant.Level1Approver != null) { obj_appraisal.AddApprover(Model.Mappers.PMSMapper.MapEmployeeDTOToApproverDTO(obj_participant.Level1Approver, 1)); }
                     if (obj_participant.Level2Approver != null) { obj_appraisal.AddApprover(Model.Mappers.PMSMapper.MapEmployeeDTOToApproverDTO(obj_participant.Level2Approver, 2)); }
+
+                    if (obj_participant.SMPEmploeeId != null && obj_participant.SMPEmploeeId > 0)
+                    {
+                        Model.DTO.Appraisal.Reviewer obj_reviewer = new Model.DTO.Appraisal.Reviewer()
+                        {
+                            EmployeeId = obj_participant.SMPEmploeeId,
+                            Appraisal = obj_appraisal,
+                            SMT = true
+                        };
+                        obj_appraisal.AddReviewer(obj_reviewer);
+                    }
 
                     Model.DTO.Appraisal.Trail obj_trail = new Model.DTO.Appraisal.Trail()
                     {

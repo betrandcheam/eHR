@@ -336,8 +336,42 @@ namespace eHR.PMS.Web.Controllers
                         } 
                     }
 
+
+                    if (!Lib.Utility.Common.IsNullOrEmptyList(obj_cycle.Appriasals))
+                    {
+                        foreach (Model.DTO.Appraisal.Appraisal obj_appraisal in obj_cycle.Appriasals)
+                        {
+                            foreach (Model.DTO.Appraisal.Stage obj_appraisal_stage in obj_appraisal.AppraisalStages)
+                            {
+                                if (obj_appraisal_stage.StageId == PMS.Model.PMSConstants.STAGE_ID_GOAL_SETTING)
+                                {
+                                    obj_appraisal_stage.StartDate = dict_cycle_stage_dates["Stage1StartDate"];
+                                    obj_appraisal_stage.EndDate = dict_cycle_stage_dates["Stage1EndDate"];
+                                    obj_appraisal_stage.SubmissionDeadline = dict_cycle_stage_dates["Stage1SubmissionDeadline"];
+                                    obj_appraisal_stage.Level1ApprovalDeadline = dict_cycle_stage_dates["Stage1Level1ApprovalDeadline"];
+                                    obj_appraisal_stage.Level2ApprovalDeadline = dict_cycle_stage_dates["Stage1Level2ApprovalDeadline"];
+                                }
+
+                                if (obj_appraisal_stage.StageId == PMS.Model.PMSConstants.STAGE_ID_PROGRESS_REVIEW)
+                                {
+                                    obj_appraisal_stage.StartDate = dict_cycle_stage_dates["Stage2StartDate"];
+                                    obj_appraisal_stage.EndDate = dict_cycle_stage_dates["Stage2EndDate"];
+                                    obj_appraisal_stage.SubmissionDeadline = dict_cycle_stage_dates["Stage2SubmissionDeadline"];
+                                    obj_appraisal_stage.Level1ApprovalDeadline = dict_cycle_stage_dates["Stage2Level1ApprovalDeadline"];
+                                    obj_appraisal_stage.Level2ApprovalDeadline = dict_cycle_stage_dates["Stage2Level2ApprovalDeadline"];
+                                }
+
+                                if (obj_appraisal_stage.StageId == PMS.Model.PMSConstants.STAGE_ID_FINAL_YEAR)
+                                {
+                                    obj_appraisal_stage.StartDate = dict_cycle_stage_dates["Stage3StartDate"];
+                                    obj_appraisal_stage.EndDate = dict_cycle_stage_dates["Stage3EndDate"];
+                                }
+                            }
+                        }
+                    }
+
                     //UpdateCycleStage
-                    if (Business.AppraisalManager.UpdateCycleStage(obj_cycle.CycleStages, out message))
+                    if (Business.AppraisalManager.UpdateCycleStage(obj_cycle.CycleStages, obj_cycle.Appriasals, out message))
                     {
                         ClearAllCreatedSessionObjects();
                         return Redirect(Url.Content("~/"));

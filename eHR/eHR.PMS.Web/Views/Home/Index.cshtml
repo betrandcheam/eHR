@@ -214,7 +214,7 @@
                                     <tr>
                                         <td><a href="@(Url.Content("~/stage1/KeyPerformanceIndicators/0/"))@(obj_appraisal.Id)">@obj_appraisal.Employee.PreferredName</a></td>
                                         <td>@obj_appraisal.Employee.DomainId</td>
-                                        <td>@(obj_appraisal.Employee.Department==null?obj_appraisal.Employee.Department.Name:"")</td>
+                                        <td>@(obj_appraisal.Department == null ? "" : obj_appraisal.Department.Name)</td>
                                     </tr>
                                 }
                             }
