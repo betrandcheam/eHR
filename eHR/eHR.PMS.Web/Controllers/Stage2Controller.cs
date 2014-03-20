@@ -78,7 +78,7 @@ namespace eHR.PMS.Web.Controllers
             string message = string.Empty;
             string temp = KPIForDatabase[0];
             string[] deleteKpiId = DeleteKPI.Split('-');
-
+            string newkpiidarray = string.Empty;
             if (string.IsNullOrEmpty(temp))
             {
                 return Json(Resources.Resource.MSG_SAVE_FAIL);
@@ -105,20 +105,20 @@ namespace eHR.PMS.Web.Controllers
                 if (result[result.Length - 1].IndexOf("^&*ONERECORDENDED") > 0)
                 {
                     result[result.Length - 1] = result[result.Length - 1].Substring(0, result[result.Length - 1].IndexOf("^&*ONERECORDENDED"));
-                    PMS.Model.PMSModel.UpdateAppraisalKPIs(
+                    PMS.Model.PMSModel.UpdateAppraisalKPIsForAjax(
                                         Business.AppraisalManager.GetKPIItemsToInsert(result),
                                         Business.AppraisalManager.GetKPIItemsToUpdate(result),
-                                        Business.AppraisalManager.GetKPIItemsToDelete(deleteKpiId), out message);
+                                        Business.AppraisalManager.GetKPIItemsToDelete(deleteKpiId), out message,out newkpiidarray);
                 }
                 else
                 {
-                    PMS.Model.PMSModel.UpdateAppraisalKPIs(
+                    PMS.Model.PMSModel.UpdateAppraisalKPIsForAjax(
                                         Business.AppraisalManager.GetKPIItemsToInsert(null),
                                         Business.AppraisalManager.GetKPIItemsToUpdate(null),
-                                        Business.AppraisalManager.GetKPIItemsToDelete(deleteKpiId), out message);
+                                        Business.AppraisalManager.GetKPIItemsToDelete(deleteKpiId), out message, out newkpiidarray);
                 }
             }
-            return Json(message);
+            return Json(new { message = message, kpiid = newkpiidarray });
         }
 
         #endregion KPI

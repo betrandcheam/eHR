@@ -79,7 +79,9 @@
                                     <th></th>
                                     <th style="width:30%">Key Performance Indicator</th>
                                     <th style="width:5%">Priority</th>
-                                    <th style="width:30%">Performance Target</th>                                   
+                                    <th></th>
+                                    <th style="width:30%">Performance Target</th>   
+                                    <th></th>                                
                                     <th style="width:30%"></th>
                                 </tr>
                             </thead>
@@ -94,10 +96,10 @@
                                                 </td>
                                                 <td>@kpi.Description</td>
                                                 <td>@kpi.Priority.Name</td>
-                                                <td style="display:none;">@kpi.Priority.Id</td>
+                                                <td><input type="hidden" class="PriorityId" value="@kpi.Priority.Id" /></td>
                                                 <td>@kpi.Target</td>
-                                                <td style="display:none;">
-                                                <input type="text" class="KPIforDatabase" name="KPIforDatabase@(kpiindex++)Block@(kpinfo.Id)" value="@(kpi.Id)^&*@(kpi.Appraisal.Id)^&*@(Model.CurrentSection.Id)^&*@(kpi.Block.Id)^&*@(kpi.Description)^&*@(kpi.Target)^&*@(kpi.Priority.Id)^&*ONERECORDENDED"/>
+                                                <td>
+                                                <input type="hidden" class="KPIforDatabase" name="KPIforDatabase@(kpiindex++)Block@(kpinfo.Id)" value="@(kpi.Id)^&*@(kpi.Appraisal.Id)^&*@(Model.CurrentSection.Id)^&*@(kpi.Block.Id)^&*@(kpi.Description)^&*@(kpi.Target)^&*@(kpi.Priority.Id)^&*ONERECORDENDED"/>
                                                 @{if (!eHR.PMS.Lib.Utility.Common.IsNullOrEmptyList(kpi.Comments))
                                                   {
                                                     <div class="Comments">
@@ -287,7 +289,6 @@
         </div><!-- /.modal-content -->
         <div id="resultcontent" class="modal-content" style="display:none;">
           <div class="modal-body" style="padding-bottom:0px;">
-                <strong>@(eHR.PMS.Web.Resources.Resource.MSG_SAVE_SUCCESS_KPI.Replace("[%DEADLINE%]",Model.SubmissionDeadline))</strong>
                 <div class="alert alert-success alert-dismissable">
                   <strong>@(eHR.PMS.Web.Resources.Resource.MSG_SAVE_SUCCESS_KPI.Replace("[%DEADLINE%]",Model.SubmissionDeadline))</strong>
                 </div>

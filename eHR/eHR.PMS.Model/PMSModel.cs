@@ -1161,25 +1161,15 @@ namespace eHR.PMS.Model
         }
 
         #region KPI
-
         public static bool UpdateAppraisalKPIs(List<PMS.Model.DTO.Appraisal.KPI> insertList, List<PMS.Model.DTO.Appraisal.KPI> updateList, List<PMS.Model.DTO.Appraisal.KPI> deleteList, out string message)
         {
             bool boo_success = false;
             message = string.Empty;
             int int_appraisal_id = 0;
             PMS.Model.Context.PMSEntities dc_pms = new PMS.Model.Context.PMSEntities();
-
+            StringBuilder sb_newkpiids = new StringBuilder();
             try
             {
-                if (!Lib.Utility.Common.IsNullOrEmptyList(insertList))
-                {
-                    foreach (PMS.Model.DTO.Appraisal.KPI obj_kpi in insertList)
-                    {
-                        dc_pms.PMS_APPRAISAL_KPI.AddObject(Mappers.PMSMapper.MapAppraisalKPIDTOToEntity(obj_kpi));
-                        int_appraisal_id = obj_kpi.Appraisal.Id;
-                    }
-                }
-
                 if (!Lib.Utility.Common.IsNullOrEmptyList(deleteList))
                 {
                     foreach (PMS.Model.DTO.Appraisal.KPI obj_kpi in deleteList)
@@ -1192,9 +1182,19 @@ namespace eHR.PMS.Model
                         Model.Context.PMS_APPRAISAL_KPI entity = dc_pms.PMS_APPRAISAL_KPI.Where(rec => rec.ID == obj_kpi.Id).Single();
                         dc_pms.PMS_APPRAISAL_KPI.DeleteObject(entity);
 
-                        if (int_appraisal_id == 0) { int_appraisal_id = obj_kpi.Appraisal.Id; }
+                        //if (int_appraisal_id == 0) { int_appraisal_id = obj_kpi.Appraisal.Id; }
                     }
                 }
+                if (!Lib.Utility.Common.IsNullOrEmptyList(insertList))
+                {
+                    foreach (PMS.Model.DTO.Appraisal.KPI obj_kpi in insertList)
+                    {
+                        dc_pms.PMS_APPRAISAL_KPI.AddObject(Mappers.PMSMapper.MapAppraisalKPIDTOToEntity(obj_kpi));
+                        int_appraisal_id = obj_kpi.Appraisal.Id;
+                    }
+                }
+
+
 
                 if (!Lib.Utility.Common.IsNullOrEmptyList(updateList))
                 {
@@ -1219,6 +1219,85 @@ namespace eHR.PMS.Model
                 }
 
                 dc_pms.SaveChanges();
+                boo_success = true;
+            }
+            catch (Exception exc)
+            {
+                message = exc.Message;
+            }
+            finally
+            {
+                dc_pms.Dispose();
+            }
+            return boo_success;
+        }
+
+        public static bool UpdateAppraisalKPIsForAjax(List<PMS.Model.DTO.Appraisal.KPI> insertList, List<PMS.Model.DTO.Appraisal.KPI> updateList, List<PMS.Model.DTO.Appraisal.KPI> deleteList, out string message,out string newkpiids)
+        {
+            bool boo_success = false;
+            message = string.Empty;
+            int int_appraisal_id = 0;
+            PMS.Model.Context.PMSEntities dc_pms = new PMS.Model.Context.PMSEntities();
+            newkpiids = string.Empty;
+            StringBuilder sb_newkpiids=new StringBuilder();
+            try
+            {
+                if (!Lib.Utility.Common.IsNullOrEmptyList(deleteList))
+                {
+                    foreach (PMS.Model.DTO.Appraisal.KPI obj_kpi in deleteList)
+                    {
+                        foreach (PMS.Model.Context.PMS_APPRAISAL_KPI_COMMENT ent_comment in dc_pms.PMS_APPRAISAL_KPI_COMMENT.Where(rec => rec.ITEM_ID == obj_kpi.Id))
+                        {
+                            dc_pms.PMS_APPRAISAL_KPI_COMMENT.DeleteObject(ent_comment);
+                        }
+
+                        Model.Context.PMS_APPRAISAL_KPI entity = dc_pms.PMS_APPRAISAL_KPI.Where(rec => rec.ID == obj_kpi.Id).Single();
+                        dc_pms.PMS_APPRAISAL_KPI.DeleteObject(entity);
+
+                        //if (int_appraisal_id == 0) { int_appraisal_id = obj_kpi.Appraisal.Id; }
+                    }
+                }
+                PMS.Model.Context.PMS_APPRAISAL_KPI tempentity=new Context.PMS_APPRAISAL_KPI();
+                if (!Lib.Utility.Common.IsNullOrEmptyList(insertList))
+                {
+                    foreach (PMS.Model.DTO.Appraisal.KPI obj_kpi in insertList)
+                    {
+                        tempentity=Mappers.PMSMapper.MapAppraisalKPIDTOToEntity(obj_kpi);
+                        dc_pms.PMS_APPRAISAL_KPI.AddObject(tempentity);
+                        dc_pms.SaveChanges();
+                        int_appraisal_id = obj_kpi.Appraisal.Id;
+                        sb_newkpiids.Append(tempentity.ID.ToString() + "-");
+                    }
+                }
+
+                
+
+                if (!Lib.Utility.Common.IsNullOrEmptyList(updateList))
+                {
+                    foreach (PMS.Model.DTO.Appraisal.KPI obj_kpi in updateList)
+                    {
+                        Model.Context.PMS_APPRAISAL_KPI entity = dc_pms.PMS_APPRAISAL_KPI.Where(rec => rec.ID == obj_kpi.Id).Single();
+                        entity.DESCRIPTION = obj_kpi.Description;
+                        entity.TARGET = obj_kpi.Target;
+                        entity.LEVEL_1_SCORE = obj_kpi.Level1Score;
+                        entity.LEVEL_2_SCORE = obj_kpi.Level2Score;
+                        entity.SELF_SCORE = obj_kpi.SelfScore;
+                        entity.PRIORITY_MASTER_ID = obj_kpi.Priority.Id;
+
+                        if (int_appraisal_id == 0) { int_appraisal_id = obj_kpi.Appraisal.Id; }
+                    }
+                }
+
+                if (int_appraisal_id > 0)
+                {
+                    Model.Context.PMS_APPRAISAL ent_appraisal = dc_pms.PMS_APPRAISAL.Where(rec => rec.ID == int_appraisal_id).Single();
+                    ent_appraisal.STATUS_ID = PMS.Model.PMSConstants.STATUS_ID_DRAFT;
+                }
+
+                dc_pms.SaveChanges();
+                newkpiids = sb_newkpiids.ToString();
+                if(!string.IsNullOrEmpty(newkpiids))
+                    newkpiids = newkpiids.Substring(0, newkpiids.Length-1);
                 boo_success = true;
             }
             catch (Exception exc)

@@ -21,6 +21,19 @@ define("stage1.kpi", ['jquery', 'bootstrap', 'bootstrap.select'], function ($) {
                 $('#InfoModal').modal();
             },
             success: function (data) {
+                var newkpiids = data.kpiid.split('-');
+                var num = 0;
+                $.each($(".KPIforDatabase"), function () {
+                    if ($(this).val().indexOf("NewKPI") > -1)
+                        $(this).val($(this).val().replace("NewKPI", newkpiids[num++]));
+                    //$(this).val(newkpiids[num++] + $(this).val().substring(6));
+                });
+                num = 0;
+                $.each($(".KPIID"), function () {
+                    if ($(this).val().indexOf("NewKPI") > -1)
+                        $(this).val($(this).val().replace("NewKPI", newkpiids[num++]));
+                });
+                $("#deleteKPIid").val("");
                 $("#stage1kpisave").button('reset');
                 $('#loadingcontent').hide();
                 $('#resultcontent').show();
@@ -28,7 +41,7 @@ define("stage1.kpi", ['jquery', 'bootstrap', 'bootstrap.select'], function ($) {
             }
         });
     };
-    /*
+    
     var autosavefunction = function () {
         var KPIArray = new Array();
         $.each($(".KPIforDatabase"), function () {
@@ -44,12 +57,25 @@ define("stage1.kpi", ['jquery', 'bootstrap', 'bootstrap.select'], function ($) {
                 $("#stage1kpisave").attr("disabled", true);
             },
             success: function (data) {
+                var newkpiids = data.kpiid.split('-');
+                var num = 0;
+                $.each($(".KPIforDatabase"), function () {
+                    if ($(this).val().indexOf("NewKPI") > -1)
+                        $(this).val($(this).val().replace("NewKPI", newkpiids[num++]));
+                    //$(this).val(newkpiids[num++] + $(this).val().substring(6));
+                });
+                num = 0;
+                $.each($(".KPIID"), function () {
+                    if ($(this).val().indexOf("NewKPI") > -1)
+                        $(this).val($(this).val().replace("NewKPI", newkpiids[num++]));
+                });
+                $("#deleteKPIid").val("");
                 $("#autosaveloading").hide('slow');
                 $("#stage1kpisave").attr("disabled", false);
             }
         });
     };
-    */
+    
     $(function () {
         $('body').scrollspy({ target: '#sidenav' });
         $('.selectpicker').selectpicker();
@@ -264,5 +290,5 @@ define("stage1.kpi", ['jquery', 'bootstrap', 'bootstrap.select'], function ($) {
         });
     });
 
-    //setInterval(autosavefunction, 600000);
+    setInterval(autosavefunction, 600000);
 });
