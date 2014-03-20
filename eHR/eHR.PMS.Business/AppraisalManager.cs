@@ -799,13 +799,12 @@ namespace eHR.PMS.Business
                 sb_body.Append(Convert.ToDateTime(obj_appraisal_start_stage.EndDate).ToString("yy"));
                 sb_body.Append(" Performance Management ");
                 sb_body.Append(appraisal.Stage.Name);
-                sb_body.Append(" Phase starts today. The Online Performance Management System is now open for employee input in the <a href='");
+                sb_body.Append(" Phase starts today. The Online Performance Management System is now open for employee input in the <a style='font-style:italic;' href='");
                 sb_body.Append(ConfigurationManager.AppSettings["pmsweburl"]);
                 sb_body.Append("'>eHR Portal</a>.</p>");
                 sb_body.Append("<p>Please note that the submission date for Employees' KPIs for Managers' review is <u>");
                 sb_body.Append(Convert.ToDateTime(obj_appraisal_current_stage.SubmissionDeadline).ToString("dd/MM/yyyy"));
-                sb_body.Append("</u>.</p>");
-                sb_body.Append("<p'>Best Regards,<br />HR Team</p><br />");
+                sb_body.Append("</u>.</p><br />");
                 sb_body.Append("<p><span style='font-style:italic; font-size:small;'>This is a computer generated email. Please do not reply.</span></p>");
 
                 obj_email_message.Body = sb_body.ToString();
@@ -836,13 +835,12 @@ namespace eHR.PMS.Business
             sb_body.Append(appraisal.Stage.Name.ToLower());
             sb_body.Append(" document of ");
             sb_body.Append(appraisal.Employee.PreferredName);
-            sb_body.Append(" is now ready for your review and approval via the <a href='");
+            sb_body.Append(" is now ready for your review and approval via the <a style='font-style:italic;' href='");
             sb_body.Append(ConfigurationManager.AppSettings["pmsweburl"]);
             sb_body.Append("'>eHR Portal</a>.</p>");
             sb_body.Append("<p>Please note that the submission date for Level 1 Managers' approval is <u>");
             sb_body.Append(Convert.ToDateTime(obj_appraisal_current_stage.Level1ApprovalDeadline).ToString("dd/MM/yyyy"));
-            sb_body.Append("</u>.</p>");
-            sb_body.Append("<p'>Best Regards,<br />HR Team</p><br />");
+            sb_body.Append("</u>.</p><br />");
             sb_body.Append("<p><span style='font-style:italic; font-size:small;'>This is a computer generated email. Please do not reply.</span></p>");
 
             obj_email_message.Body = sb_body.ToString();
@@ -869,7 +867,9 @@ namespace eHR.PMS.Business
             sb_body.Append(", </p>");
             sb_body.Append("<p>Your Level ");
             sb_body.Append(approvalLevel);
-            sb_body.Append(" has reviewed your KPIs and has returned to you for your further inputs via the <a href='");
+            sb_body.Append(" Manager has reviewed your ");
+            sb_body.Append(appraisal.Stage.Name.ToLower());
+            sb_body.Append(" document and has returned to you for your further inputs via the <a style='font-style:italic;' href='");
             sb_body.Append(ConfigurationManager.AppSettings["pmsweburl"]);
             sb_body.Append("'>eHR Portal</a>.</p>");
 
@@ -885,10 +885,10 @@ namespace eHR.PMS.Business
             {
                 sb_body.Append("<p>Please submit your revised ");
                 sb_body.Append(appraisal.Stage.Name.ToLower());
-                sb_body.Append(" document for your Level 1 Manager's review urgently</p>");
+                sb_body.Append(" document for your Level 1 Manager's review urgently.</p>");
             }
 
-            sb_body.Append("<p'>Best Regards,<br />HR Team</p><br />");
+            sb_body.Append("<br />");
             sb_body.Append("<p><span style='font-style:italic; font-size:small;'>This is a computer generated email. Please do not reply.</span></p>");
 
             obj_email_message.Body = sb_body.ToString();
@@ -924,14 +924,16 @@ namespace eHR.PMS.Business
             }
             else
             {
-                sb_body.Append("<p>Your Level 2 Manager has approved your KPIs and you may view them at <a href='");
+                sb_body.Append("<p>Your Level 2 Manager has approved your ");
+                sb_body.Append(appraisal.Stage.Name.ToLower());
+                sb_body.Append(" document and you may view them at <a style='font-style:italic;' href='");
                 sb_body.Append(ConfigurationManager.AppSettings["pmsweburl"]);
-                sb_body.Append("'>eHR Online Portal</a>. Your ");
+                sb_body.Append("'>eHR Portal</a>. Your ");
                 sb_body.Append(appraisal.Stage.Name);
                 sb_body.Append(" Phase is now completed.</p>");
             }
             
-            sb_body.Append("<p'>Best Regards,<br />HR Team</p><br />");
+            sb_body.Append("<br />");
             sb_body.Append("<p><span style='font-style:italic; font-size:small;'>This is a computer generated email. Please do not reply.</span></p>");
 
             obj_email_message.Body = sb_body.ToString();
@@ -971,19 +973,19 @@ namespace eHR.PMS.Business
                 sb_body.Append(", </p>");
                 sb_body.Append("<p>");
                 sb_body.Append(appraisal.GetApproverByLevel(1).PreferredName);
-                sb_body.Append(", has reviewed and approved the KPI for ");
-                sb_body.Append(appraisal.Employee.PreferredName);
-                sb_body.Append(" and the ");
+                sb_body.Append(", has reviewed and approved the ");
                 sb_body.Append(appraisal.Stage.Name.ToLower());
-                sb_body.Append(" document is now ready for your approval via <a href='");
+                sb_body.Append(" for ");
+                sb_body.Append(appraisal.Employee.PreferredName);
+                sb_body.Append(" and it is now ready for your approval via <a style='font-style:italic;' href='");
                 sb_body.Append(ConfigurationManager.AppSettings["pmsweburl"]);
                 sb_body.Append("'>eHR Portal</a>.</p>");
                 sb_body.Append("<p>Please note that the submission deadline for Level 2 Manager's approval is <u>");
                 sb_body.Append(Convert.ToDateTime(obj_appraisal_current_stage.Level2ApprovalDeadline).ToString("dd/MM/yyyy"));
                 sb_body.Append("</u>. Upon approval, the ");
                 sb_body.Append(appraisal.Stage.Name);
-                sb_body.Append(" will be completed and will be submitted to HR.</p>");
-                sb_body.Append("<p'>Best Regards,<br />HR Team</p><br />");
+                sb_body.Append(" Phase will be completed and will be submitted to HR.</p>");
+                sb_body.Append("<br />");
                 sb_body.Append("<p><span style='font-style:italic; font-size:small;'>This is a computer generated email. Please do not reply.</span></p>");
 
                 obj_email_message.Body = sb_body.ToString();
