@@ -97,6 +97,7 @@ namespace eHR.PMS.Web.Controllers
             if (id.HasValue)
             {
                 obj_appraisal_page.Appraisal = PMS.Model.PMSModel.GetAppraisalById(Convert.ToInt32(id));
+                obj_appraisal_page.CoreValueCompetencies = PMS.Model.PMSModel.GetCoreValueCompetencyByGrade(obj_appraisal_page.Appraisal.Employee.ACRGrade.Id);
                 obj_appraisal_page.User = CurrentUser;
                 obj_appraisal_page.Sections = PMS.Model.PMSModel.GetMasterSectionList(true);
                 obj_appraisal_page.CurrentTaskId = taskid;

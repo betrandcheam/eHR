@@ -57,14 +57,31 @@
                 </div>
                 <div id="collapse@(index)" class="panel-collapse collapse in">
                   <div class="panel-body">
-                  
+                    <div class="row">
+                        <div class="panel panel-info" style="margin:20px;">
+                            <div class="panel-heading">Core Competency:</div>
+                              <div class="panel-body">
+                                <ul class="list-group">
+                                    @{ if (!eHR.PMS.Lib.Utility.Common.IsNullOrEmptyList(Model.CoreValueCompetencies))
+                                       {
+                                           IEnumerable<eHR.PMS.Model.DTO.GradeCompetency> lst_competencies = Model.CoreValueCompetencies.Where(rec => rec.Block.Id == kpinfo.Id);
+                                           foreach (eHR.PMS.Model.DTO.GradeCompetency c in lst_competencies)
+                                           { 
+                                                <li class="list-group-item">@c.Name</li>
+                                           }
+                                       }
+
+                                    }
+                                </ul>
+                              </div>
+                        </div>
+                    </div>
                     <div blockid="@kpinfo.Id" class="tablediv" style="display:none;">
                         
                         <table class="table">
                             <thead class="">
                                 <tr class="thead-color">
                                     <th></th>
-                                    <th style="width:30%">Core Value Competency</th>
                                     <th style="width:30%">Performance Target</th> 
                                     <th style="width:20%">Comments</th>                                  
                                     <th></th>
@@ -78,7 +95,6 @@
                                       {
                                             <tr>
                                                 <td><input type="hidden" class="KPIID" name="KPIID@(kpi.Id)" value="@kpi.Id" /></td>
-                                                <td>@kpi.CoreValueCompetency.Name</td>
                                                 <td>@kpi.Target</td>
                                                 <td style="display:none;">
                                                 @{if (!eHR.PMS.Lib.Utility.Common.IsNullOrEmptyList(kpi.Comments) && kpi.Comments.Where(rec => rec.FormSaveOnly == false).Count() > 0)
