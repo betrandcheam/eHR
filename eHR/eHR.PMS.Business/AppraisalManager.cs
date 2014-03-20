@@ -1293,7 +1293,8 @@ namespace eHR.PMS.Business
                                                                                                                     (rec.EmploymentType !=null && rec.EmploymentType.Id == PMS.Model.PMSConstants.EMPLOYMENT_TYPE_ID_PERMANENT) &&
                                                                                                                     rec.GetNumberOfApprovers() == 2 &&
                                                                                                                     (rec.DateOfHire != null && rec.DateOfHire < eligibleDateStart) &&
-                                                                                                                    (rec.DateOfDeparture == null || rec.DateOfDeparture > eligibleDateEnd)
+                                                                                                                    (rec.DateOfDeparture == null || rec.DateOfDeparture > eligibleDateEnd) &&
+                                                                                                                    (rec.SMPEmploeeId != null && rec.SMPEmploeeId > 0)
                                                                                                                    );
                 if (!Lib.Utility.Common.IsNullOrEmptyList(lst_filtered_employees))
                 {
