@@ -6,7 +6,6 @@ define("home.profile", ['jquery', 'bootstrap'], function ($) {
         var obj = new Object();
         $('.Reviewer').on('keyup', function () {
             obj = $(this);
-            obj.next().html("");
             if (obj.val() != "") {
                 $.ajax({
                     url: $("#forRazorValue").attr("searchurl"),
@@ -14,8 +13,7 @@ define("home.profile", ['jquery', 'bootstrap'], function ($) {
                     type: 'POST',
                     data: { name: obj.val() },
                     success: function (data) {
-                        if (obj.next().css('display') == 'none')
-                            obj.next().css('display', 'block');
+                        obj.next().html("");
                         var html = '<div class="tt-dataset-0"><span class="tt-suggestions" style="display: block;">';
                         $.each(data, function (index) {
                             html = [html, '<div usrid="', data[index].Id, '" class="tt-suggestion" style="white-space: nowrap; cursor: pointer;">', '<p style="white-space: normal;">', data[index].PreferredName + " (" + data[index].DomainId + ")", '</p>', '</div>'].join('');
@@ -32,17 +30,20 @@ define("home.profile", ['jquery', 'bootstrap'], function ($) {
                             obj.val($(this).children().text());
                             obj.next().hide();
                         });
-                        obj.focus(function () {
-                            obj.next().show();
-                        }).blur(function () {
-                            obj.next().hide();
-                        });
+                        if (obj.next().html() != "" && obj.next().css('display') == 'none')
+                            obj.next().css('display', 'block');
                     }
                 });
             }
             else {
                 obj.next().hide();
             }
+            obj.focus(function () {
+                if (obj.next().html() != "")
+                    obj.next().show();
+            }).blur(function () {
+                obj.next().hide();
+            });
         });
 
         $("#reviewersave").click(function () {
