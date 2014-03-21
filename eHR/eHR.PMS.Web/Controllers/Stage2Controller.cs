@@ -189,7 +189,7 @@ namespace eHR.PMS.Web.Controllers
             string message = string.Empty;
             string temp = KPIForDatabase[0];
             string[] deleteKpiId = DeleteKPI.Split('-');
-
+            string newkpiidarray = string.Empty;
             if (string.IsNullOrEmpty(temp))
             {
                 return Json(Resources.Resource.MSG_SAVE_FAIL);
@@ -216,20 +216,20 @@ namespace eHR.PMS.Web.Controllers
                 if (result[result.Length - 1].IndexOf("^&*ONERECORDENDED") > 0)
                 {
                     result[result.Length - 1] = result[result.Length - 1].Substring(0, result[result.Length - 1].IndexOf("^&*ONERECORDENDED"));
-                    PMS.Model.PMSModel.UpdateAppraisalCoreValues(
+                    PMS.Model.PMSModel.UpdateAppraisalCoreValuesForAjax(
                                         Business.AppraisalManager.GetCoreValueItemsToInsert(result),
                                         Business.AppraisalManager.GetCoreValueItemsToUpdate(result),
-                                        Business.AppraisalManager.GetCoreValueItemsToDelete(deleteKpiId), out message);
+                                        Business.AppraisalManager.GetCoreValueItemsToDelete(deleteKpiId), out message,out newkpiidarray);
                 }
                 else
                 {
-                    PMS.Model.PMSModel.UpdateAppraisalCoreValues(
+                    PMS.Model.PMSModel.UpdateAppraisalCoreValuesForAjax(
                                         Business.AppraisalManager.GetCoreValueItemsToInsert(null),
                                         Business.AppraisalManager.GetCoreValueItemsToUpdate(null),
-                                        Business.AppraisalManager.GetCoreValueItemsToDelete(deleteKpiId), out message);
+                                        Business.AppraisalManager.GetCoreValueItemsToDelete(deleteKpiId), out message,out newkpiidarray);
                 }
             }
-            return Json(message);
+            return Json(new { message = message, kpiid = newkpiidarray });
         }
 
         #endregion Core Values

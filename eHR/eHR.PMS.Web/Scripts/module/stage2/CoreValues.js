@@ -22,6 +22,19 @@ define("stage2.corevalues", ['jquery', 'bootstrap', 'bootstrap.select'], functio
                     $('#InfoModal').modal();
                 },
                 success: function (data) {
+                    var newkpiids = data.kpiid.split('-');
+                    var num = 0;
+                    $.each($(".KPIforDatabase"), function () {
+                        if ($(this).val().indexOf("NewKPI") > -1)
+                            $(this).val($(this).val().replace("NewKPI", newkpiids[num++]));
+                        //$(this).val(newkpiids[num++] + $(this).val().substring(6));
+                    });
+                    num = 0;
+                    $.each($(".KPIID"), function () {
+                        if ($(this).val().indexOf("NewKPI") > -1)
+                            $(this).val($(this).val().replace("NewKPI", newkpiids[num++]));
+                    });
+                    $("#deleteKPIid").val("");
                     $("#stage1kpisave").button('reset');
                     $('#loadingcontent').hide();
                     $('#resultcontent').show();
@@ -29,7 +42,6 @@ define("stage2.corevalues", ['jquery', 'bootstrap', 'bootstrap.select'], functio
                 }
             });
         };
-        /*
         var autosavefunction = function () {
             var KPIArray = new Array();
             $.each($(".KPIforDatabase"), function () {
@@ -45,12 +57,25 @@ define("stage2.corevalues", ['jquery', 'bootstrap', 'bootstrap.select'], functio
                     $("#stage1kpisave").attr("disabled", true);
                 },
                 success: function (data) {
+                    var newkpiids = data.kpiid.split('-');
+                    var num = 0;
+                    $.each($(".KPIforDatabase"), function () {
+                        if ($(this).val().indexOf("NewKPI") > -1)
+                            $(this).val($(this).val().replace("NewKPI", newkpiids[num++]));
+                        //$(this).val(newkpiids[num++] + $(this).val().substring(6));
+                    });
+                    num = 0;
+                    $.each($(".KPIID"), function () {
+                        if ($(this).val().indexOf("NewKPI") > -1)
+                            $(this).val($(this).val().replace("NewKPI", newkpiids[num++]));
+                    });
+                    $("#deleteKPIid").val("");
                     $("#autosaveloading").hide('slow');
                     $("#stage1kpisave").attr("disabled", false);
                 }
             });
         };
-        */
+        
         $(function () {
             //if (message)
             //    $('#RedirectModal').modal();
@@ -207,7 +232,7 @@ define("stage2.corevalues", ['jquery', 'bootstrap', 'bootstrap.select'], functio
                 var blockid = tablediv.attr("blockid");
                 var apprid = $("#forRazorValue").attr("apprid");
                 var sectionid = $("#sectionlist li.active a").attr("sectionid");
-                var html = ['<tr><td><input type="hidden" class="KPIID" value="NewKPI" /></td><td>', PTtext.val(), '</td><td style="display:none;"><input type="text" class="KPIforDatabase" name="KPIforDatabase', KPINumforThisSection, 'Block', blockid, '"value="NewKPI^&*', apprid, '^&*', sectionid, '^&*', blockid, "^&*", PTtext.val(), '^&*ONERECORDENDED"/><td align="right"><a href="javascript:void(0)" class="EditKPI btn btn-info btn-xs"><i class="glyphicon glyphicon-wrench"></i> Edit</a> <a href="javascript:void(0)" class="RemoveKPI btn btn-danger btn-xs"><i class="glyphicon glyphicon-trash"></i> Remove</a> <a href="javascript:void(0)" class="ViewKpiComments btn btn-warning btn-xs disabled"><i class="glyphicon glyphicon-pencil"></i> View Comments</a></td></tr>'].join('');
+                var html = ['<tr><td><input type="hidden" class="KPIID" value="NewKPI" /></td><td>', PTtext.val(), '</td><td><input type="hidden" class="KPIforDatabase" name="KPIforDatabase', KPINumforThisSection, 'Block', blockid, '"value="NewKPI^&*', apprid, '^&*', sectionid, '^&*', blockid, "^&*", PTtext.val(), '^&*ONERECORDENDED"/><td align="right"><a href="javascript:void(0)" class="EditKPI btn btn-info btn-xs"><i class="glyphicon glyphicon-wrench"></i> Edit</a> <a href="javascript:void(0)" class="RemoveKPI btn btn-danger btn-xs"><i class="glyphicon glyphicon-trash"></i> Remove</a> <a href="javascript:void(0)" class="ViewKpiComments btn btn-warning btn-xs disabled"><i class="glyphicon glyphicon-pencil"></i> View Comments</a></td></tr>'].join('');
                 $(html).appendTo(KPItbody);
 
 
@@ -230,5 +255,5 @@ define("stage2.corevalues", ['jquery', 'bootstrap', 'bootstrap.select'], functio
                 window.location.href($("#forRazorValue").attr("rooturl"));
             });
         });
-        //setInterval(autosavefunction, 600000); 
+        setInterval(autosavefunction, 600000); 
 });

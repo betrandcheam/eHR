@@ -252,7 +252,7 @@ define("stage1.kpi", ['jquery', 'bootstrap', 'bootstrap.select'], function ($) {
         });
 
         $("#stage1kpisubmit").click(function () {
-            $(".alert").remove();
+            $(".alert-danger").remove();
             $(".panel-heading").css("background-color", "rgb(233,233,233)")
             var flag = true;
             var errorplace = new Object();

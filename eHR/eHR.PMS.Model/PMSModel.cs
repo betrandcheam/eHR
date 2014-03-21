@@ -1456,6 +1456,84 @@ namespace eHR.PMS.Model
             return boo_success;
         }
 
+        public static bool UpdateAppraisalCoreValuesForAjax(List<PMS.Model.DTO.Appraisal.CoreValue> insertList, List<PMS.Model.DTO.Appraisal.CoreValue> updateList, List<PMS.Model.DTO.Appraisal.CoreValue> deleteList, out string message, out string newkpiids)
+        {
+            bool boo_success = false;
+            message = string.Empty;
+            int int_appraisal_id = 0;
+            PMS.Model.Context.PMSEntities dc_pms = new PMS.Model.Context.PMSEntities();
+            newkpiids = string.Empty;
+            StringBuilder sb_newkpiids = new StringBuilder();
+            try
+            {
+
+                if (!Lib.Utility.Common.IsNullOrEmptyList(deleteList))
+                {
+                    foreach (PMS.Model.DTO.Appraisal.CoreValue obj_core_value in deleteList)
+                    {
+                        foreach (PMS.Model.Context.PMS_APPRAISAL_CORE_VALUE_COMMENT ent_comment in dc_pms.PMS_APPRAISAL_CORE_VALUE_COMMENT.Where(rec => rec.ITEM_ID == obj_core_value.Id))
+                        {
+                            dc_pms.PMS_APPRAISAL_CORE_VALUE_COMMENT.DeleteObject(ent_comment);
+                        }
+
+                        Model.Context.PMS_APPRAISAL_CORE_VALUE entity = dc_pms.PMS_APPRAISAL_CORE_VALUE.Where(rec => rec.ID == obj_core_value.Id).Single();
+                        dc_pms.PMS_APPRAISAL_CORE_VALUE.DeleteObject(entity);
+
+                        //if (int_appraisal_id == 0) { int_appraisal_id = obj_core_value.Appraisal.Id; }
+                    }
+                }
+
+                PMS.Model.Context.PMS_APPRAISAL_CORE_VALUE tempentity = new Context.PMS_APPRAISAL_CORE_VALUE();
+                if (!Lib.Utility.Common.IsNullOrEmptyList(insertList))
+                {
+                    foreach (PMS.Model.DTO.Appraisal.CoreValue obj_core_value in insertList)
+                    {
+                        tempentity = Mappers.PMSMapper.MapAppraisalCoreValueDTOToEntity(obj_core_value);
+                        dc_pms.PMS_APPRAISAL_CORE_VALUE.AddObject(tempentity);
+                        dc_pms.SaveChanges();
+                        int_appraisal_id = obj_core_value.Appraisal.Id;
+                        sb_newkpiids.Append(tempentity.ID.ToString() + "-");
+                    }
+                }
+
+                if (!Lib.Utility.Common.IsNullOrEmptyList(updateList))
+                {
+                    foreach (PMS.Model.DTO.Appraisal.CoreValue obj_core_value in updateList)
+                    {
+                        Model.Context.PMS_APPRAISAL_CORE_VALUE entity = dc_pms.PMS_APPRAISAL_CORE_VALUE.Where(rec => rec.ID == obj_core_value.Id).Single();
+                        //entity.COMPETENCY_MASTER_ID = obj_core_value.CoreValueCompetency.Id;
+                        entity.TARGET = obj_core_value.Target;
+                        entity.LEVEL_1_SCORE = obj_core_value.Level1Score;
+                        entity.LEVEL_2_SCORE = obj_core_value.Level2Score;
+                        entity.SELF_SCORE = obj_core_value.SelfScore;
+
+                        if (int_appraisal_id == 0) { int_appraisal_id = obj_core_value.Appraisal.Id; }
+                    }
+                }
+
+                if (int_appraisal_id > 0)
+                {
+                    Model.Context.PMS_APPRAISAL ent_appraisal = dc_pms.PMS_APPRAISAL.Where(rec => rec.ID == int_appraisal_id).Single();
+                    ent_appraisal.STATUS_ID = PMS.Model.PMSConstants.STATUS_ID_DRAFT;
+                }
+
+                dc_pms.SaveChanges();
+                newkpiids = sb_newkpiids.ToString();
+                if (!string.IsNullOrEmpty(newkpiids))
+                    newkpiids = newkpiids.Substring(0, newkpiids.Length - 1);
+                boo_success = true;
+            }
+            catch (Exception exc)
+            {
+                message = exc.Message;
+            }
+            finally
+            {
+                dc_pms.Dispose();
+            }
+            return boo_success;
+        }
+
         public static bool UpdateAppraisalCoreValueComment(List<PMS.Model.DTO.Appraisal.CoreValueComment> updateList, out string message)
         {
             bool boo_success = false;

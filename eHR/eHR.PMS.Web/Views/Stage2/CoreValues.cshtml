@@ -112,7 +112,8 @@
                             <thead class="">
                                 <tr class="thead-color">
                                     <th></th>
-                                    <th style="width:35%">Performance Target</th>                                   
+                                    <th style="width:35%">Performance Target</th>
+                                    <th></th>                                   
                                     <th style="width:30%"></th>
                                 </tr>
                             </thead>
@@ -125,8 +126,8 @@
                                             <tr>
                                                 <td><input type="hidden" class="KPIID" value="@(kpi.Id)" /></td>
                                                 <td>@(kpi.Target)</td>
-                                                <td style="display:none;">
-                                                <input type="text" class="KPIforDatabase" name="KPIforDatabase@(kpiindex++)Block@(kpinfo.Id)" value="@(kpi.Id)^&*@(kpi.Appraisal.Id)^&*@(Model.CurrentSection.Id)^&*@(kpi.Block.Id)^&*@(kpi.Target)^&*ONERECORDENDED"/>
+                                                <td>
+                                                <input type="hidden" class="KPIforDatabase" name="KPIforDatabase@(kpiindex++)Block@(kpinfo.Id)" value="@(kpi.Id)^&*@(kpi.Appraisal.Id)^&*@(Model.CurrentSection.Id)^&*@(kpi.Block.Id)^&*@(kpi.Target)^&*ONERECORDENDED"/>
                                                 @{if (!eHR.PMS.Lib.Utility.Common.IsNullOrEmptyList(kpi.Comments))
                                                   {
                                                     <div class="Comments">
