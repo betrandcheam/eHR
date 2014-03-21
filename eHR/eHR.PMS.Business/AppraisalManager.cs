@@ -995,7 +995,7 @@ namespace eHR.PMS.Business
                 sb_body.Append(appraisal.GetApproverByLevel(1).PreferredName);
                 sb_body.Append(", has reviewed and approved the ");
                 sb_body.Append(appraisal.Stage.Name.ToLower());
-                sb_body.Append(" for ");
+                sb_body.Append(" document for ");
                 sb_body.Append(appraisal.Employee.PreferredName);
                 sb_body.Append(" and it is now ready for your approval via <a style='font-style:italic;' href='");
                 sb_body.Append(ConfigurationManager.AppSettings["pmsweburl"]);
