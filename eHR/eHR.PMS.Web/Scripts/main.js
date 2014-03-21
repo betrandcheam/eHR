@@ -42,7 +42,7 @@
         });
         $('textarea').blur(function () {
             $(this).removeClass("focusField").addClass("idleField");
-            if ($.trim(this.value) == '') {
+            if ($.trim(this.value) == '' && this.defaultValue.indexOf("Type something here") == 0) {
                 this.value = (this.defaultValue ? this.defaultValue : '');
             }
         });
