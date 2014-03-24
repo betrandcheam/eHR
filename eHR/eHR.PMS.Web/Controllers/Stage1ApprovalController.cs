@@ -34,30 +34,41 @@ namespace eHR.PMS.Web.Controllers
         [HttpPost]
         public ActionResult KeyPerformanceIndicators(int taskid, int id, FormCollection form)
         {
-            List<Model.DTO.Appraisal.KPIComment> lst_comments = new List<Model.DTO.Appraisal.KPIComment>();
-            Dictionary<string, string> dict_comments = new Dictionary<string, string>();
+            List<Model.DTO.Appraisal.KPIComment> lst_update_comments = new List<Model.DTO.Appraisal.KPIComment>();
+            List<Model.DTO.Appraisal.KPIComment> lst_delete_comments = new List<Model.DTO.Appraisal.KPIComment>();            
+            Dictionary<string, TempComment> dict_comments = new Dictionary<string, TempComment>();
             string message = string.Empty;
             dict_comments = FormCollectionToDictionary(form);
 
-            foreach (KeyValuePair<string, string> kv in dict_comments)
+            foreach (KeyValuePair<string, TempComment> kv in dict_comments)
             {
-                if (!string.IsNullOrEmpty(kv.Value.Trim()))
+                if (!string.IsNullOrEmpty(kv.Value.CommentContent.Trim()))
                 {
                     Model.DTO.Appraisal.KPIComment obj_comment = new Model.DTO.Appraisal.KPIComment()
                     {
                         AppraisalKPI = new Model.DTO.Appraisal.KPI() { Id = Convert.ToInt32(kv.Key) },
-                        Comments = kv.Value.Trim(),
+                        Comments = kv.Value.CommentContent.Trim(),
                         Commentor = new Model.DTO.Core.Employee() { Id = CurrentUser.Id },
                         CommentedTimestamp = DateTime.Now,
                         FormSaveOnly = true
                     };
-                    lst_comments.Add(obj_comment);
+                    lst_update_comments.Add(obj_comment);
+                }
+                else
+                {
+                    if (!kv.Value.StrCommentID.Contains("NewComment"))
+                    {
+                        Model.DTO.Appraisal.KPIComment obj_comment = new Model.DTO.Appraisal.KPIComment()
+                        {
+                            Id = Int32.Parse(kv.Value.StrCommentID)
+                        };
+                        lst_delete_comments.Add(obj_comment);
+                    }
                 }
             }
-
-            if (!Lib.Utility.Common.IsNullOrEmptyList(lst_comments))
+            if (!Lib.Utility.Common.IsNullOrEmptyList(lst_update_comments) || !Lib.Utility.Common.IsNullOrEmptyList(lst_delete_comments))
             {
-                if (Model.PMSModel.UpdateAppraisalKPIComment(lst_comments, out message))
+                if (Model.PMSModel.UpdateAppraisalKPIComment(lst_update_comments, lst_delete_comments, out message))
                 {
                     //TempData["AlertMessage"] = "Appraisal information is saved.";
                     return Redirect(Url.Content("~/Stage1Approval/CoreValues/" + taskid + "/" + id));
@@ -69,7 +80,7 @@ namespace eHR.PMS.Web.Controllers
                     return View();
                 }
             }
-            else 
+            else
             {
                 return Redirect(Url.Content("~/Stage1Approval/CoreValues/" + taskid + "/" + id));
             }
@@ -80,10 +91,14 @@ namespace eHR.PMS.Web.Controllers
         {
             string message = string.Empty;
             string temp = KPIForDatabase[0];
+            string newcommentsidarray = string.Empty;
             string[] splitString = { "},{" };
             string[] result = temp.Substring(2, temp.Length - 2).Split(splitString, StringSplitOptions.None);
-            Model.PMSModel.UpdateAppraisalKPIComment(Business.AppraisalManager.GetKPICommentItemsToSave(result, CurrentUser.Id, DateTime.Now), out message);
-            return Json(message);
+            List<PMS.Model.DTO.Appraisal.KPIComment> lst_comments = new List<Model.DTO.Appraisal.KPIComment>();
+            List<PMS.Model.DTO.Appraisal.KPIComment> lst_delete_comments = new List<Model.DTO.Appraisal.KPIComment>();
+            Business.AppraisalManager.GetKPICommentItemsToSave(result, CurrentUser.Id, DateTime.Now,out lst_comments,out lst_delete_comments);
+            Model.PMSModel.UpdateAppraisalKPICommentForAjax(lst_comments,lst_delete_comments,out message,out newcommentsidarray);
+            return Json(new { message = message, kpiid = newcommentsidarray });
         }
 
         #endregion KPI
@@ -114,29 +129,41 @@ namespace eHR.PMS.Web.Controllers
         public ActionResult CoreValues(int taskid, int id, FormCollection form)
         {
             List<Model.DTO.Appraisal.CoreValueComment> lst_comments = new List<Model.DTO.Appraisal.CoreValueComment>();
-            Dictionary<string, string> dict_comments = new Dictionary<string, string>();
+            List<Model.DTO.Appraisal.CoreValueComment> lst_delete_comments = new List<Model.DTO.Appraisal.CoreValueComment>();            
+            Dictionary<string, TempComment> dict_comments = new Dictionary<string, TempComment>();
             dict_comments = FormCollectionToDictionary(form);
             string message = string.Empty;
 
-            foreach (KeyValuePair<string, string> kv in dict_comments)
+            foreach (KeyValuePair<string, TempComment> kv in dict_comments)
             {
-                if (!string.IsNullOrEmpty(kv.Value.Trim()))
+                if (!string.IsNullOrEmpty(kv.Value.CommentContent.Trim()))
                 {
                     Model.DTO.Appraisal.CoreValueComment obj_comment = new Model.DTO.Appraisal.CoreValueComment()
                     {
                         AppraisalCoreValue = new Model.DTO.Appraisal.CoreValue() { Id = Convert.ToInt32(kv.Key) },
-                        Comments = kv.Value.Trim(),
+                        Comments = kv.Value.CommentContent.Trim(),
                         Commentor = new Model.DTO.Core.Employee() { Id = CurrentUser.Id },
                         CommentedTimestamp = DateTime.Now,
                         FormSaveOnly = true
                     };
                     lst_comments.Add(obj_comment);
                 }
+                else
+                {
+                    if(!kv.Value.StrCommentID.Contains("NewComment"))
+                    {
+                        Model.DTO.Appraisal.CoreValueComment obj_comment = new Model.DTO.Appraisal.CoreValueComment()
+                        {
+                          Id=Int32.Parse(kv.Value.StrCommentID)
+                        };
+                        lst_delete_comments.Add(obj_comment);
+                    }
+                }
             }
 
-            if (!Lib.Utility.Common.IsNullOrEmptyList(lst_comments))
+            if (!Lib.Utility.Common.IsNullOrEmptyList(lst_comments) || !Lib.Utility.Common.IsNullOrEmptyList(lst_delete_comments))
             {
-                if (Model.PMSModel.UpdateAppraisalCoreValueComment(lst_comments, out message))
+                if (Model.PMSModel.UpdateAppraisalCoreValueComment(lst_comments,lst_delete_comments, out message))
                 {
                     //TempData["AlertMessage"] = "Appraisal information is saved.";
                     return Redirect(Url.Content("~/Stage1Approval/PerformanceCoachingandReview/" + taskid + "/" + id));
@@ -159,11 +186,15 @@ namespace eHR.PMS.Web.Controllers
         public JsonResult CoreValuesSave(string[] KPIForDatabase)
         {
             string message = string.Empty;
+            string newcommentsidarray = string.Empty;
             string temp = KPIForDatabase[0];
             string[] splitString = { "},{" };
             string[] result = temp.Substring(2, temp.Length - 2).Split(splitString, StringSplitOptions.None);
-            Model.PMSModel.UpdateAppraisalCoreValueComment(Business.AppraisalManager.GetCoreValueCommentItemsToSave(result, CurrentUser.Id, DateTime.Now), out message);
-            return Json(message);
+            List<PMS.Model.DTO.Appraisal.CoreValueComment> lst_comments = new List<Model.DTO.Appraisal.CoreValueComment>();
+            List<PMS.Model.DTO.Appraisal.CoreValueComment> lst_delete_comments = new List<Model.DTO.Appraisal.CoreValueComment>();
+            Business.AppraisalManager.GetCoreValueCommentItemsToSave(result, CurrentUser.Id, DateTime.Now, out lst_comments, out lst_delete_comments);
+            Model.PMSModel.UpdateAppraisalCoreValueCommentForAjax(lst_comments,lst_delete_comments, out message,out newcommentsidarray);
+            return Json(new { message = message, kpiid = newcommentsidarray });
         }
 
         #endregion Core Value
@@ -336,16 +367,25 @@ namespace eHR.PMS.Web.Controllers
 
         #endregion Career Development
 
-        public Dictionary<string, string> FormCollectionToDictionary(FormCollection form)
+        public Dictionary<string, TempComment> FormCollectionToDictionary(FormCollection form)
         {
-            Dictionary<string, string> dict = new Dictionary<string, string>();
+            Dictionary<string, TempComment> dict = new Dictionary<string, TempComment>();
             string temp = string.Empty;
             foreach (string key in form.AllKeys.Where(sec => sec.Contains("KPIID")))
             {
                 temp = key.Replace("KPIID", "");
-                dict.Add(temp, form["CommentContent" + temp]);
+                TempComment tc = new TempComment();
+                tc.StrCommentID = form["CommentID" + temp];
+                tc.CommentContent=form["CommentContent" + temp];
+                dict.Add(temp, tc);
             }
             return dict;
+        }
+
+        public class TempComment
+        {
+            public string StrCommentID { get; set; }
+            public string CommentContent { get; set; }
         }
     }
 }

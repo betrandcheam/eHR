@@ -21,6 +21,15 @@ define("stage2approval.corevalues", ['jquery', 'bootstrap', 'bootstrap.select'],
                     $('#InfoModal').modal();
                 },
                 success: function (data) {
+                    var newkpiids = data.kpiid.split('-');
+                    var num = 0;
+                    $.each($(".CommentID"), function () {
+                        if ($(this).val().indexOf("NewComment") > -1)
+                            $(this).val($(this).val().replace("NewComment", newkpiids[num++]));
+                        if ($(this).prev().val() == "")
+                            $(this).val("NewComment");
+                        //$(this).val(newkpiids[num++] + $(this).val().substring(6));
+                    });
                     $("#stage1kpisave").button('reset');
                     $('#loadingcontent').hide();
                     $('#resultcontent').show();

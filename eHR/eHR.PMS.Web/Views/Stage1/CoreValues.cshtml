@@ -126,12 +126,25 @@
                                                 <td>@(kpi.Target)</td>
                                                 <td>
                                                 <input type="hidden" class="KPIforDatabase" name="KPIforDatabase@(kpiindex++)Block@(kpinfo.Id)" value="@(kpi.Id)^&*@(kpi.Appraisal.Id)^&*@(Model.CurrentSection.Id)^&*@(kpi.Block.Id)^&*@(kpi.Target)^&*ONERECORDENDED"/>
-                                                @{if (!eHR.PMS.Lib.Utility.Common.IsNullOrEmptyList(kpi.Comments))
+                                                </td>
+                                                <td align="right">
+                                                 @{ if (!Model.ViewOnly)
+                                                    {
+                                                         <a href="javascript:void(0)" class="EditKPI btn btn-info btn-xs"><i class="glyphicon glyphicon-wrench"></i> Edit</a>
+                                                         <a href="javascript:void(0)" class="RemoveKPI btn btn-danger btn-xs"><i class="glyphicon glyphicon-trash"></i> Remove</a>
+                                                    
+                                                    }
+                                                  }
+                                                    <a commentsid="@(kpinfo.Id)@(commentsindex++)" href="javascript:void(0)" class="ViewKpiComments btn btn-warning btn-xs" ><i class="glyphicon glyphicon-pencil"></i> View Comments</a>                                                     
+                                                </td>
+                                                <td style="display:none;">
+                                                    @{ IEnumerable<eHR.PMS.Model.DTO.Appraisal.CoreValueComment> templist = kpi.Comments;
+                                                       if (!eHR.PMS.Lib.Utility.Common.IsNullOrEmptyList(templist) && templist.Where(s => s.FormSaveOnly == false).Count()>0)
                                                   {
                                                     <div class="Comments">
                                                             <div style="width:500px;">                                                   
                                                             <ul class="list-group">
-                                                          @foreach (eHR.PMS.Model.DTO.Appraisal.CoreValueComment comment in kpi.Comments)
+                                                          @foreach (eHR.PMS.Model.DTO.Appraisal.CoreValueComment comment in templist.Where(s => s.FormSaveOnly == false))
                                                           {
                                                              <li class="list-group-item">
                                                              <span class="badge">By @(comment.Commentor.PreferredName) on @(Convert.ToDateTime(comment.CommentedTimestamp).ToString("hh:mm tt,dd-MMM-yyyy"))</span>                                                                                                                           
@@ -149,17 +162,6 @@
                                                     <div class="Comments"></div>
                                                   }
                                                   }
-
-                                                </td>
-                                                <td align="right">
-                                                 @{ if (!Model.ViewOnly)
-                                                    {
-                                                         <a href="javascript:void(0)" class="EditKPI btn btn-info btn-xs"><i class="glyphicon glyphicon-wrench"></i> Edit</a>
-                                                         <a href="javascript:void(0)" class="RemoveKPI btn btn-danger btn-xs"><i class="glyphicon glyphicon-trash"></i> Remove</a>
-                                                    
-                                                    }
-                                                  }
-                                                    <a commentsid="@(kpinfo.Id)@(commentsindex++)" href="javascript:void(0)" class="ViewKpiComments btn btn-warning btn-xs" ><i class="glyphicon glyphicon-pencil"></i> View Comments</a>                                                     
                                                 </td>
                                             </tr>
                                       }

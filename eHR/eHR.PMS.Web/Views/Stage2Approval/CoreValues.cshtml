@@ -93,16 +93,17 @@
                                       IEnumerable<eHR.PMS.Model.DTO.Appraisal.CoreValue> list = Model.Appraisal.CoreValues.Where(rec => rec.Block.Id == kpinfo.Id);
                                       foreach (eHR.PMS.Model.DTO.Appraisal.CoreValue kpi in list)
                                       {
-                                            <tr>
+                                          IEnumerable<eHR.PMS.Model.DTO.Appraisal.CoreValueComment> templist = kpi.Comments;
+                                          <tr>
                                                 <td><input type="hidden" class="KPIID" name="KPIID@(kpi.Id)" value="@kpi.Id" /></td>
                                                 <td>@kpi.Target</td>
                                                 <td style="display:none;">
-                                                @{if (!eHR.PMS.Lib.Utility.Common.IsNullOrEmptyList(kpi.Comments) && kpi.Comments.Where(rec => rec.FormSaveOnly == false).Count() > 0)
+                                                @{if (!eHR.PMS.Lib.Utility.Common.IsNullOrEmptyList(templist) && templist.Where(rec => rec.FormSaveOnly == false).Count() > 0)
                                                   {
                                                     <div class="Comments">
                                                             <div style="width:500px;">                                                   
                                                             <ul class="list-group">
-                                                          @foreach (eHR.PMS.Model.DTO.Appraisal.CoreValueComment comment in kpi.Comments.Where(rec => rec.Id > 0))
+                                                          @foreach (eHR.PMS.Model.DTO.Appraisal.CoreValueComment comment in templist.Where(rec => rec.FormSaveOnly == false))
                                                           {
                                                               if (comment.FormSaveOnly == false) { 
                                                              <li class="list-group-item">
@@ -124,17 +125,26 @@
                                                   }
                                                 </td>
                                                 <td>
-                                                    <textarea name="CommentContent@(kpi.Id)" class="CommentContent PTtext idleField" rows="2" cols="5">
-                                                    @{if (!eHR.PMS.Lib.Utility.Common.IsNullOrEmptyList(kpi.Comments))
+                                                    @{if (!eHR.PMS.Lib.Utility.Common.IsNullOrEmptyList(templist))
                                                         {
-                                                            if (!eHR.PMS.Lib.Utility.Common.IsNullOrEmptyList(kpi.Comments.Where(rec => rec.FormSaveOnly == true))) 
+                                                            if (!eHR.PMS.Lib.Utility.Common.IsNullOrEmptyList(templist.Where(rec => rec.FormSaveOnly == true))) 
                                                             { 
-                                                                @(kpi.Comments.Where(rec => rec.FormSaveOnly == true).Single().Comments)
+                                                                <textarea name="CommentContent@(kpi.Id)" class="CommentContent PTtext idleField" rows="2" cols="5">@(templist.Where(rec => rec.FormSaveOnly == true).Single().Comments)</textarea>
+                                                                <input type="hidden" name="CommentID@(kpi.Id)" class="CommentID" value="@(templist.Where(rec => rec.FormSaveOnly == true).Single().Id)" />
                                                             }
-                                                            
+                                                            else
+                                                            {
+                                                                <textarea name="CommentContent@(kpi.Id)" class="CommentContent PTtext idleField" rows="2" cols="5"></textarea>
+                                                                <input type="hidden" name="CommentID@(kpi.Id)" class="CommentID" value="NewComment" />
+                                                            }
+
+                                                        }
+                                                        else
+                                                        {
+                                                           <textarea name="CommentContent@(kpi.Id)" class="CommentContent PTtext idleField" rows="2" cols="5"></textarea>
+                                                           <input type="hidden" name="CommentID@(kpi.Id)" class="CommentID" value="NewComment" />
                                                         }
                                                      }
-                                                    </textarea>
                                                 </td>
                                                 <td align="right">
                                                     <a commentsid="@(kpinfo.Id)@(commentsindex++)" href="javascript:void(0)" class="ViewKpiComments btn btn-warning btn-xs" ><i class="glyphicon glyphicon-pencil"></i> View Comments</a>                                                     

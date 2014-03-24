@@ -1340,12 +1340,71 @@ namespace eHR.PMS.Model
             return boo_success;
         }
 
-        public static bool UpdateAppraisalKPIComment(List<PMS.Model.DTO.Appraisal.KPIComment> updateList, out string message)
+        public static bool UpdateAppraisalKPIComment(List<PMS.Model.DTO.Appraisal.KPIComment> updateList,List<PMS.Model.DTO.Appraisal.KPIComment> deleteList, out string message)
+        {
+            bool boo_success = false;
+            message = string.Empty;
+            bool updateflag = false;
+            PMS.Model.Context.PMSEntities dc_pms = new PMS.Model.Context.PMSEntities();
+
+            try
+            {
+                if (!Lib.Utility.Common.IsNullOrEmptyList(updateList))
+                {
+                    updateflag = true;
+                    foreach (PMS.Model.DTO.Appraisal.KPIComment obj_comment in updateList)
+                    {
+                        // there should only be 1 new comment for each appraisal kpi item
+                        PMS.Model.Context.PMS_APPRAISAL_KPI_COMMENT ent_comment = dc_pms.PMS_APPRAISAL_KPI_COMMENT.Where(rec => rec.ITEM_ID == obj_comment.AppraisalKPI.Id &&
+                                                                                                                                rec.COMMENTED_BY_ID == obj_comment.Commentor.Id &&
+                                                                                                                                rec.FORM_SAVE_ONLY == true).SingleOrDefault();
+
+                        if (ent_comment != null)
+                        {
+                            ent_comment.COMMENT = obj_comment.Comments;
+                            ent_comment.COMMENTED_TIMESTAMP = obj_comment.CommentedTimestamp;
+                        }
+                        else
+                        {
+                            ent_comment = Mappers.PMSMapper.MapAppraisalKPICommentDTOToEntity(obj_comment);
+                            dc_pms.PMS_APPRAISAL_KPI_COMMENT.AddObject(ent_comment);
+                        }
+                    }
+                    
+                    
+                }
+                if (!Lib.Utility.Common.IsNullOrEmptyList(deleteList))
+                {
+                    updateflag = true;
+                    foreach (PMS.Model.DTO.Appraisal.KPIComment obj_comment in deleteList)
+                    {
+                        PMS.Model.Context.PMS_APPRAISAL_KPI_COMMENT ent_comment = dc_pms.PMS_APPRAISAL_KPI_COMMENT.Where(s => s.ID == obj_comment.Id).Single();
+                        dc_pms.PMS_APPRAISAL_KPI_COMMENT.DeleteObject(ent_comment);
+                    }
+                }
+                if (updateflag)
+                    dc_pms.SaveChanges();
+                boo_success = true;
+            }
+            catch (Exception exc)
+            {
+                message = exc.Message;
+                boo_success = false;
+            }
+            finally
+            {
+                dc_pms.Dispose();
+            }
+            return boo_success;
+        }
+
+        public static bool UpdateAppraisalKPICommentForAjax(List<PMS.Model.DTO.Appraisal.KPIComment> updateList, List<PMS.Model.DTO.Appraisal.KPIComment> deleteList, out string message, out string newcommentsidarray)
         {
             bool boo_success = false;
             message = string.Empty;
             PMS.Model.Context.PMSEntities dc_pms = new PMS.Model.Context.PMSEntities();
-
+            newcommentsidarray = string.Empty;
+            StringBuilder sb_newkpiids = new StringBuilder();
             try
             {
                 if (!Lib.Utility.Common.IsNullOrEmptyList(updateList))
@@ -1366,15 +1425,32 @@ namespace eHR.PMS.Model
                         {
                             ent_comment = Mappers.PMSMapper.MapAppraisalKPICommentDTOToEntity(obj_comment);
                             dc_pms.PMS_APPRAISAL_KPI_COMMENT.AddObject(ent_comment);
+                            dc_pms.SaveChanges();
+                            sb_newkpiids.Append(ent_comment.ID.ToString() + "-");
                         }
                     }
-                    dc_pms.SaveChanges();
-                    boo_success = true;
+
+
                 }
+                if (!Lib.Utility.Common.IsNullOrEmptyList(deleteList))
+                {
+                    foreach (PMS.Model.DTO.Appraisal.KPIComment obj_comment in deleteList)
+                    {
+                        PMS.Model.Context.PMS_APPRAISAL_KPI_COMMENT ent_comment = dc_pms.PMS_APPRAISAL_KPI_COMMENT.Where(s => s.ID == obj_comment.Id).Single();
+                        dc_pms.PMS_APPRAISAL_KPI_COMMENT.DeleteObject(ent_comment);
+                    }
+                    dc_pms.SaveChanges();
+                }
+
+                newcommentsidarray = sb_newkpiids.ToString();
+                if (!string.IsNullOrEmpty(newcommentsidarray))
+                    newcommentsidarray = newcommentsidarray.Substring(0, newcommentsidarray.Length - 1);
+                boo_success = true;
             }
             catch (Exception exc)
             {
                 message = exc.Message;
+                boo_success = false;
             }
             finally
             {
@@ -1382,7 +1458,6 @@ namespace eHR.PMS.Model
             }
             return boo_success;
         }
-
         #endregion KPI
 
         #region Core Values
@@ -1534,12 +1609,67 @@ namespace eHR.PMS.Model
             return boo_success;
         }
 
-        public static bool UpdateAppraisalCoreValueComment(List<PMS.Model.DTO.Appraisal.CoreValueComment> updateList, out string message)
+        public static bool UpdateAppraisalCoreValueComment(List<PMS.Model.DTO.Appraisal.CoreValueComment> updateList,List<PMS.Model.DTO.Appraisal.CoreValueComment> deleteList, out string message)
         {
             bool boo_success = false;
             message = string.Empty;
             PMS.Model.Context.PMSEntities dc_pms = new PMS.Model.Context.PMSEntities();
+            bool updateflag = false;
+            try
+            {
+                if (!Lib.Utility.Common.IsNullOrEmptyList(updateList))
+                {
+                    updateflag = true;
+                    foreach (PMS.Model.DTO.Appraisal.CoreValueComment obj_comment in updateList)
+                    {
+                        // there should only be 1 new comment for each appraisal kpi item
+                        PMS.Model.Context.PMS_APPRAISAL_CORE_VALUE_COMMENT ent_comment = dc_pms.PMS_APPRAISAL_CORE_VALUE_COMMENT.Where(rec => rec.ITEM_ID == obj_comment.AppraisalCoreValue.Id &&
+                                                                                                                                                rec.COMMENTED_BY_ID == obj_comment.Commentor.Id &&
+                                                                                                                                                rec.FORM_SAVE_ONLY == true).SingleOrDefault();
 
+                        if (ent_comment != null)
+                        {
+                            ent_comment.COMMENT = obj_comment.Comments;
+                            ent_comment.COMMENTED_TIMESTAMP = obj_comment.CommentedTimestamp;
+                        }
+                        else
+                        {
+                            ent_comment = Mappers.PMSMapper.MapAppraisalCoreValueCommentDTOToEntity(obj_comment);
+                            dc_pms.PMS_APPRAISAL_CORE_VALUE_COMMENT.AddObject(ent_comment);
+                        }
+                    }
+                }
+                if (!Lib.Utility.Common.IsNullOrEmptyList(deleteList))
+                {
+                    updateflag = true;
+                    foreach (PMS.Model.DTO.Appraisal.CoreValueComment obj_comment in deleteList)
+                    {
+                        PMS.Model.Context.PMS_APPRAISAL_CORE_VALUE_COMMENT ent_comment = dc_pms.PMS_APPRAISAL_CORE_VALUE_COMMENT.Where(s => s.ID == obj_comment.Id).Single();
+                        dc_pms.PMS_APPRAISAL_CORE_VALUE_COMMENT.DeleteObject(ent_comment);
+                    }
+                }
+                if(updateflag)
+                    dc_pms.SaveChanges();
+                boo_success = true;
+            }
+            catch (Exception exc)
+            {
+                message = exc.Message;
+            }
+            finally
+            {
+                dc_pms.Dispose();
+            }
+            return boo_success;
+        }
+
+        public static bool UpdateAppraisalCoreValueCommentForAjax(List<PMS.Model.DTO.Appraisal.CoreValueComment> updateList, List<PMS.Model.DTO.Appraisal.CoreValueComment> deleteList, out string message, out string newcommentsidarray)
+        {
+            bool boo_success = false;
+            message = string.Empty;
+            PMS.Model.Context.PMSEntities dc_pms = new PMS.Model.Context.PMSEntities();
+            newcommentsidarray = string.Empty;
+            StringBuilder sb_newkpiids = new StringBuilder();
             try
             {
                 if (!Lib.Utility.Common.IsNullOrEmptyList(updateList))
@@ -1560,11 +1690,24 @@ namespace eHR.PMS.Model
                         {
                             ent_comment = Mappers.PMSMapper.MapAppraisalCoreValueCommentDTOToEntity(obj_comment);
                             dc_pms.PMS_APPRAISAL_CORE_VALUE_COMMENT.AddObject(ent_comment);
+                            dc_pms.SaveChanges();
+                            sb_newkpiids.Append(ent_comment.ID.ToString() + "-");
                         }
                     }
-                    dc_pms.SaveChanges();
-                    boo_success = true;
                 }
+                if (!Lib.Utility.Common.IsNullOrEmptyList(deleteList))
+                {
+                    foreach (PMS.Model.DTO.Appraisal.CoreValueComment obj_comment in deleteList)
+                    {
+                        PMS.Model.Context.PMS_APPRAISAL_CORE_VALUE_COMMENT ent_comment = dc_pms.PMS_APPRAISAL_CORE_VALUE_COMMENT.Where(s => s.ID == obj_comment.Id).Single();
+                        dc_pms.PMS_APPRAISAL_CORE_VALUE_COMMENT.DeleteObject(ent_comment);
+                    }
+                    dc_pms.SaveChanges();
+                }
+                newcommentsidarray = sb_newkpiids.ToString();
+                if (!string.IsNullOrEmpty(newcommentsidarray))
+                    newcommentsidarray = newcommentsidarray.Substring(0, newcommentsidarray.Length - 1);
+                boo_success = true;
             }
             catch (Exception exc)
             {
@@ -1576,7 +1719,6 @@ namespace eHR.PMS.Model
             }
             return boo_success;
         }
-
         #endregion Core Values
 
         #region Performance Coaching

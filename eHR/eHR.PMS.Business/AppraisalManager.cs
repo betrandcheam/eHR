@@ -1411,19 +1411,19 @@ namespace eHR.PMS.Business
             return lst_kpis;
         }
 
-        public static List<PMS.Model.DTO.Appraisal.KPIComment> GetKPICommentItemsToSave(string[] result, int commentorId, DateTime commentTimestamp)
+        public static List<PMS.Model.DTO.Appraisal.KPIComment> GetKPICommentItemsToSave(string[] result, int commentorId, DateTime commentTimestamp, out List<PMS.Model.DTO.Appraisal.KPIComment> lst_comments, out List<PMS.Model.DTO.Appraisal.KPIComment> lst_delete_comments)
         {
-            List<PMS.Model.DTO.Appraisal.KPIComment> lst_comments = null;
-
+            lst_comments = null;
+            lst_delete_comments = null;
             if (!Lib.Utility.Common.IsNullOrEmptyList(result))
             {
                 lst_comments = new List<Model.DTO.Appraisal.KPIComment>();
-
+                lst_delete_comments = new List<Model.DTO.Appraisal.KPIComment>();
                 foreach (string str_string in result)
                 {
                     string[] kparray = str_string.Replace("\"", "").Split(',');
-                    string tmp_comment = kparray[1].Split(':')[1].Replace("}]", "").Trim().TrimEnd('\r','\n').Replace("\\n", Environment.NewLine).Trim();
-
+                    string tmp_comment = kparray[1].Split(':')[1].Trim();
+                    string tmp_comment_id = kparray[2].Split(':')[1].Replace("}]", "").Trim().TrimEnd('\r', '\n').Replace("\\n", Environment.NewLine).Trim();
                     if (!string.IsNullOrEmpty(tmp_comment)) 
                     {
                         PMS.Model.DTO.Appraisal.KPIComment obj_comment = new Model.DTO.Appraisal.KPIComment()
@@ -1436,27 +1436,38 @@ namespace eHR.PMS.Business
                         };
                         lst_comments.Add(obj_comment);
                     }
+                    else
+                    {
+                        if (!tmp_comment_id.Contains("NewComment"))
+                        {
+                            PMS.Model.DTO.Appraisal.KPIComment obj_comment = new Model.DTO.Appraisal.KPIComment()
+                            {
+                                Id = Int32.Parse(tmp_comment_id)
+                            };
+                            lst_delete_comments.Add(obj_comment);
+                        }
+                    }
                 }
             }
 
             return lst_comments;
         }
 
-        public static List<PMS.Model.DTO.Appraisal.CoreValueComment> GetCoreValueCommentItemsToSave(string[] result, int commentorId, DateTime commentTimestamp)
+        public static void GetCoreValueCommentItemsToSave(string[] result, int commentorId, DateTime commentTimestamp,out List<PMS.Model.DTO.Appraisal.CoreValueComment> lst_comments,out List<PMS.Model.DTO.Appraisal.CoreValueComment> lst_delete_comments)
         {
-            List<PMS.Model.DTO.Appraisal.CoreValueComment> lst_comments = null;
-
+            lst_comments = null;
+            lst_delete_comments = null;
             if (!Lib.Utility.Common.IsNullOrEmptyList(result))
             {
                 lst_comments = new List<Model.DTO.Appraisal.CoreValueComment>();
-
+                lst_delete_comments = new List<Model.DTO.Appraisal.CoreValueComment>();
                 foreach (string str_string in result)
                 {
                     if (!string.IsNullOrEmpty(str_string))
                     {
                         string[] kparray = str_string.Replace("\"", "").Split(',');
-                        string tmp_comment = kparray[1].Split(':')[1].Replace("}]", "").Trim().TrimEnd('\r', '\n').Replace("\\n", Environment.NewLine).Trim();
-
+                        string tmp_comment = kparray[1].Split(':')[1].Trim();
+                        string tmp_comment_id = kparray[2].Split(':')[1].Replace("}]", "").Trim().TrimEnd('\r', '\n').Replace("\\n", Environment.NewLine).Trim();
                         if (!string.IsNullOrEmpty(tmp_comment))
                         {
                             PMS.Model.DTO.Appraisal.CoreValueComment obj_comment = new Model.DTO.Appraisal.CoreValueComment()
@@ -1469,10 +1480,21 @@ namespace eHR.PMS.Business
                             };
                             lst_comments.Add(obj_comment);
                         }
+                        else
+                        {
+                            if (!tmp_comment_id.Contains("NewComment"))
+                            {
+                                PMS.Model.DTO.Appraisal.CoreValueComment obj_comment = new Model.DTO.Appraisal.CoreValueComment()
+                                {
+                                 Id=Int32.Parse(tmp_comment_id)
+                                };
+                                lst_delete_comments.Add(obj_comment);
+                            }
+                        }
                     }
                 }
             }
-            return lst_comments;
+            return;
         }
 
         #endregion KPI Items
