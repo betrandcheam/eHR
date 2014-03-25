@@ -151,7 +151,7 @@ namespace eHR.PMS.Web.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Appraisal Information is saved..
+        ///   Looks up a localized string similar to Appraisal information is saved successfully..
         /// </summary>
         public static string MSG_NEXT_SUCCESS {
             get {

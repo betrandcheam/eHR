@@ -148,7 +148,7 @@
     <value>Unable to save appraisal information. Please try again or contact IT Department.</value>
   </data>
   <data name="MSG_NEXT_SUCCESS" xml:space="preserve">
-    <value>Appraisal Information is saved.</value>
+    <value>Appraisal information is saved successfully.</value>
   </data>
   <data name="MSG_REJECT_SUBMISSION" xml:space="preserve">
     <value>Proceed to reject?</value>

@@ -643,7 +643,7 @@ namespace eHR.PMS.Business
 
             lst_new_tasks.Add(CreateNewTaskForAppraisal(appraisal.Id,
                             Model.PMSConstants.STATUS_CORE_ID_OPEN,
-                            "Re-submission of performance appraisal.",
+                            "Re-submission of my performance appraisal.",
                             str_task_address,
                             Model.Mappers.CoreMapper.MapEmployeeDTOToOwnerDTO(appraisal.Employee)));
 
@@ -1706,17 +1706,17 @@ namespace eHR.PMS.Business
 
             if (appraisal.Stage.Id == Model.PMSConstants.STAGE_ID_GOAL_SETTING)
             {
-                obj_task.Name = "Submission of performance appraisal.";
+                obj_task.Name = "Submission of my performance appraisal.";
                 obj_task.Address = "/Stage1/KeyPerformanceIndicators";
             }
             else if (appraisal.Stage.Id == Model.PMSConstants.STAGE_ID_PROGRESS_REVIEW)
             {
-                obj_task.Name = "Submission of performance appraisal for progress review.";
+                obj_task.Name = "Submission of my performance appraisal for progress review.";
                 obj_task.Address = "/Stage2/KeyPerformanceIndicators";
             }
             else if (appraisal.Stage.Id == Model.PMSConstants.STAGE_ID_FINAL_YEAR)
             {
-                obj_task.Name = "Submission of performance appraisal for final year review.";
+                obj_task.Name = "Submission of my performance appraisal for final year review.";
                 obj_task.Address = "/Stage3/KeyPerformanceIndicators";
             }
 
