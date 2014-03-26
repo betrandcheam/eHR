@@ -95,7 +95,7 @@ namespace eHR.PMS.Web.Controllers
                     if (!Lib.Utility.Common.IsNullOrEmptyList(lst_selected_employees))
                     {
                         System.Web.HttpContext.Current.Session.Add("CycleParticipantsList", lst_selected_employees);
-                        obj_cycle_management_page.Participants = lst_selected_employees.OrderBy(rec => rec.Department.Name).OrderBy(rec => rec.PreferredName).ToList();
+                        obj_cycle_management_page.Participants = lst_selected_employees.OrderBy(rec => rec.Department.Name).ThenBy(rec => rec.PreferredName).ToList();
                     }
                     else
                     {
@@ -973,7 +973,7 @@ namespace eHR.PMS.Web.Controllers
                         sb.Append("<tr>");
                         sb.Append("<td><input type='hidden' class='eid' value='" + ei.Id + "' /></td>");
                         sb.Append("<td>" + ei.PreferredName + "</td>");
-                        sb.Append("<td>" + ei.PreferredName + "</td>");
+                        sb.Append("<td>" + (ei.Department != null ? ei.Department.Name : "") + "</td>");
                         sb.Append("<td>" + ei.GetNumberOfApprovers() + "</td>");
                         sb.Append("</tr>");
                     }
