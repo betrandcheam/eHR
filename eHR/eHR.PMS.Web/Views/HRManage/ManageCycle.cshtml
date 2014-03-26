@@ -28,10 +28,14 @@
         <div class="col-sm-4">
             <select name="cycleid" id="cycleid" class="selectpicker">
                 <option value="-1">choose cycle</option>
-                @foreach (eHR.PMS.Model.DTO.Cycle.Cycle cycle in @Model.Cycles)
-                {
-                      <option value="@cycle.Id">@cycle.Name</option> 
-                } 
+                @{ if (!eHR.PMS.Lib.Utility.Common.IsNullOrEmptyList(Model.Cycles))
+                   {
+                    foreach(eHR.PMS.Model.DTO.Cycle.Cycle cycle in Model.Cycles)
+                    {
+                        <option value="@cycle.Id">@cycle.Name</option> 
+                    }
+                   }
+                 }
             </select>
         </div>
       </div>
