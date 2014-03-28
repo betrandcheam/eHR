@@ -1466,8 +1466,13 @@ namespace eHR.PMS.Business
                     if (!string.IsNullOrEmpty(str_string))
                     {
                         string[] kparray = str_string.Replace("\"", "").Split(',');
-                        string tmp_comment = kparray[1].Split(':')[1].Trim();
-                        string tmp_comment_id = kparray[2].Split(':')[1].Replace("}]", "").Trim().TrimEnd('\r', '\n').Replace("\\n", Environment.NewLine).Trim();
+
+                        string tmp_comment = kparray[1].Split(':')[1].Replace("}]", "").Trim().TrimEnd('\r', '\n').Replace("\\n", Environment.NewLine).Trim();
+
+
+                        string tmp_comment_id = kparray[0].Split(':')[1].Trim(); //.Replace("}]", "").Trim().TrimEnd('\r', '\n').Replace("\\n", Environment.NewLine).Trim();
+                        
+                        
                         if (!string.IsNullOrEmpty(tmp_comment))
                         {
                             PMS.Model.DTO.Appraisal.CoreValueComment obj_comment = new Model.DTO.Appraisal.CoreValueComment()
@@ -1486,7 +1491,10 @@ namespace eHR.PMS.Business
                             {
                                 PMS.Model.DTO.Appraisal.CoreValueComment obj_comment = new Model.DTO.Appraisal.CoreValueComment()
                                 {
-                                 Id=Int32.Parse(tmp_comment_id)
+                                    AppraisalCoreValue = new Model.DTO.Appraisal.CoreValue() { Id = Convert.ToInt32(kparray[0].Split(':')[1]) },
+                                    FormSaveOnly = true,
+                                    Commentor = new Model.DTO.Core.Employee() { Id = commentorId },
+                                    Id= Int32.Parse(tmp_comment_id)
                                 };
                                 lst_delete_comments.Add(obj_comment);
                             }

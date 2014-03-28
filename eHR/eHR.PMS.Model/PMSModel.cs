@@ -1727,8 +1727,16 @@ namespace eHR.PMS.Model
                 {
                     foreach (PMS.Model.DTO.Appraisal.CoreValueComment obj_comment in deleteList)
                     {
-                        PMS.Model.Context.PMS_APPRAISAL_CORE_VALUE_COMMENT ent_comment = dc_pms.PMS_APPRAISAL_CORE_VALUE_COMMENT.Where(s => s.ID == obj_comment.Id).Single();
-                        dc_pms.PMS_APPRAISAL_CORE_VALUE_COMMENT.DeleteObject(ent_comment);
+                        PMS.Model.Context.PMS_APPRAISAL_CORE_VALUE_COMMENT ent_comment = dc_pms.PMS_APPRAISAL_CORE_VALUE_COMMENT.Where(rec => rec.ITEM_ID == obj_comment.AppraisalCoreValue.Id &&
+                                                                                                                                                rec.COMMENTED_BY_ID == obj_comment.Commentor.Id &&
+                                                                                                                                                rec.FORM_SAVE_ONLY == true).SingleOrDefault();
+
+                        //PMS.Model.Context.PMS_APPRAISAL_CORE_VALUE_COMMENT ent_comment = dc_pms.PMS_APPRAISAL_CORE_VALUE_COMMENT.Where(s => s.ID == obj_comment.Id).SingleOrDefault();
+                        if (ent_comment != null) 
+                        {
+                            dc_pms.PMS_APPRAISAL_CORE_VALUE_COMMENT.DeleteObject(ent_comment);
+                        }
+                        
                     }
                     dc_pms.SaveChanges();
                 }
