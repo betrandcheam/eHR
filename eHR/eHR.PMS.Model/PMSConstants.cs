@@ -77,5 +77,26 @@ namespace eHR.PMS.Model
         public static readonly int ACTION_ID_APPRAISAL_HR_ADMINISTERED = 9; 
 
         #endregion
+
+        #region Descriptions
+        public static readonly string KPIDescription="<h4>Key Performance Indicators Descriptions :</h4>"+
+                                                                "<p>"+
+                                                                    "\"Financials\", \"Build\", \"Governance/Risk\" and \"People\" are four main themes derived from the Corporate and Underwriting Principles"+ 
+                                                                    "that capture the corporate focus and priorities and serve to align individual's Key Performance Indicators (KPIs) to achieving the"+
+                                                                    "Corporate KPIs and Corporate Vision. KPIs are manually set goals and metrics that measure individual's achievements and progress.<br />"+
+                                                                    "You will need to set at least 1 or more KPI within each of the four main themes.<br />"+
+                                                                    "You are to complete the form and initiate discussion with your Manager.<br />"+
+                                                                    "Once you have submitted the form your Manager, your Manager will complete the relevant sections. All submissions and comments will be tracked.<br />"+ 
+                                                                "</p>"+
+                                                                "<br />"+
+                                                                "<h4>Performance Rating Descriptions :</h4>"+
+                                                                "<p>"+
+                                                                    "<span class='badge'>5</span> - Far Exceeds Expections (Exceptional/ Outstanding Performer)<br />"+
+                                                                    "<span class='badge'>4</span> - Exceeds Expectation (Strong Performer)<br />"+
+                                                                    "<span class='badge'>3</span> - Meets Expectation (Solid Performer)<br />"+ 
+                                                                    "<span class='badge'>2</span> - Improvements Needed (Under Performer)<br />"+
+                                                                    "<span class='badge'>1</span> - Poor/Does not meet expectation<br />"+
+                                                                "</p>";
+        #endregion
     }
 }

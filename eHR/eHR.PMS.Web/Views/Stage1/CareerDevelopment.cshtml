@@ -234,7 +234,8 @@
         </div><!-- /.modal-content -->
       </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
-<input type="hidden" id="forRazorValue" message='@message'  saveurl="@(Url.Content("~/Stage1/CareerDevelopmentSave"))" apprid='@Model.Appraisal.Id'
+<input type="hidden" id="forRazorValue" message='@message' exportPDFurl="@(Url.Content("~/Home/pdfExport/" + Model.Appraisal.Id))"
+  saveurl="@(Url.Content("~/Stage1/CareerDevelopmentSave"))" apprid='@Model.Appraisal.Id'
     rooturl="@(Url.Content("~/"))"/>
 @section scripts
         {

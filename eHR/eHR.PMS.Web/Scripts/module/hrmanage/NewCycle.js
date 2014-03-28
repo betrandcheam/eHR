@@ -58,14 +58,17 @@ define("hrmanage.newcycle", ['jquery', 'bootstrap', 'moment', 'bootstrap.datetim
         window.location.href = "(Url.Content("~/"))HRManage/RemoveParticipants/" + $("#strStage1EndDate").val() + "/" + $("#strStage3EndDate").val();
         } 
         });*/
+        var nowTemp = new Date();
+        var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
+
         $('#datetimepicker1').datetimepicker({
             format: "DD/MM/YYYY",
             pickTime: false
-        });
+        })
         $('#datetimepicker2').datetimepicker({
             format: "DD/MM/YYYY",
             pickTime: false
-        });
+        })
         $('#datetimepicker3').datetimepicker({
             format: "DD/MM/YYYY",
             pickTime: false
@@ -130,7 +133,7 @@ define("hrmanage.newcycle", ['jquery', 'bootstrap', 'moment', 'bootstrap.datetim
                 if ($.trim($(this).val()).length == 0) {
                     int_error_count++;
                     $(this).addClass("warningclass");
-                    str_error_message = "Please provide the "+$(this).attr("forerrormsg")+" for cycle.";
+                    str_error_message = "Please provide the " + $(this).attr("forerrormsg") + " for cycle.";
                     $("#errormsg").text(str_error_message);
                     $(".alert").show();
                     return false;
@@ -139,7 +142,7 @@ define("hrmanage.newcycle", ['jquery', 'bootstrap', 'moment', 'bootstrap.datetim
                     if (!validators_boo_checkDate($.trim($(this).val()), "/")) {
                         int_error_count++;
                         $(this).addClass("warningclass");
-                        str_error_message = $(this).attr("forerrormsg")+" is not valid. It should be in DD/MM/YYYY format.";
+                        str_error_message = $(this).attr("forerrormsg") + " is not valid. It should be in DD/MM/YYYY format.";
                         $("#errormsg").text(str_error_message);
                         $(".alert").show();
                         return false;
