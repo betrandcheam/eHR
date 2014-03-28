@@ -16,7 +16,7 @@ define("stage2approval.careerdevelopment", ['jquery', 'bootstrap'], function ($)
                     $('#InfoModal').modal();
                 },
                 success: function (data) {
-                    //$("#stage1kpisave").button('reset');
+                    $("#stage1kpisave").button('reset');
                     $('#loadingcontent').hide();
                     $('#resultcontent').show();
                     //$('#InfoModal').modal();
