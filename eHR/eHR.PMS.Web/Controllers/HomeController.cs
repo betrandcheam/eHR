@@ -159,18 +159,18 @@ namespace eHR.PMS.Web.Controllers
                         {
                             lst_temp.Add(str_reviewer);
                         }
+                    }
 
-                        foreach (string str_reviewer_id in lst_temp)
+                    foreach (string str_reviewer_id in lst_temp)
+                    {
+                        Model.DTO.Appraisal.Reviewer obj_reviewer = new Model.DTO.Appraisal.Reviewer()
                         {
-                            Model.DTO.Appraisal.Reviewer obj_reviewer = new Model.DTO.Appraisal.Reviewer()
-                            {
-                                EmployeeId = Convert.ToInt32(str_reviewer_id),
-                                Appraisal = new Model.DTO.Appraisal.Appraisal() { Id = apprid },
-                                SMT = false
-                            };
-                            lst_reviewers.Add(obj_reviewer);
-                        }
-                    } 
+                            EmployeeId = Convert.ToInt32(str_reviewer_id),
+                            Appraisal = new Model.DTO.Appraisal.Appraisal() { Id = apprid },
+                            SMT = false
+                        };
+                        lst_reviewers.Add(obj_reviewer);
+                    }
                 }
             }
 
@@ -585,5 +585,6 @@ namespace eHR.PMS.Web.Controllers
             
         }
         #endregion pdf export
+
     }
 }

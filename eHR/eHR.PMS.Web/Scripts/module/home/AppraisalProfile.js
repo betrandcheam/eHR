@@ -52,8 +52,9 @@ define("home.profile", ['jquery', 'bootstrap'], function ($) {
                 if ($(this).val() != "")
                     reviewers = [reviewers, '|', $(this).attr("usrid")].join('');
             });
-            if (reviewers != "")
+            if (reviewers != "") {
                 reviewers = reviewers.substring(1, reviewers.length);
+            }
             $.ajax({
                 url: $("#forRazorValue").attr("saveurl"),
                 dataType: 'json',

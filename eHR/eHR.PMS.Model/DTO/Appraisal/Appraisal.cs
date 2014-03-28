@@ -209,14 +209,17 @@ namespace eHR.PMS.Model.DTO.Appraisal
             {
                 StringBuilder sb_names = new StringBuilder();
                 int int_counter = 0;
-                if (!Lib.Utility.Common.IsNullOrEmptyList(lst_reviewers))
+
+                IEnumerable<PMS.Model.DTO.Appraisal.Reviewer> lst_reviewers_only = lst_reviewers.Where(rec => rec.SMT == false);
+
+                if (!Lib.Utility.Common.IsNullOrEmptyList(lst_reviewers_only))
                 {
-                    foreach (PMS.Model.DTO.Appraisal.Reviewer obj_reviewer in lst_reviewers)
+                    foreach (PMS.Model.DTO.Appraisal.Reviewer obj_reviewer in lst_reviewers_only)
                     {
                         if (!Convert.ToBoolean(obj_reviewer.SMT)) 
                         {
                             sb_names.Append(obj_reviewer.PreferredName);
-                            if (int_counter != lst_reviewers.Count() - 1)
+                            if (int_counter != lst_reviewers_only.Count() - 1)
                             {
                                 sb_names.Append(", ");
                             }
