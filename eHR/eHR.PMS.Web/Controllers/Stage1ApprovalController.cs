@@ -23,12 +23,41 @@ namespace eHR.PMS.Web.Controllers
                 obj_appraisal_page.Appraisal = PMS.Model.PMSModel.GetAppraisalById(Convert.ToInt32(id));
                 obj_appraisal_page.CurrentTaskId = taskid;
                 obj_appraisal_page.CurrentSection = obj_appraisal_page.Sections.Where(a => a.Id == PMS.Model.PMSConstants.SECTION_ID_KPI).First();
-                ViewData["Stage"] = obj_appraisal_page.Appraisal.Stage.Name;
-                ViewData["Status"] = obj_appraisal_page.Appraisal.Status.Name;
+                //ViewData["Stage"] = obj_appraisal_page.Appraisal.Stage.Name;
+                //ViewData["Status"] = obj_appraisal_page.Appraisal.Status.Name;
             }
-            ViewData["appraisalid"] = id;
-            ViewData.Model = obj_appraisal_page;
-            return View();
+            //ViewData["appraisalid"] = id;
+            //ViewData.Model = obj_appraisal_page;
+
+            if (obj_appraisal_page.Appraisal != null)
+            {
+                if (obj_appraisal_page.Appraisal.Status.Id == Model.PMSConstants.STATUS_ID_PENDING_LEVEL_1_APPROVAL || obj_appraisal_page.Appraisal.Status.Id == Model.PMSConstants.STATUS_ID_PENDING_LEVEL_2_APPROVAL)
+                {
+                    if (!CheckAccess(obj_appraisal_page.Appraisal, taskid))
+                    {
+                        TempData["AlertMessage"] = Resources.Resource.MSG_APPRAISAL_NO_ACCESS;
+                        return Redirect(Url.Content("~/Home/Index"));
+                    }
+                    else
+                    {                     
+                        ViewData["Stage"] = obj_appraisal_page.Appraisal.Stage.Name;
+                        ViewData["Status"] = obj_appraisal_page.Appraisal.Status.Name;
+                        ViewData["appraisalid"] = id;
+                        ViewData.Model = obj_appraisal_page;
+                        return View();
+                    }
+                }
+                else
+                {
+                    TempData["AlertMessage"] = Resources.Resource.MSG_WRONG_STATUS_APPROVAL;
+                    return Redirect(Url.Content("~/Home/Index")); 
+                }
+            }
+            else 
+            {
+                TempData["AlertMessage"] = Resources.Resource.MSG_NO_APPRAISAL_FOUND;
+                return Redirect(Url.Content("~/Home/Index"));
+            }
         }
 
         [HttpPost]
@@ -117,12 +146,39 @@ namespace eHR.PMS.Web.Controllers
                 obj_appraisal_page.Sections = PMS.Model.PMSModel.GetMasterSectionList(true);
                 obj_appraisal_page.CurrentTaskId = taskid;
                 obj_appraisal_page.CurrentSection = obj_appraisal_page.Sections.Where(a => a.Id == PMS.Model.PMSConstants.SECTION_ID_CORE_VALUES).First();
-                ViewData["Stage"] = obj_appraisal_page.Appraisal.Stage.Name;
-                ViewData["Status"] = obj_appraisal_page.Appraisal.Status.Name;
+                //ViewData["Stage"] = obj_appraisal_page.Appraisal.Stage.Name;
+                //ViewData["Status"] = obj_appraisal_page.Appraisal.Status.Name;
             }
-            ViewData["appraisalid"] = id;
-            ViewData.Model = obj_appraisal_page;
-            return View();
+
+            if (obj_appraisal_page.Appraisal != null)
+            {
+                if (obj_appraisal_page.Appraisal.Status.Id == Model.PMSConstants.STATUS_ID_PENDING_LEVEL_1_APPROVAL || obj_appraisal_page.Appraisal.Status.Id == Model.PMSConstants.STATUS_ID_PENDING_LEVEL_2_APPROVAL)
+                {
+                    if (!CheckAccess(obj_appraisal_page.Appraisal, taskid))
+                    {
+                        TempData["AlertMessage"] = Resources.Resource.MSG_APPRAISAL_NO_ACCESS;
+                        return Redirect(Url.Content("~/Home/Index"));
+                    }
+                    else
+                    {
+                        ViewData["Stage"] = obj_appraisal_page.Appraisal.Stage.Name;
+                        ViewData["Status"] = obj_appraisal_page.Appraisal.Status.Name;
+                        ViewData["appraisalid"] = id;
+                        ViewData.Model = obj_appraisal_page;
+                        return View();
+                    }
+                }
+                else
+                {
+                    TempData["AlertMessage"] = Resources.Resource.MSG_WRONG_STATUS_APPROVAL;
+                    return Redirect(Url.Content("~/Home/Index"));
+                }
+            }
+            else
+            {
+                TempData["AlertMessage"] = Resources.Resource.MSG_NO_APPRAISAL_FOUND;
+                return Redirect(Url.Content("~/Home/Index"));
+            }
         }
 
         [HttpPost]
@@ -212,12 +268,42 @@ namespace eHR.PMS.Web.Controllers
                 obj_appraisal_page.Sections = PMS.Model.PMSModel.GetMasterSectionList(true);
                 obj_appraisal_page.CurrentTaskId = taskid;
                 obj_appraisal_page.CurrentSection = obj_appraisal_page.Sections.Where(a => a.Id == PMS.Model.PMSConstants.SECTION_ID_PERFORMANCE_COACHING).First();
-                ViewData["Stage"] = obj_appraisal_page.Appraisal.Stage.Name;
-                ViewData["Status"] = obj_appraisal_page.Appraisal.Status.Name;
+                //ViewData["Stage"] = obj_appraisal_page.Appraisal.Stage.Name;
+                //ViewData["Status"] = obj_appraisal_page.Appraisal.Status.Name;
             }
-            ViewData["appraisalid"] = id;
-            ViewData.Model = obj_appraisal_page;
-            return View();
+            //ViewData["appraisalid"] = id;
+            //ViewData.Model = obj_appraisal_page;
+            //return View();
+
+            if (obj_appraisal_page.Appraisal != null)
+            {
+                if (obj_appraisal_page.Appraisal.Status.Id == Model.PMSConstants.STATUS_ID_PENDING_LEVEL_1_APPROVAL || obj_appraisal_page.Appraisal.Status.Id == Model.PMSConstants.STATUS_ID_PENDING_LEVEL_2_APPROVAL)
+                {
+                    if (!CheckAccess(obj_appraisal_page.Appraisal, taskid))
+                    {
+                        TempData["AlertMessage"] = Resources.Resource.MSG_APPRAISAL_NO_ACCESS;
+                        return Redirect(Url.Content("~/Home/Index"));
+                    }
+                    else
+                    {
+                        ViewData["Stage"] = obj_appraisal_page.Appraisal.Stage.Name;
+                        ViewData["Status"] = obj_appraisal_page.Appraisal.Status.Name;
+                        ViewData["appraisalid"] = id;
+                        ViewData.Model = obj_appraisal_page;
+                        return View();
+                    }
+                }
+                else
+                {
+                    TempData["AlertMessage"] = Resources.Resource.MSG_WRONG_STATUS_APPROVAL;
+                    return Redirect(Url.Content("~/Home/Index"));
+                }
+            }
+            else
+            {
+                TempData["AlertMessage"] = Resources.Resource.MSG_NO_APPRAISAL_FOUND;
+                return Redirect(Url.Content("~/Home/Index"));
+            }
         }
 
         [HttpPost]
@@ -259,20 +345,23 @@ namespace eHR.PMS.Web.Controllers
         public JsonResult PerformanceCoachingandReviewSave(string KPIID, string Comments)
         {
             string message = string.Empty;
-            List<Model.DTO.Appraisal.PerformanceCoachingComment> lst_comments = new List<Model.DTO.Appraisal.PerformanceCoachingComment>();
 
-            Model.DTO.Appraisal.PerformanceCoachingComment obj_comment = new Model.DTO.Appraisal.PerformanceCoachingComment()
+            if (!string.IsNullOrEmpty(KPIID) && !string.IsNullOrEmpty(Comments)) 
             {
-                AppraisalPerformanceCoaching = new Model.DTO.Appraisal.PerformanceCoaching(){ Id = Convert.ToInt32(KPIID) },
-                CommentedTimestamp = DateTime.Now,
-                Commentor = new Model.DTO.Core.Employee() { Id = CurrentUser.Id },
-                Comments = Comments.Trim(),
-                FormSaveOnly = true,
-            };
-            lst_comments.Add(obj_comment);
+                List<Model.DTO.Appraisal.PerformanceCoachingComment> lst_comments = new List<Model.DTO.Appraisal.PerformanceCoachingComment>();
 
-            Model.PMSModel.UpdateAppraisalPerformanceCoachingComment(lst_comments, out message);
+                Model.DTO.Appraisal.PerformanceCoachingComment obj_comment = new Model.DTO.Appraisal.PerformanceCoachingComment()
+                {
+                    AppraisalPerformanceCoaching = new Model.DTO.Appraisal.PerformanceCoaching() { Id = Convert.ToInt32(KPIID) },
+                    CommentedTimestamp = DateTime.Now,
+                    Commentor = new Model.DTO.Core.Employee() { Id = CurrentUser.Id },
+                    Comments = !string.IsNullOrEmpty(Comments) == true ? Comments.Trim() : null,
+                    FormSaveOnly = true,
+                };
+                lst_comments.Add(obj_comment);
 
+                Model.PMSModel.UpdateAppraisalPerformanceCoachingComment(lst_comments, out message);
+            }
             return Json(message);
         }
 
@@ -291,12 +380,42 @@ namespace eHR.PMS.Web.Controllers
                 obj_appraisal_page.Sections = PMS.Model.PMSModel.GetMasterSectionList(true);
                 obj_appraisal_page.CurrentTaskId = taskid;
                 obj_appraisal_page.CurrentSection = obj_appraisal_page.Sections.Where(a => a.Id == PMS.Model.PMSConstants.SECTION_ID_CAREER_DEVELOPMENT).First();
-                ViewData["Stage"] = obj_appraisal_page.Appraisal.Stage.Name;
-                ViewData["Status"] = obj_appraisal_page.Appraisal.Status.Name;
+                //ViewData["Stage"] = obj_appraisal_page.Appraisal.Stage.Name;
+                //ViewData["Status"] = obj_appraisal_page.Appraisal.Status.Name;
             }
-            ViewData["appraisalid"] = id;
-            ViewData.Model = obj_appraisal_page;
-            return View();
+
+            //ViewData["appraisalid"] = id;
+            //ViewData.Model = obj_appraisal_page;
+            //return View();
+            if (obj_appraisal_page.Appraisal != null)
+            {
+                if (obj_appraisal_page.Appraisal.Status.Id == Model.PMSConstants.STATUS_ID_PENDING_LEVEL_1_APPROVAL || obj_appraisal_page.Appraisal.Status.Id == Model.PMSConstants.STATUS_ID_PENDING_LEVEL_2_APPROVAL)
+                {
+                    if (!CheckAccess(obj_appraisal_page.Appraisal, taskid))
+                    {
+                        TempData["AlertMessage"] = Resources.Resource.MSG_APPRAISAL_NO_ACCESS;
+                        return Redirect(Url.Content("~/Home/Index"));
+                    }
+                    else
+                    {
+                        ViewData["Stage"] = obj_appraisal_page.Appraisal.Stage.Name;
+                        ViewData["Status"] = obj_appraisal_page.Appraisal.Status.Name;
+                        ViewData["appraisalid"] = id;
+                        ViewData.Model = obj_appraisal_page;
+                        return View();
+                    }
+                }
+                else
+                {
+                    TempData["AlertMessage"] = Resources.Resource.MSG_WRONG_STATUS_APPROVAL;
+                    return Redirect(Url.Content("~/Home/Index"));
+                }
+            }
+            else
+            {
+                TempData["AlertMessage"] = Resources.Resource.MSG_NO_APPRAISAL_FOUND;
+                return Redirect(Url.Content("~/Home/Index"));
+            }
         }
 
         [HttpPost]
@@ -380,6 +499,31 @@ namespace eHR.PMS.Web.Controllers
                 dict.Add(temp, tc);
             }
             return dict;
+        }
+
+        private bool CheckAccess(Model.DTO.Appraisal.Appraisal appraisal, int taskId)
+        {
+            bool boo_has_access = false;
+
+            Model.DTO.Core.Task.Task obj_task = Model.PMSModel.GetTaskById(taskId);
+            if (obj_task != null)
+            {
+                if (obj_task.RecordId != appraisal.Id)
+                {
+                    boo_has_access = false;
+                }
+                else if (!Lib.Utility.Common.IsNullOrEmptyList(obj_task.Owners))
+                {
+                    var var_owners = obj_task.Owners.Where(rec => rec.EmployeeId == CurrentUser.Id);
+
+                    if (!Lib.Utility.Common.IsNullOrEmptyList(var_owners))
+                    {
+                        boo_has_access = true;
+                    }
+                }
+            }
+
+            return boo_has_access;
         }
 
         public class TempComment

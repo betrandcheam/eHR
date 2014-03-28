@@ -90,6 +90,21 @@ namespace eHR.PMS.Web.Models.DTO
             return str_name;
         }
 
+        public string GetAppraisalFirstReviewerDomainId()
+        {
+            string str_domain_id = null;
+            List<Model.DTO.Appraisal.Reviewer> lst_reviewers = GetReviewers();
+
+            if (!Lib.Utility.Common.IsNullOrEmptyList(lst_reviewers))
+            {
+                if (lst_reviewers.Count() > 0)
+                {
+                    str_domain_id = lst_reviewers[0].DomainId;
+                }
+            }
+            return str_domain_id;
+        }
+
         public string GetAppraisalSecondReviewerName()
         {
             string str_name = null;
@@ -103,6 +118,21 @@ namespace eHR.PMS.Web.Models.DTO
                 }
             }
             return str_name;
+        }
+
+        public string GetAppraisalSecondReviewerDomainId()
+        {
+            string str_domain_id = null;
+            List<Model.DTO.Appraisal.Reviewer> lst_reviewers = GetReviewers();
+
+            if (!Lib.Utility.Common.IsNullOrEmptyList(lst_reviewers))
+            {
+                if (lst_reviewers.Count() > 1)
+                {
+                    str_domain_id = lst_reviewers[1].DomainId;
+                }
+            }
+            return str_domain_id;
         }
 
         public string GetSeniorManagementTeamMemberName()

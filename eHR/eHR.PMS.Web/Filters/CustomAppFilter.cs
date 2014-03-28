@@ -12,6 +12,11 @@ namespace eHR.PMS.Web.Filters
         {
             int stageid = 0;
             string stagename = string.Empty;
+
+           // var abc = filterContext.RouteData.Values["controller"].ToString();
+
+            //filterContext.Result = new RedirectResult("~/");
+
         }
     }
 }

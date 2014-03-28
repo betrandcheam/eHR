@@ -7,7 +7,31 @@ namespace eHR.PMS.Model
 {
     public class PMSModel
     {
-        #region Employee
+        #region Task
+
+        public static PMS.Model.DTO.Core.Task.Task GetTaskById(int taskId)
+        {
+            PMS.Model.Context.PMSEntities dc_pms = new PMS.Model.Context.PMSEntities();
+            PMS.Model.DTO.Core.Task.Task obj_task = null;
+            System.Data.Objects.ObjectQuery<PMS.Model.Context.TASK> entities;
+
+            dc_pms.ContextOptions.LazyLoadingEnabled = false;
+
+            Model.Context.TASK ent_task = ((from ent_tasks in dc_pms.TASKs
+                                            where ent_tasks.ID == taskId
+                                            select ent_tasks) as System.Data.Objects.ObjectQuery<PMS.Model.Context.TASK>)
+                                                    .Include("MST_MODULE")
+                                                    .Include("MST_STATUS")
+                                                    .Include("TASK_OWNER")
+                                                    .Include("TASK_OWNER.EMPLOYEE").SingleOrDefault();
+
+            if (ent_task != null)
+            {
+                obj_task = Mappers.CoreMapper.MapTaskEntityToDTO(ent_task, true);
+            }
+
+            return obj_task;
+        }
 
         public static List<PMS.Model.DTO.Core.Task.Task> GetTasksByOwner(int ownerEmployeeId, int? statusId)
         {
@@ -96,6 +120,10 @@ namespace eHR.PMS.Model
             dc_pms.Dispose();
             return lst_tasks;
         }
+
+        #endregion
+
+        #region Employee
 
         public static List<PMS.Model.DTO.GradeCompetency> GetCoreValueCompetencyByGrade(int? gradeId)
         {
@@ -1009,7 +1037,7 @@ namespace eHR.PMS.Model
 
             entity = (from ent_appraisals in dc_pms.PMS_APPRAISAL
                       where ent_appraisals.ID == appraisalId
-                      select ent_appraisals).Single();
+                      select ent_appraisals).SingleOrDefault();
 
             if (entity != null)
             {

@@ -118,7 +118,10 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="MSG_APPRAISAL_APPROVED" xml:space="preserve">
-    <value>The appraisal is approved. It will be routed to the next level approver for approval.</value>
+    <value>The appraisal is approved.</value>
+  </data>
+  <data name="MSG_APPRAISAL_NO_ACCESS" xml:space="preserve">
+    <value>You do not have the rights to view the appraisal.</value>
   </data>
   <data name="MSG_APPRAISAL_REJECTED" xml:space="preserve">
     <value>The appraisal is rejected. It will be routed to the employee for re-submission.</value>
@@ -150,6 +153,9 @@
   <data name="MSG_NEXT_SUCCESS" xml:space="preserve">
     <value>Appraisal information is saved successfully.</value>
   </data>
+  <data name="MSG_NO_APPRAISAL_FOUND" xml:space="preserve">
+    <value>No appraisal record found. Please try again or contact IT Department.</value>
+  </data>
   <data name="MSG_REJECT_SUBMISSION" xml:space="preserve">
     <value>Proceed to reject?</value>
   </data>
@@ -173,5 +179,8 @@
   </data>
   <data name="MSG_UPDATE_CYCLE" xml:space="preserve">
     <value>Update cycle information now?</value>
+  </data>
+  <data name="MSG_WRONG_STATUS_APPROVAL" xml:space="preserve">
+    <value>Appraisal is not in pending appoval status.</value>
   </data>
 </root>

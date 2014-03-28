@@ -6,7 +6,7 @@ using System.Web.Mvc;
 
 namespace eHR.PMS.Web.Controllers
 { 
-    //[HandleError]
+    [HandleError]
     [Helpers.CustomAuthorization]
     [Filters.CustomAppFilter]
     public class BaseController : Controller
@@ -18,6 +18,7 @@ namespace eHR.PMS.Web.Controllers
         {
             InitialiseLatestCycleId();
             InitialiseUserObject();
+            CheckAppraisalAccessPrivilege();
             ViewData["userid"] = CurrentUser.Id;
             ViewData["moduleName"] = "Performance Appraisal";
             ViewData["hr_user"] = Business.SecurityManager.HasHRRole(CurrentUser) == true ? "Y" : "N";
@@ -56,6 +57,14 @@ namespace eHR.PMS.Web.Controllers
             {
                 obj_user = (PMS.Model.DTO.Core.Security.User)System.Web.HttpContext.Current.Session[str_user_domain_id];
             }
+        }
+
+        private void CheckAppraisalAccessPrivilege()
+        {
+
+
+
+        
         }
     }
 }

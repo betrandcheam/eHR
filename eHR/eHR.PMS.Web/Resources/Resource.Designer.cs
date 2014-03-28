@@ -61,11 +61,20 @@ namespace eHR.PMS.Web.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The appraisal is approved. It will be routed to the next level approver for approval..
+        ///   Looks up a localized string similar to The appraisal is approved..
         /// </summary>
         public static string MSG_APPRAISAL_APPROVED {
             get {
                 return ResourceManager.GetString("MSG_APPRAISAL_APPROVED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You do not have the rights to view the appraisal..
+        /// </summary>
+        public static string MSG_APPRAISAL_NO_ACCESS {
+            get {
+                return ResourceManager.GetString("MSG_APPRAISAL_NO_ACCESS", resourceCulture);
             }
         }
         
@@ -160,6 +169,15 @@ namespace eHR.PMS.Web.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No appraisal record found. Please try again or contact IT Department..
+        /// </summary>
+        public static string MSG_NO_APPRAISAL_FOUND {
+            get {
+                return ResourceManager.GetString("MSG_NO_APPRAISAL_FOUND", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Proceed to reject?.
         /// </summary>
         public static string MSG_REJECT_SUBMISSION {
@@ -228,6 +246,15 @@ namespace eHR.PMS.Web.Resources {
         public static string MSG_UPDATE_CYCLE {
             get {
                 return ResourceManager.GetString("MSG_UPDATE_CYCLE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Appraisal is not in pending appoval status..
+        /// </summary>
+        public static string MSG_WRONG_STATUS_APPROVAL {
+            get {
+                return ResourceManager.GetString("MSG_WRONG_STATUS_APPROVAL", resourceCulture);
             }
         }
     }

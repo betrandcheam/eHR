@@ -12,6 +12,7 @@ namespace eHR.PMS.Web.Helpers
         {
             base.OnAuthorization(filterContext);
         }
+
         protected override bool AuthorizeCore(HttpContextBase httpContext)
         {
             bool boo_is_authorized = false;
@@ -29,6 +30,7 @@ namespace eHR.PMS.Web.Helpers
                     }
                 }
             }
+
             return boo_is_authorized;
         }
 

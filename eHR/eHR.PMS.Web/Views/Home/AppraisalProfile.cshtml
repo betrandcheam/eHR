@@ -1,5 +1,7 @@
 ﻿@model eHR.PMS.Web.Models.DTO.AppraisalProfilePage
-@{  string str_previous_url = Request.UrlReferrer.AbsolutePath; }
+@{
+    string str_previous_url = Request.UrlReferrer == null ? Url.Content("~/") : Request.UrlReferrer.AbsolutePath;
+ }
 
 <div style="padding:20px 50px;">
         <input type="hidden" id="apprid" value="@Model.Appraisal.Id" />
@@ -178,12 +180,12 @@
                     <div class="col-sm-4">
                         @{if (Model.User.Id == Model.Appraisal.Employee.Id || ViewData["hr_user"].Equals("Y"))
                           {
-                            <input usrid="@(Model.Appraisal.Reviewers.Count>0?(Model.Appraisal.Reviewers[0].EmployeeId.Value.ToString()):"")" type="text" class="form-control Reviewer" value="@(Model.GetAppraisalFirstReviewerName() == null ? "" : Model.GetAppraisalFirstReviewerName() + " (" + Model.Appraisal.Reviewers[0].DomainId + ")")" >
+                            <input usrid="@(Model.Appraisal.Reviewers.Count>0?(Model.Appraisal.Reviewers[0].EmployeeId.Value.ToString()):"")" type="text" class="form-control Reviewer" value="@(Model.GetAppraisalFirstReviewerName() == null ? "" : Model.GetAppraisalFirstReviewerName() + " (" + Model.GetAppraisalFirstReviewerDomainId() + ")")" >
                             <span class="tt-dropdown-menu" style="position: absolute; top: 100%; left: 0px; z-index: 100; display: none; right: auto;"></span>
                           }
                           else
                           {
-                            <input usrid="" type="text" class="form-control Reviewer" disabled="disabled" value="@(Model.GetAppraisalFirstReviewerName() == null ? "" : Model.GetAppraisalFirstReviewerName() + " (" + Model.Appraisal.Reviewers[0].DomainId + ")")" >
+                            <input usrid="" type="text" class="form-control Reviewer" disabled="disabled" value="@(Model.GetAppraisalFirstReviewerName() == null ? "" : Model.GetAppraisalFirstReviewerName() + " (" + Model.GetAppraisalFirstReviewerDomainId() + ")")" >
                           }
                          }
                     </div>
@@ -191,12 +193,12 @@
                     <div class="col-sm-4">
                         @{if (Model.User.Id == Model.Appraisal.Employee.Id || ViewData["hr_user"].Equals("Y"))
                           {
-                            <input usrid="@(Model.Appraisal.Reviewers.Count>1?(Model.Appraisal.Reviewers[1].EmployeeId.Value.ToString()):"")" type="text" class="form-control Reviewer" value="@(Model.GetAppraisalSecondReviewerName() == null ? "" : Model.GetAppraisalSecondReviewerName() + " (" + Model.Appraisal.Reviewers[1].DomainId + ")")" >
+                            <input usrid="@(Model.Appraisal.Reviewers.Count>1?(Model.Appraisal.Reviewers[1].EmployeeId.Value.ToString()):"")" type="text" class="form-control Reviewer" value="@(Model.GetAppraisalSecondReviewerName() == null ? "" : Model.GetAppraisalSecondReviewerName() + " (" + Model.GetAppraisalSecondReviewerDomainId() + ")")" >
                              <span class="tt-dropdown-menu" style="position: absolute; top: 100%; left: 0px; z-index: 100; display: none; right: auto;"></span>
                           }
                           else
                           {
-                             <input usrid="" type="text" class="form-control Reviewer" disabled="disabled" value="@(Model.GetAppraisalSecondReviewerName() == null ? "" : Model.GetAppraisalSecondReviewerName() + " (" + Model.Appraisal.Reviewers[1].DomainId + ")")" >  
+                             <input usrid="" type="text" class="form-control Reviewer" disabled="disabled" value="@(Model.GetAppraisalSecondReviewerName() == null ? "" : Model.GetAppraisalSecondReviewerName() + " (" + Model.GetAppraisalSecondReviewerDomainId() + ")")" >  
                           }
                          }
                     </div>

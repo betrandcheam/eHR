@@ -9,6 +9,7 @@ namespace eHR.PMS.Web.Controllers
     public class Stage1Controller : BaseController
     {
         private bool boo_view_only = true;
+        private bool boo_has_access = false;
 
         #region KPI
 
@@ -23,17 +24,36 @@ namespace eHR.PMS.Web.Controllers
                 obj_appraisal_page.Sections = PMS.Model.PMSModel.GetMasterSectionList(true);
                 obj_appraisal_page.Appraisal = PMS.Model.PMSModel.GetAppraisalById(Convert.ToInt32(id));
                 obj_appraisal_page.CurrentTaskId = taskId;
-                obj_appraisal_page.CurrentSection = obj_appraisal_page.Sections.Where(a=> a.Id == PMS.Model.PMSConstants.SECTION_ID_KPI).First();
-                ViewData["Stage"] = obj_appraisal_page.Appraisal.Stage.Name;
-                ViewData["Status"] = obj_appraisal_page.Appraisal.Status.Name;
-
-                SetPageViewOnly(obj_appraisal_page.Appraisal.Status.Id, taskId);
-                obj_appraisal_page.ViewOnly = boo_view_only;
+                //SetPageViewOnly(obj_appraisal_page.Appraisal.Status.Id, taskId);
+                //SetPageViewOnly(obj_appraisal_page.Appraisal, taskId);
+                
             }
 
-            ViewData["appraisalid"] = id;
-            ViewData.Model = obj_appraisal_page;
-            return View();
+            if (obj_appraisal_page.Appraisal != null)
+            {
+                obj_appraisal_page.CurrentSection = obj_appraisal_page.Sections.Where(a => a.Id == PMS.Model.PMSConstants.SECTION_ID_KPI).First();
+                
+                ViewData["Stage"] = obj_appraisal_page.Appraisal.Stage.Name;
+                ViewData["Status"] = obj_appraisal_page.Appraisal.Status.Name;
+                ViewData["appraisalid"] = id;
+
+                if (!CheckAccessAndSetViewMode(obj_appraisal_page.Appraisal, taskId))
+                {
+                    TempData["AlertMessage"] = Resources.Resource.MSG_APPRAISAL_NO_ACCESS;
+                    return Redirect(Url.Content("~/Home/Index"));
+                }
+                else
+                {
+                    ViewData.Model = obj_appraisal_page;
+                    obj_appraisal_page.ViewOnly = boo_view_only;
+                    return View();
+                }
+            }
+            else 
+            {
+                TempData["AlertMessage"] = Resources.Resource.MSG_NO_APPRAISAL_FOUND;
+                return Redirect(Url.Content("~/Home/Index"));
+            }
         }
 
         [HttpPost]
@@ -136,17 +156,33 @@ namespace eHR.PMS.Web.Controllers
                 obj_appraisal_page.Sections = PMS.Model.PMSModel.GetMasterSectionList(true);
                 obj_appraisal_page.Appraisal = PMS.Model.PMSModel.GetAppraisalById(Convert.ToInt32(id));
                 obj_appraisal_page.CurrentTaskId = taskid;
+            }
+
+
+            if (obj_appraisal_page.Appraisal != null)
+            {
                 obj_appraisal_page.CurrentSection = obj_appraisal_page.Sections.Where(a => a.Id == PMS.Model.PMSConstants.SECTION_ID_CORE_VALUES).First();
                 ViewData["Stage"] = obj_appraisal_page.Appraisal.Stage.Name;
                 ViewData["Status"] = obj_appraisal_page.Appraisal.Status.Name;
+                ViewData["appraisalid"] = id;
 
-                SetPageViewOnly(obj_appraisal_page.Appraisal.Status.Id, taskid);
-                obj_appraisal_page.ViewOnly = boo_view_only;
+                if (!CheckAccessAndSetViewMode(obj_appraisal_page.Appraisal, taskid))
+                {
+                    TempData["AlertMessage"] = Resources.Resource.MSG_APPRAISAL_NO_ACCESS;
+                    return Redirect(Url.Content("~/Home/Index"));
+                }
+                else
+                {
+                    ViewData.Model = obj_appraisal_page;
+                    obj_appraisal_page.ViewOnly = boo_view_only;
+                    return View();
+                }
             }
-
-            ViewData["appraisalid"] = id;
-            ViewData.Model = obj_appraisal_page;
-            return View();
+            else
+            {
+                TempData["AlertMessage"] = Resources.Resource.MSG_NO_APPRAISAL_FOUND;
+                return Redirect(Url.Content("~/Home/Index"));
+            }
         }
 
         [HttpPost]
@@ -246,17 +282,42 @@ namespace eHR.PMS.Web.Controllers
                 obj_appraisal_page.Sections = PMS.Model.PMSModel.GetMasterSectionList(true);
                 obj_appraisal_page.Appraisal = PMS.Model.PMSModel.GetAppraisalById(Convert.ToInt32(id));
                 obj_appraisal_page.CurrentTaskId = taskid;
-                obj_appraisal_page.CurrentSection = obj_appraisal_page.Sections.Where(a=> a.Id == PMS.Model.PMSConstants.SECTION_ID_KPI).First();
-                ViewData["Stage"] = obj_appraisal_page.Appraisal.Stage.Name;
-                ViewData["Status"] = obj_appraisal_page.Appraisal.Status.Name;
+                //obj_appraisal_page.CurrentSection = obj_appraisal_page.Sections.Where(a=> a.Id == PMS.Model.PMSConstants.SECTION_ID_KPI).First();
+                //ViewData["Stage"] = obj_appraisal_page.Appraisal.Stage.Name;
+                //ViewData["Status"] = obj_appraisal_page.Appraisal.Status.Name;
 
-                SetPageViewOnly(obj_appraisal_page.Appraisal.Status.Id, taskid);
-                obj_appraisal_page.ViewOnly = boo_view_only;
+                //SetPageViewOnly(obj_appraisal_page.Appraisal.Status.Id, taskid);
+                //SetPageViewOnly(obj_appraisal_page.Appraisal, taskid);
+                //obj_appraisal_page.ViewOnly = boo_view_only;
             }
 
-            ViewData["appraisalid"] = id;
-            ViewData.Model = obj_appraisal_page;
-            return View();
+            //ViewData["appraisalid"] = id;
+            //ViewData.Model = obj_appraisal_page;
+
+            if (obj_appraisal_page.Appraisal != null)
+            {
+                obj_appraisal_page.CurrentSection = obj_appraisal_page.Sections.Where(a => a.Id == PMS.Model.PMSConstants.SECTION_ID_PERFORMANCE_COACHING).First();
+                ViewData["Stage"] = obj_appraisal_page.Appraisal.Stage.Name;
+                ViewData["Status"] = obj_appraisal_page.Appraisal.Status.Name;
+                ViewData["appraisalid"] = id;
+
+                if (!CheckAccessAndSetViewMode(obj_appraisal_page.Appraisal, taskid))
+                {
+                    TempData["AlertMessage"] = Resources.Resource.MSG_APPRAISAL_NO_ACCESS;
+                    return Redirect(Url.Content("~/Home/Index"));
+                }
+                else
+                {
+                    ViewData.Model = obj_appraisal_page;
+                    obj_appraisal_page.ViewOnly = boo_view_only;
+                    return View();
+                }
+            }
+            else
+            {
+                TempData["AlertMessage"] = Resources.Resource.MSG_NO_APPRAISAL_FOUND;
+                return Redirect(Url.Content("~/Home/Index"));
+            }
         }
 
         [HttpPost]
@@ -307,16 +368,41 @@ namespace eHR.PMS.Web.Controllers
                 obj_appraisal_page.Sections = PMS.Model.PMSModel.GetMasterSectionList(true);
                 obj_appraisal_page.Appraisal = PMS.Model.PMSModel.GetAppraisalById(Convert.ToInt32(id));
                 obj_appraisal_page.CurrentTaskId = taskid;
-                obj_appraisal_page.CurrentSection = obj_appraisal_page.Sections.Where(a => a.Id == PMS.Model.PMSConstants.SECTION_ID_KPI).First();
+                //obj_appraisal_page.CurrentSection = obj_appraisal_page.Sections.Where(a => a.Id == PMS.Model.PMSConstants.SECTION_ID_KPI).First();
+                //ViewData["Stage"] = obj_appraisal_page.Appraisal.Stage.Name;
+                //ViewData["Status"] = obj_appraisal_page.Appraisal.Status.Name;
+
+                //SetPageViewOnly(obj_appraisal_page.Appraisal.Status.Id, taskid);
+                //SetPageViewOnly(obj_appraisal_page.Appraisal, taskid);
+                //obj_appraisal_page.ViewOnly = boo_view_only;
+            }
+            //ViewData["appraisalid"] = id;
+            //ViewData.Model = obj_appraisal_page;
+
+            if (obj_appraisal_page.Appraisal != null)
+            {
+                obj_appraisal_page.CurrentSection = obj_appraisal_page.Sections.Where(a => a.Id == PMS.Model.PMSConstants.SECTION_ID_CAREER_DEVELOPMENT).First();
                 ViewData["Stage"] = obj_appraisal_page.Appraisal.Stage.Name;
                 ViewData["Status"] = obj_appraisal_page.Appraisal.Status.Name;
+                ViewData["appraisalid"] = id;
 
-                SetPageViewOnly(obj_appraisal_page.Appraisal.Status.Id, taskid);
-                obj_appraisal_page.ViewOnly = boo_view_only;
+                if (!CheckAccessAndSetViewMode(obj_appraisal_page.Appraisal, taskid))
+                {
+                    TempData["AlertMessage"] = Resources.Resource.MSG_APPRAISAL_NO_ACCESS;
+                    return Redirect(Url.Content("~/Home/Index"));
+                }
+                else
+                {
+                    ViewData.Model = obj_appraisal_page;
+                    obj_appraisal_page.ViewOnly = boo_view_only;
+                    return View();
+                }
             }
-            ViewData["appraisalid"] = id;
-            ViewData.Model = obj_appraisal_page;
-            return View();
+            else
+            {
+                TempData["AlertMessage"] = Resources.Resource.MSG_NO_APPRAISAL_FOUND;
+                return Redirect(Url.Content("~/Home/Index"));
+            }
         }
 
         [HttpPost]
@@ -365,6 +451,89 @@ namespace eHR.PMS.Web.Controllers
 
         #endregion Career Development
 
+        private bool CheckAccessRights(Model.DTO.Appraisal.Appraisal appraisal)
+        {
+            bool boo_has_access = false;
+
+            if (Business.SecurityManager.HasHRRole(CurrentUser)) 
+            {
+                boo_has_access = true;
+            }
+            else if (CurrentUser.Id == appraisal.Employee.Id)
+            {
+                boo_has_access = true;
+            }
+            else if (IsCurrentUserApprover(appraisal.Approvers))
+            {
+                boo_has_access = true;
+            }
+
+            else if (IsCurrentUserReviewer(appraisal.Reviewers))
+            {
+                boo_has_access = true;
+            }
+
+            return boo_has_access;
+        }
+
+        private bool IsCurrentUserApprover(List<Model.DTO.Appraisal.Approver> approvers)
+        {
+            bool boo_is_approver = false;
+
+            if (!Lib.Utility.Common.IsNullOrEmptyList(approvers))
+            {
+                var var_approvers = approvers.Where(rec => rec.EmployeeId == CurrentUser.Id);
+
+                if (!Lib.Utility.Common.IsNullOrEmptyList(var_approvers))
+                {
+                    boo_is_approver = true;
+                }
+            }
+            return boo_is_approver;
+        }
+
+        private bool IsCurrentUserReviewer(List<Model.DTO.Appraisal.Reviewer> reviewers)
+        {
+            bool boo_is_reviewer = false;
+
+            if (!Lib.Utility.Common.IsNullOrEmptyList(reviewers))
+            {
+                var var_approvers = reviewers.Where(rec => rec.EmployeeId == CurrentUser.Id);
+
+                if (!Lib.Utility.Common.IsNullOrEmptyList(var_approvers))
+                {
+                    boo_is_reviewer = true;
+                }
+            }
+            return boo_is_reviewer;
+        }
+
+        private void SetPageViewOnly(Model.DTO.Appraisal.Appraisal appraisal, int taskId)
+        {
+            if (taskId > 0)
+            {
+                if (appraisal.Status.Id == PMS.Model.PMSConstants.STATUS_ID_NEW || appraisal.Status.Id == PMS.Model.PMSConstants.STATUS_ID_DRAFT)
+                {
+                    if (CurrentUser.Id == appraisal.Employee.Id)
+                    {
+                        boo_view_only = false;
+                    }
+                    else 
+                    {
+                        boo_view_only = true;
+                    }                 
+                }
+                else
+                {
+                    boo_view_only = true;
+                }
+            }
+            else
+            {
+                boo_view_only = true;
+            }
+        }
+        
         private void SetPageViewOnly(int appraisalStatusId, int taskId)
         {
             if (taskId > 0)
@@ -393,6 +562,72 @@ namespace eHR.PMS.Web.Controllers
                 dict.Add(key, form[key]);
             }
             return dict;
+        }
+
+        public bool CheckAccessAndSetViewMode(Model.DTO.Appraisal.Appraisal appraisal, int taskId)
+        {
+            bool boo_has_access = false;
+
+            if (taskId > 0)
+            {
+                // if current user is owner of task, input mode
+                // if current user is not user of task, redirect to stage1/keyperformanceindicator/0/appraisalId
+
+                Model.DTO.Core.Task.Task obj_task = Model.PMSModel.GetTaskById(taskId);
+
+                if (obj_task != null)
+                {
+                    // check if task id is for appraisal
+
+                    if (obj_task.RecordId != appraisal.Id)
+                    {
+                        boo_has_access = false;
+                    }
+                    else if (!Lib.Utility.Common.IsNullOrEmptyList(obj_task.Owners))
+                    {
+                        var var_owners = obj_task.Owners.Where(rec => rec.EmployeeId == CurrentUser.Id);
+
+                        if (!Lib.Utility.Common.IsNullOrEmptyList(var_owners))
+                        {
+                            boo_has_access = true;
+                            if (obj_task.Status.Id == Model.PMSConstants.STATUS_CORE_ID_OPEN)
+                            {
+                                boo_view_only = false;
+                            }
+                            else
+                            {
+                                boo_view_only = true;
+                            }
+                        }
+                        else
+                        {
+                            boo_view_only = true;
+                            boo_has_access = CheckAccessRights(appraisal);
+                        }
+                    }
+                    else 
+                    {
+                        boo_view_only = true;
+                        boo_has_access = CheckAccessRights(appraisal);
+                    }
+
+                    // if current user is owner of task, and task is incomplete, do nothing
+                    // if current user is owner of task and task is completed, got to view mode
+                    // if current user is not owner of task, go to view mode
+                }
+                else
+                {
+                    boo_view_only = true;
+                    boo_has_access = CheckAccessRights(appraisal);
+                }
+            }
+            else
+            { 
+                boo_view_only = true;
+                boo_has_access = CheckAccessRights(appraisal);
+            }
+
+            return boo_has_access;
         }
     }
 }

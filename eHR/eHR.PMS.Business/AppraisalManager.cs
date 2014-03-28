@@ -585,7 +585,7 @@ namespace eHR.PMS.Business
                 sb_task_name.Append("'s Appraisal.");
 
                 string str_task_address = null;
-                if (appraisal.Stage.Id == Model.PMSConstants.STAGE_ID_GOAL_SETTING) { str_task_address = "/Stage2Approval/KeyPerformanceIndicators"; }
+                if (appraisal.Stage.Id == Model.PMSConstants.STAGE_ID_GOAL_SETTING) { str_task_address = "/Stage1Approval/KeyPerformanceIndicators"; }
                 if (appraisal.Stage.Id == Model.PMSConstants.STAGE_ID_PROGRESS_REVIEW) { str_task_address = "/Stage2Approval/KeyPerformanceIndicators"; }
 
 

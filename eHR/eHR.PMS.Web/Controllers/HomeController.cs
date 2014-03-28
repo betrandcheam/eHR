@@ -40,14 +40,89 @@ namespace eHR.PMS.Web.Controllers
             if (id.HasValue)
             {
                 appraisalProfilePageDTO.Appraisal = PMS.Model.PMSModel.GetAppraisalById(Convert.ToInt32(id));
+
+                if (appraisalProfilePageDTO.Appraisal != null)
+                {
+                    if (!CheckAccessRights(appraisalProfilePageDTO.Appraisal))
+                    {
+                        TempData["AlertMessage"] = Resources.Resource.MSG_APPRAISAL_NO_ACCESS;
+                        return Redirect(Url.Content("~/Home/Index"));
+                    }
+                    else 
+                    {
+                        ViewData.Model = appraisalProfilePageDTO;
+                        return View();
+                    }
+                }
+                else
+                {
+                    TempData["AlertMessage"] = Resources.Resource.MSG_NO_APPRAISAL_FOUND;
+                    return Redirect(Url.Content("~/Home/Index"));
+                }
+
             }
             else 
             {
                 TempData["AlertMessage"] = "Unable to retrieve appraisal profile.";
                 return Redirect(Url.Content("~/"));
             }
-            ViewData.Model = appraisalProfilePageDTO;
-            return View();
+        }
+
+        private bool CheckAccessRights(Model.DTO.Appraisal.Appraisal appraisal)
+        {
+            bool boo_has_access = false;
+
+            if (Business.SecurityManager.HasHRRole(CurrentUser))
+            {
+                boo_has_access = true;
+            }
+            else if (CurrentUser.Id == appraisal.Employee.Id)
+            {
+                boo_has_access = true;
+            }
+            else if (IsCurrentUserApprover(appraisal.Approvers))
+            {
+                boo_has_access = true;
+            }
+
+            else if (IsCurrentUserReviewer(appraisal.Reviewers))
+            {
+                boo_has_access = true;
+            }
+
+            return boo_has_access;
+        }
+
+        private bool IsCurrentUserApprover(List<Model.DTO.Appraisal.Approver> approvers)
+        {
+            bool boo_is_approver = false;
+
+            if (!Lib.Utility.Common.IsNullOrEmptyList(approvers))
+            {
+                var var_approvers = approvers.Where(rec => rec.EmployeeId == CurrentUser.Id);
+
+                if (!Lib.Utility.Common.IsNullOrEmptyList(var_approvers))
+                {
+                    boo_is_approver = true;
+                }
+            }
+            return boo_is_approver;
+        }
+
+        private bool IsCurrentUserReviewer(List<Model.DTO.Appraisal.Reviewer> reviewers)
+        {
+            bool boo_is_reviewer = false;
+
+            if (!Lib.Utility.Common.IsNullOrEmptyList(reviewers))
+            {
+                var var_approvers = reviewers.Where(rec => rec.EmployeeId == CurrentUser.Id);
+
+                if (!Lib.Utility.Common.IsNullOrEmptyList(var_approvers))
+                {
+                    boo_is_reviewer = true;
+                }
+            }
+            return boo_is_reviewer;
         }
 
         [HttpPost]
