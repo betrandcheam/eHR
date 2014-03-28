@@ -55,7 +55,7 @@
                 $(this).prev().find(".forcollapseicon").removeClass("glyphicon-chevron-up").addClass("glyphicon-chevron-down");
             });
         });
-        
+
         $(document).on("click", function (e) {
             var $target = $(e.target);
             isPopover = $(e.target).is('.ViewKpiComments');
@@ -64,5 +64,23 @@
             //hide only if clicked on button or inside popover
             if (!isPopover && !inPopover) $(".ViewKpiComments").popover('destroy');
         });
+
+        if ($("#ExportPDF").length > 0) {
+            $("#ExportPDF").click(function () {
+                $.ajax({
+                    url: $("#forRazorValue").attr("exportPDFurl"),
+                    type: "POST",
+                    dataType: "Json",
+                    success: function (data) {
+                        $("#ExportPDF").button('reset');
+                        window.open(data);
+                    }
+                });
+            });
+            //$("#ExportPDF").click(function () {
+            //window.location.href = $("#forRazorValue").attr("exportPDFurl");
+            //$("#ExportPDF").button('reset');
+            //});
+        }
     });
 })
