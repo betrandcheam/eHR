@@ -151,6 +151,15 @@ namespace eHR.PMS.Web.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You do not have the neccessary rights to access the function. Please contact HR Department..
+        /// </summary>
+        public static string MSG_FUNCTIONS_NO_ACCESS {
+            get {
+                return ResourceManager.GetString("MSG_FUNCTIONS_NO_ACCESS", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Unable to save appraisal information. Please try again or contact IT Department..
         /// </summary>
         public static string MSG_NEXT_FAIL {

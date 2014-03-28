@@ -147,6 +147,9 @@
   <data name="MSG_CANCEL" xml:space="preserve">
     <value>All information that are not saved will be discarded. Are you sure you want to return to the main menu?</value>
   </data>
+  <data name="MSG_FUNCTIONS_NO_ACCESS" xml:space="preserve">
+    <value>You do not have the neccessary rights to access the function. Please contact HR Department.</value>
+  </data>
   <data name="MSG_NEXT_FAIL" xml:space="preserve">
     <value>Unable to save appraisal information. Please try again or contact IT Department.</value>
   </data>

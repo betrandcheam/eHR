@@ -15,57 +15,65 @@ namespace eHR.PMS.Web.Controllers
 
         public ActionResult NewCycle(string cycleDateRangeStart, string cycleDateRangeEnd, int? cycleId)
         {
-            Dictionary<string, string> dict = new Dictionary<string, string>();
-            Models.DTO.NewCycleManagementPage obj_cycle_management_page = new Models.DTO.NewCycleManagementPage();
-
-            if (string.IsNullOrEmpty(cycleDateRangeStart) || string.IsNullOrEmpty(cycleDateRangeEnd))
+            if (Business.SecurityManager.HasHRRole(CurrentUser))
             {
-                obj_cycle_management_page.CurrentCycle = new PMS.Model.DTO.Cycle.Cycle();
-                dict.Add("Stage1EndDate", "");
-                dict.Add("Stage3EndDate", "");
-                dict.Add("strStage1EndDate", "");
-                dict.Add("strStage3EndDate", "");
+                Dictionary<string, string> dict = new Dictionary<string, string>();
+                Models.DTO.NewCycleManagementPage obj_cycle_management_page = new Models.DTO.NewCycleManagementPage();
 
-                dict.Add("Stage1SubmissionDeadline", "");
-                dict.Add("Stage1Level1ApprovalDeadline", "");
-                dict.Add("Stage1Level2ApprovalDeadline", "");
-                dict.Add("Stage2SubmissionDeadline", "");
-                dict.Add("Stage2Level1ApprovalDeadline", "");
-                dict.Add("Stage2Level2ApprovalDeadline", "");
-                TempData["QueryData"] = dict;
+                if (string.IsNullOrEmpty(cycleDateRangeStart) || string.IsNullOrEmpty(cycleDateRangeEnd))
+                {
+                    obj_cycle_management_page.CurrentCycle = new PMS.Model.DTO.Cycle.Cycle();
+                    dict.Add("Stage1EndDate", "");
+                    dict.Add("Stage3EndDate", "");
+                    dict.Add("strStage1EndDate", "");
+                    dict.Add("strStage3EndDate", "");
+
+                    dict.Add("Stage1SubmissionDeadline", "");
+                    dict.Add("Stage1Level1ApprovalDeadline", "");
+                    dict.Add("Stage1Level2ApprovalDeadline", "");
+                    dict.Add("Stage2SubmissionDeadline", "");
+                    dict.Add("Stage2Level1ApprovalDeadline", "");
+                    dict.Add("Stage2Level2ApprovalDeadline", "");
+                    TempData["QueryData"] = dict;
+                }
+                else
+                {
+                    cycleDateRangeStart = Lib.Utility.Common.ChangeDateFormat(cycleDateRangeStart);
+                    cycleDateRangeEnd = Lib.Utility.Common.ChangeDateFormat(cycleDateRangeEnd);
+                    string key = cycleDateRangeStart + " " + cycleDateRangeEnd;
+
+                    obj_cycle_management_page.Participants = (List<Model.DTO.Core.Employee>)System.Web.HttpContext.Current.Session["CycleParticipantsList"];
+
+                    dict.Add("cyclename", (string)System.Web.HttpContext.Current.Session["CycleName"]);
+                    dict.Add("Stage1StartDate", (string)System.Web.HttpContext.Current.Session["Stage1StartDate"]);
+                    dict.Add("Stage1EndDate", (string)System.Web.HttpContext.Current.Session["Stage1EndDate"]);
+                    dict.Add("Stage2StartDate", (string)System.Web.HttpContext.Current.Session["Stage2StartDate"]);
+                    dict.Add("Stage2EndDate", (string)System.Web.HttpContext.Current.Session["Stage2EndDate"]);
+                    dict.Add("Stage3StartDate", (string)System.Web.HttpContext.Current.Session["Stage3StartDate"]);
+                    dict.Add("Stage3EndDate", (string)System.Web.HttpContext.Current.Session["Stage3EndDate"]);
+                    dict.Add("strStage1EndDate", Lib.Utility.Common.ChangeDateFormatVS(dict["Stage1EndDate"]));
+                    dict.Add("strStage3EndDate", Lib.Utility.Common.ChangeDateFormatVS(dict["Stage3EndDate"]));
+
+                    dict.Add("Stage1SubmissionDeadline", (string)System.Web.HttpContext.Current.Session["Stage1SubmissionDeadline"]);
+                    dict.Add("Stage1Level1ApprovalDeadline", (string)System.Web.HttpContext.Current.Session["Stage1Level1ApprovalDeadline"]);
+                    dict.Add("Stage1Level2ApprovalDeadline", (string)System.Web.HttpContext.Current.Session["Stage1Level2ApprovalDeadline"]);
+
+                    dict.Add("Stage2SubmissionDeadline", (string)System.Web.HttpContext.Current.Session["Stage2SubmissionDeadline"]);
+                    dict.Add("Stage2Level1ApprovalDeadline", (string)System.Web.HttpContext.Current.Session["Stage2Level1ApprovalDeadline"]);
+                    dict.Add("Stage2Level2ApprovalDeadline", (string)System.Web.HttpContext.Current.Session["Stage2Level2ApprovalDeadline"]);
+
+                    TempData["QueryData"] = dict;
+                }
+
+                //ModelState.Clear();
+                ViewData.Model = obj_cycle_management_page;
+                return View();
             }
-            else
+            else 
             {
-                cycleDateRangeStart = Lib.Utility.Common.ChangeDateFormat(cycleDateRangeStart);
-                cycleDateRangeEnd = Lib.Utility.Common.ChangeDateFormat(cycleDateRangeEnd);
-                string key = cycleDateRangeStart + " " + cycleDateRangeEnd;
-
-                obj_cycle_management_page.Participants = (List<Model.DTO.Core.Employee>)System.Web.HttpContext.Current.Session["CycleParticipantsList"];
-
-                dict.Add("cyclename", (string)System.Web.HttpContext.Current.Session["CycleName"]);
-                dict.Add("Stage1StartDate", (string)System.Web.HttpContext.Current.Session["Stage1StartDate"]);
-                dict.Add("Stage1EndDate", (string)System.Web.HttpContext.Current.Session["Stage1EndDate"]);
-                dict.Add("Stage2StartDate", (string)System.Web.HttpContext.Current.Session["Stage2StartDate"]);
-                dict.Add("Stage2EndDate", (string)System.Web.HttpContext.Current.Session["Stage2EndDate"]);
-                dict.Add("Stage3StartDate", (string)System.Web.HttpContext.Current.Session["Stage3StartDate"]);
-                dict.Add("Stage3EndDate", (string)System.Web.HttpContext.Current.Session["Stage3EndDate"]);
-                dict.Add("strStage1EndDate", Lib.Utility.Common.ChangeDateFormatVS(dict["Stage1EndDate"]));
-                dict.Add("strStage3EndDate", Lib.Utility.Common.ChangeDateFormatVS(dict["Stage3EndDate"]));
-
-                dict.Add("Stage1SubmissionDeadline", (string)System.Web.HttpContext.Current.Session["Stage1SubmissionDeadline"]);
-                dict.Add("Stage1Level1ApprovalDeadline", (string)System.Web.HttpContext.Current.Session["Stage1Level1ApprovalDeadline"]);
-                dict.Add("Stage1Level2ApprovalDeadline", (string)System.Web.HttpContext.Current.Session["Stage1Level2ApprovalDeadline"]);
-
-                dict.Add("Stage2SubmissionDeadline", (string)System.Web.HttpContext.Current.Session["Stage2SubmissionDeadline"]);
-                dict.Add("Stage2Level1ApprovalDeadline", (string)System.Web.HttpContext.Current.Session["Stage2Level1ApprovalDeadline"]);
-                dict.Add("Stage2Level2ApprovalDeadline", (string)System.Web.HttpContext.Current.Session["Stage2Level2ApprovalDeadline"]);
-
-                TempData["QueryData"] = dict;
+                TempData["AlertMessage"] = Resources.Resource.MSG_FUNCTIONS_NO_ACCESS;
+                return Redirect(Url.Content("~/Home/Index"));
             }
-
-            //ModelState.Clear();
-            ViewData.Model = obj_cycle_management_page;
-            return View();
         }
 
         [HttpPost]
@@ -185,52 +193,61 @@ namespace eHR.PMS.Web.Controllers
 
         public ActionResult ManageCycle(string cycleDateRangeStart, string cycleDateRangeEnd,int? cycleId)
         {
-            Dictionary<string, string> dict = new Dictionary<string, string>();
-            Models.DTO.CycleManagementPage obj_cycle_management_page = new Models.DTO.CycleManagementPage();
-            obj_cycle_management_page.Cycles = eHR.PMS.Model.PMSModel.GetCycleByStatus(null);
-            if (string.IsNullOrEmpty(cycleDateRangeStart) || string.IsNullOrEmpty(cycleDateRangeEnd))
+            if (Business.SecurityManager.HasHRRole(CurrentUser))
             {
-                //obj_cycle_management_page.Cycle = new PMS.Model.DTO.Cycle.Cycle();
-                ;
-            }
-            else
-            {
-                cycleDateRangeStart = Lib.Utility.Common.ChangeDateFormat(cycleDateRangeStart);
-                cycleDateRangeEnd = Lib.Utility.Common.ChangeDateFormat(cycleDateRangeEnd);
-                //string key = cycleDateRangeStart + " " + cycleDateRangeEnd;
-                if (cycleId.HasValue)
+                Dictionary<string, string> dict = new Dictionary<string, string>();
+                Models.DTO.CycleManagementPage obj_cycle_management_page = new Models.DTO.CycleManagementPage();
+                obj_cycle_management_page.Cycles = eHR.PMS.Model.PMSModel.GetCycleByStatus(null);
+                if (string.IsNullOrEmpty(cycleDateRangeStart) || string.IsNullOrEmpty(cycleDateRangeEnd))
                 {
-                    obj_cycle_management_page.CurrentCycle = eHR.PMS.Model.PMSModel.GetCycleById(cycleId.Value);
-                    obj_cycle_management_page.CurrentCycle.CycleStages = eHR.PMS.Model.PMSModel.GetStagesByCycleId(cycleId.Value);
-                    List<Model.DTO.Appraisal.Appraisal> templist = eHR.PMS.Model.PMSModel.GetEmployeesInAppraisalsByCycleId(cycleId.Value);
-                    if (System.Web.HttpContext.Current.Session["TempRemoveApprIds"] != null)
-                    {
-                        List<int> tempRemoveApprIds = (List<int>)System.Web.HttpContext.Current.Session["TempRemoveApprIds"];
-                        templist = eHR.PMS.Model.PMSModel.GetEmployeesInAppraisalsByCycleId(cycleId.Value).Where(sec => !tempRemoveApprIds.Contains(sec.Id)).ToList();
-                    }
-                    if (System.Web.HttpContext.Current.Session["CycleExistParticipantsList"] != null)
-                        templist.AddRange((List<Model.DTO.Appraisal.Appraisal>)System.Web.HttpContext.Current.Session["CycleExistParticipantsList"]);
-                    obj_cycle_management_page.Participants = templist;
+                    //obj_cycle_management_page.Cycle = new PMS.Model.DTO.Cycle.Cycle();
+                    ;
                 }
                 else
-                    obj_cycle_management_page.Participants = (List<Model.DTO.Appraisal.Appraisal>)System.Web.HttpContext.Current.Session["CycleExistParticipantsList"];
+                {
+                    cycleDateRangeStart = Lib.Utility.Common.ChangeDateFormat(cycleDateRangeStart);
+                    cycleDateRangeEnd = Lib.Utility.Common.ChangeDateFormat(cycleDateRangeEnd);
+                    //string key = cycleDateRangeStart + " " + cycleDateRangeEnd;
+                    if (cycleId.HasValue)
+                    {
+                        obj_cycle_management_page.CurrentCycle = eHR.PMS.Model.PMSModel.GetCycleById(cycleId.Value);
+                        obj_cycle_management_page.CurrentCycle.CycleStages = eHR.PMS.Model.PMSModel.GetStagesByCycleId(cycleId.Value);
+                        List<Model.DTO.Appraisal.Appraisal> templist = eHR.PMS.Model.PMSModel.GetEmployeesInAppraisalsByCycleId(cycleId.Value);
+                        if (System.Web.HttpContext.Current.Session["TempRemoveApprIds"] != null)
+                        {
+                            List<int> tempRemoveApprIds = (List<int>)System.Web.HttpContext.Current.Session["TempRemoveApprIds"];
+                            templist = eHR.PMS.Model.PMSModel.GetEmployeesInAppraisalsByCycleId(cycleId.Value).Where(sec => !tempRemoveApprIds.Contains(sec.Id)).ToList();
+                        }
+                        if (System.Web.HttpContext.Current.Session["CycleExistParticipantsList"] != null)
+                            templist.AddRange((List<Model.DTO.Appraisal.Appraisal>)System.Web.HttpContext.Current.Session["CycleExistParticipantsList"]);
+                        obj_cycle_management_page.Participants = templist;
+                    }
+                    else
+                    {
+                        obj_cycle_management_page.Participants = (List<Model.DTO.Appraisal.Appraisal>)System.Web.HttpContext.Current.Session["CycleExistParticipantsList"];
+                    }
+                    /*dict.Add("cyclename", (string)System.Web.HttpContext.Current.Session["CycleName"]);
+                    dict.Add("Stage1StartDate", (string)System.Web.HttpContext.Current.Session["Stage1StartDate"]);
+                    dict.Add("Stage1EndDate", (string)System.Web.HttpContext.Current.Session["Stage1EndDate"]);
+                    dict.Add("Stage2StartDate", (string)System.Web.HttpContext.Current.Session["Stage2StartDate"]);
+                    dict.Add("Stage2EndDate", (string)System.Web.HttpContext.Current.Session["Stage2EndDate"]);
+                    dict.Add("Stage3StartDate", (string)System.Web.HttpContext.Current.Session["Stage3StartDate"]);
+                    dict.Add("Stage3EndDate", (string)System.Web.HttpContext.Current.Session["Stage3EndDate"]);
+                    dict.Add("strStage1EndDate", Lib.Utility.Common.ChangeDateFormatVS(dict["Stage1EndDate"]));
+                    dict.Add("strStage3EndDate", Lib.Utility.Common.ChangeDateFormatVS(dict["Stage3EndDate"]));
+                    TempData["QueryData"] = dict;*/
+                }
 
-                /*dict.Add("cyclename", (string)System.Web.HttpContext.Current.Session["CycleName"]);
-                dict.Add("Stage1StartDate", (string)System.Web.HttpContext.Current.Session["Stage1StartDate"]);
-                dict.Add("Stage1EndDate", (string)System.Web.HttpContext.Current.Session["Stage1EndDate"]);
-                dict.Add("Stage2StartDate", (string)System.Web.HttpContext.Current.Session["Stage2StartDate"]);
-                dict.Add("Stage2EndDate", (string)System.Web.HttpContext.Current.Session["Stage2EndDate"]);
-                dict.Add("Stage3StartDate", (string)System.Web.HttpContext.Current.Session["Stage3StartDate"]);
-                dict.Add("Stage3EndDate", (string)System.Web.HttpContext.Current.Session["Stage3EndDate"]);
-                dict.Add("strStage1EndDate", Lib.Utility.Common.ChangeDateFormatVS(dict["Stage1EndDate"]));
-                dict.Add("strStage3EndDate", Lib.Utility.Common.ChangeDateFormatVS(dict["Stage3EndDate"]));
-                TempData["QueryData"] = dict;*/
+                ModelState.Clear();
+                ViewData.Model = obj_cycle_management_page;
+                ViewData["NowDate"] = DateTime.Now.ToString("yyyy-MM-dd");
+                return View();
             }
-
-            ModelState.Clear();
-            ViewData.Model = obj_cycle_management_page;
-            ViewData["NowDate"] = DateTime.Now.ToString("yyyy-MM-dd");
-            return View();
+            else 
+            {
+                 TempData["AlertMessage"] = Resources.Resource.MSG_FUNCTIONS_NO_ACCESS;
+                return Redirect(Url.Content("~/Home/Index"));
+            }
         }
 
         [HttpPost]
@@ -403,26 +420,34 @@ namespace eHR.PMS.Web.Controllers
 
         public ActionResult AddNewParticipants(string cycleDateRangeStart, string cycleDateRangeEnd)
         {
-            Dictionary<string, string> dict = new Dictionary<string, string>();
-            Models.DTO.NewCycleManagementPage obj_cycle_management_page = new Models.DTO.NewCycleManagementPage();
-
-            if (string.IsNullOrEmpty(cycleDateRangeStart) || string.IsNullOrEmpty(cycleDateRangeEnd))
+            if (Business.SecurityManager.HasHRRole(CurrentUser))
             {
-                ViewData["Stage1EndDate"] = "";
-                ViewData["Stage3EndDate"] = "";
+                Dictionary<string, string> dict = new Dictionary<string, string>();
+                Models.DTO.NewCycleManagementPage obj_cycle_management_page = new Models.DTO.NewCycleManagementPage();
 
-                dict.Add("Stage1EndDate", "");
-                dict.Add("Stage3EndDate", "");
+                if (string.IsNullOrEmpty(cycleDateRangeStart) || string.IsNullOrEmpty(cycleDateRangeEnd))
+                {
+                    ViewData["Stage1EndDate"] = "";
+                    ViewData["Stage3EndDate"] = "";
+
+                    dict.Add("Stage1EndDate", "");
+                    dict.Add("Stage3EndDate", "");
+                }
+                else
+                {
+                    dict.Add("Stage1EndDate", Lib.Utility.Common.ChangeDateFormat(cycleDateRangeStart));
+                    dict.Add("Stage3EndDate", Lib.Utility.Common.ChangeDateFormat(cycleDateRangeEnd));
+                    ViewData["Stage1EndDate"] = Lib.Utility.Common.ChangeDateFormat(cycleDateRangeStart);
+                    ViewData["Stage3EndDate"] = Lib.Utility.Common.ChangeDateFormat(cycleDateRangeEnd);
+                }
+                ViewData.Model = obj_cycle_management_page;
+                return View();
             }
-            else
+            else 
             {
-                dict.Add("Stage1EndDate", Lib.Utility.Common.ChangeDateFormat(cycleDateRangeStart));
-                dict.Add("Stage3EndDate", Lib.Utility.Common.ChangeDateFormat(cycleDateRangeEnd));
-                ViewData["Stage1EndDate"] = Lib.Utility.Common.ChangeDateFormat(cycleDateRangeStart);
-                ViewData["Stage3EndDate"] = Lib.Utility.Common.ChangeDateFormat(cycleDateRangeEnd);
-            }
-            ViewData.Model = obj_cycle_management_page;
-            return View();
+                TempData["AlertMessage"] = Resources.Resource.MSG_FUNCTIONS_NO_ACCESS;
+                return Redirect(Url.Content("~/Home/Index"));
+            }   
         }
 
         [HttpPost]
@@ -533,39 +558,45 @@ namespace eHR.PMS.Web.Controllers
 
         public ActionResult RemoveNewParticipants(string cycleDateRangeStart, string cycleDateRangeEnd)
         {
-            Dictionary<string, string> dict = new Dictionary<string, string>();
-            Models.DTO.NewCycleManagementPage obj_cycle_management_page = new Models.DTO.NewCycleManagementPage();
-
-            if (System.Web.HttpContext.Current.Session["CycleParticipantsList"] != null)
+            if (Business.SecurityManager.HasHRRole(CurrentUser))
             {
-                obj_cycle_management_page.Participants = (List<Model.DTO.Core.Employee>)System.Web.HttpContext.Current.Session["CycleParticipantsList"];
-            }
+                Dictionary<string, string> dict = new Dictionary<string, string>();
+                Models.DTO.NewCycleManagementPage obj_cycle_management_page = new Models.DTO.NewCycleManagementPage();
 
-            if (Lib.Utility.Common.IsNullOrEmptyList(obj_cycle_management_page.Participants))
+                if (System.Web.HttpContext.Current.Session["CycleParticipantsList"] != null)
+                {
+                    obj_cycle_management_page.Participants = (List<Model.DTO.Core.Employee>)System.Web.HttpContext.Current.Session["CycleParticipantsList"];
+                }
+
+                if (Lib.Utility.Common.IsNullOrEmptyList(obj_cycle_management_page.Participants))
+                {
+                    ViewData["AlertMessage"] = "There are no employees to remove.";
+                    return Redirect(Url.Content("~/HRManage/NewCycle/" + cycleDateRangeStart + "/" + cycleDateRangeEnd));
+                }
+
+                if (string.IsNullOrEmpty(cycleDateRangeStart) || string.IsNullOrEmpty(cycleDateRangeEnd))
+                {
+                    ViewData["Stage1EndDate"] = "";
+                    ViewData["Stage3EndDate"] = "";
+                    dict.Add("Stage1EndDate", "");
+                    dict.Add("Stage3EndDate", "");
+                }
+                else
+                {
+                    dict.Add("Stage1EndDate", Lib.Utility.Common.ChangeDateFormat(cycleDateRangeStart));
+                    dict.Add("Stage3EndDate", Lib.Utility.Common.ChangeDateFormat(cycleDateRangeEnd));
+                    ViewData["Stage1EndDate"] = Lib.Utility.Common.ChangeDateFormat(cycleDateRangeStart);
+                    ViewData["Stage3EndDate"] = Lib.Utility.Common.ChangeDateFormat(cycleDateRangeEnd);
+                }
+                ModelState.Clear();
+                ViewData.Model = obj_cycle_management_page;
+                return View();
+            }
+            else 
             {
-                ViewData["AlertMessage"] = "There are no employees to remove.";
-                return Redirect(Url.Content("~/HRManage/NewCycle/" + cycleDateRangeStart + "/" + cycleDateRangeEnd));
+                TempData["AlertMessage"] = Resources.Resource.MSG_FUNCTIONS_NO_ACCESS;
+                return Redirect(Url.Content("~/Home/Index"));
             }
-
-            if (string.IsNullOrEmpty(cycleDateRangeStart) || string.IsNullOrEmpty(cycleDateRangeEnd))
-            {
-                ViewData["Stage1EndDate"] = "";
-                ViewData["Stage3EndDate"] = "";
-                dict.Add("Stage1EndDate", "");
-                dict.Add("Stage3EndDate", "");
-            }
-            else
-            {
-                dict.Add("Stage1EndDate", Lib.Utility.Common.ChangeDateFormat(cycleDateRangeStart));
-                dict.Add("Stage3EndDate", Lib.Utility.Common.ChangeDateFormat(cycleDateRangeEnd));
-                ViewData["Stage1EndDate"] = Lib.Utility.Common.ChangeDateFormat(cycleDateRangeStart);
-                ViewData["Stage3EndDate"] = Lib.Utility.Common.ChangeDateFormat(cycleDateRangeEnd);
-            }
-
-
-            ModelState.Clear();
-            ViewData.Model = obj_cycle_management_page;
-            return View();
         }
 
         [HttpPost]
@@ -655,26 +686,34 @@ namespace eHR.PMS.Web.Controllers
 
         public ActionResult AddParticipants(string cycleDateRangeStart, string cycleDateRangeEnd,int cycleId)
         {
-            Dictionary<string, string> dict = new Dictionary<string, string>();
-            Models.DTO.CycleManagementPage obj_cycle_management_page = new Models.DTO.CycleManagementPage();
-
-            if (string.IsNullOrEmpty(cycleDateRangeStart) || string.IsNullOrEmpty(cycleDateRangeEnd))
+            if (Business.SecurityManager.HasHRRole(CurrentUser))
             {
-                ViewData["Stage1EndDate"] = "";
-                ViewData["Stage3EndDate"] = "";
+                Dictionary<string, string> dict = new Dictionary<string, string>();
+                Models.DTO.CycleManagementPage obj_cycle_management_page = new Models.DTO.CycleManagementPage();
 
-                dict.Add("Stage1EndDate", "");
-                dict.Add("Stage3EndDate", "");
+                if (string.IsNullOrEmpty(cycleDateRangeStart) || string.IsNullOrEmpty(cycleDateRangeEnd))
+                {
+                    ViewData["Stage1EndDate"] = "";
+                    ViewData["Stage3EndDate"] = "";
+
+                    dict.Add("Stage1EndDate", "");
+                    dict.Add("Stage3EndDate", "");
+                }
+                else
+                {
+                    dict.Add("Stage1EndDate", Lib.Utility.Common.ChangeDateFormat(cycleDateRangeStart));
+                    dict.Add("Stage3EndDate", Lib.Utility.Common.ChangeDateFormat(cycleDateRangeEnd));
+                    ViewData["Stage1EndDate"] = Lib.Utility.Common.ChangeDateFormat(cycleDateRangeStart);
+                    ViewData["Stage3EndDate"] = Lib.Utility.Common.ChangeDateFormat(cycleDateRangeEnd);
+                }
+                ViewData.Model = obj_cycle_management_page;
+                return View();
             }
             else
             {
-                dict.Add("Stage1EndDate", Lib.Utility.Common.ChangeDateFormat(cycleDateRangeStart));
-                dict.Add("Stage3EndDate", Lib.Utility.Common.ChangeDateFormat(cycleDateRangeEnd));
-                ViewData["Stage1EndDate"] = Lib.Utility.Common.ChangeDateFormat(cycleDateRangeStart);
-                ViewData["Stage3EndDate"] = Lib.Utility.Common.ChangeDateFormat(cycleDateRangeEnd);
+                TempData["AlertMessage"] = Resources.Resource.MSG_FUNCTIONS_NO_ACCESS;
+                return Redirect(Url.Content("~/Home/Index"));
             }
-            ViewData.Model = obj_cycle_management_page;
-            return View();
         }
 
         [HttpPost]
@@ -796,45 +835,53 @@ namespace eHR.PMS.Web.Controllers
 
         public ActionResult RemoveParticipants(string cycleDateRangeStart, string cycleDateRangeEnd, int cycleId)
         {
-            Dictionary<string, string> dict = new Dictionary<string, string>();
-            Models.DTO.CycleManagementPage obj_cycle_management_page = new Models.DTO.CycleManagementPage();
-            if (System.Web.HttpContext.Current.Session["TempRemoveApprIds"] != null)
+            if (Business.SecurityManager.HasHRRole(CurrentUser))
             {
-                List<int> tempRemoveApprIds = (List<int>)System.Web.HttpContext.Current.Session["TempRemoveApprIds"];
-                obj_cycle_management_page.Participants = eHR.PMS.Model.PMSModel.GetEmployeesInAppraisalsByCycleId(cycleId).Where(sec => !tempRemoveApprIds.Contains(sec.Id)).ToList();
-            }
-            else
-                obj_cycle_management_page.Participants = eHR.PMS.Model.PMSModel.GetEmployeesInAppraisalsByCycleId(cycleId);
-            if (System.Web.HttpContext.Current.Session["CycleExistParticipantsList"] != null)
-            {
-                obj_cycle_management_page.Participants.AddRange((List<Model.DTO.Appraisal.Appraisal>)System.Web.HttpContext.Current.Session["CycleExistParticipantsList"]);
-            }
+                Dictionary<string, string> dict = new Dictionary<string, string>();
+                Models.DTO.CycleManagementPage obj_cycle_management_page = new Models.DTO.CycleManagementPage();
+                if (System.Web.HttpContext.Current.Session["TempRemoveApprIds"] != null)
+                {
+                    List<int> tempRemoveApprIds = (List<int>)System.Web.HttpContext.Current.Session["TempRemoveApprIds"];
+                    obj_cycle_management_page.Participants = eHR.PMS.Model.PMSModel.GetEmployeesInAppraisalsByCycleId(cycleId).Where(sec => !tempRemoveApprIds.Contains(sec.Id)).ToList();
+                }
+                else
+                    obj_cycle_management_page.Participants = eHR.PMS.Model.PMSModel.GetEmployeesInAppraisalsByCycleId(cycleId);
+                if (System.Web.HttpContext.Current.Session["CycleExistParticipantsList"] != null)
+                {
+                    obj_cycle_management_page.Participants.AddRange((List<Model.DTO.Appraisal.Appraisal>)System.Web.HttpContext.Current.Session["CycleExistParticipantsList"]);
+                }
 
-            if (Lib.Utility.Common.IsNullOrEmptyList(obj_cycle_management_page.Participants))
-            {
-                ViewData["AlertMessage"] = "There are no employees to remove.";
-                return Redirect(Url.Content("~/HRManage/ManageCycle/" + cycleDateRangeStart + "/" + cycleDateRangeEnd + "/" + cycleId));
-            }
+                if (Lib.Utility.Common.IsNullOrEmptyList(obj_cycle_management_page.Participants))
+                {
+                    ViewData["AlertMessage"] = "There are no employees to remove.";
+                    return Redirect(Url.Content("~/HRManage/ManageCycle/" + cycleDateRangeStart + "/" + cycleDateRangeEnd + "/" + cycleId));
+                }
 
-            if (string.IsNullOrEmpty(cycleDateRangeStart) || string.IsNullOrEmpty(cycleDateRangeEnd))
-            {
-                ViewData["Stage1EndDate"] = "";
-                ViewData["Stage3EndDate"] = "";
-                dict.Add("Stage1EndDate", "");
-                dict.Add("Stage3EndDate", "");
-            }
-            else
-            {
-                dict.Add("Stage1EndDate", Lib.Utility.Common.ChangeDateFormat(cycleDateRangeStart));
-                dict.Add("Stage3EndDate", Lib.Utility.Common.ChangeDateFormat(cycleDateRangeEnd));
-                ViewData["Stage1EndDate"] = Lib.Utility.Common.ChangeDateFormat(cycleDateRangeStart);
-                ViewData["Stage3EndDate"] = Lib.Utility.Common.ChangeDateFormat(cycleDateRangeEnd);
-            }
+                if (string.IsNullOrEmpty(cycleDateRangeStart) || string.IsNullOrEmpty(cycleDateRangeEnd))
+                {
+                    ViewData["Stage1EndDate"] = "";
+                    ViewData["Stage3EndDate"] = "";
+                    dict.Add("Stage1EndDate", "");
+                    dict.Add("Stage3EndDate", "");
+                }
+                else
+                {
+                    dict.Add("Stage1EndDate", Lib.Utility.Common.ChangeDateFormat(cycleDateRangeStart));
+                    dict.Add("Stage3EndDate", Lib.Utility.Common.ChangeDateFormat(cycleDateRangeEnd));
+                    ViewData["Stage1EndDate"] = Lib.Utility.Common.ChangeDateFormat(cycleDateRangeStart);
+                    ViewData["Stage3EndDate"] = Lib.Utility.Common.ChangeDateFormat(cycleDateRangeEnd);
+                }
 
 
-            ModelState.Clear();
-            ViewData.Model = obj_cycle_management_page;
-            return View();
+                ModelState.Clear();
+                ViewData.Model = obj_cycle_management_page;
+                return View();
+            }
+            else 
+            {
+                TempData["AlertMessage"] = Resources.Resource.MSG_FUNCTIONS_NO_ACCESS;
+                return Redirect(Url.Content("~/Home/Index"));
+            }
         }
 
         [HttpPost]
