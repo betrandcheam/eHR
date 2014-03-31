@@ -255,7 +255,7 @@
     </div><!-- /.modal -->
     
 <input type="hidden" id="forRazorValue" message="@message" approvemessage="@(eHR.PMS.Web.Resources.Resource.MSG_APPROVE_SUBMISSION)" rejectmessage="@(eHR.PMS.Web.Resources.Resource.MSG_REJECT_SUBMISSION)"
- saveurl="@(Url.Content("~/Stage1Approval/KPISave"))" apprid='@Model.Appraisal.Id'
+ exportPDFurl="@(Url.Content("~/Home/pdfExport/" + Model.Appraisal.Id))" saveurl="@(Url.Content("~/Stage1Approval/KPISave"))" apprid='@Model.Appraisal.Id'
     rooturl="@(Url.Content("~/"))"/>
 @section scripts
         {

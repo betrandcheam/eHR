@@ -384,6 +384,7 @@ namespace eHR.PMS.Web.Controllers
                    cell.BackgroundColor = new Color(91, 192, 222);
                    kpiTab.AddCell(cell);
 
+                   StringBuilder kpicommentsParagraph = new StringBuilder();
                    if (!Lib.Utility.Common.IsNullOrEmptyList(appr.KPIs.Where(s => s.Block.Id == b.Id)))
                    {
                        foreach (Model.DTO.Appraisal.KPI k in appr.KPIs.Where(s => s.Block.Id == b.Id))
@@ -391,7 +392,17 @@ namespace eHR.PMS.Web.Controllers
                            kpiTab.AddCell(k.Description);
                            kpiTab.AddCell(k.Priority.Name);
                            kpiTab.AddCell(k.Target);
-                           kpiTab.AddCell("");
+                           if (!Lib.Utility.Common.IsNullOrEmptyList(k.Comments))
+                           {
+                               foreach (Model.DTO.Appraisal.KPIComment kc in k.Comments.Where(s => s.FormSaveOnly == false))
+                               {
+                                   kpicommentsParagraph.Append(kc.CommentedTimestamp + " , " + kc.Commentor.PreferredName + " said:\n");
+                                   kpicommentsParagraph.Append("     " + kc.Comments + "\n");
+                               }
+                               kpiTab.AddCell(new Paragraph(kpicommentsParagraph.ToString()));
+                           }
+                           else
+                               kpiTab.AddCell("");
                            //pdfTab.AddCell(k.c);
                        }
                    }
@@ -464,12 +475,23 @@ namespace eHR.PMS.Web.Controllers
                    cell = new PdfPCell(new Paragraph("Comments"));
                    cell.BackgroundColor = new Color(91, 192, 222);
                    corevaluesTab.AddCell(cell);
+                   StringBuilder corevaluecommentsParagraph = new StringBuilder();
                    if (!Lib.Utility.Common.IsNullOrEmptyList(appr.CoreValues))
                    {
                        foreach (Model.DTO.Appraisal.CoreValue k in appr.CoreValues.Where(s => s.Block.Id == b.Id))
                        {
                            corevaluesTab.AddCell(k.Target);
-                           corevaluesTab.AddCell("");
+                           if (!Lib.Utility.Common.IsNullOrEmptyList(k.Comments))
+                           {
+                               foreach (Model.DTO.Appraisal.CoreValueComment kc in k.Comments.Where(s => s.FormSaveOnly == false))
+                               {
+                                   corevaluecommentsParagraph.Append(kc.CommentedTimestamp + " , " + kc.Commentor.PreferredName + " said:\n");
+                                   corevaluecommentsParagraph.Append("     " + kc.Comments + "\n");
+                               }
+                               corevaluesTab.AddCell(new Paragraph(corevaluecommentsParagraph.ToString()));
+                           }
+                           else
+                               corevaluesTab.AddCell("");
                            //pdfTab.AddCell(k.c);
                        }
                    }
@@ -510,6 +532,25 @@ namespace eHR.PMS.Web.Controllers
                    {
                        cell = new PdfPCell(new Paragraph(appr.PerformanceCoachings.First().AreasOfImprovement));
                        performanceCoachingTab.AddCell(cell);
+                   }
+                   else
+                   {
+                       emptycell.FixedHeight = 80;
+                       performanceCoachingTab.AddCell(emptycell);
+                   }
+                   content = new Paragraph("Comments");
+                   cell = new PdfPCell(content);
+                   performanceCoachingTab.AddCell(cell);
+
+                   StringBuilder performanceCoachingcommentsParagraph = new StringBuilder();
+                   if (!eHR.PMS.Lib.Utility.Common.IsNullOrEmptyList(appr.PerformanceCoachings) && !eHR.PMS.Lib.Utility.Common.IsNullOrEmptyList(appr.PerformanceCoachings.First().Comments))
+                   {
+                       foreach (Model.DTO.Appraisal.PerformanceCoachingComment kc in appr.PerformanceCoachings.First().Comments.Where(s => s.FormSaveOnly == false))
+                       {
+                           performanceCoachingcommentsParagraph.Append(kc.CommentedTimestamp + " , " + kc.Commentor.PreferredName + " said:\n");
+                           performanceCoachingcommentsParagraph.Append("     " + kc.Comments + "\n");
+                       }
+                       performanceCoachingTab.AddCell(new Paragraph(performanceCoachingcommentsParagraph.ToString()));
                    }
                    else
                    {
@@ -560,6 +601,24 @@ namespace eHR.PMS.Web.Controllers
                    {
                        cell = new PdfPCell(new Paragraph(appr.CareerDevelopments.First().LearningPlans));
                        careerDevelopmentTab.AddCell(cell);
+                   }
+                   else
+                   {
+                       emptycell.FixedHeight = 80;
+                       careerDevelopmentTab.AddCell(emptycell);
+                   }
+                   content = new Paragraph("Comments");
+                   cell = new PdfPCell(content);
+                   careerDevelopmentTab.AddCell(cell);
+                   StringBuilder careerDevelopmentcommentsParagraph = new StringBuilder();
+                   if (!eHR.PMS.Lib.Utility.Common.IsNullOrEmptyList(appr.PerformanceCoachings) && !eHR.PMS.Lib.Utility.Common.IsNullOrEmptyList(appr.PerformanceCoachings.First().Comments))
+                   {
+                       foreach (Model.DTO.Appraisal.PerformanceCoachingComment kc in appr.PerformanceCoachings.First().Comments.Where(s => s.FormSaveOnly == false))
+                       {
+                           careerDevelopmentcommentsParagraph.Append(kc.CommentedTimestamp + " , " + kc.Commentor.PreferredName + " said:\n");
+                           careerDevelopmentcommentsParagraph.Append("     " + kc.Comments + "\n");
+                       }
+                       careerDevelopmentTab.AddCell(new Paragraph(careerDevelopmentcommentsParagraph.ToString()));
                    }
                    else
                    {
