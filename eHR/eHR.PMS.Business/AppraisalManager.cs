@@ -1011,13 +1011,14 @@ namespace eHR.PMS.Business
             StringBuilder sb_body = new StringBuilder();
              sb_body.Append("<p>Hi ");
              sb_body.Append(newMember.PreferredName);
-             sb_body.Append(",</p><br /><p>   ");
+             sb_body.Append(",</p><p>   ");
              sb_body.Append(appr.Employee.PreferredName);
              sb_body.Append(" You are now the Level ");
              sb_body.Append(newMember.ApprovalLevel.HasValue ? newMember.ApprovalLevel.Value.ToString() : "");
              sb_body.Append(" Manager for ");
              sb_body.Append(appr.Employee.PreferredName);
-             sb_body.Append("’s appraisal. You can now process his/her appraisal from via the <a href='http://ssgdv19/eHR.PMS.Web/'> eHR Portal </a> </p>");
+             sb_body.Append("’s appraisal. You can now process his/her appraisal from via the <a style='font-style:italic;' href='http://ssgdv19/eHR.PMS.Web/'> eHR Portal </a> </p>");
+             sb_body.Append("<p><span style='font-style:italic; font-size:small;'>This is a computer generated email. Please do not reply.</span></p>");            
             obj_email_message.Body = sb_body.ToString();
             //if (newMember.OfficeEmailAddress != null && IsValidEmail(newMember.OfficeEmailAddress))
             obj_email_message.To.Add(newMember.OfficeEmailAddress);
@@ -1043,9 +1044,10 @@ namespace eHR.PMS.Business
             StringBuilder sb_body = new StringBuilder();
              sb_body.Append("<p>Hi ");
              sb_body.Append(newMember.PreferredName);
-             sb_body.Append(",</p><br /><p>   ");
+             sb_body.Append(",</p><p>   ");
              sb_body.Append(appr.Employee.PreferredName);
-             sb_body.Append(" has selected you as the Reviewer for his/her appraisal. You can now view his/her appraisal from via the<a href='http://ssgdv19/eHR.PMS.Web/'> eHR Portal </a> </p>");
+             sb_body.Append(" has selected you as the Reviewer for his/her appraisal. You can now view his/her appraisal from via the<a style='font-style:italic;' href='http://ssgdv19/eHR.PMS.Web/'> eHR Portal </a> </p>");
+             sb_body.Append("<p><span style='font-style:italic; font-size:small;'>This is a computer generated email. Please do not reply.</span></p>");            
             obj_email_message.Body = sb_body.ToString();
             //if (newMember.OfficeEmailAddress != null && IsValidEmail(newMember.OfficeEmailAddress))
             obj_email_message.To.Add(newMember.OfficeEmailAddress);
@@ -1077,18 +1079,10 @@ namespace eHR.PMS.Business
             StringBuilder sb_body = new StringBuilder();
                     sb_body.Append("<p>Hi ");
                     sb_body.Append(newMember.PreferredName);
-                    sb_body.Append(",</p><br /><p>   You are now the Senior Management Team member for ");
+                    sb_body.Append(",</p><p>   You are now the Senior Management Team member for ");
                     sb_body.Append(appr.Employee.PreferredName);
-                    sb_body.Append(". You can now process his/her appraisal from via the<a href='http://ssgdv19/eHR.PMS.Web/'> eHR Portal </a> </p>");
-                   /* break;
-                case "Review":
-                    sb_body.Append("<p>Hi ");
-                    sb_body.Append(newMember.PreferredName);
-                    sb_body.Append(",</p><br /><p>   ");
-                    sb_body.Append(appr.Employee.PreferredName);
-                    sb_body.Append(" has selected you as the Reviewer for his/her appraisal. You can now view his/her appraisal from via the<a href='http://ssgdv19/eHR.PMS.Web/'> eHR Portal </a> </p>");
-                    break;
-            }*/
+                    sb_body.Append(". You can now process his/her appraisal from via the<a style='font-style:italic;' href='http://ssgdv19/eHR.PMS.Web/'> eHR Portal </a> </p>");
+                    sb_body.Append("<p><span style='font-style:italic; font-size:small;'>This is a computer generated email. Please do not reply.</span></p>");            
             obj_email_message.Body = sb_body.ToString();
             //if (newMember.OfficeEmailAddress != null && IsValidEmail(newMember.OfficeEmailAddress))
             obj_email_message.To.Add(newMember.OfficeEmailAddress);
