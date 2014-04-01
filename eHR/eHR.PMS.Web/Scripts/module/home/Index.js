@@ -7,5 +7,9 @@ define("home.index", ['jquery', 'bootstrap'], function ($) {
         if (message)
             $('#RedirectModal').modal();
     });
+    var refreshfunction = function () {
+        window.location.href = "";
+    }
+    setInterval(refreshfunction, 300000);
 });
             
