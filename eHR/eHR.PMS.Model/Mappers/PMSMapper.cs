@@ -707,6 +707,19 @@ namespace eHR.PMS.Model.Mappers
             };
             return obj_dto;
         }
+        public static PMS.Model.DTO.Appraisal.Reviewer MapEmployeeDTOToReviewerDTO(PMS.Model.DTO.Core.Employee employeeDTO)
+        {
+            PMS.Model.DTO.Appraisal.Reviewer obj_dto = new PMS.Model.DTO.Appraisal.Reviewer()
+            {
+                EmployeeId = employeeDTO.Id,
+                FirstName = employeeDTO.FirstName,
+                LastName = employeeDTO.LastName,
+                PreferredName = employeeDTO.PreferredName,
+                OfficeEmailAddress = employeeDTO.OfficeEmailAddress,
+            };
+            return obj_dto;
+        }
+        
 
         public static List<PMS.Model.DTO.Appraisal.Approver> MapApproverEntitiesToDTOs(List<PMS.Model.Context.PMS_APPRAISAL_APPROVER> entities)
         {

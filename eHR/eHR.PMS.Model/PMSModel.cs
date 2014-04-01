@@ -300,6 +300,17 @@ namespace eHR.PMS.Model
             return lst_employees;
         }
 
+        public static PMS.Model.DTO.Core.Employee GetEmployeeById(int id)
+        {
+            PMS.Model.Context.PMSEntities dc_pms = new PMS.Model.Context.PMSEntities();
+            PMS.Model.DTO.Core.Employee employee = new DTO.Core.Employee();
+            PMS.Model.Context.EMPLOYEE entity;
+            
+            dc_pms.ContextOptions.LazyLoadingEnabled = false;
+            entity=(from ent_employee in dc_pms.EMPLOYEEs where ent_employee.ID==id select ent_employee).Single();
+            employee = Mappers.CoreMapper.MapEmployeeEntityToDTO(entity);
+            return employee;
+        }
         public static List<PMS.Model.DTO.Core.Employee> GetEmployeesByName(bool? active, string name)
         {
             PMS.Model.Context.PMSEntities dc_pms = new PMS.Model.Context.PMSEntities();
@@ -1171,12 +1182,12 @@ namespace eHR.PMS.Model
             return boo_success;
         }
 
-        public static bool UpdateReviewersForAppraisal(int appraisalId, List<DTO.Appraisal.Reviewer> reviewers, out string message)
+        public static bool UpdateReviewersForAppraisal(int appraisalId, List<DTO.Appraisal.Reviewer> reviewers, out string message, out List<DTO.Appraisal.Reviewer> oldReviewers)
         {
             bool boo_success = false;
             message = string.Empty;
             PMS.Model.Context.PMSEntities dc_pms = new PMS.Model.Context.PMSEntities();
-
+            oldReviewers = null;
             try
             {
                 // remove all reviewers for appraisal
@@ -1188,8 +1199,10 @@ namespace eHR.PMS.Model
 
                 if (!Lib.Utility.Common.IsNullOrEmptyList(lst_ent_reviewers))
                 {
+                    oldReviewers = new List<DTO.Appraisal.Reviewer>();
                     foreach (Model.Context.PMS_APPRAISAL_REVIEWER ent_reviewer in lst_ent_reviewers)
                     {
+                        oldReviewers.Add(Model.Mappers.PMSMapper.MapReviewerEntityToDTO(ent_reviewer));
                         dc_pms.PMS_APPRAISAL_REVIEWER.DeleteObject(ent_reviewer);
                     }
                 }
@@ -1979,23 +1992,24 @@ namespace eHR.PMS.Model
             return lst_approvers;
         }
 
-        public static bool UpdateApproversAndTasks(PMS.Model.DTO.Appraisal.Appraisal appraisal, List<PMS.Model.DTO.Appraisal.Approver> approvers, List<PMS.Model.DTO.Core.Task.Owner> taskOwners, out string message)
+        public static bool UpdateApproversAndTasks(PMS.Model.DTO.Appraisal.Appraisal appraisal, List<PMS.Model.DTO.Appraisal.Approver> approvers, List<PMS.Model.DTO.Core.Task.Owner> taskOwners, out string message, out List<Model.DTO.Appraisal.Approver> oldApprovers)
         {
             bool boo_success = false;
             message = string.Empty;
             PMS.Model.Context.PMSEntities dc_pms = new PMS.Model.Context.PMSEntities();
-
+            oldApprovers = null;
             try
             {
                 if (!Lib.Utility.Common.IsNullOrEmptyList(approvers))
                 {
-
+                    oldApprovers = new List<DTO.Appraisal.Approver>();
                     IEnumerable<Model.Context.PMS_APPRAISAL_APPROVER> lst_approver_entities = from ent_approvers in dc_pms.PMS_APPRAISAL_APPROVER
                                                                                               where ent_approvers.APPRAISAL_ID == appraisal.Id
                                                                                               select ent_approvers;
 
                     foreach (Model.Context.PMS_APPRAISAL_APPROVER ent_approver in lst_approver_entities)
                     {
+                        oldApprovers.Add(Model.Mappers.PMSMapper.MapApproverEntityToDTO(ent_approver));
                         foreach (PMS.Model.DTO.Appraisal.Approver obj_approver in approvers)
                         {
                             if (ent_approver.ID == obj_approver.Id)
@@ -2048,12 +2062,12 @@ namespace eHR.PMS.Model
             return boo_success;
         }
 
-        public static bool UpdateSMTMember(PMS.Model.DTO.Appraisal.Appraisal appraisal, PMS.Model.DTO.Appraisal.Reviewer smtMember, out string message)
+        public static bool UpdateSMTMember(PMS.Model.DTO.Appraisal.Appraisal appraisal, PMS.Model.DTO.Appraisal.Reviewer smtMember, out string message, out Model.DTO.Appraisal.Reviewer oldReviewer)
         {
             bool boo_success = false;
             message = string.Empty;
             PMS.Model.Context.PMSEntities dc_pms = new PMS.Model.Context.PMSEntities();
-
+            oldReviewer = null;
             try
             {
                 Model.Context.PMS_APPRAISAL_REVIEWER ent_reviewer = (from ent_reviewers in dc_pms.PMS_APPRAISAL_REVIEWER
@@ -2065,6 +2079,7 @@ namespace eHR.PMS.Model
                 if (ent_reviewer != null)
                 {
                     ent_reviewer.REVIEWER_ID = smtMember.EmployeeId;
+                    oldReviewer = Model.Mappers.PMSMapper.MapReviewerEntityToDTO(ent_reviewer);
                 }
                 else 
                 { 

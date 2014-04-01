@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Configuration;
+using System.Text.RegularExpressions;
 
 namespace eHR.PMS.Business
 {
@@ -660,12 +661,31 @@ namespace eHR.PMS.Business
             }
             return boo_success;
         }
+        
+        public static bool ManageChangeReviewerMember(Model.DTO.Appraisal.Appraisal appraisal, List<Model.DTO.Appraisal.Reviewer> lst_reviewers, out string message)
+        {
 
+            message = string.Empty;
+            bool result = false;
+            List<Model.DTO.Appraisal.Reviewer> lst_oldReviewers=new List<Model.DTO.Appraisal.Reviewer>();
+            result=Model.PMSModel.UpdateReviewersForAppraisal(appraisal.Id, lst_reviewers, out message,out lst_oldReviewers);
+            if (result)
+            {
+                List<System.Net.Mail.MailMessage> lst_email_messages=new List<System.Net.Mail.MailMessage>();
+
+                lst_email_messages=GenerateEmailMessagesForReviewers(appraisal,lst_reviewers,lst_oldReviewers);
+                SendEmailNotification(lst_email_messages);
+            }
+
+            return result;
+        }
+        
         public static bool ManageChangeApprover(Model.DTO.Appraisal.Appraisal appraisal, List<Model.DTO.Appraisal.Approver> newApprovers, out string message)
         {
             message = string.Empty;
             List<Model.DTO.Core.Task.Owner> lst_owners_to_update = null;
-
+            bool result = false;
+            List<Model.DTO.Appraisal.Approver> lst_oldApprovers = new List<Model.DTO.Appraisal.Approver>();
             if (!Lib.Utility.Common.IsNullOrEmptyList(newApprovers))
             {
                 List<Model.DTO.Core.Task.Task> lst_tasks = Model.PMSModel.GetTasksByAppraisal(appraisal.Id, Model.PMSConstants.STATUS_CORE_ID_OPEN);
@@ -710,13 +730,32 @@ namespace eHR.PMS.Business
                 }
             }
 
-            return Model.PMSModel.UpdateApproversAndTasks(appraisal, newApprovers, lst_owners_to_update, out message);
+            result = Model.PMSModel.UpdateApproversAndTasks(appraisal, newApprovers, lst_owners_to_update, out message, out lst_oldApprovers);
+            if (result)
+            {
+                List<System.Net.Mail.MailMessage> lst_email_messages = new List<System.Net.Mail.MailMessage>();
+
+                lst_email_messages = GenerateEmailMessagesForApprovers(appraisal, newApprovers, lst_oldApprovers);
+                SendEmailNotification(lst_email_messages);
+            }
+            return result;
         }
 
         public static bool ManageChangeSMTMember(Model.DTO.Appraisal.Appraisal appraisal, Model.DTO.Appraisal.Reviewer smtMember, out string message)
         {
             message = string.Empty;
-            return Model.PMSModel.UpdateSMTMember(appraisal,smtMember,out message);
+            bool result = false;
+            Model.DTO.Appraisal.Reviewer oldMember=new Model.DTO.Appraisal.Reviewer();
+            result=Model.PMSModel.UpdateSMTMember(appraisal,smtMember,out message,out oldMember);
+            if (result)
+            {
+                List<System.Net.Mail.MailMessage> lst_email_messages=new List<System.Net.Mail.MailMessage>();
+                if(smtMember.EmployeeId!=oldMember.EmployeeId && smtMember.OfficeEmailAddress!=null && IsValidEmail(smtMember.OfficeEmailAddress))
+                    lst_email_messages.Add(GenerateEmailMessageForChangeSMTPerson(appraisal, smtMember, oldMember));
+                SendEmailNotification(lst_email_messages);
+            }
+
+            return result;
         }
 
         public static List<PMS.Model.DTO.Appraisal.Appraisal> GetAppraisalsForView(int cycleId, string employeeName, string employeeDomainId, string departmentName)
@@ -921,6 +960,142 @@ namespace eHR.PMS.Business
             return obj_email_message;
         }
 
+        private static List<System.Net.Mail.MailMessage> GenerateEmailMessagesForApprovers(Model.DTO.Appraisal.Appraisal appr, List<Model.DTO.Appraisal.Approver> newMembers, List<Model.DTO.Appraisal.Approver> oldMembers)
+        {
+            List<System.Net.Mail.MailMessage> lst_messages = new List<System.Net.Mail.MailMessage>();
+            int oldApproverersIndex = 1;
+            foreach (Model.DTO.Appraisal.Approver approver in newMembers)
+            {
+                if (approver.OfficeEmailAddress != null && IsValidEmail(approver.OfficeEmailAddress))
+                {
+                    if (oldMembers.Count >= oldApproverersIndex && approver.EmployeeId != oldMembers[oldApproverersIndex].EmployeeId)
+                        lst_messages.Add(GenerateEmailMessageForChangeApproverPerson(appr, approver, oldMembers[oldApproverersIndex++]));
+                    else
+                        lst_messages.Add(GenerateEmailMessageForChangeApproverPerson(appr, approver, null));
+                }
+            }
+            return lst_messages;
+        }
+        private static List<System.Net.Mail.MailMessage> GenerateEmailMessagesForReviewers(Model.DTO.Appraisal.Appraisal appr, List<Model.DTO.Appraisal.Reviewer> newMembers,List<Model.DTO.Appraisal.Reviewer> oldMembers)
+        {
+            List<System.Net.Mail.MailMessage> lst_messages = new List<System.Net.Mail.MailMessage>();
+            int oldReviewersIndex = 1;
+            foreach (Model.DTO.Appraisal.Reviewer reviewer in newMembers)
+            {
+                if (reviewer.OfficeEmailAddress != null && IsValidEmail(reviewer.OfficeEmailAddress))
+                {
+                    if (oldMembers.Count >= oldReviewersIndex && reviewer.EmployeeId != oldMembers[oldReviewersIndex].EmployeeId)
+                        lst_messages.Add(GenerateEmailMessageForChangeReviewerPerson(appr, reviewer, oldMembers[oldReviewersIndex++]));
+                    else
+                        lst_messages.Add(GenerateEmailMessageForChangeReviewerPerson(appr, reviewer, null));
+                }
+            }
+            return lst_messages;
+        }
+
+        private static System.Net.Mail.MailMessage GenerateEmailMessageForChangeApproverPerson(Model.DTO.Appraisal.Appraisal appr, Model.DTO.Appraisal.Approver newMember, Model.DTO.Appraisal.Approver oldmember)
+        {
+
+            StringBuilder sb_subject = new StringBuilder();
+            sb_subject.Append("Change in Approver for ");
+            sb_subject.Append(appr.Employee.PreferredName);
+            sb_subject.Append("’s Performance Appraisal");
+
+
+            System.Net.Mail.MailMessage obj_email_message = new System.Net.Mail.MailMessage()
+            {
+                Subject = sb_subject.ToString(),
+                From = new System.Net.Mail.MailAddress(ConfigurationManager.AppSettings["emailsenderaddress"], ConfigurationManager.AppSettings["emailsendername"]),
+                IsBodyHtml = true
+            };
+            StringBuilder sb_body = new StringBuilder();
+             sb_body.Append("<p>Hi ");
+             sb_body.Append(newMember.PreferredName);
+             sb_body.Append(",</p><br /><p>   ");
+             sb_body.Append(appr.Employee.PreferredName);
+             sb_body.Append(" You are now the Level ");
+             sb_body.Append(newMember.ApprovalLevel.HasValue ? newMember.ApprovalLevel.Value.ToString() : "");
+             sb_body.Append(" Manager for ");
+             sb_body.Append(appr.Employee.PreferredName);
+             sb_body.Append("’s appraisal. You can now process his/her appraisal from via the <a href='http://ssgdv19/eHR.PMS.Web/'> eHR Portal </a> </p>");
+            obj_email_message.Body = sb_body.ToString();
+            //if (newMember.OfficeEmailAddress != null && IsValidEmail(newMember.OfficeEmailAddress))
+            obj_email_message.To.Add(newMember.OfficeEmailAddress);
+            if (oldmember != null && oldmember.OfficeEmailAddress != null && IsValidEmail(oldmember.OfficeEmailAddress))
+                obj_email_message.CC.Add(oldmember.OfficeEmailAddress);
+            return obj_email_message;
+        }
+        private static System.Net.Mail.MailMessage GenerateEmailMessageForChangeReviewerPerson(Model.DTO.Appraisal.Appraisal appr, Model.DTO.Appraisal.Reviewer newMember, Model.DTO.Appraisal.Reviewer oldmember)
+        {
+
+            StringBuilder sb_subject = new StringBuilder();
+            sb_subject.Append("Change in Reviewer for ");
+            sb_subject.Append(appr.Employee.PreferredName);
+            sb_subject.Append("’s Performance Appraisal");
+
+
+            System.Net.Mail.MailMessage obj_email_message = new System.Net.Mail.MailMessage()
+            {
+                Subject = sb_subject.ToString(),
+                From = new System.Net.Mail.MailAddress(ConfigurationManager.AppSettings["emailsenderaddress"], ConfigurationManager.AppSettings["emailsendername"]),
+                IsBodyHtml = true
+            };
+            StringBuilder sb_body = new StringBuilder();
+             sb_body.Append("<p>Hi ");
+             sb_body.Append(newMember.PreferredName);
+             sb_body.Append(",</p><br /><p>   ");
+             sb_body.Append(appr.Employee.PreferredName);
+             sb_body.Append(" has selected you as the Reviewer for his/her appraisal. You can now view his/her appraisal from via the<a href='http://ssgdv19/eHR.PMS.Web/'> eHR Portal </a> </p>");
+            obj_email_message.Body = sb_body.ToString();
+            //if (newMember.OfficeEmailAddress != null && IsValidEmail(newMember.OfficeEmailAddress))
+            obj_email_message.To.Add(newMember.OfficeEmailAddress);
+            if (oldmember != null && oldmember.OfficeEmailAddress != null && IsValidEmail(oldmember.OfficeEmailAddress))
+                obj_email_message.CC.Add(oldmember.OfficeEmailAddress);
+            return obj_email_message;
+        }
+
+        private static bool IsValidEmail(string strIn)
+        {
+            // Return true if strIn is in valid e-mail format. 
+            return Regex.IsMatch(strIn, @"^([\w-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$");
+        }
+        private static System.Net.Mail.MailMessage GenerateEmailMessageForChangeSMTPerson(Model.DTO.Appraisal.Appraisal appr, Model.DTO.Appraisal.Reviewer newMember, Model.DTO.Appraisal.Reviewer oldmember)
+        {
+            
+            StringBuilder sb_subject = new StringBuilder();
+            sb_subject.Append("Change in Approver for ");
+            sb_subject.Append(appr.Employee.PreferredName);
+            sb_subject.Append("’s Performance Appraisal");
+                   
+            
+            System.Net.Mail.MailMessage obj_email_message = new System.Net.Mail.MailMessage()
+            {
+                Subject = sb_subject.ToString(),
+                From = new System.Net.Mail.MailAddress(ConfigurationManager.AppSettings["emailsenderaddress"], ConfigurationManager.AppSettings["emailsendername"]),
+                IsBodyHtml = true
+            };
+            StringBuilder sb_body = new StringBuilder();
+                    sb_body.Append("<p>Hi ");
+                    sb_body.Append(newMember.PreferredName);
+                    sb_body.Append(",</p><br /><p>   You are now the Senior Management Team member for ");
+                    sb_body.Append(appr.Employee.PreferredName);
+                    sb_body.Append(". You can now process his/her appraisal from via the<a href='http://ssgdv19/eHR.PMS.Web/'> eHR Portal </a> </p>");
+                   /* break;
+                case "Review":
+                    sb_body.Append("<p>Hi ");
+                    sb_body.Append(newMember.PreferredName);
+                    sb_body.Append(",</p><br /><p>   ");
+                    sb_body.Append(appr.Employee.PreferredName);
+                    sb_body.Append(" has selected you as the Reviewer for his/her appraisal. You can now view his/her appraisal from via the<a href='http://ssgdv19/eHR.PMS.Web/'> eHR Portal </a> </p>");
+                    break;
+            }*/
+            obj_email_message.Body = sb_body.ToString();
+            //if (newMember.OfficeEmailAddress != null && IsValidEmail(newMember.OfficeEmailAddress))
+            obj_email_message.To.Add(newMember.OfficeEmailAddress);
+            if (oldmember != null && oldmember.OfficeEmailAddress != null && IsValidEmail(oldmember.OfficeEmailAddress))
+                obj_email_message.CC.Add(oldmember.OfficeEmailAddress);
+            return obj_email_message;
+        }
         private static System.Net.Mail.MailMessage GenerateEmailMessageToEmployeeForApprovedAppraisal(Model.DTO.Appraisal.Appraisal appraisal, int approvalLevel)
         {
             StringBuilder sb_subject = new StringBuilder("Your appraisal is approved by your level ");
@@ -957,9 +1132,10 @@ namespace eHR.PMS.Business
             sb_body.Append("<p><span style='font-style:italic; font-size:small;'>This is a computer generated email. Please do not reply.</span></p>");
 
             obj_email_message.Body = sb_body.ToString();
-            obj_email_message.To.Add(appraisal.Employee.OfficeEmailAddress);
+            if (appraisal.Employee.OfficeEmailAddress!=null)
+                obj_email_message.To.Add(appraisal.Employee.OfficeEmailAddress);
 
-            if (approvalLevel == 2)
+            if (approvalLevel == 2 && appraisal.GetApproverByLevel(1).OfficeEmailAddress!=null)
             {
                 obj_email_message.CC.Add(appraisal.GetApproverByLevel(1).OfficeEmailAddress);
             }
@@ -972,10 +1148,12 @@ namespace eHR.PMS.Business
             Model.DTO.Appraisal.Stage obj_appraisal_current_stage = appraisal.AppraisalStages.Where(rec => rec.StageId == appraisal.Stage.Id).Single();
             List<System.Net.Mail.MailMessage> lst_messages = new List<System.Net.Mail.MailMessage>();
 
+            System.Net.Mail.MailMessage temp = new System.Net.Mail.MailMessage();
             if (approvalLevel == 1)
-            { 
-                lst_messages.Add(GenerateEmailMessageToEmployeeForApprovedAppraisal(appraisal,approvalLevel));
-
+            {
+                temp = GenerateEmailMessageToEmployeeForApprovedAppraisal(appraisal, approvalLevel);
+                if(temp!=null)
+                    lst_messages.Add(temp);
                 StringBuilder sb_subject = new StringBuilder("Approval required for ");
                 sb_subject.Append(appraisal.Employee.PreferredName);
                 sb_subject.Append("'s performance appraisal.");
@@ -1009,13 +1187,16 @@ namespace eHR.PMS.Business
                 sb_body.Append("<p><span style='font-style:italic; font-size:small;'>This is a computer generated email. Please do not reply.</span></p>");
 
                 obj_email_message.Body = sb_body.ToString();
-                obj_email_message.To.Add(appraisal.GetApproverByLevel(2).OfficeEmailAddress);
+                if (appraisal.GetApproverByLevel(2).OfficeEmailAddress!=null)
+                    obj_email_message.To.Add(appraisal.GetApproverByLevel(2).OfficeEmailAddress);
                 lst_messages.Add(obj_email_message);
             }
 
             if (approvalLevel == 2)
             {
-                lst_messages.Add(GenerateEmailMessageToEmployeeForApprovedAppraisal(appraisal, approvalLevel));
+                temp = GenerateEmailMessageToEmployeeForApprovedAppraisal(appraisal, approvalLevel);
+                if (temp != null)
+                    lst_messages.Add(temp);
             }
 
             return lst_messages;

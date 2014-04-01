@@ -151,6 +151,7 @@ namespace eHR.PMS.Web.Controllers
 
                 if (!Lib.Utility.Common.IsNullOrEmptyList(reviewarray))
                 {
+                    Model.DTO.Appraisal.Appraisal obj_appraisal = Model.PMSModel.GetAppraisalById(apprid);
                     List<string> lst_temp = new List<string>();
                     lst_reviewers = new List<Model.DTO.Appraisal.Reviewer>();
                     foreach(string str_reviewer in reviewarray)
@@ -163,22 +164,24 @@ namespace eHR.PMS.Web.Controllers
 
                     foreach (string str_reviewer_id in lst_temp)
                     {
-                        Model.DTO.Appraisal.Reviewer obj_reviewer = new Model.DTO.Appraisal.Reviewer()
-                        {
-                            EmployeeId = Convert.ToInt32(str_reviewer_id),
-                            Appraisal = new Model.DTO.Appraisal.Appraisal() { Id = apprid },
-                            SMT = false
-                        };
+
+                        // 1. add GetEmployeeById in model
+                        // 2. add MapEmployeeDTOToReviewerDTO in pmsmapper
+
+                        Model.DTO.Appraisal.Reviewer obj_reviewer = Model.Mappers.PMSMapper.MapEmployeeDTOToReviewerDTO(Model.PMSModel.GetEmployeeById(Convert.ToInt32(str_reviewer_id)));
+                        obj_reviewer.Appraisal = new Model.DTO.Appraisal.Appraisal() { Id = apprid };
+                        obj_reviewer.SMT = false;
+
                         lst_reviewers.Add(obj_reviewer);
                     }
+                    if (!Business.AppraisalManager.ManageChangeReviewerMember(obj_appraisal, lst_reviewers, out message))
+                    {
+                        return Json(message);
+                    }
                 }
+                
             }
-
-            if (!Model.PMSModel.UpdateReviewersForAppraisal(apprid, lst_reviewers, out message))
-            {
-                return Json(message);
-            }
-
+            
             return Json(message);
         }
 
@@ -199,26 +202,22 @@ namespace eHR.PMS.Web.Controllers
 
                     if (obj_level_1_approver != null && obj_level_1_approver.EmployeeId != Convert.ToInt32(approver1))
                     {
-                        Model.DTO.Appraisal.Approver obj_approver = new Model.DTO.Appraisal.Approver() 
-                        { 
-                            Id = obj_level_1_approver.Id,
-                            Appraisal= obj_appraisal,
-                            EmployeeId = Convert.ToInt32(approver1),
-                            ApprovalLevel = 1
-                        };
+                        Model.DTO.Appraisal.Approver obj_approver = new Model.DTO.Appraisal.Approver();
+                        obj_approver = Model.Mappers.PMSMapper.MapEmployeeDTOToApproverDTO(Model.PMSModel.GetEmployeeById(Convert.ToInt32(approver1)), 1);
+                        obj_approver.Appraisal = obj_appraisal;
+                        //obj_approver.ApprovalLevel = 1;
+                        obj_approver.Id = obj_level_1_approver.Id;
 
                         lst_new_approvers.Add(obj_approver);
                     }
 
                     if (obj_level_2_approver != null && obj_level_2_approver.EmployeeId != Convert.ToInt32(approver2))
                     {
-                        Model.DTO.Appraisal.Approver obj_approver = new Model.DTO.Appraisal.Approver()
-                        {
-                            Id = obj_level_2_approver.Id,
-                            Appraisal = obj_appraisal,
-                            EmployeeId = Convert.ToInt32(approver2),
-                            ApprovalLevel = 2
-                        };
+                        Model.DTO.Appraisal.Approver obj_approver = new Model.DTO.Appraisal.Approver();
+                        obj_approver = Model.Mappers.PMSMapper.MapEmployeeDTOToApproverDTO(Model.PMSModel.GetEmployeeById(Convert.ToInt32(approver2)), 2);
+                        obj_approver.Appraisal = obj_appraisal;
+                        //obj_approver.ApprovalLevel = 1;
+                        obj_approver.Id = obj_level_1_approver.Id;
                         lst_new_approvers.Add(obj_approver);
                     }
 
@@ -240,12 +239,9 @@ namespace eHR.PMS.Web.Controllers
             if (!string.IsNullOrEmpty(smt))
             {
                 Model.DTO.Appraisal.Appraisal obj_appraisal = Model.PMSModel.GetAppraisalById(appraisalId);
-                obj_reviewer = new Model.DTO.Appraisal.Reviewer() 
-                { 
-                    EmployeeId = Convert.ToInt32(smt),
-                    Appraisal = obj_appraisal,
-                    SMT = true
-                };
+                obj_reviewer = Model.Mappers.PMSMapper.MapEmployeeDTOToReviewerDTO(Model.PMSModel.GetEmployeeById(Convert.ToInt32(smt)));
+                obj_reviewer.Appraisal = new Model.DTO.Appraisal.Appraisal() { Id = appraisalId };
+                obj_reviewer.SMT = true;
 
                 if (!Business.AppraisalManager.ManageChangeSMTMember(obj_appraisal, obj_reviewer, out message))
                 {
