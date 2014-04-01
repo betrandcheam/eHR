@@ -145,13 +145,13 @@ namespace eHR.PMS.Web.Controllers
         {
             string message = string.Empty;
             List<Model.DTO.Appraisal.Reviewer> lst_reviewers = null;
+            Model.DTO.Appraisal.Appraisal obj_appraisal = Model.PMSModel.GetAppraisalById(apprid);
             if (!string.IsNullOrEmpty(reviewers))
             {
                 string[] reviewarray = reviewers.Split('|');
 
                 if (!Lib.Utility.Common.IsNullOrEmptyList(reviewarray))
                 {
-                    Model.DTO.Appraisal.Appraisal obj_appraisal = Model.PMSModel.GetAppraisalById(apprid);
                     List<string> lst_temp = new List<string>();
                     lst_reviewers = new List<Model.DTO.Appraisal.Reviewer>();
                     foreach(string str_reviewer in reviewarray)
@@ -174,12 +174,11 @@ namespace eHR.PMS.Web.Controllers
 
                         lst_reviewers.Add(obj_reviewer);
                     }
-                    if (!Business.AppraisalManager.ManageChangeReviewerMember(obj_appraisal, lst_reviewers, out message))
-                    {
-                        return Json(message);
-                    }
                 }
-                
+            }
+            if (!Business.AppraisalManager.ManageChangeReviewerMember(obj_appraisal, lst_reviewers, out message))
+            {
+                return Json(message);
             }
             
             return Json(message);

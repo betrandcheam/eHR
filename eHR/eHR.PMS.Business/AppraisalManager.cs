@@ -669,7 +669,7 @@ namespace eHR.PMS.Business
             bool result = false;
             List<Model.DTO.Appraisal.Reviewer> lst_oldReviewers=new List<Model.DTO.Appraisal.Reviewer>();
             result=Model.PMSModel.UpdateReviewersForAppraisal(appraisal.Id, lst_reviewers, out message,out lst_oldReviewers);
-            if (result)
+            if (result && lst_reviewers!=null)
             {
                 List<System.Net.Mail.MailMessage> lst_email_messages=new List<System.Net.Mail.MailMessage>();
 
@@ -963,12 +963,12 @@ namespace eHR.PMS.Business
         private static List<System.Net.Mail.MailMessage> GenerateEmailMessagesForApprovers(Model.DTO.Appraisal.Appraisal appr, List<Model.DTO.Appraisal.Approver> newMembers, List<Model.DTO.Appraisal.Approver> oldMembers)
         {
             List<System.Net.Mail.MailMessage> lst_messages = new List<System.Net.Mail.MailMessage>();
-            int oldApproverersIndex = 1;
+            int oldApproverersIndex = 0;
             foreach (Model.DTO.Appraisal.Approver approver in newMembers)
             {
                 if (approver.OfficeEmailAddress != null && IsValidEmail(approver.OfficeEmailAddress))
                 {
-                    if (oldMembers.Count >= oldApproverersIndex && approver.EmployeeId != oldMembers[oldApproverersIndex].EmployeeId)
+                    if (oldMembers != null && oldMembers.Count >= (oldApproverersIndex + 1) && approver.EmployeeId != oldMembers[oldApproverersIndex].EmployeeId)
                         lst_messages.Add(GenerateEmailMessageForChangeApproverPerson(appr, approver, oldMembers[oldApproverersIndex++]));
                     else
                         lst_messages.Add(GenerateEmailMessageForChangeApproverPerson(appr, approver, null));
@@ -979,12 +979,12 @@ namespace eHR.PMS.Business
         private static List<System.Net.Mail.MailMessage> GenerateEmailMessagesForReviewers(Model.DTO.Appraisal.Appraisal appr, List<Model.DTO.Appraisal.Reviewer> newMembers,List<Model.DTO.Appraisal.Reviewer> oldMembers)
         {
             List<System.Net.Mail.MailMessage> lst_messages = new List<System.Net.Mail.MailMessage>();
-            int oldReviewersIndex = 1;
+            int oldReviewersIndex = 0;
             foreach (Model.DTO.Appraisal.Reviewer reviewer in newMembers)
             {
                 if (reviewer.OfficeEmailAddress != null && IsValidEmail(reviewer.OfficeEmailAddress))
                 {
-                    if (oldMembers.Count >= oldReviewersIndex && reviewer.EmployeeId != oldMembers[oldReviewersIndex].EmployeeId)
+                    if (oldMembers!=null && oldMembers.Count >= (oldReviewersIndex + 1) && reviewer.EmployeeId != oldMembers[oldReviewersIndex].EmployeeId)
                         lst_messages.Add(GenerateEmailMessageForChangeReviewerPerson(appr, reviewer, oldMembers[oldReviewersIndex++]));
                     else
                         lst_messages.Add(GenerateEmailMessageForChangeReviewerPerson(appr, reviewer, null));

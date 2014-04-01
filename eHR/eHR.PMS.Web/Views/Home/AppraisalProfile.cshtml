@@ -180,7 +180,7 @@
                     <div class="col-sm-4">
                         @{if (Model.User.Id == Model.Appraisal.Employee.Id || ViewData["hr_user"].Equals("Y"))
                           {
-                            <input usrid="@(Model.Appraisal.Reviewers.Count>0?(Model.Appraisal.Reviewers[0].EmployeeId.Value.ToString()):"")" type="text" class="form-control Reviewer" value="@(Model.GetAppraisalFirstReviewerName() == null ? "" : Model.GetAppraisalFirstReviewerName() + " (" + Model.GetAppraisalFirstReviewerDomainId() + ")")" >
+                            <input usrid="@(Model.GetAppraisalFirstReviewerId())" type="text" class="form-control Reviewer" value="@(Model.GetAppraisalFirstReviewerName() == null ? "" : Model.GetAppraisalFirstReviewerName() + " (" + Model.GetAppraisalFirstReviewerDomainId() + ")")" >
                             <span class="tt-dropdown-menu" style="position: absolute; top: 100%; left: 0px; z-index: 100; display: none; right: auto;"></span>
                           }
                           else
@@ -193,7 +193,7 @@
                     <div class="col-sm-4">
                         @{if (Model.User.Id == Model.Appraisal.Employee.Id || ViewData["hr_user"].Equals("Y"))
                           {
-                            <input usrid="@(Model.Appraisal.Reviewers.Count>1?(Model.Appraisal.Reviewers[1].EmployeeId.Value.ToString()):"")" type="text" class="form-control Reviewer" value="@(Model.GetAppraisalSecondReviewerName() == null ? "" : Model.GetAppraisalSecondReviewerName() + " (" + Model.GetAppraisalSecondReviewerDomainId() + ")")" >
+                            <input usrid="@(Model.GetAppraisalSecondReviewerId())" type="text" class="form-control Reviewer" value="@(Model.GetAppraisalSecondReviewerName() == null ? "" : Model.GetAppraisalSecondReviewerName() + " (" + Model.GetAppraisalSecondReviewerDomainId() + ")")" >
                              <span class="tt-dropdown-menu" style="position: absolute; top: 100%; left: 0px; z-index: 100; display: none; right: auto;"></span>
                           }
                           else
