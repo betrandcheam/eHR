@@ -290,7 +290,22 @@
     </div>
     </div>
 
-
+    <!--pop up info for redirect-->
+    <div style="top:50%;" class="modal fade" id="PDFModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+      <div class="modal-dialog" style="text-align:center;">
+        <div id="submitcontent" class="modal-content">
+          <div class="modal-body" style="padding-bottom:0px;">
+                <div class="alert alert-success alert-dismissable">
+                  <strong>If you do not save your input content before exporting to PDF, the content will not appear on PDF.Do you still want to continue to Export?</strong>
+                </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" id="PDFStart" class="btn btn-primary" data-dismiss="modal">OK</button>
+            <button type="button" id="PDFCancel" class="btn btn-primary" data-dismiss="modal">Cancel</button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
     <!--[if lt IE 8]>
        <script type="text/javascript" src="@(Url.Content("~/Scripts/lib/json3.min.js"))"></script>
     <![endif]-->

@@ -67,6 +67,9 @@
 
         if ($("#ExportPDF").length > 0) {
             $("#ExportPDF").click(function () {
+                $("#PDFModal").modal();
+            });
+            $("#PDFStart").click(function () {
                 $.ajax({
                     url: $("#forRazorValue").attr("exportPDFurl"),
                     type: "POST",
@@ -76,6 +79,10 @@
                         window.open(data);
                     }
                 });
+            });
+            $("#PDFCancel").click(function () {
+                $("html,body").animate({ scrollTop: $("#stage1kpisave").offset().top + "px" });
+                $("#ExportPDF").button('reset');
             });
             //$("#ExportPDF").click(function () {
             //window.location.href = $("#forRazorValue").attr("exportPDFurl");
