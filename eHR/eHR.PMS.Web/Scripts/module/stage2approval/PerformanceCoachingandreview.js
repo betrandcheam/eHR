@@ -68,7 +68,18 @@ define("stage2approval.performance", ['jquery', 'bootstrap'], function ($) {
             $("#btn_cancel_modal_ok").click(function () {
                 window.location.href($("#forRazorValue").attr("rooturl"));
             });
-
+            $(".ViewKpiComments").click(function () {
+                $(this).popover({
+                    title: 'Comments',
+                    placement: 'right',
+                    html: 'true',
+                    content: function () {
+                        var content = $(this).next().find(".Comments").html();
+                        return (content != "" ? content : "There are no Comments");
+                    }
+                });
+                $(this).popover('show');
+            });
 
         });
         //setInterval(autosavefunction, 300000); 
