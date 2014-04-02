@@ -142,8 +142,11 @@ define("stage1.kpi", ['jquery', 'bootstrap', 'bootstrap.select'], function ($) {
             PrioritytextforEdit = div.find(".selectpicker");
             AdddivforEdit = div.find(".Adddiv");
             UpdatedivforEdit = div.find(".Updatediv");
-            KPItextforEdit.val($(this).parent().prev().prev().prev().prev().prev().text());
-            PTtextforEdit.val($(this).parent().prev().prev().text());
+            //KPItextforEdit.val($(this).parent().prev().prev().prev().prev().prev().text());
+            //PTtextforEdit.val($(this).parent().prev().prev().text());
+            KPItextforEdit.val(replaceAll("<BR checkedByCssHelper=\"true\">", "\n", $(this).parent().prev().prev().prev().prev().prev().html()));
+            PTtextforEdit.val(replaceAll("<BR checkedByCssHelper=\"true\">", "\n", $(this).parent().prev().prev().html()));
+
             PrioritytextHidSelectforEdit.find('.filter-option').text($(this).parent().prev().prev().prev().prev().text());
             PrioritytextforEdit.val($(this).parent().prev().prev().prev().find(".PriorityId").text());
             $(this).addClass("disabled");
@@ -215,8 +218,10 @@ define("stage1.kpi", ['jquery', 'bootstrap', 'bootstrap.select'], function ($) {
                 return false;
             }
 
-            editbuttonobject.parent().prev().prev().prev().prev().prev().text(KPItextforEdit.val());
-            editbuttonobject.parent().prev().prev().text(PTtextforEdit.val());
+            //editbuttonobject.parent().prev().prev().prev().prev().prev().text(nl2br(KPItextforEdit.val()));
+            editbuttonobject.parent().prev().prev().prev().prev().prev().html(nl2br(KPItextforEdit.val()));
+            //editbuttonobject.parent().prev().prev().text(nl2br(PTtextforEdit.val()));
+            editbuttonobject.parent().prev().prev().html(nl2br(PTtextforEdit.val()));
             editbuttonobject.parent().prev().prev().prev().prev().text(PrioritytextHidSelectforEdit.find(".filter-option").text());
             editbuttonobject.parent().prev().prev().prev().find(".PriorityId").val(PrioritytextforEdit.val());
             var oldhidValue = editbuttonobject.parent().prev().find('.KPIforDatabase').val();
@@ -273,7 +278,7 @@ define("stage1.kpi", ['jquery', 'bootstrap', 'bootstrap.select'], function ($) {
             var blockid = tablediv.attr("blockid");
             var apprid = $("#forRazorValue").attr("apprid");
             var sectionid = $("#sectionlist li.active a").attr("sectionid");
-            var html = ['<tr><td><input type="hidden" class="KPIID" value="NewKPI" /></td><td>', KPItext.val(), '</td><td>', Prioritytext.find("option:selected").text(), '</td><td><input type="hidden" class="PriorityId" value="', Prioritytext.val(), '" /></td><td>', PTtext.val(), '</td><td><input type="hidden" class="KPIforDatabase" name="KPIforDatabase', KPINumforThisSection, 'Block', blockid, '" value="NewKPI^&*', apprid, '^&*', sectionid, '^&*', blockid, '^&*', KPItext.val(), '^&*', PTtext.val(), '^&*', Prioritytext.val(), '^&*ONERECORDENDED"/></td><td align="right"><a href="javascript:void(0)" class="EditKPI btn btn-info btn-xs"><i class="glyphicon glyphicon-wrench"></i> Edit</a> <a href="javascript:void(0)" class="RemoveKPI btn btn-danger btn-xs"><i class="glyphicon glyphicon-trash"></i> Remove</a><a href="javascript:void(0)" class="ViewKpiComments btn btn-warning btn-xs disabled"><i class="glyphicon glyphicon-pencil"></i> View Comments</a> </td></tr>'].join('');
+            var html = ['<tr><td><input type="hidden" class="KPIID" value="NewKPI" /></td><td>', nl2br(KPItext.val()), '</td><td>', Prioritytext.find("option:selected").text(), '</td><td><input type="hidden" class="PriorityId" value="', Prioritytext.val(), '" /></td><td>', nl2br(PTtext.val()), '</td><td><input type="hidden" class="KPIforDatabase" name="KPIforDatabase', KPINumforThisSection, 'Block', blockid, '" value="NewKPI^&*', apprid, '^&*', sectionid, '^&*', blockid, '^&*', KPItext.val(), '^&*', PTtext.val(), '^&*', Prioritytext.val(), '^&*ONERECORDENDED"/></td><td align="right"><a href="javascript:void(0)" class="EditKPI btn btn-info btn-xs"><i class="glyphicon glyphicon-wrench"></i> Edit</a> <a href="javascript:void(0)" class="RemoveKPI btn btn-danger btn-xs"><i class="glyphicon glyphicon-trash"></i> Remove</a><a href="javascript:void(0)" class="ViewKpiComments btn btn-warning btn-xs disabled"><i class="glyphicon glyphicon-pencil"></i> View Comments</a> </td></tr>'].join('');
 
             $(html).appendTo(KPItbody);
             if (tablediv.is(":hidden")) {
@@ -334,5 +339,13 @@ define("stage1.kpi", ['jquery', 'bootstrap', 'bootstrap.select'], function ($) {
     if ($("#forRazorValue").attr("viewmode") != "view") {
         setInterval(autosavefunction, parseInt($("#forRazorValue").attr("autosaveinterval")));
     }
-    
+
+    function nl2br(str, is_xhtml) {
+        var breakTag = (is_xhtml || typeof is_xhtml === 'undefined') ? '<br />' : '<br>';
+        return (str + '').replace(/([^>\r\n]?)(\r\n|\n\r|\r|\n)/g, '$1' + breakTag + '$2');
+    }
+
+    function replaceAll(find, replace, str) {
+        return str.replace(new RegExp(find, 'g'), replace);
+    }
 });

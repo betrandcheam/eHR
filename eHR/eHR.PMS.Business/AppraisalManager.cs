@@ -1524,8 +1524,8 @@ namespace eHR.PMS.Business
                         Appraisal = new Model.DTO.Appraisal.Appraisal() { Id = Convert.ToInt32(arr_values[1]) },
                         Section = new Model.DTO.Master.Section() { Id = Convert.ToInt32(arr_values[2]) },
                         Block = new Model.DTO.Master.Block() { Id = Convert.ToInt32(arr_values[3]) },
-                        Description = arr_values[4].Trim(),
-                        Target = arr_values[5].Trim(),
+                        Description = arr_values[4].Trim().TrimEnd('\r', '\n').Replace("\\n", Environment.NewLine),
+                        Target = arr_values[5].Trim().TrimEnd('\r', '\n').Replace("\\n", Environment.NewLine),
                         Priority = new Model.DTO.Master.Priority() { Id = Convert.ToInt32(arr_values[6]) }
                     };
                     lst_kpis.Add(obj_kpi);
@@ -1555,8 +1555,8 @@ namespace eHR.PMS.Business
                             Appraisal = new Model.DTO.Appraisal.Appraisal() { Id = Convert.ToInt32(arr_values[1]) },
                             Section = new Model.DTO.Master.Section() { Id = Convert.ToInt32(arr_values[2]) },
                             Block = new Model.DTO.Master.Block() { Id = Convert.ToInt32(arr_values[3]) },
-                            Description = arr_values[4].Trim(),
-                            Target = arr_values[5].Trim(),
+                            Description = arr_values[4].Trim().TrimEnd('\r', '\n').Replace("\\n", Environment.NewLine),
+                            Target = arr_values[5].Trim().TrimEnd('\r', '\n').Replace("\\n", Environment.NewLine),
                             Priority = new Model.DTO.Master.Priority() { Id = Convert.ToInt32(arr_values[6]) }
                         };
                         lst_kpis.Add(obj_kpi);
@@ -1597,7 +1597,7 @@ namespace eHR.PMS.Business
                 foreach (string str_string in result)
                 {
                     string[] kparray = str_string.Replace("\"", "").Split(',');
-                    string tmp_comment = kparray[1].Split(':')[1].Trim();
+                    string tmp_comment = kparray[1].Split(':')[1].Replace("}]", "").Trim().TrimEnd('\r', '\n').Replace("\\n", Environment.NewLine).Trim();
                     string tmp_comment_id = kparray[2].Split(':')[1].Replace("}]", "").Trim().TrimEnd('\r', '\n').Replace("\\n", Environment.NewLine).Trim();
                     if (!string.IsNullOrEmpty(tmp_comment)) 
                     {
@@ -1710,7 +1710,7 @@ namespace eHR.PMS.Business
                                 Section = new Model.DTO.Master.Section() { Id = Convert.ToInt32(arr_values[2]) },
                                 Block = new Model.DTO.Master.Block() { Id = Convert.ToInt32(arr_values[3]) },
                                 //CoreValueCompetency = new Model.DTO.Master.CoreValueCompetency() { Id = Convert.ToInt32(arr_values[4]) },
-                                Target = arr_values[4].Trim()
+                                Target = arr_values[4].Trim().TrimEnd('\r', '\n').Replace("\\n", Environment.NewLine)
                             };
                             lst_core_values.Add(obj_kpi);
                         }
@@ -1743,7 +1743,7 @@ namespace eHR.PMS.Business
                                 Section = new Model.DTO.Master.Section() { Id = Convert.ToInt32(arr_values[2]) },
                                 Block = new Model.DTO.Master.Block() { Id = Convert.ToInt32(arr_values[3]) },
                                 //CoreValueCompetency = new Model.DTO.Master.CoreValueCompetency() { Id = Convert.ToInt32(arr_values[4]) },
-                                Target = arr_values[4].Trim()
+                                Target = arr_values[4].Trim().TrimEnd('\r', '\n').Replace("\\n", Environment.NewLine)
                             };
                             lst_core_values.Add(obj_kpi);
                         }
@@ -1787,8 +1787,8 @@ namespace eHR.PMS.Business
                 {
                     Appraisal = new Model.DTO.Appraisal.Appraisal() { Id = Convert.ToInt32(form["AppraisalID"]) },
                     //Section = new Model.DTO.Master.Section() { Id = Convert.ToInt32(form["SectionID"]) },
-                    AreasOfImprovement = form["ImprovementsArea"].Trim(),
-                    AreasOfStrength = form["StrengthsArea"].Trim()
+                    AreasOfImprovement = form["ImprovementsArea"].Trim().TrimEnd('\r', '\n').Replace("\\n", Environment.NewLine),
+                    AreasOfStrength = form["StrengthsArea"].Trim().TrimEnd('\r', '\n').Replace("\\n", Environment.NewLine)
                 };
             }
             return obj_performance_coaching;
@@ -1808,9 +1808,9 @@ namespace eHR.PMS.Business
                 {
                     Appraisal = new Model.DTO.Appraisal.Appraisal() { Id = Convert.ToInt32(form["AppraisalID"]) },
                     Section = new Model.DTO.Master.Section() { Id = Convert.ToInt32(form["SectionID"]) },
-                    ShortTermGoals = form["ShorttermCareerGoal"].Trim(),
-                    CareerPlans = form["DevelopmentPlan"].Trim(),
-                    LearningPlans = form["Learninganddevelopment"].Trim()
+                    ShortTermGoals = form["ShorttermCareerGoal"].Trim().TrimEnd('\r', '\n').Replace("\\n", Environment.NewLine),
+                    CareerPlans = form["DevelopmentPlan"].Trim().TrimEnd('\r', '\n').Replace("\\n", Environment.NewLine),
+                    LearningPlans = form["Learninganddevelopment"].Trim().TrimEnd('\r', '\n').Replace("\\n", Environment.NewLine)
                 };
             }
             return obj_career_development;

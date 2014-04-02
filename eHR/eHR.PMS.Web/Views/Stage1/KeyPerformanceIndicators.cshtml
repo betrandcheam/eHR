@@ -77,10 +77,10 @@
                                             <tr>
                                                 <td><input type="hidden" class="KPIID" value="@kpi.Id" />
                                                 </td>
-                                                <td>@kpi.Description</td>
+                                                <td>@(MvcHtmlString.Create(kpi.Description.Replace(Environment.NewLine,"<br />")))</td>
                                                 <td>@kpi.Priority.Name</td>
                                                 <td><input type="hidden" class="PriorityId" value="@kpi.Priority.Id" /></td>
-                                                <td>@kpi.Target</td>
+                                                <td>@(MvcHtmlString.Create(@kpi.Target.Replace(Environment.NewLine, "<br />")))</td>
                                                 <td>
                                                 <input type="hidden" class="KPIforDatabase" name="KPIforDatabase@(kpiindex++)Block@(kpinfo.Id)" value="@(kpi.Id)^&*@(kpi.Appraisal.Id)^&*@(Model.CurrentSection.Id)^&*@(kpi.Block.Id)^&*@(kpi.Description)^&*@(kpi.Target)^&*@(kpi.Priority.Id)^&*ONERECORDENDED"/>
                                                 </td>
@@ -106,7 +106,7 @@
                                                                      <li class="list-group-item">
                                                                      <span class="badge">By @(comment.Commentor.PreferredName) on @(Convert.ToDateTime(comment.CommentedTimestamp).ToString("hh:mm tt, dd-MMM-yyyy"))</span>                                                                                                                           
                                                                      <br />
-                                                                     <p style="word-wrap:break-word;">@comment.Comments</p>
+                                                                     <p style="word-wrap:break-word;">@(MvcHtmlString.Create(comment.Comments.Replace(Environment.NewLine,"<br />")))</p>
                                                                      </li>
                                                               }
                                                                 </ul> 

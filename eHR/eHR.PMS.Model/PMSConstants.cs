@@ -86,7 +86,7 @@ namespace eHR.PMS.Model
                                                                     "Corporate KPIs and Corporate Vision. KPIs are manually set goals and metrics that measure individual's achievements and progress.<br />"+
                                                                     "You will need to set at least 1 or more KPI within each of the four main themes.<br />"+
                                                                     "You are to complete the form and initiate discussion with your Manager.<br />"+
-                                                                    "Once you have submitted the form your Manager, your Manager will complete the relevant sections. All submissions and comments will be tracked.<br />"+ 
+                                                                    "Once you have submitted the form to your Manager, your Manager will complete the relevant sections. All submissions and comments will be tracked.<br />"+ 
                                                                 "</p>"+
                                                                 "<br />"+
                                                                 "<h4>Performance Rating Descriptions :</h4>"+

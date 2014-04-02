@@ -96,7 +96,7 @@
                                           IEnumerable<eHR.PMS.Model.DTO.Appraisal.CoreValueComment> templist = kpi.Comments;                                          
                                             <tr>
                                                 <td><input type="hidden" class="KPIID" name="KPIID@(kpi.Id)" value="@kpi.Id" /></td>
-                                                <td>@kpi.Target</td>
+                                                <td>@(MvcHtmlString.Create(kpi.Target.Replace(Environment.NewLine,"<br />")))</td>
                                                 <td style="display:none;">
                                                 @{if (!eHR.PMS.Lib.Utility.Common.IsNullOrEmptyList(kpi.Comments) && templist.Where(rec => rec.FormSaveOnly == false).Count() > 0)
                                                   {
@@ -109,7 +109,7 @@
                                                              <li class="list-group-item">
                                                              <span class="badge">By @(comment.Commentor.PreferredName) on @(Convert.ToDateTime(comment.CommentedTimestamp).ToString("hh:mm tt, dd-MMM-yyyy"))</span>                                                                                                                           
                                                              <br />
-                                                             <p style="word-wrap:break-word;">@comment.Comments</p>
+                                                             <p style="word-wrap:break-word;">@(MvcHtmlString.Create(comment.Comments.Replace(Environment.NewLine, "<br />")))</p>
                                                               </li>
                                                               }
                                                           }

@@ -95,7 +95,7 @@
                                                                      <li class="list-group-item">
                                                                      <span class="badge">By @(comment.Commentor.PreferredName) on @(Convert.ToDateTime(comment.CommentedTimestamp).ToString("hh:mm tt, dd-MMM-yyyy"))</span>                                                                                                                           
                                                                      <br />
-                                                                     <p style="word-wrap:break-word;">@comment.Comments</p>
+                                                                     <p style="word-wrap:break-word;">@(MvcHtmlString.Create(comment.Comments.Replace(Environment.NewLine, "<br />")))</p>
                                                                      </li>
                                                               }
                                                                 </ul> 

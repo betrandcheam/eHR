@@ -145,7 +145,8 @@ define("stage1.corevalues", ['jquery', 'bootstrap', 'bootstrap.select'], functio
             PTtextforEdit = div.find(".corevaluetext");
             //KPItextHidSelectforEdit.find('.filter-option').text($(this).parent().prev().prev().prev().text());
             //KPItextSelectEdit.val($(this).parent().prev().prev().prev().prev().text());
-            PTtextforEdit.val($(this).parent().prev().prev().text());
+            //PTtextforEdit.val($(this).parent().prev().prev().text());
+            PTtextforEdit.val(replaceAll("<BR checkedByCssHelper=\"true\">", "\n", $(this).parent().prev().prev().html()));
             $(this).addClass("disabled");
             $(this).next().addClass("disabled");
             AdddivforEdit.hide("slow");
@@ -175,7 +176,7 @@ define("stage1.corevalues", ['jquery', 'bootstrap', 'bootstrap.select'], functio
                     html: 'true',
                     content: function () {
                         var content = $(this).parent().parent().find(".Comments").html();
-                        return (content != "" ? content : "There is no Comments");
+                        return (content != "" ? content : "There are no Comments");
                     }
                 });
                 $(this).popover('show');
@@ -191,7 +192,7 @@ define("stage1.corevalues", ['jquery', 'bootstrap', 'bootstrap.select'], functio
                         html: 'true',
                         content: function () {
                             var content = $(this).parent().parent().find(".Comments").html();
-                            return (content != "" ? content : "There is no Comments");
+                            return (content != "" ? content : "There are no Comments");
                         }
                     });
                     $(this).popover('show');
@@ -212,7 +213,8 @@ define("stage1.corevalues", ['jquery', 'bootstrap', 'bootstrap.select'], functio
             }
             //editbuttonobject.parent().prev().prev().prev().text(KPItextSelectForEdit.find("option:selected").text());
             //editbuttonobject.parent().prev().prev().prev().prev().text(KPItextSelect.val());
-            editbuttonobject.parent().prev().prev().text(PTtextforEdit.val());
+            //editbuttonobject.parent().prev().prev().text(PTtextforEdit.val());
+            editbuttonobject.parent().prev().prev().html(nl2br(PTtextforEdit.val()));
             var oldhidValue = editbuttonobject.parent().prev().find('.KPIforDatabase').val();
             var tempArray = oldhidValue.split("^&*");
             editbuttonobject.parent().prev().find('.KPIforDatabase').val([tempArray[0], '^&*', tempArray[1], '^&*', tempArray[2], '^&*', tempArray[3], '^&*', PTtextforEdit.val(), '^&*ONERECORDENDED'].join(''));
@@ -259,7 +261,8 @@ define("stage1.corevalues", ['jquery', 'bootstrap', 'bootstrap.select'], functio
             var blockid = tablediv.attr("blockid");
             var apprid = $("#forRazorValue").attr("apprid");
             var sectionid = $("#sectionlist li.active a").attr("sectionid");
-            var html = ['<tr><td><input type="hidden" class="KPIID" value="NewKPI" /></td><td>', PTtext.val(), '</td><td><input type="hidden" class="KPIforDatabase" name="KPIforDatabase', KPINumforThisSection, 'Block', blockid, '"value="NewKPI^&*', apprid, '^&*', sectionid, '^&*', blockid, "^&*", PTtext.val(), '^&*ONERECORDENDED"/><td align="right"><a href="javascript:void(0)" class="EditKPI btn btn-info btn-xs"><i class="glyphicon glyphicon-wrench"></i> Edit</a> <a href="javascript:void(0)" class="RemoveKPI btn btn-danger btn-xs"><i class="glyphicon glyphicon-trash"></i> Remove</a> <a href="javascript:void(0)" class="ViewKpiComments btn btn-warning btn-xs disabled"><i class="glyphicon glyphicon-pencil"></i> View Comments</a></td></tr>'].join('');
+            //var html = ['<tr><td><input type="hidden" class="KPIID" value="NewKPI" /></td><td>', PTtext.val(), '</td><td><input type="hidden" class="KPIforDatabase" name="KPIforDatabase', KPINumforThisSection, 'Block', blockid, '"value="NewKPI^&*', apprid, '^&*', sectionid, '^&*', blockid, "^&*", PTtext.val(), '^&*ONERECORDENDED"/><td align="right"><a href="javascript:void(0)" class="EditKPI btn btn-info btn-xs"><i class="glyphicon glyphicon-wrench"></i> Edit</a> <a href="javascript:void(0)" class="RemoveKPI btn btn-danger btn-xs"><i class="glyphicon glyphicon-trash"></i> Remove</a> <a href="javascript:void(0)" class="ViewKpiComments btn btn-warning btn-xs disabled"><i class="glyphicon glyphicon-pencil"></i> View Comments</a></td></tr>'].join('');
+            var html = ['<tr><td><input type="hidden" class="KPIID" value="NewKPI" /></td><td>', nl2br(PTtext.val()), '</td><td><input type="hidden" class="KPIforDatabase" name="KPIforDatabase', KPINumforThisSection, 'Block', blockid, '"value="NewKPI^&*', apprid, '^&*', sectionid, '^&*', blockid, "^&*", PTtext.val(), '^&*ONERECORDENDED"/><td align="right"><a href="javascript:void(0)" class="EditKPI btn btn-info btn-xs"><i class="glyphicon glyphicon-wrench"></i> Edit</a> <a href="javascript:void(0)" class="RemoveKPI btn btn-danger btn-xs"><i class="glyphicon glyphicon-trash"></i> Remove</a> <a href="javascript:void(0)" class="ViewKpiComments btn btn-warning btn-xs disabled"><i class="glyphicon glyphicon-pencil"></i> View Comments</a></td></tr>'].join('');
             $(html).appendTo(KPItbody);
 
 
@@ -292,6 +295,15 @@ define("stage1.corevalues", ['jquery', 'bootstrap', 'bootstrap.select'], functio
 
     if ($("#forRazorValue").attr("viewmode") != "view") {
         setInterval(autosavefunction, parseInt($("#forRazorValue").attr("autosaveinterval")));
+    }
+
+    function nl2br(str, is_xhtml) {
+        var breakTag = (is_xhtml || typeof is_xhtml === 'undefined') ? '<br />' : '<br>';
+        return (str + '').replace(/([^>\r\n]?)(\r\n|\n\r|\r|\n)/g, '$1' + breakTag + '$2');
+    }
+
+    function replaceAll(find, replace, str) {
+        return str.replace(new RegExp(find, 'g'), replace);
     }
 
 });
