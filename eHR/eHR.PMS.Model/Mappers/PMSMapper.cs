@@ -786,6 +786,7 @@ namespace eHR.PMS.Model.Mappers
                 LastName = entity.EMPLOYEE.LAST_NAME,
                 PreferredName = entity.EMPLOYEE.PREFERRED_NAME,
                 DomainId = entity.EMPLOYEE.DOMAIN_ID,
+                OfficeEmailAddress=entity.EMPLOYEE.OFFICE_EMAIL_ADDRESS,
                 SMT=entity.IS_SMT
             };
 
