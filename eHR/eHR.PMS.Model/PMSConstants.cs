@@ -81,8 +81,8 @@ namespace eHR.PMS.Model
         #region Descriptions
         public static readonly string KPIDescription="<h4>Key Performance Indicators Descriptions :</h4>"+
                                                                 "<p>"+
-                                                                    "\"Financials\", \"Build\", \"Governance/Risk\" and \"People\" are four main themes derived from the Corporate and Underwriting Principles"+ 
-                                                                    "that capture the corporate focus and priorities and serve to align individual's Key Performance Indicators (KPIs) to achieving the"+
+                                                                    "\"Financials\", \"Build\", \"Governance/Risk\" and \"People\" are four main themes derived from the Corporate and Underwriting Principles "+ 
+                                                                    "that capture the corporate focus and priorities and serve to align individual's Key Performance Indicators (KPIs) to achieving the "+
                                                                     "Corporate KPIs and Corporate Vision. KPIs are manually set goals and metrics that measure individual's achievements and progress.<br />"+
                                                                     "You will need to set at least 1 or more KPI within each of the four main themes.<br />"+
                                                                     "You are to complete the form and initiate discussion with your Manager.<br />"+

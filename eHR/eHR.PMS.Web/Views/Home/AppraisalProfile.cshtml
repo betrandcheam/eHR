@@ -139,7 +139,7 @@
                       }
                     }
                   <div class="form-group">
-                    <label class="col-sm-2 control-label">Level 1 Approver: </label>
+                    <label class="col-sm-2 control-label">Level 1 Manager: </label>
                     <div class="col-sm-4">
                         @{if (Model.User.Id != Model.Appraisal.Employee.Id && ViewData["hr_user"].Equals("Y"))
                           {
@@ -152,7 +152,7 @@
                           }
                          }
                     </div>                    
-                    <label class="col-sm-2 control-label">Level 2 Approver: </label>
+                    <label class="col-sm-2 control-label">Level 2 Manager: </label>
                     <div class="col-sm-4">
                         @{if (Model.User.Id != Model.Appraisal.Employee.Id && ViewData["hr_user"].Equals("Y"))
                           {

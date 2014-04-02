@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Configuration;
-using System.Text.RegularExpressions;
+//using System.Text.RegularExpressions;
 
 namespace eHR.PMS.Business
 {
@@ -747,13 +747,14 @@ namespace eHR.PMS.Business
             bool result = false;
             Model.DTO.Appraisal.Reviewer oldMember=new Model.DTO.Appraisal.Reviewer();
             result=Model.PMSModel.UpdateSMTMember(appraisal,smtMember,out message,out oldMember);
-            if (result)
-            {
-                List<System.Net.Mail.MailMessage> lst_email_messages=new List<System.Net.Mail.MailMessage>();
-                if(smtMember.EmployeeId!=oldMember.EmployeeId && smtMember.OfficeEmailAddress!=null && IsValidEmail(smtMember.OfficeEmailAddress))
-                    lst_email_messages.Add(GenerateEmailMessageForChangeSMTPerson(appraisal, smtMember, oldMember));
-                SendEmailNotification(lst_email_messages);
-            }
+            // no sending of email notification if it is SMT change
+            //if (result)
+            //{
+            //    List<System.Net.Mail.MailMessage> lst_email_messages=new List<System.Net.Mail.MailMessage>();
+            //    if(smtMember.EmployeeId!=oldMember.EmployeeId && smtMember.OfficeEmailAddress!=null && IsValidEmail(smtMember.OfficeEmailAddress))
+            //        lst_email_messages.Add(GenerateEmailMessageForChangeSMTPerson(appraisal, smtMember, oldMember));
+            //    SendEmailNotification(lst_email_messages);
+            //}
 
             return result;
         }
@@ -966,7 +967,7 @@ namespace eHR.PMS.Business
             int oldApproverersIndex = 0;
             foreach (Model.DTO.Appraisal.Approver approver in newMembers)
             {
-                if (approver.OfficeEmailAddress != null && IsValidEmail(approver.OfficeEmailAddress))
+                if (approver.OfficeEmailAddress != null && Lib.Utility.Common.IsValidEmail(approver.OfficeEmailAddress))
                 {
                     if (oldMembers != null && oldMembers.Count >= (oldApproverersIndex + 1) && approver.EmployeeId != oldMembers[oldApproverersIndex].EmployeeId)
                         lst_messages.Add(GenerateEmailMessageForChangeApproverPerson(appr, approver, oldMembers[oldApproverersIndex++]));
@@ -982,7 +983,7 @@ namespace eHR.PMS.Business
             int oldReviewersIndex = 0;
             foreach (Model.DTO.Appraisal.Reviewer reviewer in newMembers)
             {
-                if (reviewer.OfficeEmailAddress != null && IsValidEmail(reviewer.OfficeEmailAddress))
+                if (reviewer.OfficeEmailAddress != null && Lib.Utility.Common.IsValidEmail(reviewer.OfficeEmailAddress))
                 {
                     if (oldMembers!=null && oldMembers.Count >= (oldReviewersIndex + 1) && reviewer.EmployeeId != oldMembers[oldReviewersIndex].EmployeeId)
                         lst_messages.Add(GenerateEmailMessageForChangeReviewerPerson(appr, reviewer, oldMembers[oldReviewersIndex++]));
@@ -1012,17 +1013,17 @@ namespace eHR.PMS.Business
              sb_body.Append("<p>Hi ");
              sb_body.Append(newMember.PreferredName);
              sb_body.Append(",</p><p>   ");
-             sb_body.Append(appr.Employee.PreferredName);
+             //sb_body.Append(appr.Employee.PreferredName);
              sb_body.Append(" You are now the Level ");
              sb_body.Append(newMember.ApprovalLevel.HasValue ? newMember.ApprovalLevel.Value.ToString() : "");
              sb_body.Append(" Manager for ");
              sb_body.Append(appr.Employee.PreferredName);
-             sb_body.Append("’s appraisal. You can now process his/her appraisal from via the <a style='font-style:italic;' href='http://ssgdv19/eHR.PMS.Web/'> eHR Portal </a> </p>");
+             sb_body.Append("’s appraisal. You can now process his/her appraisal form via the <a style='font-style:italic;' href='http://ssgdv19/eHR.PMS.Web/'> eHR Portal </a> </p>");
              sb_body.Append("<p><span style='font-style:italic; font-size:small;'>This is a computer generated email. Please do not reply.</span></p>");            
             obj_email_message.Body = sb_body.ToString();
             //if (newMember.OfficeEmailAddress != null && IsValidEmail(newMember.OfficeEmailAddress))
             obj_email_message.To.Add(newMember.OfficeEmailAddress);
-            if (oldmember != null && oldmember.OfficeEmailAddress != null && IsValidEmail(oldmember.OfficeEmailAddress))
+            if (oldmember != null && oldmember.OfficeEmailAddress != null && Lib.Utility.Common.IsValidEmail(oldmember.OfficeEmailAddress))
                 obj_email_message.CC.Add(oldmember.OfficeEmailAddress);
             return obj_email_message;
         }
@@ -1046,21 +1047,16 @@ namespace eHR.PMS.Business
              sb_body.Append(newMember.PreferredName);
              sb_body.Append(",</p><p>   ");
              sb_body.Append(appr.Employee.PreferredName);
-             sb_body.Append(" has selected you as the Reviewer for his/her appraisal. You can now view his/her appraisal from via the<a style='font-style:italic;' href='http://ssgdv19/eHR.PMS.Web/'> eHR Portal </a> </p>");
+             sb_body.Append(" has selected you as the Reviewer for his/her appraisal. You can now view his/her appraisal form via the<a style='font-style:italic;' href='http://ssgdv19/eHR.PMS.Web/'> eHR Portal </a> </p>");
              sb_body.Append("<p><span style='font-style:italic; font-size:small;'>This is a computer generated email. Please do not reply.</span></p>");            
             obj_email_message.Body = sb_body.ToString();
             //if (newMember.OfficeEmailAddress != null && IsValidEmail(newMember.OfficeEmailAddress))
             obj_email_message.To.Add(newMember.OfficeEmailAddress);
-            if (oldmember != null && oldmember.OfficeEmailAddress != null && IsValidEmail(oldmember.OfficeEmailAddress))
+            if (oldmember != null && oldmember.OfficeEmailAddress != null && Lib.Utility.Common.IsValidEmail(oldmember.OfficeEmailAddress))
                 obj_email_message.CC.Add(oldmember.OfficeEmailAddress);
             return obj_email_message;
         }
 
-        private static bool IsValidEmail(string strIn)
-        {
-            // Return true if strIn is in valid e-mail format. 
-            return Regex.IsMatch(strIn, @"^([\w-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$");
-        }
         private static System.Net.Mail.MailMessage GenerateEmailMessageForChangeSMTPerson(Model.DTO.Appraisal.Appraisal appr, Model.DTO.Appraisal.Reviewer newMember, Model.DTO.Appraisal.Reviewer oldmember)
         {
             
@@ -1081,12 +1077,12 @@ namespace eHR.PMS.Business
                     sb_body.Append(newMember.PreferredName);
                     sb_body.Append(",</p><p>   You are now the Senior Management Team member for ");
                     sb_body.Append(appr.Employee.PreferredName);
-                    sb_body.Append(". You can now process his/her appraisal from via the<a style='font-style:italic;' href='http://ssgdv19/eHR.PMS.Web/'> eHR Portal </a> </p>");
+                    sb_body.Append(". You can now process his/her appraisal form via the<a style='font-style:italic;' href='http://ssgdv19/eHR.PMS.Web/'> eHR Portal </a> </p>");
                     sb_body.Append("<p><span style='font-style:italic; font-size:small;'>This is a computer generated email. Please do not reply.</span></p>");            
             obj_email_message.Body = sb_body.ToString();
             //if (newMember.OfficeEmailAddress != null && IsValidEmail(newMember.OfficeEmailAddress))
             obj_email_message.To.Add(newMember.OfficeEmailAddress);
-            if (oldmember != null && oldmember.OfficeEmailAddress != null && IsValidEmail(oldmember.OfficeEmailAddress))
+            if (oldmember != null && oldmember.OfficeEmailAddress != null && Lib.Utility.Common.IsValidEmail(oldmember.OfficeEmailAddress))
                 obj_email_message.CC.Add(oldmember.OfficeEmailAddress);
             return obj_email_message;
         }
@@ -1126,7 +1122,7 @@ namespace eHR.PMS.Business
             sb_body.Append("<p><span style='font-style:italic; font-size:small;'>This is a computer generated email. Please do not reply.</span></p>");
 
             obj_email_message.Body = sb_body.ToString();
-            if (appraisal.Employee.OfficeEmailAddress!=null)
+            if (appraisal.Employee.OfficeEmailAddress != null && Lib.Utility.Common.IsValidEmail(appraisal.Employee.OfficeEmailAddress))
                 obj_email_message.To.Add(appraisal.Employee.OfficeEmailAddress);
 
             if (approvalLevel == 2 && appraisal.GetApproverByLevel(1).OfficeEmailAddress!=null)
@@ -1181,7 +1177,7 @@ namespace eHR.PMS.Business
                 sb_body.Append("<p><span style='font-style:italic; font-size:small;'>This is a computer generated email. Please do not reply.</span></p>");
 
                 obj_email_message.Body = sb_body.ToString();
-                if (appraisal.GetApproverByLevel(2).OfficeEmailAddress!=null)
+                if (appraisal.GetApproverByLevel(2).OfficeEmailAddress != null && Lib.Utility.Common.IsValidEmail(appraisal.GetApproverByLevel(2).OfficeEmailAddress))
                     obj_email_message.To.Add(appraisal.GetApproverByLevel(2).OfficeEmailAddress);
                 lst_messages.Add(obj_email_message);
             }

@@ -269,7 +269,7 @@ namespace eHR.PMS.Web.Controllers
            string filePath = Path.Combine(Server.MapPath("~/PDFFiles"), fileName);
             #endregion
 
-            Model.DTO.Appraisal.Appraisal appr=PMS.Model.PMSModel.GetAppraisalById(id);
+           Model.DTO.Appraisal.Appraisal appr=PMS.Model.PMSModel.GetAppraisalById(id);
            string logoImgPath = Server.MapPath("~/Content/img/logo.gif");
            string CorevalueImg = Server.MapPath("~/Content/img/pms_corevalue_rating_description.jpg");
            Document doc = new Document(PageSize.A4, 2, 2, 10, 2);
@@ -278,7 +278,7 @@ namespace eHR.PMS.Web.Controllers
            {
                PdfWriter.GetInstance(doc, new FileStream(filePath, FileMode.Create));
                #region set headerfooter
-               HeaderFooter header = new HeaderFooter(new Phrase("Aisa Capital Reinsurance", FontFactory.GetFont("Arial", 6, Font.ITALIC)), false);
+               HeaderFooter header = new HeaderFooter(new Phrase("Asia Capital Reinsurance", FontFactory.GetFont("Arial", 6, Font.ITALIC)), false);
                header.Border = Rectangle.BOTTOM_BORDER;
                header.BorderColor = Color.GRAY;
                header.BorderWidth = 0.5f;

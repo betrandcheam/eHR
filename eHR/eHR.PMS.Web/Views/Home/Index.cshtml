@@ -66,8 +66,8 @@
                             <th>Review Period To</th>
                             <th>Stage</th>
                             <th>Status</th>
-                            <th>Level 1 Approver</th>
-                            <th>Level 2 Approver</th>
+                            <th>Level 1 Manager</th>
+                            <th>Level 2 Manager</th>
                             <th>Reviewers</th>
                         </tr>
                         @{
@@ -250,7 +250,7 @@
       </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
 
-<input type="hidden" id="forRazorValue" message="@message" rooturl="@(Url.Content("~/"))"/>
+<input type="hidden" id="forRazorValue" message="@message" rooturl="@(Url.Content("~/"))" refreshinterval="@(eHR.PMS.Web.Resources.Resource.MAIN_MENU_REFRESH_INTERVAL)"/>
         @section scripts
         {
         <!--<script type="text/javascript">

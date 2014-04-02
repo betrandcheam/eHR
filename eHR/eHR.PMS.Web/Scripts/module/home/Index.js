@@ -10,6 +10,6 @@ define("home.index", ['jquery', 'bootstrap'], function ($) {
     var refreshfunction = function () {
         window.location.href = "";
     }
-    setInterval(refreshfunction, 300000);
+    setInterval(refreshfunction, parseInt($("#forRazorValue").attr("refreshinterval")));
 });
             

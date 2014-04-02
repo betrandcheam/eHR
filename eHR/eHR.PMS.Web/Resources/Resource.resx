@@ -120,6 +120,9 @@
   <data name="AUTO_SAVE_INTERVAL" xml:space="preserve">
     <value>600000</value>
   </data>
+  <data name="MAIN_MENU_REFRESH_INTERVAL" xml:space="preserve">
+    <value>300000</value>
+  </data>
   <data name="MSG_APPRAISAL_APPROVED" xml:space="preserve">
     <value>The appraisal is approved.</value>
   </data>

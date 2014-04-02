@@ -5,6 +5,7 @@ using System.Text;
 using System.IO;
 using System.Reflection;
 using System.Globalization;
+using System.Text.RegularExpressions;
 
 namespace eHR.PMS.Lib.Utility
 {
@@ -76,6 +77,16 @@ namespace eHR.PMS.Lib.Utility
         {
             DateTime t = DateTime.ParseExact(str, "dd/MM/yyyy", null);
             return t.ToString("yyyy-MM-dd");
+        }
+
+        #endregion
+
+        #region Email
+        
+        public static bool IsValidEmail(string strIn)
+        {
+            // Return true if strIn is in valid e-mail format. 
+            return Regex.IsMatch(strIn, @"^([\w-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$");
         }
 
         #endregion
