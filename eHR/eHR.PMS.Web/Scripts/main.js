@@ -65,29 +65,31 @@
             if (!isPopover && !inPopover) $(".ViewKpiComments").popover('destroy');
         });
 
-        if ($("#ExportPDF").length > 0) {
+        /*if ($("#ExportPDF").length > 0) {
+            
             $("#ExportPDF").click(function () {
-                $("#PDFModal").modal();
+                savefunction();
+            $("#PDFModal").modal();
             });
             $("#PDFStart").click(function () {
-                $.ajax({
-                    url: $("#forRazorValue").attr("exportPDFurl"),
-                    type: "POST",
-                    dataType: "Json",
-                    success: function (data) {
-                        $("#ExportPDF").button('reset');
-                        window.open(data);
-                    }
-                });
+            $.ajax({
+            url: $("#forRazorValue").attr("exportPDFurl"),
+            type: "POST",
+            dataType: "Json",
+            success: function (data) {
+            $("#ExportPDF").button('reset');
+            window.open(data);
+            }
+            });
             });
             $("#PDFCancel").click(function () {
-                $("html,body").animate({ scrollTop: $("#stage1kpisave").offset().top + "px" });
-                $("#ExportPDF").button('reset');
+            $("html,body").animate({ scrollTop: $("#stage1kpisave").offset().top + "px" });
+            $("#ExportPDF").button('reset');
             });
             //$("#ExportPDF").click(function () {
             //window.location.href = $("#forRazorValue").attr("exportPDFurl");
             //$("#ExportPDF").button('reset');
-            //});
-        }
+            });
+        }*/
     });
 })

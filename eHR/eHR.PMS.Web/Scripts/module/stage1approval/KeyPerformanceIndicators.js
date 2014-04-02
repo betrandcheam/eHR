@@ -4,6 +4,7 @@
 define("stage1approval.kpi", ['jquery', 'bootstrap', 'bootstrap.select'], function ($) {
     var savefunction = function () {
         var KPIArray = new Array();
+        var pdfsave = false;
         $.each($(".KPIID"), function () {
             KPIArray.push(({ KpiId: $(this).val(), Comments: $(this).parent().parent().find(".CommentContent").val(), CommentID: $(this).parent().parent().find(".CommentID").val() }));
         });
@@ -16,9 +17,19 @@ define("stage1approval.kpi", ['jquery', 'bootstrap', 'bootstrap.select'], functi
             beforeSend: function () {
                 //$("#stage1kpisave").button('loading');
                 //$("#buttongroup").showLoading();
-                $('#resultcontent').hide();
-                $('#loadingcontent').show();
-                $('#InfoModal').modal();
+                if (!pdfsave) {
+                    $('#resultcontent').hide();
+                    $('#loadingcontent').show();
+                    $('#InfoModal').modal();
+                }
+                else {
+                    $('#part1').css("visibility", "visible");
+                    $('#spanclass1').css("visibility", "hidden");
+                    $('#part2').css("visibility", "hidden");
+                    $('#spanclass2').css("visibility", "hidden");
+                    $('#modal-footer').hide();
+                    $('#PDFModal').modal();
+                }
             },
             success: function (data) {
                 var newkpiids = data.kpiid.split('-');
@@ -30,10 +41,33 @@ define("stage1approval.kpi", ['jquery', 'bootstrap', 'bootstrap.select'], functi
                         $(this).val("NewComment");
                     //$(this).val(newkpiids[num++] + $(this).val().substring(6));
                 });
-                $("#stage1kpisave").button('reset');
-                $('#loadingcontent').hide();
-                $('#resultcontent').show();
-                $('#InfoModal').modal();
+                if (!pdfsave) {
+                    $("#stage1kpisave").button('reset');
+                    $('#loadingcontent').hide();
+                    $('#resultcontent').show();
+                    $('#InfoModal').modal();
+                }
+                else {
+                    $('#part1').css("visibility", "hidden");
+                    $('#spanclass1').css("visibility", "visible");
+                    $.ajax({
+                        url: $("#forRazorValue").attr("exportPDFurl"),
+                        type: "POST",
+                        dataType: "Json",
+                        beforeSend: function () {
+                            $('#part2').css("visibility", "visible");
+                        },
+                        success: function (data) {
+                            $("#ExportPDF").button('reset');
+                            $('#part2').css("visibility", "hidden");
+                            $('#spanclass2').css("visibility", "visible");
+                            $("#modal-footer").show();
+                            $('#PDFOpen').click(function () {
+                                window.open(data);
+                            });
+                        }
+                    });
+                }
             }
         });
     };
@@ -83,7 +117,10 @@ define("stage1approval.kpi", ['jquery', 'bootstrap', 'bootstrap.select'], functi
             $("form").submit();
         });
 
-        $("#stage1kpisave").click(savefunction);
+        $("#stage1kpisave").click(function () {
+            pdfsave = false;
+            savefunction();
+        });
 
         $("#btn_appraisal_cancel").click(function () {
             $('#CancelInfoModal').modal();
@@ -134,6 +171,10 @@ define("stage1approval.kpi", ['jquery', 'bootstrap', 'bootstrap.select'], functi
                 }
             }
 
+        });
+        $("#ExportPDF").click(function () {
+            pdfsave = true;
+            savefunction();
         });
     });
     //setInterval(autosavefunction, 300000);

@@ -295,13 +295,18 @@
       <div class="modal-dialog" style="text-align:center;">
         <div id="submitcontent" class="modal-content">
           <div class="modal-body" style="padding-bottom:0px;">
-                <div class="alert alert-success alert-dismissable">
-                  <strong>If you do not save your input content before exporting to PDF, the content will not appear on PDF.Do you still want to continue to Export?</strong>
-                </div>
+                <p style="text-align:left;"><span id="spanclass1" style="visibility:hidden;" class="label label-success"><i class="glyphicon glyphicon-ok"></i></span>
+                    <strong>Saving your input</strong>
+                    <span id="part1"><img src="@(Url.Content("~/Content/img/ajax-loader.gif"))"</span>
+                </p>
+                <p style="text-align:left;"><span id="spanclass2" style="visibility:hidden;" class="label label-success"><i class="glyphicon glyphicon-ok"></i></span>
+                    <strong>Exporting your PDF</strong>
+                    <span id="part2" style="visibility:hidden;"><img src="@(Url.Content("~/Content/img/ajax-loader.gif"))" /></span>
+                </p>
           </div>
-          <div class="modal-footer">
-            <button type="button" id="PDFStart" class="btn btn-primary" data-dismiss="modal">OK</button>
-            <button type="button" id="PDFCancel" class="btn btn-primary" data-dismiss="modal">Cancel</button>
+          <div id="modal-footer" class="modal-footer" style="display:none;">
+            <button type="button" id="PDFOpen" class="btn btn-xs btn-primary" data-dismiss="modal">Open PDF</button>
+            <button type="button" class="btn btn-xs btn-primary" data-dismiss="modal">Close</button>
           </div>
         </div><!-- /.modal-content -->
       </div><!-- /.modal-dialog -->

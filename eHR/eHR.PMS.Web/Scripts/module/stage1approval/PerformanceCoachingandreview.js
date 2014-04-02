@@ -3,6 +3,7 @@
 }),
 define("stage1approval.performance", ['jquery', 'bootstrap'], function ($) {
     var message = $("#forRazorValue").attr("message");
+    var pdfsave = false;
     var savefunction = function () {
         $.ajax({
             url: $("#forRazorValue").attr("saveurl"),
@@ -13,14 +14,47 @@ define("stage1approval.performance", ['jquery', 'bootstrap'], function ($) {
             beforeSend: function () {
                 //$("#stage1kpisave").button('loading');
                 //$("#buttongroup").showLoading();
-                $('#resultcontent').hide();
-                $('#loadingcontent').show();
-                $('#InfoModal').modal();
+                if (!pdfsave) {
+                    $('#resultcontent').hide();
+                    $('#loadingcontent').show();
+                    $('#InfoModal').modal();
+                }
+                else {
+                    $('#part1').css("visibility", "visible");
+                    $('#spanclass1').css("visibility", "hidden");
+                    $('#part2').css("visibility", "hidden");
+                    $('#spanclass2').css("visibility", "hidden");
+                    $('#modal-footer').hide();
+                    $('#PDFModal').modal();
+                }
             },
             success: function (data) {
-                $("#stage1kpisave").button('reset');
-                $('#loadingcontent').hide();
-                $('#resultcontent').show();
+                if (!pdfsave) {
+                    $("#stage1kpisave").button('reset');
+                    $('#loadingcontent').hide();
+                    $('#resultcontent').show();
+                }
+                else {
+                    $('#part1').css("visibility", "hidden");
+                    $('#spanclass1').css("visibility", "visible");
+                    $.ajax({
+                        url: $("#forRazorValue").attr("exportPDFurl"),
+                        type: "POST",
+                        dataType: "Json",
+                        beforeSend: function () {
+                            $('#part2').css("visibility", "visible");
+                        },
+                        success: function (data) {
+                            $("#ExportPDF").button('reset');
+                            $('#part2').css("visibility", "hidden");
+                            $('#spanclass2').css("visibility", "visible");
+                            $("#modal-footer").show();
+                            $('#PDFOpen').click(function () {
+                                window.open(data);
+                            });
+                        }
+                    });
+                }
                 //$('#InfoModal').modal();
             }
         });
@@ -55,6 +89,7 @@ define("stage1approval.performance", ['jquery', 'bootstrap'], function ($) {
         });
         $("#stage1kpisubmit").click(function () {
             // $('#SubmitInfoModal').modal();
+            pdfsave = false;
             $("form").submit();
         });
 
@@ -82,6 +117,10 @@ define("stage1approval.performance", ['jquery', 'bootstrap'], function ($) {
                 }
             });
             $(this).popover('show');
+        });
+        $("#ExportPDF").click(function () {
+            pdfsave = true;
+            savefunction();
         });
     });
     //setInterval(autosavefunction, 300000);

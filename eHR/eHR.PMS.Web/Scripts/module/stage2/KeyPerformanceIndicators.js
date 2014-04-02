@@ -3,6 +3,7 @@
 }),
 define("stage1.kpi", ['jquery', 'bootstrap', 'bootstrap.select'], function ($) {
     var message = $("#forRazorValue").attr("message");
+    var pdfsave = false;
     var savefunction = function () {
         var KPIArray = new Array();
         $.each($(".KPIforDatabase"), function () {
@@ -16,9 +17,19 @@ define("stage1.kpi", ['jquery', 'bootstrap', 'bootstrap.select'], function ($) {
             beforeSend: function () {
                 //$("#stage1kpisave").button('loading');
                 //$("#buttongroup").showLoading();
-                $('#resultcontent').hide();
-                $('#loadingcontent').show();
-                $('#InfoModal').modal();
+                if (!pdfsave) {
+                    $('#resultcontent').hide();
+                    $('#loadingcontent').show();
+                    $('#InfoModal').modal();
+                }
+                else {
+                    $('#part1').css("visibility", "visible");
+                    $('#spanclass1').css("visibility", "hidden");
+                    $('#part2').css("visibility", "hidden");
+                    $('#spanclass2').css("visibility", "hidden");
+                    $('#modal-footer').hide();
+                    $('#PDFModal').modal();
+                }
             },
             success: function (data) {
                 var newkpiids = data.kpiid.split('-');
@@ -34,14 +45,37 @@ define("stage1.kpi", ['jquery', 'bootstrap', 'bootstrap.select'], function ($) {
                         $(this).val($(this).val().replace("NewKPI", newkpiids[num++]));
                 });
                 $("#deleteKPIid").val("");
-                $("#stage1kpisave").button('reset');
-                $('#loadingcontent').hide();
-                $('#resultcontent').show();
-                $('#InfoModal').modal();
+                if (!pdfsave) {
+                    $("#stage1kpisave").button('reset');
+                    $('#loadingcontent').hide();
+                    $('#resultcontent').show();
+                    $('#InfoModal').modal();
+                }
+                else {
+                    $('#part1').css("visibility", "hidden");
+                    $('#spanclass1').css("visibility", "visible");
+                    $.ajax({
+                        url: $("#forRazorValue").attr("exportPDFurl"),
+                        type: "POST",
+                        dataType: "Json",
+                        beforeSend: function () {
+                            $('#part2').css("visibility", "visible");
+                        },
+                        success: function (data) {
+                            $("#ExportPDF").button('reset');
+                            $('#part2').css("visibility", "hidden");
+                            $('#spanclass2').css("visibility", "visible");
+                            $("#modal-footer").show();
+                            $('#PDFOpen').click(function () {
+                                window.open(data);
+                            });
+                        }
+                    });
+                }
             }
         });
     };
-    
+
     var autosavefunction = function () {
         var KPIArray = new Array();
         $.each($(".KPIforDatabase"), function () {
@@ -75,7 +109,7 @@ define("stage1.kpi", ['jquery', 'bootstrap', 'bootstrap.select'], function ($) {
             }
         });
     };
-    
+
     $(function () {
         $('body').scrollspy({ target: '#sidenav' });
         $('.selectpicker').selectpicker();
@@ -278,6 +312,7 @@ define("stage1.kpi", ['jquery', 'bootstrap', 'bootstrap.select'], function ($) {
 
         $("#stage1kpisave").click(function () {
             $(".alert").remove();
+            pdfsave = false;
             savefunction();
         });
 
@@ -287,6 +322,10 @@ define("stage1.kpi", ['jquery', 'bootstrap', 'bootstrap.select'], function ($) {
 
         $("#btn_cancel_modal_ok").click(function () {
             window.location.href($("#forRazorValue").attr("rooturl"));
+        });
+        $("#ExportPDF").click(function () {
+            pdfsave = true;
+            savefunction();
         });
     });
 
