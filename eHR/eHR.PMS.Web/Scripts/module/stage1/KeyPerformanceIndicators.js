@@ -292,5 +292,8 @@ define("stage1.kpi", ['jquery', 'bootstrap', 'bootstrap.select'], function ($) {
         });
     });
 
-    setInterval(autosavefunction, 600000);
+    if ($("#forRazorValue").attr("viewmode") != "view") {
+        setInterval(autosavefunction, parseInt($("#forRazorValue").attr("autosaveinterval")));
+    }
+    
 });

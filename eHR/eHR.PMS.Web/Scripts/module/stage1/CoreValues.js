@@ -251,5 +251,10 @@ define("stage1.corevalues", ['jquery', 'bootstrap', 'bootstrap.select'], functio
                 window.location.href($("#forRazorValue").attr("rooturl"));
             });
         });
-        setInterval(autosavefunction, 600000); 
+
+        //setInterval(autosavefunction, 600000);
+
+        if ($("#forRazorValue").attr("viewmode") != "view") {
+            setInterval(autosavefunction, parseInt($("#forRazorValue").attr("autosaveinterval")));
+        }
 });

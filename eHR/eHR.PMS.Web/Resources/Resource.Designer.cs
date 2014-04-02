@@ -61,6 +61,15 @@ namespace eHR.PMS.Web.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 600000.
+        /// </summary>
+        public static string AUTO_SAVE_INTERVAL {
+            get {
+                return ResourceManager.GetString("AUTO_SAVE_INTERVAL", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The appraisal is approved..
         /// </summary>
         public static string MSG_APPRAISAL_APPROVED {
