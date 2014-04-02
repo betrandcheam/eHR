@@ -253,6 +253,13 @@ namespace eHR.PMS.Web.Controllers
         #endregion Appraisal Profile
 
         #region pdf export
+        public ActionResult PDFFiles(string filename)
+        {
+            string path = Server.MapPath("~/PDFFiles/" + filename);
+            Response.AddHeader("content-disposition", "attachment;");
+            return File(path, "application/pdf");
+
+        }
         public JsonResult pdfExport(int id)
         {
             #region GetFilePath
@@ -262,7 +269,7 @@ namespace eHR.PMS.Web.Controllers
            string filePath = Path.Combine(Server.MapPath("~/PDFFiles"), fileName);
             #endregion
 
- 
+            Model.DTO.Appraisal.Appraisal appr=PMS.Model.PMSModel.GetAppraisalById(id);
            string logoImgPath = Server.MapPath("~/Content/img/logo.gif");
            string CorevalueImg = Server.MapPath("~/Content/img/pms_corevalue_rating_description.jpg");
            Document doc = new Document(PageSize.A4, 2, 2, 10, 2);
@@ -297,12 +304,33 @@ namespace eHR.PMS.Web.Controllers
                Image jpg1 = Image.GetInstance(logoImgPath);
                jpg1.Alignment = Element.ALIGN_LEFT;
                p1.Add(jpg1);
-               
-               Paragraph p2 = new Paragraph(new Phrase(CurrentUser.PreferredName + "'s Apprisal", FontFactory.GetFont("Arial", 20)));
-               p2.SetAlignment("center");
-               
+
+               PdfPTable EmployInfoTable = new PdfPTable(4);
+               EmployInfoTable.WidthPercentage = 80f;
+               PdfPCell pCell = new PdfPCell(new Paragraph("Name: "));
+               EmployInfoTable.AddCell(pCell);
+               pCell = new PdfPCell(new Paragraph(appr.Employee.PreferredName));
+               EmployInfoTable.AddCell(pCell);
+               pCell = new PdfPCell(new Paragraph("ID: "));
+               EmployInfoTable.AddCell(pCell);
+               pCell = new PdfPCell(new Paragraph(appr.Employee.DomainId));
+               EmployInfoTable.AddCell(pCell);
+               pCell = new PdfPCell(new Paragraph("Department: "));
+               EmployInfoTable.AddCell(pCell);
+               pCell = new PdfPCell(new Paragraph(appr.Employee.Department.Name));
+               EmployInfoTable.AddCell(pCell);
+               pCell = new PdfPCell(new Paragraph("Employment Type: "));
+               EmployInfoTable.AddCell(pCell);
+               pCell = new PdfPCell(new Paragraph(appr.Employee.EmploymentType.Name));
+               EmployInfoTable.AddCell(pCell);
+               pCell = new PdfPCell(new Paragraph("ACR Grade: "));
+               EmployInfoTable.AddCell(pCell);
+               pCell = new PdfPCell(new Paragraph(appr.Employee.ACRGrade.Name));
+               EmployInfoTable.AddCell(pCell);
+               EmployInfoTable.AddCell(emptycell);
+               EmployInfoTable.AddCell(emptycell);
                doc.Add(p1);
-               doc.Add(p2);
+               doc.Add(EmployInfoTable);
                #endregion
 
                #region define table
@@ -331,21 +359,21 @@ namespace eHR.PMS.Web.Controllers
                #region writing kpitable
 
                List<Model.DTO.Master.Section> sections = PMS.Model.PMSModel.GetMasterSectionList(true);
-               Model.DTO.Appraisal.Appraisal appr=PMS.Model.PMSModel.GetAppraisalById(id);
+               
                List<Model.DTO.GradeCompetency> gcList = PMS.Model.PMSModel.GetCoreValueCompetencyByGrade(CurrentUser.ACRGrade.Id);
                Paragraph sectionName = new Paragraph(sections[0].Name+"\n"+"\n");
 
                PdfPTable descriptionTable=new PdfPTable(1);
                descriptionTable.WidthPercentage=90f;
-               PdfPCell pCell = new PdfPCell(new Paragraph(sectionName));
+               pCell = new PdfPCell(new Paragraph(sectionName));
                pCell.Border = Rectangle.NO_BORDER;
                descriptionTable.AddCell(pCell);
-               string kpiDescription = "\n Key Performance Indicators Descriptions :\n"
+               string kpiDescription = "\n\n Key Performance Indicators Descriptions :\n"
                                         +"\n"
                                         +"\"Financials\", \"Build\", \"Governance/Risk\" and \"People\" are four main themes derived from the Corporate and Underwriting Principles that capture the corporate focus and priorities and serve to align individual's Key Performance Indicators (KPIs) to achieving the Corporate KPIs and Corporate Vision. KPIs are manually set goals and metrics that measure individual's achievements and progress."
                                        + "You will need to set at least 1 or more KPI within each of the four main themes."
                                        + "You are to complete the form and initiate discussion with your Manager."
-                                       + "Once you have submitted the form your Manager, your Manager will complete the relevant sections. All submissions and comments will be tracked.\n"
+                                       + "Once you have submitted the form to your Manager, your Manager will complete the relevant sections. All submissions and comments will be tracked.\n"
                                         +"\n"
                                         +"Performance Rating Descriptions :\n"
                                         +"\n"
@@ -384,15 +412,15 @@ namespace eHR.PMS.Web.Controllers
                    {
                        foreach (Model.DTO.Appraisal.KPI k in appr.KPIs.Where(s => s.Block.Id == b.Id))
                        {
-                           kpiTab.AddCell(k.Description);
+                           kpiTab.AddCell(k.Description.Replace(Environment.NewLine,"\n"));
                            kpiTab.AddCell(k.Priority.Name);
-                           kpiTab.AddCell(k.Target);
+                           kpiTab.AddCell(k.Target.Replace(Environment.NewLine, "\n"));
                            if (!Lib.Utility.Common.IsNullOrEmptyList(k.Comments))
                            {
                                foreach (Model.DTO.Appraisal.KPIComment kc in k.Comments.Where(s => s.FormSaveOnly == false))
                                {
                                    kpicommentsParagraph.Append(kc.CommentedTimestamp + " , " + kc.Commentor.PreferredName + " said:\n");
-                                   kpicommentsParagraph.Append("     " + kc.Comments + "\n");
+                                   kpicommentsParagraph.Append("     " + kc.Comments.Replace(Environment.NewLine, "\n") + "\n");
                                }
                                kpiTab.AddCell(new Paragraph(kpicommentsParagraph.ToString()));
                            }
@@ -409,6 +437,11 @@ namespace eHR.PMS.Web.Controllers
                        kpiTab.AddCell(emptycell);
                        kpiTab.AddCell(emptycell);
                    }
+                   emptycell.FixedHeight = 80;
+                   kpiTab.AddCell(emptycell);
+                   kpiTab.AddCell(emptycell);
+                   kpiTab.AddCell(emptycell);
+                   kpiTab.AddCell(emptycell);
                }
                doc.Add(kpiTab);
                #endregion
@@ -475,13 +508,13 @@ namespace eHR.PMS.Web.Controllers
                    {
                        foreach (Model.DTO.Appraisal.CoreValue k in appr.CoreValues.Where(s => s.Block.Id == b.Id))
                        {
-                           corevaluesTab.AddCell(k.Target);
+                           corevaluesTab.AddCell(k.Target.Replace(Environment.NewLine, "\n"));
                            if (!Lib.Utility.Common.IsNullOrEmptyList(k.Comments))
                            {
                                foreach (Model.DTO.Appraisal.CoreValueComment kc in k.Comments.Where(s => s.FormSaveOnly == false))
                                {
                                    corevaluecommentsParagraph.Append(kc.CommentedTimestamp + " , " + kc.Commentor.PreferredName + " said:\n");
-                                   corevaluecommentsParagraph.Append("     " + kc.Comments + "\n");
+                                   corevaluecommentsParagraph.Append("     " + kc.Comments.Replace(Environment.NewLine, "\n") + "\n");
                                }
                                corevaluesTab.AddCell(new Paragraph(corevaluecommentsParagraph.ToString()));
                            }
@@ -509,10 +542,11 @@ namespace eHR.PMS.Web.Controllers
                    performanceCoachingTab.AddCell(pCell);
                    Paragraph content = new Paragraph("Employee's areas of strengths:");
                    PdfPCell cell = new PdfPCell(content);
+                   cell.BackgroundColor = new Color(91, 192, 222);
                    performanceCoachingTab.AddCell(cell);
                    if (!eHR.PMS.Lib.Utility.Common.IsNullOrEmptyList(appr.PerformanceCoachings))
                    {
-                       cell = new PdfPCell(new Paragraph(appr.PerformanceCoachings.First().AreasOfStrength));
+                       cell = new PdfPCell(new Paragraph(appr.PerformanceCoachings.First().AreasOfStrength.Replace(Environment.NewLine, "\n")));
                        performanceCoachingTab.AddCell(cell);
                    }
                    else
@@ -522,10 +556,11 @@ namespace eHR.PMS.Web.Controllers
                    }
                    content = new Paragraph("Employee's areas for improvements and developmental needs");
                    cell = new PdfPCell(content);
+                   cell.BackgroundColor = new Color(91, 192, 222);
                    performanceCoachingTab.AddCell(cell);
                    if (!eHR.PMS.Lib.Utility.Common.IsNullOrEmptyList(appr.PerformanceCoachings))
                    {
-                       cell = new PdfPCell(new Paragraph(appr.PerformanceCoachings.First().AreasOfImprovement));
+                       cell = new PdfPCell(new Paragraph(appr.PerformanceCoachings.First().AreasOfImprovement.Replace(Environment.NewLine, "\n")));
                        performanceCoachingTab.AddCell(cell);
                    }
                    else
@@ -535,6 +570,7 @@ namespace eHR.PMS.Web.Controllers
                    }
                    content = new Paragraph("Comments");
                    cell = new PdfPCell(content);
+                   cell.BackgroundColor = new Color(91, 192, 222);
                    performanceCoachingTab.AddCell(cell);
 
                    StringBuilder performanceCoachingcommentsParagraph = new StringBuilder();
@@ -543,7 +579,7 @@ namespace eHR.PMS.Web.Controllers
                        foreach (Model.DTO.Appraisal.PerformanceCoachingComment kc in appr.PerformanceCoachings.First().Comments.Where(s => s.FormSaveOnly == false))
                        {
                            performanceCoachingcommentsParagraph.Append(kc.CommentedTimestamp + " , " + kc.Commentor.PreferredName + " said:\n");
-                           performanceCoachingcommentsParagraph.Append("     " + kc.Comments + "\n");
+                           performanceCoachingcommentsParagraph.Append("     " + kc.Comments.Replace(Environment.NewLine, "\n") + "\n");
                        }
                        performanceCoachingTab.AddCell(new Paragraph(performanceCoachingcommentsParagraph.ToString()));
                    }
@@ -565,10 +601,11 @@ namespace eHR.PMS.Web.Controllers
                    careerDevelopmentTab.AddCell(pCell);
                    Paragraph content = new Paragraph("Short-term Career Goals:");
                    PdfPCell cell = new PdfPCell(content);
+                   cell.BackgroundColor = new Color(91, 192, 222);
                    careerDevelopmentTab.AddCell(cell);
                    if (!eHR.PMS.Lib.Utility.Common.IsNullOrEmptyList(appr.CareerDevelopments))
                    {
-                       cell = new PdfPCell(new Paragraph(appr.CareerDevelopments.First().ShortTermGoals));
+                       cell = new PdfPCell(new Paragraph(appr.CareerDevelopments.First().ShortTermGoals.Replace(Environment.NewLine, "\n")));
                        careerDevelopmentTab.AddCell(cell);
                    }
                    else
@@ -578,10 +615,11 @@ namespace eHR.PMS.Web.Controllers
                    }
                    content = new Paragraph("Career Development Plan:");
                    cell = new PdfPCell(content);
+                   cell.BackgroundColor = new Color(91, 192, 222);
                    careerDevelopmentTab.AddCell(cell);
                    if (!eHR.PMS.Lib.Utility.Common.IsNullOrEmptyList(appr.CareerDevelopments))
                    {
-                       cell = new PdfPCell(new Paragraph(appr.CareerDevelopments.First().CareerPlans));
+                       cell = new PdfPCell(new Paragraph(appr.CareerDevelopments.First().CareerPlans.Replace(Environment.NewLine, "\n")));
                        careerDevelopmentTab.AddCell(cell);
                    }
                    else
@@ -591,10 +629,11 @@ namespace eHR.PMS.Web.Controllers
                    }
                    content = new Paragraph("Learning and development:");
                    cell = new PdfPCell(content);
+                   cell.BackgroundColor = new Color(91, 192, 222);
                    careerDevelopmentTab.AddCell(cell);
                    if (!eHR.PMS.Lib.Utility.Common.IsNullOrEmptyList(appr.CareerDevelopments))
                    {
-                       cell = new PdfPCell(new Paragraph(appr.CareerDevelopments.First().LearningPlans));
+                       cell = new PdfPCell(new Paragraph(appr.CareerDevelopments.First().LearningPlans.Replace(Environment.NewLine, "\n")));
                        careerDevelopmentTab.AddCell(cell);
                    }
                    else
@@ -604,6 +643,7 @@ namespace eHR.PMS.Web.Controllers
                    }
                    content = new Paragraph("Comments");
                    cell = new PdfPCell(content);
+                   cell.BackgroundColor = new Color(91, 192, 222);
                    careerDevelopmentTab.AddCell(cell);
                    StringBuilder careerDevelopmentcommentsParagraph = new StringBuilder();
                    if (!eHR.PMS.Lib.Utility.Common.IsNullOrEmptyList(appr.PerformanceCoachings) && !eHR.PMS.Lib.Utility.Common.IsNullOrEmptyList(appr.PerformanceCoachings.First().Comments))
@@ -611,7 +651,7 @@ namespace eHR.PMS.Web.Controllers
                        foreach (Model.DTO.Appraisal.PerformanceCoachingComment kc in appr.PerformanceCoachings.First().Comments.Where(s => s.FormSaveOnly == false))
                        {
                            careerDevelopmentcommentsParagraph.Append(kc.CommentedTimestamp + " , " + kc.Commentor.PreferredName + " said:\n");
-                           careerDevelopmentcommentsParagraph.Append("     " + kc.Comments + "\n");
+                           careerDevelopmentcommentsParagraph.Append("     " + kc.Comments.Replace(Environment.NewLine, "\n") + "\n");
                        }
                        careerDevelopmentTab.AddCell(new Paragraph(careerDevelopmentcommentsParagraph.ToString()));
                    }
@@ -625,7 +665,7 @@ namespace eHR.PMS.Web.Controllers
                #endregion
 
                doc.Close();
-               return Json(Url.Content("~/PDFFiles/"+fileName));
+               return Json(fileName);
                //return File(filePath, "application/pdf", fileName);
            }
            catch (Exception)
