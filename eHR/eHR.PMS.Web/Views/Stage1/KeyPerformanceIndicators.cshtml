@@ -299,7 +299,7 @@
       </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
 
-<input type="hidden" id="forRazorValue" exportPDFurl="@(Url.Content("~/Home/pdfExport/" + Model.Appraisal.Id))"  saveurl="@(Url.Content("~/Stage1/KPISave"))" apprid='@Model.Appraisal.Id' viewmode="@(Model.ViewOnly?"view":"input")" 
+<input type="hidden" id="forRazorValue" openPDFurl="@(Url.Content("~/Home/PDFFiles/"))" exportPDFurl="@(Url.Content("~/Home/pdfExport/" + Model.Appraisal.Id))"  saveurl="@(Url.Content("~/Stage1/KPISave"))" apprid='@Model.Appraisal.Id' viewmode="@(Model.ViewOnly?"view":"input")" 
     rooturl="@(Url.Content("~/"))" autosaveinterval="@eHR.PMS.Web.Resources.Resource.AUTO_SAVE_INTERVAL"/>
 @section scripts
         {

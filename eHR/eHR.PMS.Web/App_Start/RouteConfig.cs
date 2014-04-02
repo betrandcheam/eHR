@@ -13,7 +13,11 @@ namespace eHR.PMS.Web
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
             //routes.IgnoreRoute("Scripts/{pathInfo}/*.js");
-
+            routes.MapRoute(
+                name: "Files",
+                url: "Home/PDFFiles/{filename}",
+                defaults: new { controller = "Home", action = "PDFFiles", filename = "" }
+            );
             routes.MapRoute(
                 name: "HomeUrl",
                 url: "Home/{action}/{id}",
