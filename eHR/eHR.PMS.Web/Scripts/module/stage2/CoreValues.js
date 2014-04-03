@@ -66,7 +66,7 @@ define("stage2.corevalues", ['jquery', 'bootstrap', 'bootstrap.select'], functio
                             $('#spanclass2').css("visibility", "visible");
                             $("#modal-footer").show();
                             $('#PDFOpen').click(function () {
-                                window.open(data);
+                               window.location.href = $("#forRazorValue").attr("openPDFurl")+data;
                             });
                         }
                     });

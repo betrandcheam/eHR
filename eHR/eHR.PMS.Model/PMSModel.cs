@@ -1285,7 +1285,10 @@ namespace eHR.PMS.Model
                 if (int_appraisal_id > 0)
                 {
                     Model.Context.PMS_APPRAISAL ent_appraisal = dc_pms.PMS_APPRAISAL.Where(rec => rec.ID == int_appraisal_id).Single();
-                    ent_appraisal.STATUS_ID = PMS.Model.PMSConstants.STATUS_ID_DRAFT;
+                    if (ent_appraisal.STATUS_ID == Model.PMSConstants.STATUS_ID_NEW)
+                    {
+                        ent_appraisal.STATUS_ID = PMS.Model.PMSConstants.STATUS_ID_DRAFT;
+                    }
                 }
 
                 dc_pms.SaveChanges();
@@ -1361,7 +1364,10 @@ namespace eHR.PMS.Model
                 if (int_appraisal_id > 0)
                 {
                     Model.Context.PMS_APPRAISAL ent_appraisal = dc_pms.PMS_APPRAISAL.Where(rec => rec.ID == int_appraisal_id).Single();
-                    ent_appraisal.STATUS_ID = PMS.Model.PMSConstants.STATUS_ID_DRAFT;
+                    if (ent_appraisal.STATUS_ID == Model.PMSConstants.STATUS_ID_NEW) 
+                    {
+                        ent_appraisal.STATUS_ID = PMS.Model.PMSConstants.STATUS_ID_DRAFT;
+                    }
                 }
 
                 dc_pms.SaveChanges();
@@ -1555,7 +1561,10 @@ namespace eHR.PMS.Model
                 if (int_appraisal_id > 0)
                 {
                     Model.Context.PMS_APPRAISAL ent_appraisal = dc_pms.PMS_APPRAISAL.Where(rec => rec.ID == int_appraisal_id).Single();
-                    ent_appraisal.STATUS_ID = PMS.Model.PMSConstants.STATUS_ID_DRAFT;
+                    if (ent_appraisal.STATUS_ID == Model.PMSConstants.STATUS_ID_NEW)
+                    {
+                        ent_appraisal.STATUS_ID = PMS.Model.PMSConstants.STATUS_ID_DRAFT;
+                    }
                 }
 
                 dc_pms.SaveChanges();
@@ -1630,7 +1639,10 @@ namespace eHR.PMS.Model
                 if (int_appraisal_id > 0)
                 {
                     Model.Context.PMS_APPRAISAL ent_appraisal = dc_pms.PMS_APPRAISAL.Where(rec => rec.ID == int_appraisal_id).Single();
-                    ent_appraisal.STATUS_ID = PMS.Model.PMSConstants.STATUS_ID_DRAFT;
+                    if (ent_appraisal.STATUS_ID == Model.PMSConstants.STATUS_ID_NEW)
+                    {
+                        ent_appraisal.STATUS_ID = PMS.Model.PMSConstants.STATUS_ID_DRAFT;
+                    }
                 }
 
                 dc_pms.SaveChanges();
@@ -1801,7 +1813,10 @@ namespace eHR.PMS.Model
                     if (int_appraisal_id > 0)
                     {
                         Model.Context.PMS_APPRAISAL ent_appraisal = dc_pms.PMS_APPRAISAL.Where(rec => rec.ID == int_appraisal_id).Single();
-                        ent_appraisal.STATUS_ID = PMS.Model.PMSConstants.STATUS_ID_DRAFT;
+                        if (ent_appraisal.STATUS_ID == Model.PMSConstants.STATUS_ID_NEW)
+                        {
+                            ent_appraisal.STATUS_ID = PMS.Model.PMSConstants.STATUS_ID_DRAFT;
+                        }
                     }
 
                     dc_pms.SaveChanges();
@@ -1901,7 +1916,10 @@ namespace eHR.PMS.Model
                     if (int_appraisal_id > 0)
                     {
                         Model.Context.PMS_APPRAISAL ent_appraisal = dc_pms.PMS_APPRAISAL.Where(rec => rec.ID == int_appraisal_id).Single();
-                        ent_appraisal.STATUS_ID = PMS.Model.PMSConstants.STATUS_ID_DRAFT;
+                        if (ent_appraisal.STATUS_ID == Model.PMSConstants.STATUS_ID_NEW)
+                        {
+                            ent_appraisal.STATUS_ID = PMS.Model.PMSConstants.STATUS_ID_DRAFT;
+                        }
                     }
 
                     dc_pms.SaveChanges();

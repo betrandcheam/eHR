@@ -48,7 +48,7 @@ define("stage2approval.performance", ['jquery', 'bootstrap'], function ($) {
                             $('#spanclass2').css("visibility", "visible");
                             $("#modal-footer").show();
                             $('#PDFOpen').click(function () {
-                                window.open(data);
+                               window.location.href = $("#forRazorValue").attr("openPDFurl")+data;
                             });
                         }
                     });

@@ -267,7 +267,7 @@
         </div><!-- /.modal-content -->
       </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
-<input type="hidden" id="forRazorValue" message='@message' exportPDFurl="@(Url.Content("~/Home/pdfExport/" + Model.Appraisal.Id))"
+<input type="hidden" id="forRazorValue" message='@message' openPDFurl="@(Url.Content("~/Home/PDFFiles/"))" exportPDFurl="@(Url.Content("~/Home/pdfExport/" + Model.Appraisal.Id))"
   saveurl="@(Url.Content("~/Stage1/CareerDevelopmentSave"))" apprid='@Model.Appraisal.Id'
     rooturl="@(Url.Content("~/"))" autosaveinterval="@eHR.PMS.Web.Resources.Resource.AUTO_SAVE_INTERVAL"  viewmode="@(Model.ViewOnly?"view":"input")"/>
 @section scripts

@@ -222,7 +222,8 @@
     </div><!-- /.modal -->
 
 <input type="hidden" id="forRazorValue" approvemessage="@(Model.Appraisal.Status.Id == eHR.PMS.Model.PMSConstants.STATUS_ID_PENDING_LEVEL_1_APPROVAL ? eHR.PMS.Web.Resources.Resource.MSG_APPROVE_LEVEL1.Replace("[%EMPLOYEE_NAME%]", Model.Appraisal.Employee.PreferredName) : eHR.PMS.Web.Resources.Resource.MSG_APPROVE_LEVEL2.Replace("[%EMPLOYEE_NAME%]", Model.Appraisal.Employee.PreferredName).Replace("[%APPRAISAL_STAGE_NAME%]", Model.Appraisal.Stage.Name.ToLower()))" rejectmessage="@(eHR.PMS.Web.Resources.Resource.MSG_REJECT_SUBMISSION)"
- exportPDFurl="@(Url.Content("~/Home/pdfExport/" + Model.Appraisal.Id))" saveurl="@(Url.Content("~/Stage1Approval/CareerDevelopmentSave"))" apprid='@Model.Appraisal.Id'
+ openPDFurl="@(Url.Content("~/Home/PDFFiles/"))" exportPDFurl="@(Url.Content("~/Home/pdfExport/" + Model.Appraisal.Id))"
+  saveurl="@(Url.Content("~/Stage1Approval/CareerDevelopmentSave"))" apprid='@Model.Appraisal.Id'
     rooturl="@(Url.Content("~/"))"/>
 @section scripts
         {

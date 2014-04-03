@@ -581,7 +581,7 @@ namespace eHR.PMS.Business
                 lst_email_messages = GenerateEmailMessageForApprovedAppraisal(appraisal, 1);
 
                 appraisal.Status = new Model.DTO.Master.Status() { Id = Model.PMSConstants.STATUS_ID_PENDING_LEVEL_2_APPROVAL };
-                StringBuilder sb_task_name = new StringBuilder("Pending Level 2 Approval Manager For ");
+                StringBuilder sb_task_name = new StringBuilder("Pending Level 2 Manager Approval For ");
                 sb_task_name.Append(appraisal.Employee.PreferredName);
                 sb_task_name.Append("'s Appraisal.");
 

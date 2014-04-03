@@ -262,14 +262,16 @@ namespace eHR.PMS.Web.Controllers
         }
         public JsonResult pdfExport(int id)
         {
+            Model.DTO.Appraisal.Appraisal appr = PMS.Model.PMSModel.GetAppraisalById(id);
+
             #region GetFilePath
-            string fileName = CurrentUser.PreferredName + "'s Apprisal on "+DateTime.Now.ToString()+".pdf";
+            string fileName = appr.Employee.PreferredName + "'s Appraisal on " + DateTime.Now.ToString() + ".pdf";
            fileName = fileName.Replace("/", "-").Replace(":","-");
             
            string filePath = Path.Combine(Server.MapPath("~/PDFFiles"), fileName);
             #endregion
 
-           Model.DTO.Appraisal.Appraisal appr=PMS.Model.PMSModel.GetAppraisalById(id);
+           
            string logoImgPath = Server.MapPath("~/Content/img/logo.gif");
            string CorevalueImg = Server.MapPath("~/Content/img/pms_corevalue_rating_description.jpg");
            Document doc = new Document(PageSize.A4, 2, 2, 10, 2);

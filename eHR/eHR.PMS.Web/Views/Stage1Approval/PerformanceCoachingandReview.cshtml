@@ -213,7 +213,8 @@
       </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
 <input type="hidden" id="forRazorValue" approvemessage="@(eHR.PMS.Web.Resources.Resource.MSG_APPROVE_SUBMISSION)" rejectmessage="@(eHR.PMS.Web.Resources.Resource.MSG_REJECT_SUBMISSION)"
- exportPDFurl="@(Url.Content("~/Home/pdfExport/" + Model.Appraisal.Id))" saveurl="@(Url.Content("~/Stage1Approval/PerformanceCoachingandReviewSave"))" apprid='@Model.Appraisal.Id' performancecoachingitemid=" @(Model.Appraisal.PerformanceCoaching.Id)"
+openPDFurl="@(Url.Content("~/Home/PDFFiles/"))" exportPDFurl="@(Url.Content("~/Home/pdfExport/" + Model.Appraisal.Id))"
+saveurl="@(Url.Content("~/Stage1Approval/PerformanceCoachingandReviewSave"))" apprid='@Model.Appraisal.Id' performancecoachingitemid=" @(Model.Appraisal.PerformanceCoaching.Id)"
     rooturl="@(Url.Content("~/"))"/>
 @section scripts
         {

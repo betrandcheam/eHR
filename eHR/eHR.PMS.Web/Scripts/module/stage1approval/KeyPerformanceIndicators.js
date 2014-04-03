@@ -2,9 +2,9 @@
     require(['stage1approval.kpi']);
 }),
 define("stage1approval.kpi", ['jquery', 'bootstrap', 'bootstrap.select'], function ($) {
+    var pdfsave = false;
     var savefunction = function () {
         var KPIArray = new Array();
-        var pdfsave = false;
         $.each($(".KPIID"), function () {
             KPIArray.push(({ KpiId: $(this).val(), Comments: $(this).parent().parent().find(".CommentContent").val(), CommentID: $(this).parent().parent().find(".CommentID").val() }));
         });
@@ -63,7 +63,7 @@ define("stage1approval.kpi", ['jquery', 'bootstrap', 'bootstrap.select'], functi
                             $('#spanclass2').css("visibility", "visible");
                             $("#modal-footer").show();
                             $('#PDFOpen').click(function () {
-                                window.open(data);
+                               window.location.href = $("#forRazorValue").attr("openPDFurl")+data;
                             });
                         }
                     });
