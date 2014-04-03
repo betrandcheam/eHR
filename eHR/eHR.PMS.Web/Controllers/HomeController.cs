@@ -216,7 +216,7 @@ namespace eHR.PMS.Web.Controllers
                         obj_approver = Model.Mappers.PMSMapper.MapEmployeeDTOToApproverDTO(Model.PMSModel.GetEmployeeById(Convert.ToInt32(approver2)), 2);
                         obj_approver.Appraisal = obj_appraisal;
                         //obj_approver.ApprovalLevel = 1;
-                        obj_approver.Id = obj_level_1_approver.Id;
+                        obj_approver.Id = obj_level_2_approver.Id;
                         lst_new_approvers.Add(obj_approver);
                     }
 

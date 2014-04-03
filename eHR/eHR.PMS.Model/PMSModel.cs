@@ -1852,16 +1852,25 @@ namespace eHR.PMS.Model
                                                                                                                                 rec.FORM_SAVE_ONLY == true).SingleOrDefault();
 
 
-
                         if (ent_comment != null)
                         {
-                            ent_comment.COMMENT = obj_comment.Comments;
-                            ent_comment.COMMENTED_TIMESTAMP = obj_comment.CommentedTimestamp;
+                            if (!string.IsNullOrEmpty(obj_comment.Comments))
+                            {
+                                ent_comment.COMMENT = obj_comment.Comments;
+                                ent_comment.COMMENTED_TIMESTAMP = obj_comment.CommentedTimestamp;
+                            }
+                            else
+                            {
+                                dc_pms.PMS_APPRAISAL_PERFORMANCE_COACHING_COMMENT.DeleteObject(ent_comment);
+                            }
                         }
                         else
                         {
-                            ent_comment = Mappers.PMSMapper.MapAppraisalPerformanceCoachingCommentDTOToEntity(obj_comment);
-                            dc_pms.PMS_APPRAISAL_PERFORMANCE_COACHING_COMMENT.AddObject(ent_comment);
+                            if (!string.IsNullOrEmpty(obj_comment.Comments))
+                            {
+                                ent_comment = Mappers.PMSMapper.MapAppraisalPerformanceCoachingCommentDTOToEntity(obj_comment);
+                                dc_pms.PMS_APPRAISAL_PERFORMANCE_COACHING_COMMENT.AddObject(ent_comment);
+                            }
                         }
 
 
@@ -1958,13 +1967,24 @@ namespace eHR.PMS.Model
 
                         if (ent_comment != null)
                         {
-                            ent_comment.COMMENT = obj_comment.Comments;
-                            ent_comment.COMMENTED_TIMESTAMP = obj_comment.CommentedTimestamp;
+                            if (!string.IsNullOrEmpty(obj_comment.Comments))
+                            {
+                                ent_comment.COMMENT = obj_comment.Comments;
+                                ent_comment.COMMENTED_TIMESTAMP = obj_comment.CommentedTimestamp;
+                            }
+                            else 
+                            {
+                                dc_pms.PMS_APPRAISAL_CAREER_DEVELOPMENT_COMMENT.DeleteObject(ent_comment);
+                            }
+
                         }
                         else
                         {
-                            ent_comment = Mappers.PMSMapper.MapAppraisalCareerDevelopmentCommentDTOToEntity(obj_comment);
-                            dc_pms.PMS_APPRAISAL_CAREER_DEVELOPMENT_COMMENT.AddObject(ent_comment);
+                            if (!string.IsNullOrEmpty(obj_comment.Comments))
+                            {
+                                ent_comment = Mappers.PMSMapper.MapAppraisalCareerDevelopmentCommentDTOToEntity(obj_comment);
+                                dc_pms.PMS_APPRAISAL_CAREER_DEVELOPMENT_COMMENT.AddObject(ent_comment);
+                            }
                         }
                     }
                     dc_pms.SaveChanges();

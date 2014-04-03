@@ -33,11 +33,11 @@
                         @{
                             if (Model.Appraisal.CareerDevelopment != null)
                             {
-                                <textarea id="ShorttermCareerGoal" name="ShorttermCareerGoal" class="form-control idleField" rows="3">@Model.Appraisal.CareerDevelopment.ShortTermGoals</textarea>
+                                <textarea id="ShorttermCareerGoal" name="ShorttermCareerGoal" disabled="disabled" class="form-control idleField" rows="3">@Model.Appraisal.CareerDevelopment.ShortTermGoals</textarea>
                             }
                             else
                             {
-                                <textarea id="ShorttermCareerGoal" name="ShorttermCareerGoal" class="form-control idleField" rows="3"></textarea>                                
+                                <textarea id="ShorttermCareerGoal" name="ShorttermCareerGoal" disabled="disabled" class="form-control idleField" rows="3"></textarea>                                
                             }
                          }
                       </div>
@@ -46,11 +46,11 @@
                         @{
                             if (Model.Appraisal.CareerDevelopment != null)
                             {
-                                <textarea id="DevelopmentPlan" name="DevelopmentPlan" class="form-control idleField" rows="3">@Model.Appraisal.CareerDevelopment.CareerPlans</textarea>                                
+                                <textarea id="DevelopmentPlan" name="DevelopmentPlan" class="form-control idleField" disabled="disabled" rows="3">@Model.Appraisal.CareerDevelopment.CareerPlans</textarea>                                
                             }
                             else
                             {
-                                <textarea id="DevelopmentPlan" name="DevelopmentPlan" class="form-control idleField" rows="3"></textarea>                                
+                                <textarea id="DevelopmentPlan" name="DevelopmentPlan" class="form-control idleField" disabled="disabled" rows="3"></textarea>                                
                             }
                         }
                       </div>
@@ -59,11 +59,11 @@
                         @{
                             if (Model.Appraisal.CareerDevelopment != null)
                             {
-                                <textarea id="Learninganddevelopment" class="form-control idleField" rows="3">@Model.Appraisal.CareerDevelopment.LearningPlans</textarea>                                
+                                <textarea id="Learninganddevelopment" class="form-control idleField" disabled="disabled" rows="3">@Model.Appraisal.CareerDevelopment.LearningPlans</textarea>                                
                             }
                             else
                             {
-                                <textarea id="Learninganddevelopment" class="form-control idleField" rows="3"></textarea>                                
+                                <textarea id="Learninganddevelopment" class="form-control idleField" disabled="disabled" rows="3"></textarea>                                
                             }
                         }
                       </div>
