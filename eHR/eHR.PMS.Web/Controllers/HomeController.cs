@@ -408,7 +408,7 @@ namespace eHR.PMS.Web.Controllers
                    kpiTab.AddCell(cell);
 
                    StringBuilder kpicommentsParagraph = new StringBuilder();
-                   if (!Lib.Utility.Common.IsNullOrEmptyList(appr.KPIs.Where(s => s.Block.Id == b.Id)))
+                   if (!Lib.Utility.Common.IsNullOrEmptyList(appr.KPIs))
                    {
                        foreach (Model.DTO.Appraisal.KPI k in appr.KPIs.Where(s => s.Block.Id == b.Id))
                        {
@@ -529,6 +529,11 @@ namespace eHR.PMS.Web.Controllers
                        corevaluesTab.AddCell(emptycell);
                        corevaluesTab.AddCell(emptycell);
                    }
+                   emptycell.FixedHeight = 80;
+                   corevaluesTab.AddCell(emptycell);
+                   corevaluesTab.AddCell(emptycell);
+                   corevaluesTab.AddCell(emptycell);
+                   corevaluesTab.AddCell(emptycell);
                }
                doc.Add(corevaluesTab);
                #endregion
