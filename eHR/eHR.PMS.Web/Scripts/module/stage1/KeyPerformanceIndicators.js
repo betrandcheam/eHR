@@ -148,7 +148,7 @@ define("stage1.kpi", ['jquery', 'bootstrap', 'bootstrap.select'], function ($) {
             PTtextforEdit.val(replaceAll("<BR checkedByCssHelper=\"true\">", "\n", $(this).parent().prev().prev().html()));
 
             PrioritytextHidSelectforEdit.find('.filter-option').text($(this).parent().prev().prev().prev().prev().text());
-            PrioritytextforEdit.val($(this).parent().prev().prev().prev().find(".PriorityId").text());
+            PrioritytextforEdit.val($(this).parent().prev().prev().prev().find(".PriorityId").val());
             $(this).addClass("disabled");
             $(this).next().addClass("disabled");
             AdddivforEdit.hide("slow");
