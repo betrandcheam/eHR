@@ -1465,8 +1465,13 @@ namespace eHR.PMS.Model
 
                         if (ent_comment != null)
                         {
-                            ent_comment.COMMENT = obj_comment.Comments;
-                            ent_comment.COMMENTED_TIMESTAMP = obj_comment.CommentedTimestamp;
+
+                            if (!string.IsNullOrEmpty(obj_comment.Comments))
+                            {
+                                ent_comment.COMMENT = obj_comment.Comments;
+                                ent_comment.COMMENTED_TIMESTAMP = obj_comment.CommentedTimestamp;
+                            }
+
                         }
                         else
                         {
@@ -1486,9 +1491,9 @@ namespace eHR.PMS.Model
                         PMS.Model.Context.PMS_APPRAISAL_KPI_COMMENT ent_comment = dc_pms.PMS_APPRAISAL_KPI_COMMENT.Where(s => s.ID == obj_comment.Id).Single();
                         dc_pms.PMS_APPRAISAL_KPI_COMMENT.DeleteObject(ent_comment);
                     }
-                    dc_pms.SaveChanges();
+                    
                 }
-
+                dc_pms.SaveChanges();
                 newcommentsidarray = sb_newkpiids.ToString();
                 if (!string.IsNullOrEmpty(newcommentsidarray))
                     newcommentsidarray = newcommentsidarray.Substring(0, newcommentsidarray.Length - 1);
@@ -1763,8 +1768,9 @@ namespace eHR.PMS.Model
                         }
                         
                     }
-                    dc_pms.SaveChanges();
+                   
                 }
+                dc_pms.SaveChanges();
                 newcommentsidarray = sb_newkpiids.ToString();
                 if (!string.IsNullOrEmpty(newcommentsidarray))
                     newcommentsidarray = newcommentsidarray.Substring(0, newcommentsidarray.Length - 1);
