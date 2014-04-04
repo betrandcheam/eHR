@@ -48,17 +48,17 @@ namespace eHR.PMS.Lib.Utility
             Log(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), message);
         }
 
-        public static void LogException(Exception exc)
+        public static void LogException(Exception exc, string filePath)
         {
             if (exc != null)
             {
-                Log(exc.Message);
-                Log(exc.StackTrace);
+                Log(exc.Message, filePath);
+                Log(exc.StackTrace, filePath);
 
                 if (exc.InnerException != null)
                 {
-                    Log(exc.InnerException.Message);
-                    Log(exc.InnerException.StackTrace);
+                    Log(exc.InnerException.Message, filePath);
+                    Log(exc.InnerException.StackTrace, filePath);
                 }
             }
         }
@@ -87,6 +87,19 @@ namespace eHR.PMS.Lib.Utility
         {
             // Return true if strIn is in valid e-mail format. 
             return Regex.IsMatch(strIn, @"^([\w-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$");
+        }
+
+        #endregion
+
+        #region Strings
+
+        public static string ReplaceLineBreaksForDatabase(string str)
+        {
+            if (!string.IsNullOrEmpty(str))
+            {
+                str = str.TrimEnd('\r', '\n').Replace("\n", Environment.NewLine);
+            }
+            return str;
         }
 
         #endregion

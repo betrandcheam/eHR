@@ -9,7 +9,7 @@ define("stage1.performance", ['jquery', 'bootstrap'], function ($) {
             url: $("#forRazorValue").attr("saveurl"),
             type: "POST",
             dataType: "Json",
-            data: { "ApprID": $("#forRazorValue").attr("apprid"), "SectionID": $("#sectionlist li.active a").attr("sectionid"), "StrengthsArea": $("#StrengthsArea").val(), "ImprovementsArea": $("#ImprovementsArea").val() },
+            data: { "ApprID": $("#forRazorValue").attr("apprid"), "SectionID": $("#sectionlist li.active a").attr("sectionid"), "StrengthsArea": encodeURIComponent($.trim($("#StrengthsArea").val())), "ImprovementsArea": encodeURIComponent($.trim($("#ImprovementsArea").val())) },
             beforeSend: function () {
                 //$("#stage1kpisave").button('loading');
                 //$("#buttongroup").showLoading();
@@ -49,7 +49,7 @@ define("stage1.performance", ['jquery', 'bootstrap'], function ($) {
                             $('#spanclass2').css("visibility", "visible");
                             $("#modal-footer").show();
                             $('#PDFOpen').click(function () {
-                                window.location.href = $("#forRazorValue").attr("openPDFurl")+data;
+                                window.location.href = $("#forRazorValue").attr("openPDFurl") + data;
                             });
                         }
                     });
@@ -89,6 +89,8 @@ define("stage1.performance", ['jquery', 'bootstrap'], function ($) {
         $("#stage1kpisubmit").click(function () {
             // $('#SubmitInfoModal').modal();
             pdfsave = false;
+            $("#StrengthsArea").val(encodeURIComponent($.trim($("#StrengthsArea").val())));
+            $("#ImprovementsArea").val(encodeURIComponent($.trim($("#ImprovementsArea").val())));
             $("form").submit();
         });
         $("#stage1kpisave").click(savefunction);

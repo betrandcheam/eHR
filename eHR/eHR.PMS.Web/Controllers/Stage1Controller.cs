@@ -95,7 +95,8 @@ namespace eHR.PMS.Web.Controllers
         public JsonResult KPISave(string[] KPIForDatabase, string DeleteKPI)
         {
             string message = string.Empty;
-            string temp = KPIForDatabase[0];
+            //string temp = KPIForDatabase[0];
+            string temp = Uri.UnescapeDataString(KPIForDatabase[0]);
             string[] deleteKpiId = DeleteKPI.Split('-');
             string newkpiidarray=string.Empty;
             if (string.IsNullOrEmpty(temp))
@@ -223,7 +224,7 @@ namespace eHR.PMS.Web.Controllers
         public JsonResult CoreValuesSave(string[] KPIForDatabase, string DeleteKPI)
         {
             string message = string.Empty;
-            string temp = KPIForDatabase[0];
+            string temp = Uri.UnescapeDataString(KPIForDatabase[0]);
             string[] deleteKpiId = DeleteKPI.Split('-');
             string newkpiidarray = string.Empty;
             if (string.IsNullOrEmpty(temp))
@@ -347,8 +348,8 @@ namespace eHR.PMS.Web.Controllers
             Dictionary<string, string> dictform = new Dictionary<string, string>();
             dictform.Add("AppraisalID", ApprID);
             dictform.Add("SectionID", SectionID);
-            dictform.Add("StrengthsArea", StrengthsArea);
-            dictform.Add("ImprovementsArea", ImprovementsArea);
+            dictform.Add("StrengthsArea",StrengthsArea);
+            dictform.Add("ImprovementsArea",ImprovementsArea);
 
             PMS.Model.PMSModel.UpdateAppraisalPerformanceCoaching(Business.AppraisalManager.GetPerformanceCoachingItemFromFormInput(dictform), out message);
             return Json(message);
@@ -441,7 +442,7 @@ namespace eHR.PMS.Web.Controllers
             Dictionary<string, string> form = new Dictionary<string, string>();
             form.Add("AppraisalID", ApprID);
             form.Add("SectionID", SectionID);
-            form.Add("ShorttermCareerGoal", ShorttermCareerGoal);
+            form.Add("ShorttermCareerGoal",ShorttermCareerGoal);
             form.Add("DevelopmentPlan", DevelopmentPlan);
             form.Add("Learninganddevelopment", Learninganddevelopment);
             string message = string.Empty;

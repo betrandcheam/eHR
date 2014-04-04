@@ -7,7 +7,7 @@ define("stage1approval.corevalues", ['jquery', 'bootstrap', 'bootstrap.select'],
     var savefunction = function () {
         var KPIArray = new Array();
         $.each($(".KPIID"), function () {
-            KPIArray.push(({ KpiId: $(this).val(), Comments: $(this).parent().parent().find(".CommentContent").val() }));
+            KPIArray.push(({ KpiId: $(this).val(), Comments: encodeURIComponent($(this).parent().parent().find(".CommentContent").val()) }));
         });
         $.ajax({
             url: $("#forRazorValue").attr("saveurl"),
@@ -62,7 +62,7 @@ define("stage1approval.corevalues", ['jquery', 'bootstrap', 'bootstrap.select'],
                             $('#spanclass2').css("visibility", "visible");
                             $("#modal-footer").show();
                             $('#PDFOpen').click(function () {
-                               window.location.href = $("#forRazorValue").attr("openPDFurl")+data;
+                                window.location.href = $("#forRazorValue").attr("openPDFurl") + data;
                             });
                         }
                     });
@@ -105,18 +105,21 @@ define("stage1approval.corevalues", ['jquery', 'bootstrap', 'bootstrap.select'],
             $(this).parent().parent().parent().parent().parent().show();
         });
         $("#btn_next_section").click(function () {
+            $.each($(".KPIID"), function () {
+                $(this).parent().parent().find(".CommentContent").val(encodeURIComponent($.trim($(this).parent().parent().find(".CommentContent").val())));
+            });
             $("form").submit();
         });
-        $("#stage1kpiapproval").click(function () {
-            $("#ApORRe").val("1");
-            $("modelmessage").text("Are you sure approve this now?")
-            $('#SubmitInfoModal').modal();
-        });
-        $("#stage1kpireject").click(function () {
-            $("#ApORRe").val("0");
-            $("modelmessage").text("Are you sure reject this now?")
-            $('#SubmitInfoModal').modal();
-        });
+        //$("#stage1kpiapproval").click(function () {
+        //    $("#ApORRe").val("1");
+        //    $("modelmessage").text("Are you sure approve this now?")
+        //    $('#SubmitInfoModal').modal();
+        //});
+        //$("#stage1kpireject").click(function () {
+        //    $("#ApORRe").val("0");
+        //    $("modelmessage").text("Are you sure reject this now?")
+        //    $('#SubmitInfoModal').modal();
+        //});
         $("#stage1kpisave").click(function () {
             pdfsave = false;
             savefunction();
@@ -144,7 +147,7 @@ define("stage1approval.corevalues", ['jquery', 'bootstrap', 'bootstrap.select'],
                     html: 'true',
                     content: function () {
                         var content = $(this).parent().parent().find(".Comments").html();
-                        return (content != "" ? content : "There is no Comments");
+                        return (content != "" ? content : "There are no Comments");
                     }
                 });
                 $(this).popover('show');
@@ -160,7 +163,7 @@ define("stage1approval.corevalues", ['jquery', 'bootstrap', 'bootstrap.select'],
                         html: 'true',
                         content: function () {
                             var content = $(this).parent().parent().find(".Comments").html();
-                            return (content != "" ? content : "There is no Comments");
+                            return (content != "" ? content : "There are no Comments");
                         }
                     });
                     $(this).popover('show');

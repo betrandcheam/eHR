@@ -8,7 +8,8 @@ define("stage1approval.careerdevelopment", ['jquery', 'bootstrap'], function ($)
             url: $("#forRazorValue").attr("saveurl"),
             type: "POST",
             dataType: "Json",
-            data: { "ApprID": $("#apprid").val(), "SectionID": $("#sectionlist li.active").attr("sectionid"), "Short-termCareerGoal": $("#Short-termCareerGoal").val(), "DevelopmentPlan": $("#DevelopmentPlan").val(), "Learninganddevelopment": $("#Learninganddevelopment").val(), "Comments": $('#Comments').val(), "KPIID": $("#Comments").attr("KPIID") },
+            //data: { "ApprID": $("#apprid").val(), "SectionID": $("#sectionlist li.active").attr("sectionid"), "Short-termCareerGoal": $("#Short-termCareerGoal").val(), "DevelopmentPlan": $("#DevelopmentPlan").val(), "Learninganddevelopment": $("#Learninganddevelopment").val(), "Comments": encodeURIComponent($('#Comments').val()), "KPIID": $("#Comments").attr("KPIID") },
+            data: { "Comments": encodeURIComponent($.trim($('#Comments').val())), "KPIID": $("#Comments").attr("KPIID") },
             beforeSend: function () {
                 //$("#stage1kpisave").button('loading');
                 //$("#buttongroup").showLoading();
@@ -48,7 +49,7 @@ define("stage1approval.careerdevelopment", ['jquery', 'bootstrap'], function ($)
                             $('#spanclass2').css("visibility", "visible");
                             $("#modal-footer").show();
                             $('#PDFOpen').click(function () {
-                               window.location.href = $("#forRazorValue").attr("openPDFurl")+data;
+                                window.location.href = $("#forRazorValue").attr("openPDFurl") + data;
                             });
                         }
                     });
@@ -102,6 +103,15 @@ define("stage1approval.careerdevelopment", ['jquery', 'bootstrap'], function ($)
         $("#btn_cancel_modal_ok").click(function () {
             window.location.href($("#forRazorValue").attr("rooturl"));
         });
+
+        $("#btn_submit_modal_ok").click(function () {
+            //encode comments
+            $('#Comments').val(encodeURIComponent($('#Comments').val()));
+            $("form").submit();
+        });
+
+
+
         $(".ViewKpiComments").click(function () {
             $(this).popover({
                 title: 'Comments',

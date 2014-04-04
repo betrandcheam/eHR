@@ -76,7 +76,8 @@ namespace eHR.PMS.Web.Controllers
                     Model.DTO.Appraisal.KPIComment obj_comment = new Model.DTO.Appraisal.KPIComment()
                     {
                         AppraisalKPI = new Model.DTO.Appraisal.KPI() { Id = Convert.ToInt32(kv.Key) },
-                        Comments = kv.Value.CommentContent.Trim(),
+                        //Comments = kv.Value.CommentContent.Trim(),
+                        Comments = Lib.Utility.Common.ReplaceLineBreaksForDatabase(Uri.UnescapeDataString(kv.Value.CommentContent.Trim())),
                         Commentor = new Model.DTO.Core.Employee() { Id = CurrentUser.Id },
                         CommentedTimestamp = DateTime.Now,
                         FormSaveOnly = true
@@ -119,7 +120,8 @@ namespace eHR.PMS.Web.Controllers
         public JsonResult KPISave(string[] KPIForDatabase)
         {
             string message = string.Empty;
-            string temp = KPIForDatabase[0];
+            string temp = Uri.UnescapeDataString(KPIForDatabase[0]);
+            //string temp = KPIForDatabase[0];
             string newcommentsidarray = string.Empty;
             string[] splitString = { "},{" };
             string[] result = temp.Substring(2, temp.Length - 2).Split(splitString, StringSplitOptions.None);
@@ -197,7 +199,8 @@ namespace eHR.PMS.Web.Controllers
                     Model.DTO.Appraisal.CoreValueComment obj_comment = new Model.DTO.Appraisal.CoreValueComment()
                     {
                         AppraisalCoreValue = new Model.DTO.Appraisal.CoreValue() { Id = Convert.ToInt32(kv.Key) },
-                        Comments = kv.Value.CommentContent.Trim(),
+                        //Comments = kv.Value.CommentContent.Trim(),
+                        Comments = Lib.Utility.Common.ReplaceLineBreaksForDatabase(Uri.UnescapeDataString(kv.Value.CommentContent.Trim())),
                         Commentor = new Model.DTO.Core.Employee() { Id = CurrentUser.Id },
                         CommentedTimestamp = DateTime.Now,
                         FormSaveOnly = true
@@ -243,7 +246,8 @@ namespace eHR.PMS.Web.Controllers
         {
             string message = string.Empty;
             string newcommentsidarray = string.Empty;
-            string temp = KPIForDatabase[0];
+            //string temp = KPIForDatabase[0];
+            string temp = Uri.UnescapeDataString(KPIForDatabase[0]);
             string[] splitString = { "},{" };
             string[] result = temp.Substring(2, temp.Length - 2).Split(splitString, StringSplitOptions.None);
             List<PMS.Model.DTO.Appraisal.CoreValueComment> lst_comments = new List<Model.DTO.Appraisal.CoreValueComment>();
@@ -323,7 +327,8 @@ namespace eHR.PMS.Web.Controllers
                 AppraisalPerformanceCoaching = new Model.DTO.Appraisal.PerformanceCoaching() { Id = Convert.ToInt32(dict_comments["KPIID"]) },
                 CommentedTimestamp = DateTime.Now,
                 Commentor = new Model.DTO.Core.Employee() { Id = CurrentUser.Id },
-                Comments = dict_comments["Comments"].Trim(),
+                //Comments = dict_comments["Comments"].Trim(),
+                Comments = Lib.Utility.Common.ReplaceLineBreaksForDatabase(Uri.UnescapeDataString(dict_comments["Comments"].Trim())),
                 FormSaveOnly = true,
             };
             lst_comments.Add(obj_comment);
@@ -355,7 +360,7 @@ namespace eHR.PMS.Web.Controllers
                     AppraisalPerformanceCoaching = new Model.DTO.Appraisal.PerformanceCoaching() { Id = Convert.ToInt32(KPIID) },
                     CommentedTimestamp = DateTime.Now,
                     Commentor = new Model.DTO.Core.Employee() { Id = CurrentUser.Id },
-                    Comments = !string.IsNullOrEmpty(Comments) == true ? Comments.Trim() : null,
+                    Comments = !string.IsNullOrEmpty(Comments) == true ? Lib.Utility.Common.ReplaceLineBreaksForDatabase(Uri.UnescapeDataString(Comments.Trim())) : null,
                     FormSaveOnly = true,
                 };
                 lst_comments.Add(obj_comment);
@@ -435,7 +440,8 @@ namespace eHR.PMS.Web.Controllers
                 AppraisalCareerDevelopment = new Model.DTO.Appraisal.CareerDevelopment() { Id = Convert.ToInt32(dict_comments["KPIID"]) },
                 CommentedTimestamp = DateTime.Now,
                 Commentor = new Model.DTO.Core.Employee() { Id = CurrentUser.Id },
-                Comments = dict_comments["Comments"].Trim(),
+                //Comments = dict_comments["Comments"].Trim(),
+                Comments = Lib.Utility.Common.ReplaceLineBreaksForDatabase(Uri.UnescapeDataString(dict_comments["Comments"].Trim())),
                 FormSaveOnly = false,
             };
             lst_comments.Add(obj_comment);
@@ -475,7 +481,7 @@ namespace eHR.PMS.Web.Controllers
                 AppraisalCareerDevelopment = new Model.DTO.Appraisal.CareerDevelopment() { Id = Convert.ToInt32(KPIID) },
                 CommentedTimestamp = DateTime.Now,
                 Commentor = new Model.DTO.Core.Employee() { Id = CurrentUser.Id },
-                Comments = Comments.Trim(),
+                Comments = Lib.Utility.Common.ReplaceLineBreaksForDatabase(Uri.UnescapeDataString(Comments.Trim())),
                 FormSaveOnly = true,
             };
             lst_comments.Add(obj_comment);

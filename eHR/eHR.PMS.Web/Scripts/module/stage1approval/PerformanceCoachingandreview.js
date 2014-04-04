@@ -9,7 +9,7 @@ define("stage1approval.performance", ['jquery', 'bootstrap'], function ($) {
             url: $("#forRazorValue").attr("saveurl"),
             type: "POST",
             dataType: "Json",
-            data: { "KPIID": $("#forRazorValue").attr("performancecoachingitemid"), "Comments": $("#Comments").val() },
+            data: { "KPIID": $("#forRazorValue").attr("performancecoachingitemid"), "Comments": encodeURIComponent($("#Comments").val()) },
             //data: { "ApprID": $("#forRazorValue").attr("apprid"), "SectionID": $("#sectionlist li.active a").attr("sectionid"), "StrengthsArea": $("#StrengthsArea").val(), "ImprovementsArea": $("#ImprovementsArea").val() },
             beforeSend: function () {
                 //$("#stage1kpisave").button('loading');
@@ -94,7 +94,7 @@ define("stage1approval.performance", ['jquery', 'bootstrap'], function ($) {
         });
 
         $("#btn_next_section").click(function () {
-            // $('#SubmitInfoModal').modal();
+            $("#Comments").val(encodeURIComponent($.trim($("#Comments").val())));
             $("form").submit();
         });
 

@@ -6,7 +6,7 @@ define("stage1approval.kpi", ['jquery', 'bootstrap', 'bootstrap.select'], functi
     var savefunction = function () {
         var KPIArray = new Array();
         $.each($(".KPIID"), function () {
-            KPIArray.push(({ KpiId: $(this).val(), Comments: $(this).parent().parent().find(".CommentContent").val(), CommentID: $(this).parent().parent().find(".CommentID").val() }));
+            KPIArray.push(({ KpiId: $(this).val(), Comments: encodeURIComponent($(this).parent().parent().find(".CommentContent").val()), CommentID: $(this).parent().parent().find(".CommentID").val() }));
         });
         var url = $("#forRazorValue").attr("saveurl");
         $.ajax({
@@ -63,7 +63,7 @@ define("stage1approval.kpi", ['jquery', 'bootstrap', 'bootstrap.select'], functi
                             $('#spanclass2').css("visibility", "visible");
                             $("#modal-footer").show();
                             $('#PDFOpen').click(function () {
-                               window.location.href = $("#forRazorValue").attr("openPDFurl")+data;
+                                window.location.href = $("#forRazorValue").attr("openPDFurl") + data;
                             });
                         }
                     });
@@ -114,6 +114,10 @@ define("stage1approval.kpi", ['jquery', 'bootstrap', 'bootstrap.select'], functi
         });
 
         $("#btn_next_section").click(function () {
+            $.each($(".KPIID"), function () {
+                $(this).parent().parent().find(".CommentContent").val(encodeURIComponent($.trim($(this).parent().parent().find(".CommentContent").val())));
+            });
+
             $("form").submit();
         });
 

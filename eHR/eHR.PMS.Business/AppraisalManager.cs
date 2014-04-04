@@ -1513,15 +1513,17 @@ namespace eHR.PMS.Business
 
                 foreach (string str_result in result.Where(sec => !sec.Contains("NewKPI"))) 
                 {
-                    arr_values = str_result.Split(arr_seperator, StringSplitOptions.None);
+                    arr_values = Uri.UnescapeDataString(str_result).Split(arr_seperator, StringSplitOptions.None);
                     PMS.Model.DTO.Appraisal.KPI obj_kpi = new Model.DTO.Appraisal.KPI()
                     {
                         Id = Convert.ToInt32(arr_values[0]),
                         Appraisal = new Model.DTO.Appraisal.Appraisal() { Id = Convert.ToInt32(arr_values[1]) },
                         Section = new Model.DTO.Master.Section() { Id = Convert.ToInt32(arr_values[2]) },
                         Block = new Model.DTO.Master.Block() { Id = Convert.ToInt32(arr_values[3]) },
-                        Description = arr_values[4].Trim().TrimEnd('\r', '\n').Replace("\\n", Environment.NewLine),
-                        Target = arr_values[5].Trim().TrimEnd('\r', '\n').Replace("\\n", Environment.NewLine),
+                        //Description = arr_values[4].Trim().TrimEnd('\r', '\n').Replace("\\n", Environment.NewLine),
+                        //Target = arr_values[5].Trim().TrimEnd('\r', '\n').Replace("\\n", Environment.NewLine),
+                        Description = Lib.Utility.Common.ReplaceLineBreaksForDatabase(arr_values[4].Trim()),
+                        Target = Lib.Utility.Common.ReplaceLineBreaksForDatabase(arr_values[5].Trim()),
                         Priority = new Model.DTO.Master.Priority() { Id = Convert.ToInt32(arr_values[6]) }
                     };
                     lst_kpis.Add(obj_kpi);
@@ -1542,7 +1544,7 @@ namespace eHR.PMS.Business
 
                 foreach (string str_result in result.Where(sec => sec.Contains("NewKPI")))
                 {
-                    arr_values = str_result.Split(arr_seperator, StringSplitOptions.None);
+                    arr_values = Uri.UnescapeDataString(str_result).Split(arr_seperator, StringSplitOptions.None);
 
                     if (arr_values[4].Trim().Length != 0 && arr_values[5].Trim().Length != 0)
                     {
@@ -1551,8 +1553,10 @@ namespace eHR.PMS.Business
                             Appraisal = new Model.DTO.Appraisal.Appraisal() { Id = Convert.ToInt32(arr_values[1]) },
                             Section = new Model.DTO.Master.Section() { Id = Convert.ToInt32(arr_values[2]) },
                             Block = new Model.DTO.Master.Block() { Id = Convert.ToInt32(arr_values[3]) },
-                            Description = arr_values[4].Trim().TrimEnd('\r', '\n').Replace("\\n", Environment.NewLine),
-                            Target = arr_values[5].Trim().TrimEnd('\r', '\n').Replace("\\n", Environment.NewLine),
+                            //Description = arr_values[4].Trim().TrimEnd('\r', '\n').Replace("\\n", Environment.NewLine),
+                            //Target = arr_values[5].Trim().TrimEnd('\r', '\n').Replace("\\n", Environment.NewLine),
+                            Description = Lib.Utility.Common.ReplaceLineBreaksForDatabase(arr_values[4].Trim()),
+                            Target = Lib.Utility.Common.ReplaceLineBreaksForDatabase(arr_values[5].Trim()),
                             Priority = new Model.DTO.Master.Priority() { Id = Convert.ToInt32(arr_values[6]) }
                         };
                         lst_kpis.Add(obj_kpi);
@@ -1593,8 +1597,10 @@ namespace eHR.PMS.Business
                 foreach (string str_string in result)
                 {
                     string[] kparray = str_string.Replace("\"", "").Split(',');
-                    string tmp_comment = kparray[1].Split(':')[1].Replace("}]", "").Trim().TrimEnd('\r', '\n').Replace("\\n", Environment.NewLine).Trim();
-                    string tmp_comment_id = kparray[2].Split(':')[1].Replace("}]", "").Trim().TrimEnd('\r', '\n').Replace("\\n", Environment.NewLine).Trim();
+                    //string tmp_comment = kparray[1].Split(':')[1].Replace("}]", "").Trim().TrimEnd('\r', '\n').Replace("\\n", Environment.NewLine).Trim();
+                    string tmp_comment = Lib.Utility.Common.ReplaceLineBreaksForDatabase(kparray[1].Split(':')[1].Replace("}]", "").Trim());
+                    //string tmp_comment_id = Lib.Utility.Common.ReplaceLineBreaksForDatabase(kparray[2].Split(':')[1].Replace("}]", "").Trim());
+                    string tmp_comment_id = kparray[2].Split(':')[1].Trim();
                     if (!string.IsNullOrEmpty(tmp_comment)) 
                     {
                         PMS.Model.DTO.Appraisal.KPIComment obj_comment = new Model.DTO.Appraisal.KPIComment()
@@ -1638,10 +1644,8 @@ namespace eHR.PMS.Business
                     {
                         string[] kparray = str_string.Replace("\"", "").Split(',');
 
-                        string tmp_comment = kparray[1].Split(':')[1].Replace("}]", "").Trim().TrimEnd('\r', '\n').Replace("\\n", Environment.NewLine).Trim();
-
-
-                        string tmp_comment_id = kparray[0].Split(':')[1].Trim(); //.Replace("}]", "").Trim().TrimEnd('\r', '\n').Replace("\\n", Environment.NewLine).Trim();
+                        string tmp_comment = Lib.Utility.Common.ReplaceLineBreaksForDatabase(kparray[1].Split(':')[1].Replace("}]", "").Trim());
+                        string tmp_comment_id = kparray[0].Split(':')[1].Trim();
                         
                         
                         if (!string.IsNullOrEmpty(tmp_comment))
@@ -1698,7 +1702,7 @@ namespace eHR.PMS.Business
                         //{
                         if (!str_result.Contains("NewKPI"))
                         {
-                            arr_values = str_result.Split(arr_seperator, StringSplitOptions.None);
+                            arr_values = Uri.UnescapeDataString(str_result).Split(arr_seperator, StringSplitOptions.None);
                             PMS.Model.DTO.Appraisal.CoreValue obj_kpi = new Model.DTO.Appraisal.CoreValue()
                             {
                                 Id = Convert.ToInt32(arr_values[0]),
@@ -1706,7 +1710,8 @@ namespace eHR.PMS.Business
                                 Section = new Model.DTO.Master.Section() { Id = Convert.ToInt32(arr_values[2]) },
                                 Block = new Model.DTO.Master.Block() { Id = Convert.ToInt32(arr_values[3]) },
                                 //CoreValueCompetency = new Model.DTO.Master.CoreValueCompetency() { Id = Convert.ToInt32(arr_values[4]) },
-                                Target = arr_values[4].Trim().TrimEnd('\r', '\n').Replace("\\n", Environment.NewLine)
+                                //Target = arr_values[4].Trim().TrimEnd('\r', '\n').Replace("\\n", Environment.NewLine)
+                                Target = Lib.Utility.Common.ReplaceLineBreaksForDatabase(arr_values[4].Trim())
                             };
                             lst_core_values.Add(obj_kpi);
                         }
@@ -1732,14 +1737,15 @@ namespace eHR.PMS.Business
                     {
                         if (str_result.Contains("NewKPI")) 
                         {
-                            arr_values = str_result.Split(arr_seperator, StringSplitOptions.None);
+                            arr_values = Uri.UnescapeDataString(str_result).Split(arr_seperator, StringSplitOptions.None);
                             PMS.Model.DTO.Appraisal.CoreValue obj_kpi = new Model.DTO.Appraisal.CoreValue()
                             {
                                 Appraisal = new Model.DTO.Appraisal.Appraisal() { Id = Convert.ToInt32(arr_values[1]) },
                                 Section = new Model.DTO.Master.Section() { Id = Convert.ToInt32(arr_values[2]) },
                                 Block = new Model.DTO.Master.Block() { Id = Convert.ToInt32(arr_values[3]) },
                                 //CoreValueCompetency = new Model.DTO.Master.CoreValueCompetency() { Id = Convert.ToInt32(arr_values[4]) },
-                                Target = arr_values[4].Trim().TrimEnd('\r', '\n').Replace("\\n", Environment.NewLine)
+                                //Target = arr_values[4].Trim().TrimEnd('\r', '\n').Replace("\\n", Environment.NewLine)
+                                Target = Lib.Utility.Common.ReplaceLineBreaksForDatabase(arr_values[4].Trim())
                             };
                             lst_core_values.Add(obj_kpi);
                         }
@@ -1783,8 +1789,10 @@ namespace eHR.PMS.Business
                 {
                     Appraisal = new Model.DTO.Appraisal.Appraisal() { Id = Convert.ToInt32(form["AppraisalID"]) },
                     //Section = new Model.DTO.Master.Section() { Id = Convert.ToInt32(form["SectionID"]) },
-                    AreasOfImprovement = form["ImprovementsArea"].Trim().TrimEnd('\r', '\n').Replace("\\n", Environment.NewLine),
-                    AreasOfStrength = form["StrengthsArea"].Trim().TrimEnd('\r', '\n').Replace("\\n", Environment.NewLine)
+                    //AreasOfImprovement = form["ImprovementsArea"].Trim().TrimEnd('\r', '\n').Replace("\\n", Environment.NewLine),
+                    //AreasOfStrength = form["StrengthsArea"].Trim().TrimEnd('\r', '\n').Replace("\\n", Environment.NewLine)
+                    AreasOfImprovement = Lib.Utility.Common.ReplaceLineBreaksForDatabase(Uri.UnescapeDataString(form["ImprovementsArea"].Trim())),
+                    AreasOfStrength = Lib.Utility.Common.ReplaceLineBreaksForDatabase(Uri.UnescapeDataString(form["StrengthsArea"].Trim()))
                 };
             }
             return obj_performance_coaching;
@@ -1804,9 +1812,12 @@ namespace eHR.PMS.Business
                 {
                     Appraisal = new Model.DTO.Appraisal.Appraisal() { Id = Convert.ToInt32(form["AppraisalID"]) },
                     Section = new Model.DTO.Master.Section() { Id = Convert.ToInt32(form["SectionID"]) },
-                    ShortTermGoals = form["ShorttermCareerGoal"].Trim().TrimEnd('\r', '\n').Replace("\\n", Environment.NewLine),
-                    CareerPlans = form["DevelopmentPlan"].Trim().TrimEnd('\r', '\n').Replace("\\n", Environment.NewLine),
-                    LearningPlans = form["Learninganddevelopment"].Trim().TrimEnd('\r', '\n').Replace("\\n", Environment.NewLine)
+                    //ShortTermGoals = form["ShorttermCareerGoal"].Trim().TrimEnd('\r', '\n').Replace("\\n", Environment.NewLine),
+                    //CareerPlans = form["DevelopmentPlan"].Trim().TrimEnd('\r', '\n').Replace("\\n", Environment.NewLine),
+                    //LearningPlans = form["Learninganddevelopment"].Trim().TrimEnd('\r', '\n').Replace("\\n", Environment.NewLine)
+                    ShortTermGoals = Lib.Utility.Common.ReplaceLineBreaksForDatabase(Uri.UnescapeDataString(form["ShorttermCareerGoal"].Trim())),
+                    CareerPlans = Lib.Utility.Common.ReplaceLineBreaksForDatabase(Uri.UnescapeDataString(form["DevelopmentPlan"].Trim())),
+                    LearningPlans = Lib.Utility.Common.ReplaceLineBreaksForDatabase(Uri.UnescapeDataString(form["Learninganddevelopment"].Trim()))
                 };
             }
             return obj_career_development;

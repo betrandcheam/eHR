@@ -7,7 +7,8 @@ define("stage1.kpi", ['jquery', 'bootstrap', 'bootstrap.select'], function ($) {
     var savefunction = function () {
         var KPIArray = new Array();
         $.each($(".KPIforDatabase"), function () {
-            KPIArray.push($(this).val());
+            //KPIArray.push($(this).val());
+            KPIArray.push(encodeURIComponent($.trim($(this).val())));
         });
         $.ajax({
             url: $("#forRazorValue").attr("saveurl"),
@@ -67,7 +68,7 @@ define("stage1.kpi", ['jquery', 'bootstrap', 'bootstrap.select'], function ($) {
                             $('#spanclass2').css("visibility", "visible");
                             $("#modal-footer").show();
                             $('#PDFOpen').click(function () {
-                                window.location.href = $("#forRazorValue").attr("openPDFurl")+data;
+                                window.location.href = $("#forRazorValue").attr("openPDFurl") + data;
                             });
                         }
                     });
@@ -80,7 +81,8 @@ define("stage1.kpi", ['jquery', 'bootstrap', 'bootstrap.select'], function ($) {
     var autosavefunction = function () {
         var KPIArray = new Array();
         $.each($(".KPIforDatabase"), function () {
-            KPIArray.push($(this).val());
+            //KPIArray.push($(this).val());
+            KPIArray.push(encodeURIComponent($.trim($(this).val())));
         });
         $.ajax({
             url: $("#forRazorValue").attr("saveurl"),
@@ -219,14 +221,14 @@ define("stage1.kpi", ['jquery', 'bootstrap', 'bootstrap.select'], function ($) {
             }
 
             //editbuttonobject.parent().prev().prev().prev().prev().prev().text(nl2br(KPItextforEdit.val()));
-            editbuttonobject.parent().prev().prev().prev().prev().prev().html(nl2br(KPItextforEdit.val()));
+            editbuttonobject.parent().prev().prev().prev().prev().prev().html(nl2br($.trim(KPItextforEdit.val())));
             //editbuttonobject.parent().prev().prev().text(nl2br(PTtextforEdit.val()));
-            editbuttonobject.parent().prev().prev().html(nl2br(PTtextforEdit.val()));
+            editbuttonobject.parent().prev().prev().html(nl2br($.trim(PTtextforEdit.val())));
             editbuttonobject.parent().prev().prev().prev().prev().text(PrioritytextHidSelectforEdit.find(".filter-option").text());
             editbuttonobject.parent().prev().prev().prev().find(".PriorityId").val(PrioritytextforEdit.val());
             var oldhidValue = editbuttonobject.parent().prev().find('.KPIforDatabase').val();
             var tempArray = oldhidValue.split("^&*");
-            editbuttonobject.parent().prev().find('.KPIforDatabase').val([tempArray[0], '^&*', tempArray[1], '^&*', tempArray[2], '^&*', tempArray[3], '^&*', KPItextforEdit.val(), '^&*', PTtextforEdit.val(), '^&*', PrioritytextforEdit.val(), '^&*ONERECORDENDED'].join(''));
+            editbuttonobject.parent().prev().find('.KPIforDatabase').val([tempArray[0], '^&*', tempArray[1], '^&*', tempArray[2], '^&*', tempArray[3], '^&*', replaceAll("\"", "'", $.trim(KPItextforEdit.val())), '^&*', replaceAll("\"", "'", $.trim(PTtextforEdit.val())), '^&*', PrioritytextforEdit.val(), '^&*ONERECORDENDED'].join(''));
             editbuttonobject.removeClass("disabled");
             editbuttonobject.next().removeClass("disabled");
             UpdatedivforEdit.hide("slow");
@@ -278,8 +280,8 @@ define("stage1.kpi", ['jquery', 'bootstrap', 'bootstrap.select'], function ($) {
             var blockid = tablediv.attr("blockid");
             var apprid = $("#forRazorValue").attr("apprid");
             var sectionid = $("#sectionlist li.active a").attr("sectionid");
-            var html = ['<tr><td><input type="hidden" class="KPIID" value="NewKPI" /></td><td>', nl2br(KPItext.val()), '</td><td>', Prioritytext.find("option:selected").text(), '</td><td><input type="hidden" class="PriorityId" value="', Prioritytext.val(), '" /></td><td>', nl2br(PTtext.val()), '</td><td><input type="hidden" class="KPIforDatabase" name="KPIforDatabase', KPINumforThisSection, 'Block', blockid, '" value="NewKPI^&*', apprid, '^&*', sectionid, '^&*', blockid, '^&*', KPItext.val(), '^&*', PTtext.val(), '^&*', Prioritytext.val(), '^&*ONERECORDENDED"/></td><td align="right"><a href="javascript:void(0)" class="EditKPI btn btn-info btn-xs"><i class="glyphicon glyphicon-wrench"></i> Edit</a> <a href="javascript:void(0)" class="RemoveKPI btn btn-danger btn-xs"><i class="glyphicon glyphicon-trash"></i> Remove</a><a href="javascript:void(0)" class="ViewKpiComments btn btn-warning btn-xs disabled"><i class="glyphicon glyphicon-pencil"></i> View Comments</a> </td></tr>'].join('');
-
+            //var html = ['<tr><td><input type="hidden" class="KPIID" value="NewKPI" /></td><td>', nl2br(KPItext.val()), '</td><td>', Prioritytext.find("option:selected").text(), '</td><td><input type="hidden" class="PriorityId" value="', Prioritytext.val(), '" /></td><td>', nl2br(PTtext.val()), '</td><td><input type="hidden" class="KPIforDatabase" name="KPIforDatabase', KPINumforThisSection, 'Block', blockid, '" value="NewKPI^&*', apprid, '^&*', sectionid, '^&*', blockid, '^&*', KPItext.val(), '^&*', PTtext.val(), '^&*', Prioritytext.val(), '^&*ONERECORDENDED"/></td><td align="right"><a href="javascript:void(0)" class="EditKPI btn btn-info btn-xs"><i class="glyphicon glyphicon-wrench"></i> Edit</a> <a href="javascript:void(0)" class="RemoveKPI btn btn-danger btn-xs"><i class="glyphicon glyphicon-trash"></i> Remove</a><a href="javascript:void(0)" class="ViewKpiComments btn btn-warning btn-xs disabled"><i class="glyphicon glyphicon-pencil"></i> View Comments</a> </td></tr>'].join('');
+            var html = ['<tr><td><input type="hidden" class="KPIID" value="NewKPI" /></td><td>', nl2br($.trim(KPItext.val())), '</td><td>', Prioritytext.find("option:selected").text(), '</td><td><input type="hidden" class="PriorityId" value="', Prioritytext.val(), '" /></td><td>', nl2br($.trim(PTtext.val())), '</td><td><input type="hidden" class="KPIforDatabase" name="KPIforDatabase', KPINumforThisSection, 'Block', blockid, '" value="NewKPI^&*', apprid, '^&*', sectionid, '^&*', blockid, '^&*', replaceAll("\"", "'", $.trim(KPItext.val())), '^&*', replaceAll("\"", "'", $.trim(PTtext.val())), '^&*', Prioritytext.val(), '^&*ONERECORDENDED"/></td><td align="right"><a href="javascript:void(0)" class="EditKPI btn btn-info btn-xs"><i class="glyphicon glyphicon-wrench"></i> Edit</a> <a href="javascript:void(0)" class="RemoveKPI btn btn-danger btn-xs"><i class="glyphicon glyphicon-trash"></i> Remove</a><a href="javascript:void(0)" class="ViewKpiComments btn btn-warning btn-xs disabled"><i class="glyphicon glyphicon-pencil"></i> View Comments</a> </td></tr>'].join('');
             $(html).appendTo(KPItbody);
             if (tablediv.is(":hidden")) {
                 tablediv.show("slow");
@@ -304,6 +306,11 @@ define("stage1.kpi", ['jquery', 'bootstrap', 'bootstrap.select'], function ($) {
             });
             if (flag) {
                 //$('#SubmitInfoModal').modal();
+
+                $.each($(".KPIforDatabase"), function () {
+                    $(this).val(encodeURIComponent($.trim($(this).val())));
+                });
+
                 $("form").submit();
             }
             else {
@@ -348,4 +355,6 @@ define("stage1.kpi", ['jquery', 'bootstrap', 'bootstrap.select'], function ($) {
     function replaceAll(find, replace, str) {
         return str.replace(new RegExp(find, 'g'), replace);
     }
+
+
 });

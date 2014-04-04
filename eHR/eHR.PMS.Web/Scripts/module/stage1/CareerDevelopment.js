@@ -9,7 +9,7 @@ define("stage1.careerdevelopment", ['jquery', 'bootstrap'], function ($) {
             url: $("#forRazorValue").attr("saveurl"),
             type: "POST",
             dataType: "Json",
-            data: { "ApprID": $("#forRazorValue").attr("apprid"), "SectionID": $("#sectionlist li.active a").attr("sectionid"), "ShorttermCareerGoal": $("#ShorttermCareerGoal").val(), "DevelopmentPlan": $("#DevelopmentPlan").val(), "Learninganddevelopment": $("#Learninganddevelopment").val() },
+            data: { "ApprID": $("#forRazorValue").attr("apprid"), "SectionID": $("#sectionlist li.active a").attr("sectionid"), "ShorttermCareerGoal": encodeURIComponent($.trim($("#ShorttermCareerGoal").val())), "DevelopmentPlan": encodeURIComponent($.trim($("#DevelopmentPlan").val())), "Learninganddevelopment": encodeURIComponent($.trim($("#Learninganddevelopment").val())) },
             beforeSend: function () {
                 //$("#stage1kpisave").button('loading');
                 //$("#buttongroup").showLoading();
@@ -49,7 +49,7 @@ define("stage1.careerdevelopment", ['jquery', 'bootstrap'], function ($) {
                             $('#spanclass2').css("visibility", "visible");
                             $("#modal-footer").show();
                             $('#PDFOpen').click(function () {
-                               window.location.href = $("#forRazorValue").attr("openPDFurl")+data;
+                                window.location.href = $("#forRazorValue").attr("openPDFurl") + data;
                             });
                         }
                     });
@@ -131,7 +131,17 @@ define("stage1.careerdevelopment", ['jquery', 'bootstrap'], function ($) {
         });
         $("#ExportPDF").click(function () {
             pdfsave = true;
+
+
+
             savefunction();
+        });
+
+        $("#btn_submit_modal_ok").click(function () {
+            $("#ShorttermCareerGoal").val(encodeURIComponent($.trim($("#ShorttermCareerGoal").val())));
+            $("#DevelopmentPlan").val(encodeURIComponent($.trim($("#DevelopmentPlan").val())));
+            $("#Learninganddevelopment").val(encodeURIComponent($.trim($("#Learninganddevelopment").val())));
+            $("form").submit();
         });
     });
     //setInterval(autosavefunction, 300000); 
