@@ -50,7 +50,7 @@ define("stage1approval.performance", ['jquery', 'bootstrap'], function ($) {
                             $('#spanclass2').css("visibility", "visible");
                             $("#modal-footer").show();
                             $('#PDFOpen').click(function () {
-                               window.location.href = $("#forRazorValue").attr("openPDFurl")+data;
+                                window.location.href = $("#forRazorValue").attr("openPDFurl") + data;
                             });
                         }
                     });
@@ -100,8 +100,10 @@ define("stage1approval.performance", ['jquery', 'bootstrap'], function ($) {
         });
 
         $("#stage1kpisave").click(function () {
-            if ($(".alert-specialChar").length > 0)
+            if ($(".alert-specialChar").length > 0) {
+                $(this).button('reset');
                 return false;
+            }
             savefunction();
         });
         $("#btn_appraisal_cancel").click(function () {

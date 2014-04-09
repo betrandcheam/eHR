@@ -92,8 +92,10 @@ define("stage1approval.careerdevelopment", ['jquery', 'bootstrap'], function ($)
             $('#SubmitInfoModal').modal();
         });
         $("#stage1kpisave").click(function () {
-            if ($(".alert-specialChar").length > 0)
+            if ($(".alert-specialChar").length > 0) {
+                $(this).button('reset');
                 return false;
+            }
             pdfsave = false;
             savefunction();
         });
