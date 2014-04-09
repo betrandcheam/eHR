@@ -87,11 +87,16 @@ define("stage1.performance", ['jquery', 'bootstrap'], function ($) {
             $("#stage1kpisubmit").trigger('click');
         });
         $("#stage1kpisubmit").click(function () {
-            // $('#SubmitInfoModal').modal();
+            if ($(".alert-specialChar").length > 0)
+                return false;
             pdfsave = false;
             $("form").submit();
         });
-        $("#stage1kpisave").click(savefunction);
+        $("#stage1kpisave").click(function () {
+            if ($(".alert-specialChar").length > 0)
+                return false;
+            savefunction();
+        });
         $("#btn_appraisal_cancel").click(function () {
             $('#CancelInfoModal').modal();
         });

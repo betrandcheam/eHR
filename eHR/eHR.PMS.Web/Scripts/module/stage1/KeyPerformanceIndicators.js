@@ -219,7 +219,19 @@ define("stage1.kpi", ['jquery', 'bootstrap', 'bootstrap.select'], function ($) {
                 PTtextforEdit.addClass("warningclass");
                 return false;
             }
-
+            $(this).parent().parent().find(".alert-specialChar").remove();
+            var flag = true;
+            $.each($(this).parent().parent().find("textarea"), function () {
+                if (IsSpecialChar($(this).val())) {
+                    flag = false;
+                    $(this).addClass("warningclass");
+                    var html = '<div class="alert alert-danger alert-specialChar alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' + ErrorMessgae + '</div>';
+                    $(html).insertAfter($(this));
+                    return false;
+                }
+            });
+            if (!flag)
+                return false;
             //editbuttonobject.parent().prev().prev().prev().prev().prev().text(nl2br(KPItextforEdit.val()));
             editbuttonobject.parent().prev().prev().prev().prev().prev().html(nl2br($.trim(KPItextforEdit.val())));
             //editbuttonobject.parent().prev().prev().text(nl2br(PTtextforEdit.val()));
@@ -269,7 +281,19 @@ define("stage1.kpi", ['jquery', 'bootstrap', 'bootstrap.select'], function ($) {
                 PTtext.addClass("warningclass");
                 return false;
             }
-
+            $(this).parent().parent().find(".alert-specialChar").remove();
+            var flag = true;
+            $.each($(this).parent().parent().find("textarea"), function () {
+                if (IsSpecialChar($(this).val())) {
+                    flag = false;
+                    $(this).addClass("warningclass");
+                    var html = '<div class="alert alert-danger alert-specialChar alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' + ErrorMessgae + '</div>';
+                    $(html).insertAfter($(this));
+                    return false;
+                }
+            });
+            if (!flag)
+                return false;
             var Prioritytext = $(this).parent().parent().find(".selectpicker");
             var PrioritytextHidSelect = $(this).parent().parent().parent().find(".bootstrap-select");
             var Adddiv = $(this).parent();

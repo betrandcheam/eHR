@@ -91,6 +91,8 @@ define("stage2approval.careerdevelopment", ['jquery', 'bootstrap'], function ($)
             $('#SubmitInfoModal').modal();
         });
         $("#stage1kpisave").click(function () {
+            if ($(".alert-specialChar").length > 0)
+                return false;
             pdfsave = false;
             savefunction();
         });

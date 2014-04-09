@@ -1,4 +1,20 @@
-﻿require(['Config'], function () {
+﻿var specialCharArray = [":", ";", "/", "?", "@", "&", "=", "+", "$", "#"];
+var specialCharArrayString = ":;/?@&=+$#";
+var ErrorMessgae = "You are not allowed to enter more than 2 special characters (" + specialCharArrayString + ") in a continuous sequence.";
+function IsSpecialChar(str) {
+    for (var k=0;k<specialCharArray.length;k++) {
+        var index=str.indexOf(specialCharArray[k])
+        if (index > -1) {
+            var nextchar = str.substr(index + 1, 1);
+            var nextcharEx = str.substr(index + 2, 1);
+            if (specialCharArray.indexOf(nextchar) > -1 && specialCharArray.indexOf(nextcharEx) > -1)
+                return true;
+        }
+    }
+    return false;
+}
+
+require(['Config'], function () {
     require(['layout']);
 })
 , define("layout", ['jquery', 'bootstrap'], function ($) {
@@ -26,9 +42,15 @@
             }
         });
         $('input[type="text"]').blur(function () {
+            $(this).parent().find('.alert-specialChar').remove();
             $(this).removeClass("focusField").addClass("idleField");
             if ($.trim(this.value) == "" && this.defaultValue.indexOf("Type something here") == 0) {
                 this.value = (this.defaultValue ? this.defaultValue : '');
+            }
+            if (IsSpecialChar($(this).val())) {
+                $(this).addClass("warningclass");
+                var html = '<div class="alert alert-danger alert-specialChar alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' + ErrorMessgae + '</div>';
+                $(html).insertAfter($(this));
             }
         });
         $('textarea').focus(function () {
@@ -41,9 +63,15 @@
             }
         });
         $('textarea').blur(function () {
+            $(this).parent().find('.alert-specialChar').remove();
             $(this).removeClass("focusField").addClass("idleField");
             if ($.trim(this.value) == '' && this.defaultValue.indexOf("Type something here") == 0) {
                 this.value = (this.defaultValue ? this.defaultValue : '');
+            }
+            if (IsSpecialChar($(this).val())) {
+                $(this).addClass("warningclass");
+                var html = '<div class="alert alert-danger alert-specialChar alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' + ErrorMessgae + '</div>';
+                $(html).insertAfter($(this));
             }
         });
         $.each($('.panel-collapse'), function () {
@@ -65,31 +93,22 @@
             if (!isPopover && !inPopover) $(".ViewKpiComments").popover('destroy');
         });
 
-        /*if ($("#ExportPDF").length > 0) {
-            
-            $("#ExportPDF").click(function () {
-                savefunction();
-            $("#PDFModal").modal();
-            });
-            $("#PDFStart").click(function () {
-            $.ajax({
-            url: $("#forRazorValue").attr("exportPDFurl"),
-            type: "POST",
-            dataType: "Json",
-            success: function (data) {
-            $("#ExportPDF").button('reset');
-            window.open(data);
+        
+        /*$("#stage1kpisubmit").click(function (e) {
+            if ($(".alert-specialChar").length > 0) {
+                e.preventDefault();
+                window.event.cancelBubble = true;
+                e.stopPropagation();
+                return false;
             }
-            });
-            });
-            $("#PDFCancel").click(function () {
-            $("html,body").animate({ scrollTop: $("#stage1kpisave").offset().top + "px" });
-            $("#ExportPDF").button('reset');
-            });
-            //$("#ExportPDF").click(function () {
-            //window.location.href = $("#forRazorValue").attr("exportPDFurl");
-            //$("#ExportPDF").button('reset');
-            });
-        }*/
+        });
+        $("#stage1kpisave").click(function (e) {
+            if ($(".alert-specialChar").length > 0) {
+                e.preventDefault();
+                window.event.cancelBubble = true;
+                e.stopPropagation();
+                return false;
+            }
+        });*/
     });
 })

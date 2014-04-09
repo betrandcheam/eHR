@@ -87,6 +87,8 @@ define("stage2.careerdevelopment", ['jquery', 'bootstrap'], function ($) {
             $("#stage1kpisubmit").trigger('click');
         });
         $("#stage1kpisubmit").click(function () {
+            if ($(".alert-specialChar").length > 0)
+                return false;
             $(".form-control").removeClass("warningclass");
             var flag = true;
             var errorplace = new Object();
@@ -105,6 +107,8 @@ define("stage2.careerdevelopment", ['jquery', 'bootstrap'], function ($) {
             }
         });
         $("#stage1kpisave").click(function () {
+            if ($(".alert-specialChar").length > 0)
+                return false;
             $(".form-control").removeClass("warningclass");
             pdfsave = false;
             savefunction();

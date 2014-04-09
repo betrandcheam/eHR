@@ -213,6 +213,19 @@ define("stage1.corevalues", ['jquery', 'bootstrap', 'bootstrap.select'], functio
                 PTtextforEdit.addClass("warningclass");
                 return false;
             }
+            $(this).parent().parent().find(".alert-specialChar").remove();
+            var flag = true;
+            $.each($(this).parent().parent().find("textarea"), function () {
+                if (IsSpecialChar($(this).val())) {
+                    flag = false;
+                    $(this).addClass("warningclass");
+                    var html = '<div class="alert alert-danger alert-specialChar alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' + ErrorMessgae + '</div>';
+                    $(html).insertAfter($(this));
+                    return false;
+                }
+            });
+            if (!flag)
+                return false;
             //editbuttonobject.parent().prev().prev().prev().text(KPItextSelectForEdit.find("option:selected").text());
             //editbuttonobject.parent().prev().prev().prev().prev().text(KPItextSelect.val());
             //editbuttonobject.parent().prev().prev().text(PTtextforEdit.val());
@@ -254,7 +267,19 @@ define("stage1.corevalues", ['jquery', 'bootstrap', 'bootstrap.select'], functio
                 PTtext.addClass("warningclass");
                 return false;
             }
-
+            $(this).parent().parent().find(".alert-specialChar").remove();
+            var flag = true;
+            $.each($(this).parent().parent().find("textarea"), function () {
+                if (IsSpecialChar($(this).val())) {
+                    flag = false;
+                    $(this).addClass("warningclass");
+                    var html = '<div class="alert alert-danger alert-specialChar alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' + ErrorMessgae + '</div>';
+                    $(html).insertAfter($(this));
+                    return false;
+                }
+            });
+            if (!flag)
+                return false;
             var Adddiv = $(this).parent();
             var Updatediv = $(this).parent().next();
             var KPINumforThisSection = $(this).parent().parent().find(".KPItbody tr").length;
@@ -275,7 +300,6 @@ define("stage1.corevalues", ['jquery', 'bootstrap', 'bootstrap.select'], functio
             PTtext.val("");
         });
         $("#stage1kpisubmit").click(function () {
-            //$('#SubmitInfoModal').modal();
             pdfsave = false;
 
             $.each($(".KPIforDatabase"), function () {
