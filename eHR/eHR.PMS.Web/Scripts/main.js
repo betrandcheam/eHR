@@ -1,46 +1,8 @@
-﻿var specialCharArray = [":", ";", "/", "?", "@", "&", "=", "+", "$", "#"];
-var specialCharArrayString = ":;/?@&=+$#";
-var ErrorMessgae = "You are not allowed to enter more than 2 special characters (" + specialCharArrayString + ") in a continuous sequence.";
-if (!Array.prototype.indexOf)
-{
-  Array.prototype.indexOf = function(elt /*, from*/)
-  {
-    var len = this.length >>> 0;
-
-    var from = Number(arguments[1]) || 0;
-    from = (from < 0)
-         ? Math.ceil(from)
-         : Math.floor(from);
-    if (from < 0)
-      from += len;
-
-    for (; from < len; from++)
-    {
-      if (from in this &&
-          this[from] === elt)
-        return from;
-    }
-    return -1;
-  };
-}
-
-function IsSpecialChar(str) {
-    for (var k=0;k<specialCharArray.length;k++) {
-        var index=str.indexOf(specialCharArray[k])
-        if (index > -1) {
-            var nextchar = str.substr(index + 1, 1);
-            var nextcharEx = str.substr(index + 2, 1);
-            if (specialCharArray.indexOf(nextchar) > -1 && specialCharArray.indexOf(nextcharEx) > -1)
-                return true;
-        }
-    }
-    return false;
-}
-
+﻿
 require(['Config'], function () {
     require(['layout']);
 })
-, define("layout", ['jquery', 'bootstrap'], function ($) {
+, define("layout", ['jquery', 'Common', 'bootstrap'], function ($,common) {
     var stop = $(".navbar").offset().top;
     $(window).scroll(function () {
         /*if ($(this).scrollTop() > (stop + $(".navbar").height()) && $(".navbar-static-top").length > 0) {
@@ -70,9 +32,9 @@ require(['Config'], function () {
             if ($.trim(this.value) == "" && this.defaultValue.indexOf("Type something here") == 0) {
                 this.value = (this.defaultValue ? this.defaultValue : '');
             }
-            if (IsSpecialChar($(this).val())) {
+            if (common.IsSpecialChar($(this).val())) {
                 $(this).addClass("warningclass");
-                var html = '<div class="alert alert-danger alert-specialChar alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' + ErrorMessgae + '</div>';
+                var html = '<div class="alert alert-danger alert-specialChar alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' + common.GetspecialCharErrorMessage() + '</div>';
                 $(html).insertAfter($(this));
             }
         });
@@ -91,9 +53,9 @@ require(['Config'], function () {
             if ($.trim(this.value) == '' && this.defaultValue.indexOf("Type something here") == 0) {
                 this.value = (this.defaultValue ? this.defaultValue : '');
             }
-            if (IsSpecialChar($(this).val())) {
+            if (common.IsSpecialChar($(this).val())) {
                 $(this).addClass("warningclass");
-                var html = '<div class="alert alert-danger alert-specialChar alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' + ErrorMessgae + '</div>';
+                var html = '<div class="alert alert-danger alert-specialChar alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' + common.GetspecialCharErrorMessage() + '</div>';
                 $(html).insertAfter($(this));
             }
         });

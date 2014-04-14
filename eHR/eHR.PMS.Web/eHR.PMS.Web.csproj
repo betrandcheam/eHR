@@ -152,6 +152,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resource.resx</DependentUpon>
     </Compile>
+    <Content Include="Scripts\Common.js" />
     <Content Include="Scripts\module\stage1approval\CareerDevelopment.js" />
     <Content Include="Scripts\module\stage1approval\CoreValues.js" />
     <Content Include="Scripts\module\stage1approval\KeyPerformanceIndicators.js" />

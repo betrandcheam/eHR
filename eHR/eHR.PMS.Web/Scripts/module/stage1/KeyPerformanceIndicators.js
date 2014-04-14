@@ -222,10 +222,10 @@ define("stage1.kpi", ['jquery', 'bootstrap', 'bootstrap.select'], function ($) {
             $(this).parent().parent().find(".alert-specialChar").remove();
             var flag = true;
             $.each($(this).parent().parent().find("textarea"), function () {
-                if (IsSpecialChar($(this).val())) {
+                if (common.IsSpecialChar($(this).val())) {
                     flag = false;
                     $(this).addClass("warningclass");
-                    var html = '<div class="alert alert-danger alert-specialChar alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' + ErrorMessgae + '</div>';
+                    var html = '<div class="alert alert-danger alert-specialChar alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' + common.GetspecialCharErrorMessage() + '</div>';
                     $(html).insertAfter($(this));
                     return false;
                 }
@@ -284,10 +284,10 @@ define("stage1.kpi", ['jquery', 'bootstrap', 'bootstrap.select'], function ($) {
             $(this).parent().parent().find(".alert-specialChar").remove();
             var flag = true;
             $.each($(this).parent().parent().find("textarea"), function () {
-                if (IsSpecialChar($(this).val())) {
+                if (common.IsSpecialChar($(this).val())) {
                     flag = false;
                     $(this).addClass("warningclass");
-                    var html = '<div class="alert alert-danger alert-specialChar alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' + ErrorMessgae + '</div>';
+                    var html = '<div class="alert alert-danger alert-specialChar alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' + common.GetspecialCharErrorMessage() + '</div>';
                     $(html).insertAfter($(this));
                     return false;
                 }
