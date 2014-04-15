@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Configuration;
+using System.Text.RegularExpressions;
 //using System.Text.RegularExpressions;
 
 namespace eHR.PMS.Business
@@ -164,7 +165,7 @@ namespace eHR.PMS.Business
                         obj_appraisal.Status = new Model.DTO.Master.Status() { Id = Model.PMSConstants.STATUS_ID_NEW };
                         lst_all_tasks.Add(CreateTasksForCycleStageChange(obj_appraisal));
                         lst_appraisals_to_update.Add(obj_appraisal);
-                        if (!string.IsNullOrEmpty(obj_appraisal.Employee.OfficeEmailAddress))
+                        if (!string.IsNullOrEmpty(obj_appraisal.Employee.OfficeEmailAddress) && isValidEmail(obj_appraisal.Employee.OfficeEmailAddress))
                         {
                             lst_email_messages.Add(GenerateEmailMessageForCycleStageStart(obj_appraisal));
                         }
@@ -218,7 +219,7 @@ namespace eHR.PMS.Business
                             obj_appraisal.Status = new Model.DTO.Master.Status() { Id = Model.PMSConstants.STATUS_ID_NEW };
                             lst_all_tasks.Add(CreateTasksForCycleStageChange(obj_appraisal));
                             lst_appraisals_to_update.Add(obj_appraisal);
-                            if (!string.IsNullOrEmpty(obj_appraisal.Employee.OfficeEmailAddress))
+                            if (!string.IsNullOrEmpty(obj_appraisal.Employee.OfficeEmailAddress) && isValidEmail(obj_appraisal.Employee.OfficeEmailAddress))
                             {
                                 lst_email_messages.Add(GenerateEmailMessageForCycleStageStart(obj_appraisal));
                             }
@@ -868,9 +869,24 @@ namespace eHR.PMS.Business
                 sb_body.Append("<p><span style='font-style:italic; font-size:small;'>This is a computer generated email. Please do not reply.</span></p>");
 
                 obj_email_message.Body = sb_body.ToString();
-                obj_email_message.To.Add(appraisal.Employee.OfficeEmailAddress);
+                if (!string.IsNullOrEmpty(appraisal.Employee.OfficeEmailAddress) && isValidEmail(appraisal.Employee.OfficeEmailAddress))
+                {
+                    obj_email_message.To.Add(appraisal.Employee.OfficeEmailAddress);
+                }
             }
             return obj_email_message;
+        }
+
+        public static bool isValidEmail(string inputEmail)
+        {
+            string strRegex = @"^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}" +
+                  @"\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\" +
+                  @".)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$";
+            Regex re = new Regex(strRegex);
+            if (re.IsMatch(inputEmail))
+                return (true);
+            else
+                return (false);
         }
 
         private static System.Net.Mail.MailMessage GenerateEmailMessageForAppraisalSubmission(Model.DTO.Appraisal.Appraisal appraisal)
