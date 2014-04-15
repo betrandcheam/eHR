@@ -1,7 +1,7 @@
 ﻿require(['Config'], function () {
     require(['stage1.corevalues']);
 }),
-define("stage1.corevalues", ['jquery', 'bootstrap', 'bootstrap.select'], function ($) {
+define("stage1.corevalues", ['jquery', 'Common','bootstrap', 'bootstrap.select'], function ($,common) {
     var message = $("#forRazorValue").attr("message");
     var pdfsave = false;
     var savefunction = function () {

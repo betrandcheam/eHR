@@ -1,7 +1,7 @@
 ﻿require(['Config'], function () {
     require(['stage1.kpi']);
 }),
-define("stage1.kpi", ['jquery', 'bootstrap', 'bootstrap.select'], function ($) {
+define("stage1.kpi", ['jquery', 'Common','bootstrap', 'bootstrap.select'], function ($,common) {
     var message = $("#forRazorValue").attr("message");
     var pdfsave = false;
     var savefunction = function () {
