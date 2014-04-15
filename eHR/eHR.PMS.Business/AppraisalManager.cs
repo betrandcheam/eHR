@@ -165,7 +165,7 @@ namespace eHR.PMS.Business
                         obj_appraisal.Status = new Model.DTO.Master.Status() { Id = Model.PMSConstants.STATUS_ID_NEW };
                         lst_all_tasks.Add(CreateTasksForCycleStageChange(obj_appraisal));
                         lst_appraisals_to_update.Add(obj_appraisal);
-                        if (!string.IsNullOrEmpty(obj_appraisal.Employee.OfficeEmailAddress) && isValidEmail(obj_appraisal.Employee.OfficeEmailAddress))
+                        if (!string.IsNullOrEmpty(obj_appraisal.Employee.OfficeEmailAddress) && Lib.Utility.Common.IsValidEmail(obj_appraisal.Employee.OfficeEmailAddress))
                         {
                             lst_email_messages.Add(GenerateEmailMessageForCycleStageStart(obj_appraisal));
                         }
@@ -219,7 +219,7 @@ namespace eHR.PMS.Business
                             obj_appraisal.Status = new Model.DTO.Master.Status() { Id = Model.PMSConstants.STATUS_ID_NEW };
                             lst_all_tasks.Add(CreateTasksForCycleStageChange(obj_appraisal));
                             lst_appraisals_to_update.Add(obj_appraisal);
-                            if (!string.IsNullOrEmpty(obj_appraisal.Employee.OfficeEmailAddress) && isValidEmail(obj_appraisal.Employee.OfficeEmailAddress))
+                            if (!string.IsNullOrEmpty(obj_appraisal.Employee.OfficeEmailAddress) && Lib.Utility.Common.IsValidEmail(obj_appraisal.Employee.OfficeEmailAddress))
                             {
                                 lst_email_messages.Add(GenerateEmailMessageForCycleStageStart(obj_appraisal));
                             }
@@ -857,7 +857,7 @@ namespace eHR.PMS.Business
                 sb_body.Append("<p>FY");
                 sb_body.Append(Convert.ToDateTime(obj_appraisal_start_stage.StartDate).ToString("yy"));
                 sb_body.Append("/");
-                sb_body.Append(Convert.ToDateTime(obj_appraisal_start_stage.EndDate).ToString("yy"));
+                sb_body.Append(Convert.ToDateTime(obj_appraisal_end_stage.EndDate).ToString("yy"));
                 sb_body.Append(" Performance Management ");
                 sb_body.Append(appraisal.Stage.Name);
                 sb_body.Append(" Phase starts today. The Online Performance Management System is now open for employee input in the <a style='font-style:italic;' href='");
@@ -869,7 +869,7 @@ namespace eHR.PMS.Business
                 sb_body.Append("<p><span style='font-style:italic; font-size:small;'>This is a computer generated email. Please do not reply.</span></p>");
 
                 obj_email_message.Body = sb_body.ToString();
-                if (!string.IsNullOrEmpty(appraisal.Employee.OfficeEmailAddress) && isValidEmail(appraisal.Employee.OfficeEmailAddress))
+                if (!string.IsNullOrEmpty(appraisal.Employee.OfficeEmailAddress) && Lib.Utility.Common.IsValidEmail(appraisal.Employee.OfficeEmailAddress))
                 {
                     obj_email_message.To.Add(appraisal.Employee.OfficeEmailAddress);
                 }
@@ -877,17 +877,6 @@ namespace eHR.PMS.Business
             return obj_email_message;
         }
 
-        public static bool isValidEmail(string inputEmail)
-        {
-            string strRegex = @"^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}" +
-                  @"\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\" +
-                  @".)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$";
-            Regex re = new Regex(strRegex);
-            if (re.IsMatch(inputEmail))
-                return (true);
-            else
-                return (false);
-        }
 
         private static System.Net.Mail.MailMessage GenerateEmailMessageForAppraisalSubmission(Model.DTO.Appraisal.Appraisal appraisal)
         {
@@ -1034,7 +1023,7 @@ namespace eHR.PMS.Business
              sb_body.Append(newMember.ApprovalLevel.HasValue ? newMember.ApprovalLevel.Value.ToString() : "");
              sb_body.Append(" Manager for ");
              sb_body.Append(appr.Employee.PreferredName);
-             sb_body.Append("’s appraisal. You can now process his/her appraisal form via the <a style='font-style:italic;' href='http://ssgdv19/eHR.PMS.Web/'> eHR Portal </a> </p>");
+             sb_body.Append("’s appraisal. You can now process his/her appraisal form via the <a style='font-style:italic;' href='"+ConfigurationManager.AppSettings["pmsweburl"]+"'> eHR Portal </a> </p>");
              sb_body.Append("<p><span style='font-style:italic; font-size:small;'>This is a computer generated email. Please do not reply.</span></p>");            
             obj_email_message.Body = sb_body.ToString();
             //if (newMember.OfficeEmailAddress != null && IsValidEmail(newMember.OfficeEmailAddress))
@@ -1063,7 +1052,7 @@ namespace eHR.PMS.Business
              sb_body.Append(newMember.PreferredName);
              sb_body.Append(",</p><p>   ");
              sb_body.Append(appr.Employee.PreferredName);
-             sb_body.Append(" has selected you as the Reviewer for his/her appraisal. You can now view his/her appraisal form via the<a style='font-style:italic;' href='http://ssgdv19/eHR.PMS.Web/'> eHR Portal </a> </p>");
+             sb_body.Append(" has selected you as the Reviewer for his/her appraisal. You can now view his/her appraisal form via the<a style='font-style:italic;' href='"+ConfigurationManager.AppSettings["pmsweburl"]+"'> eHR Portal </a> </p>");
              sb_body.Append("<p><span style='font-style:italic; font-size:small;'>This is a computer generated email. Please do not reply.</span></p>");            
             obj_email_message.Body = sb_body.ToString();
             //if (newMember.OfficeEmailAddress != null && IsValidEmail(newMember.OfficeEmailAddress))
@@ -1093,7 +1082,7 @@ namespace eHR.PMS.Business
                     sb_body.Append(newMember.PreferredName);
                     sb_body.Append(",</p><p>   You are now the Senior Management Team member for ");
                     sb_body.Append(appr.Employee.PreferredName);
-                    sb_body.Append(". You can now process his/her appraisal form via the<a style='font-style:italic;' href='http://ssgdv19/eHR.PMS.Web/'> eHR Portal </a> </p>");
+                    sb_body.Append(". You can now process his/her appraisal form via the<a style='font-style:italic;' href='"+ConfigurationManager.AppSettings["pmsweburl"]+"'> eHR Portal </a> </p>");
                     sb_body.Append("<p><span style='font-style:italic; font-size:small;'>This is a computer generated email. Please do not reply.</span></p>");            
             obj_email_message.Body = sb_body.ToString();
             //if (newMember.OfficeEmailAddress != null && IsValidEmail(newMember.OfficeEmailAddress))

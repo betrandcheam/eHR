@@ -8,7 +8,7 @@ define("home.index", ['jquery', 'bootstrap'], function ($) {
             $('#RedirectModal').modal();
     });
     var refreshfunction = function () {
-        window.location.href = "";
+        window.location.href = $("#forRazorValue").attr("rooturl");
     }
     setInterval(refreshfunction, parseInt($("#forRazorValue").attr("refreshinterval")));
 });

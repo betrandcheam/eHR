@@ -187,7 +187,7 @@ namespace eHR.PMS.Job
                             obj_appraisal.Status = new Model.DTO.Master.Status() { Id = Model.PMSConstants.STATUS_ID_NEW };
                             obj_appraisal.Stage = Model.Mappers.PMSMapper.MapAppraisalStageDTOToStageDTO(obj_appraisal.AppraisalStages.Where(rec => rec.StageId == Model.PMSConstants.STAGE_ID_PROGRESS_REVIEW).SingleOrDefault());
 
-                            if (!string.IsNullOrEmpty(obj_appraisal.Employee.OfficeEmailAddress) && isValidEmail(obj_appraisal.Employee.OfficeEmailAddress))
+                            if (!string.IsNullOrEmpty(obj_appraisal.Employee.OfficeEmailAddress) && Lib.Utility.Common.IsValidEmail(obj_appraisal.Employee.OfficeEmailAddress))
                             {
                                 lst_email_messages.Add(Business.AppraisalManager.GenerateEmailMessageForCycleStageStart(obj_appraisal));
                             }
@@ -206,7 +206,7 @@ namespace eHR.PMS.Job
                             obj_appraisal.Status = new Model.DTO.Master.Status() { Id = Model.PMSConstants.STATUS_ID_NEW };
                             obj_appraisal.Stage = new Model.DTO.Master.Stage() { Id = Model.PMSConstants.STAGE_ID_GOAL_SETTING };
 
-                            if (!string.IsNullOrEmpty(obj_appraisal.Employee.OfficeEmailAddress) && isValidEmail(obj_appraisal.Employee.OfficeEmailAddress))
+                            if (!string.IsNullOrEmpty(obj_appraisal.Employee.OfficeEmailAddress) && Lib.Utility.Common.IsValidEmail(obj_appraisal.Employee.OfficeEmailAddress))
                             {
                                 lst_email_messages.Add(Business.AppraisalManager.GenerateEmailMessageForCycleStageStart(obj_appraisal));
                             }
@@ -223,17 +223,7 @@ namespace eHR.PMS.Job
             }
         }
 
-        public static bool isValidEmail(string inputEmail)
-        {
-            string strRegex = @"^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}" +
-                  @"\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\" +
-                  @".)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$";
-            Regex re = new Regex(strRegex);
-            if (re.IsMatch(inputEmail))
-                return (true);
-            else
-                return (false);
-        }
+       
         private static void ManageCycleInProgressReviewStage(Model.DTO.Cycle.Cycle cycle, DateTime runDate)
         { }
     }
