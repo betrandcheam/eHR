@@ -148,7 +148,7 @@ define("stage1.corevalues", ['jquery', 'Common','bootstrap', 'bootstrap.select']
             //KPItextHidSelectforEdit.find('.filter-option').text($(this).parent().prev().prev().prev().text());
             //KPItextSelectEdit.val($(this).parent().prev().prev().prev().prev().text());
             //PTtextforEdit.val($(this).parent().prev().prev().text());
-            PTtextforEdit.val(replaceAll("<BR checkedByCssHelper=\"true\">", "\n", $(this).parent().prev().prev().html()));
+            PTtextforEdit.val(ReplaceEncode(br2nl(replaceAll("<BR checkedByCssHelper=\"true\">", "\n", $(this).parent().prev().prev().html()))));
             $(this).addClass("disabled");
             $(this).next().addClass("disabled");
             AdddivforEdit.hide("slow");
@@ -328,13 +328,34 @@ define("stage1.corevalues", ['jquery', 'Common','bootstrap', 'bootstrap.select']
         setInterval(autosavefunction, parseInt($("#forRazorValue").attr("autosaveinterval")));
     }
 
-    function nl2br(str, is_xhtml) {
+    /*function nl2br(str, is_xhtml) {
         var breakTag = (is_xhtml || typeof is_xhtml === 'undefined') ? '<br />' : '<br>';
         return (str + '').replace(/([^>\r\n]?)(\r\n|\n\r|\r|\n)/g, '$1' + breakTag + '$2');
     }
 
     function replaceAll(find, replace, str) {
         return str.replace(new RegExp(find, 'g'), replace);
+    }*/
+    function nl2br(str, is_xhtml) {
+        //var breakTag = (is_xhtml || typeof is_xhtml === 'undefined') ? '<br />' : '<br>';
+        // return (str + '').replace(/([^>\r\n]?)(\r\n|\n\r|\r|\n)/g, '$1' + breakTag + '$2');
+        return str.replace(/\n/g, '<br />');
+
+    }
+
+    function replaceAll(find, replace, str) {
+        return str.replace(new RegExp(find, 'g'), replace);
+    }
+
+    function br2nl(str) {
+        return str.replace(/<br\s*\/?>/mg, "\n");
+    }
+
+    function ReplaceEncode(str) {
+        var div = document.createElement('div');
+        div.innerHTML = str;
+        var decoded = div.firstChild.nodeValue;
+        return decoded;
     }
 
 });

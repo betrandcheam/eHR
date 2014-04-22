@@ -1,7 +1,7 @@
 ﻿require(['Config'], function () {
     require(['stage1.kpi']);
 }),
-define("stage1.kpi", ['jquery', 'Common', 'bootstrap', 'bootstrap.select'], function ($,common) {
+define("stage1.kpi", ['jquery', 'Common', 'bootstrap', 'bootstrap.select'], function ($, common) {
     var message = $("#forRazorValue").attr("message");
     var pdfsave = false;
     var savefunction = function () {
@@ -146,8 +146,13 @@ define("stage1.kpi", ['jquery', 'Common', 'bootstrap', 'bootstrap.select'], func
             UpdatedivforEdit = div.find(".Updatediv");
             //KPItextforEdit.val($(this).parent().prev().prev().prev().prev().prev().text());
             //PTtextforEdit.val($(this).parent().prev().prev().text());
-            KPItextforEdit.val(replaceAll("<BR checkedByCssHelper=\"true\">", "\n", $(this).parent().prev().prev().prev().prev().prev().html()));
-            PTtextforEdit.val(replaceAll("<BR checkedByCssHelper=\"true\">", "\n", $(this).parent().prev().prev().html()));
+
+
+            KPItextforEdit.val(ReplaceEncode(br2nl(replaceAll("<BR checkedByCssHelper=\"true\">", "\n", $(this).parent().prev().prev().prev().prev().prev().html()))));
+            //var temp = replaceAll("<BR checkedByCssHelper=\"true\">", "\n", $(this).parent().prev().prev().html());
+            //temp = br2nl(replaceAll("<BR checkedByCssHelper=\"true\">", "\n", $(this).parent().prev().prev().html()));
+            //temp = ReplaceEncode(temp);
+            PTtextforEdit.val(ReplaceEncode(br2nl(replaceAll("<BR checkedByCssHelper=\"true\">", "\n", $(this).parent().prev().prev().html()))));
 
             PrioritytextHidSelectforEdit.find('.filter-option').text($(this).parent().prev().prev().prev().prev().text());
             PrioritytextforEdit.val($(this).parent().prev().prev().prev().find(".PriorityId").val());
@@ -235,6 +240,7 @@ define("stage1.kpi", ['jquery', 'Common', 'bootstrap', 'bootstrap.select'], func
             //editbuttonobject.parent().prev().prev().prev().prev().prev().text(nl2br(KPItextforEdit.val()));
             editbuttonobject.parent().prev().prev().prev().prev().prev().html(nl2br($.trim(KPItextforEdit.val())));
             //editbuttonobject.parent().prev().prev().text(nl2br(PTtextforEdit.val()));
+            //var temp = nl2br($.trim(PTtextforEdit.val()));
             editbuttonobject.parent().prev().prev().html(nl2br($.trim(PTtextforEdit.val())));
             editbuttonobject.parent().prev().prev().prev().prev().text(PrioritytextHidSelectforEdit.find(".filter-option").text());
             editbuttonobject.parent().prev().prev().prev().find(".PriorityId").val(PrioritytextforEdit.val());
@@ -372,13 +378,24 @@ define("stage1.kpi", ['jquery', 'Common', 'bootstrap', 'bootstrap.select'], func
     }
 
     function nl2br(str, is_xhtml) {
-        var breakTag = (is_xhtml || typeof is_xhtml === 'undefined') ? '<br />' : '<br>';
-        return (str + '').replace(/([^>\r\n]?)(\r\n|\n\r|\r|\n)/g, '$1' + breakTag + '$2');
+        //var breakTag = (is_xhtml || typeof is_xhtml === 'undefined') ? '<br />' : '<br>';
+        // return (str + '').replace(/([^>\r\n]?)(\r\n|\n\r|\r|\n)/g, '$1' + breakTag + '$2');
+        return str.replace(/\n/g, '<br />');
+
     }
 
     function replaceAll(find, replace, str) {
         return str.replace(new RegExp(find, 'g'), replace);
     }
 
+    function br2nl(str) {
+        return str.replace(/<br\s*\/?>/mg, "\n");
+    }
 
+    function ReplaceEncode(str) {
+        var div = document.createElement('div');
+        div.innerHTML = str;
+        var decoded = div.firstChild.nodeValue;
+        return decoded;
+    }
 });
