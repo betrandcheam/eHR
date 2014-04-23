@@ -653,9 +653,9 @@ namespace eHR.PMS.Web.Controllers
                    cell.BackgroundColor = new Color(91, 192, 222);
                    careerDevelopmentTab.AddCell(cell);
                    StringBuilder careerDevelopmentcommentsParagraph = new StringBuilder();
-                   if (!eHR.PMS.Lib.Utility.Common.IsNullOrEmptyList(appr.PerformanceCoachings) && !eHR.PMS.Lib.Utility.Common.IsNullOrEmptyList(appr.PerformanceCoachings.First().Comments))
+                   if (!eHR.PMS.Lib.Utility.Common.IsNullOrEmptyList(appr.CareerDevelopments) && !eHR.PMS.Lib.Utility.Common.IsNullOrEmptyList(appr.CareerDevelopments.First().Comments))
                    {
-                       foreach (Model.DTO.Appraisal.PerformanceCoachingComment kc in appr.PerformanceCoachings.First().Comments.Where(s => s.FormSaveOnly == false))
+                       foreach (Model.DTO.Appraisal.CareerDevelopmentComment kc in appr.CareerDevelopments.First().Comments.Where(s => s.FormSaveOnly == false))
                        {
                            careerDevelopmentcommentsParagraph.Append(kc.CommentedTimestamp + " , " + kc.Commentor.PreferredName + " said:\n");
                            careerDevelopmentcommentsParagraph.Append("     " + kc.Comments.Replace(Environment.NewLine, "\n") + "\n");
