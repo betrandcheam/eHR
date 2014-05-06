@@ -14,6 +14,7 @@ namespace eHR.PMS.Model.DTO.Appraisal
         private string str_description;
         private string str_target;
         private PMS.Model.DTO.Master.Priority obj_priority;
+        private string str_progress;
         private int? int_self_score;
         private int? int_level_1_score;
         private int? int_level_2_score;
@@ -52,6 +53,12 @@ namespace eHR.PMS.Model.DTO.Appraisal
             set { str_description = value; }
         }
 
+        public string Progress
+        {
+            get { return str_progress; }
+            set { str_progress = value; }
+        }
+        
         public string Target
         {
             get { return str_target; }

@@ -330,6 +330,7 @@ namespace eHR.PMS.Model.Mappers
                 Description = entity.DESCRIPTION,
                 Target = entity.TARGET,
                 Priority = MapPriorityEntityToDTO(entity.PMS_MST_PRIORITY),
+                Progress = entity.PROGRESS_UPDATE,
                 SelfScore = entity.SELF_SCORE,
                 Level1Score = entity.LEVEL_1_SCORE,
                 Level2Score = entity.LEVEL_2_SCORE,
@@ -438,6 +439,7 @@ namespace eHR.PMS.Model.Mappers
                 Block = MapBlockEntityToDTO(entity.PMS_MST_BLOCK),
                 //CoreValueCompetency = MapCoreValueCompetencyEntityToDTO(entity.PMS_MST_CORE_VALUE_COMPETENCY),
                 Target = entity.TARGET,
+                Progress = entity.PROGRESS_UPDATE,
                 SelfScore = entity.SELF_SCORE,
                 Level1Score = entity.LEVEL_1_SCORE,
                 Level2Score = entity.LEVEL_2_SCORE,
@@ -533,7 +535,8 @@ namespace eHR.PMS.Model.Mappers
                 Id = entity.ID,
                 //Section = MapSectionEntityToDTO(entity.PMS_MST_SECTION, true),
                 AreasOfImprovement = entity.IMPROVEMENT_AREA,
-                AreasOfStrength = entity.STRENGTH_AREA
+                AreasOfStrength = entity.STRENGTH_AREA,
+                Progress=entity.PROGRESS_UPDATE
             };
 
             obj_dto.Appraisal = entity.PMS_APPRAISAL == null ? null : MapAppraisalEntityToDTO(entity.PMS_APPRAISAL, false);
@@ -619,6 +622,7 @@ namespace eHR.PMS.Model.Mappers
             PMS.Model.DTO.Appraisal.CareerDevelopment obj_dto = new PMS.Model.DTO.Appraisal.CareerDevelopment()
             {
                 Id = entity.ID,
+                Progress=entity.PROGRESS_UPDATE,
 //Section = MapSectionEntityToDTO(entity.PMS_MST_SECTION, true),
                 CareerPlans = entity.CAREER_PLAN,
                 ShortTermGoals = entity.SHORT_TERM_GOALS,

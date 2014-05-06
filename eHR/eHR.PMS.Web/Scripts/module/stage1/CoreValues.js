@@ -74,6 +74,67 @@ define("stage1.corevalues", ['jquery', 'Common','bootstrap', 'bootstrap.select']
             }
         });
     };
+
+    var saveProgressFunction = function () {
+        var KPIArray = new Array();
+        $.each($(".Progress"), function () {
+            //KPIArray.push($(this).val());
+            KPIArray.push({ KpiId: $(this).attr("name"), Progress: encodeURIComponent($.trim($(this).val())) });
+        });
+        $.ajax({
+            url: $("#forRazorValue").attr("saveprogressurl"),
+            type: "POST",
+            dataType: "Json",
+            data: { "KPIForDatabase": JSON.stringify(KPIArray) },
+            beforeSend: function () {
+                //$("#stage1kpisave").button('loading');
+                //$("#buttongroup").showLoading();
+                if (!pdfsave) {
+                    $('#resultcontent').hide();
+                    $('#loadingcontent').show();
+                    $('#InfoModal').modal();
+                }
+                else {
+                    $('#part1').css("visibility", "visible");
+                    $('#spanclass1').css("visibility", "hidden");
+                    $('#part2').css("visibility", "hidden");
+                    $('#spanclass2').css("visibility", "hidden");
+                    $('#modal-footer').hide();
+                    $('#PDFModal').modal();
+                }
+            },
+            success: function (data) {
+                if (!pdfsave) {
+                    $("#stage1progresssave").button('reset');
+                    $('#loadingcontent').hide();
+                    $('#resultcontent').show();
+                    $('#InfoModal').modal();
+                }
+                else {
+                    $('#part1').css("visibility", "hidden");
+                    $('#spanclass1').css("visibility", "visible");
+                    $.ajax({
+                        url: $("#forRazorValue").attr("exportPDFurl"),
+                        type: "POST",
+                        dataType: "Json",
+                        beforeSend: function () {
+                            $('#part2').css("visibility", "visible");
+                        },
+                        success: function (data) {
+                            $("#ExportPDF").button('reset');
+                            $('#part2').css("visibility", "hidden");
+                            $('#spanclass2').css("visibility", "visible");
+                            $("#modal-footer").show();
+                            $('#PDFOpen').click(function () {
+                                window.location.href = $("#forRazorValue").attr("openPDFurl") + data;
+                            });
+                        }
+                    });
+                }
+            }
+        });
+    };
+
     var autosavefunction = function () {
         var KPIArray = new Array();
         $.each($(".KPIforDatabase"), function () {
@@ -308,6 +369,18 @@ define("stage1.corevalues", ['jquery', 'Common','bootstrap', 'bootstrap.select']
 
             $("form").submit();
         });
+        $("#stage1progresssubmit").click(function () {
+
+            $.each($(".Progress"), function () {
+                $(this).val(encodeURIComponent($.trim($(this).val())));
+            });
+
+            $("form").submit();
+        });
+        $("#stage1progresssave").click(function () {
+            pdfsave = false;
+            saveProgressFunction();
+        });
         $("#stage1kpisave").click(savefunction);
         $("#btn_appraisal_cancel").click(function () {
             $('#CancelInfoModal').modal();
@@ -328,14 +401,6 @@ define("stage1.corevalues", ['jquery', 'Common','bootstrap', 'bootstrap.select']
         setInterval(autosavefunction, parseInt($("#forRazorValue").attr("autosaveinterval")));
     }
 
-    /*function nl2br(str, is_xhtml) {
-        var breakTag = (is_xhtml || typeof is_xhtml === 'undefined') ? '<br />' : '<br>';
-        return (str + '').replace(/([^>\r\n]?)(\r\n|\n\r|\r|\n)/g, '$1' + breakTag + '$2');
-    }
-
-    function replaceAll(find, replace, str) {
-        return str.replace(new RegExp(find, 'g'), replace);
-    }*/
     function nl2br(str, is_xhtml) {
         //var breakTag = (is_xhtml || typeof is_xhtml === 'undefined') ? '<br />' : '<br>';
         // return (str + '').replace(/([^>\r\n]?)(\r\n|\n\r|\r|\n)/g, '$1' + breakTag + '$2');
@@ -353,9 +418,10 @@ define("stage1.corevalues", ['jquery', 'Common','bootstrap', 'bootstrap.select']
 
     function ReplaceEncode(str) {
         var div = document.createElement('div');
-        div.innerHTML = str;
-        var decoded = div.firstChild.nodeValue;
+        div.innerHTML = "<pre>" + str + "</pre>";
+        var decoded = div.children[0].firstChild.nodeValue; 
         return decoded;
     }
+
 
 });

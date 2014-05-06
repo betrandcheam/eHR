@@ -2969,6 +2969,102 @@ namespace eHR.PMS.Model.Context
         private global::System.String _PERFORMANCE_APPRAISAL_LEVEL2_APPROVER_DISPLAY;
         partial void OnPERFORMANCE_APPRAISAL_LEVEL2_APPROVER_DISPLAYChanging(global::System.String value);
         partial void OnPERFORMANCE_APPRAISAL_LEVEL2_APPROVER_DISPLAYChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String FIRST_ADDRESS_COUNTRY_DISPLAY
+        {
+            get
+            {
+                return _FIRST_ADDRESS_COUNTRY_DISPLAY;
+            }
+            set
+            {
+                OnFIRST_ADDRESS_COUNTRY_DISPLAYChanging(value);
+                ReportPropertyChanging("FIRST_ADDRESS_COUNTRY_DISPLAY");
+                _FIRST_ADDRESS_COUNTRY_DISPLAY = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("FIRST_ADDRESS_COUNTRY_DISPLAY");
+                OnFIRST_ADDRESS_COUNTRY_DISPLAYChanged();
+            }
+        }
+        private global::System.String _FIRST_ADDRESS_COUNTRY_DISPLAY;
+        partial void OnFIRST_ADDRESS_COUNTRY_DISPLAYChanging(global::System.String value);
+        partial void OnFIRST_ADDRESS_COUNTRY_DISPLAYChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String SECOND_ADDRESS_COUNTRY_DISPLAY
+        {
+            get
+            {
+                return _SECOND_ADDRESS_COUNTRY_DISPLAY;
+            }
+            set
+            {
+                OnSECOND_ADDRESS_COUNTRY_DISPLAYChanging(value);
+                ReportPropertyChanging("SECOND_ADDRESS_COUNTRY_DISPLAY");
+                _SECOND_ADDRESS_COUNTRY_DISPLAY = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("SECOND_ADDRESS_COUNTRY_DISPLAY");
+                OnSECOND_ADDRESS_COUNTRY_DISPLAYChanged();
+            }
+        }
+        private global::System.String _SECOND_ADDRESS_COUNTRY_DISPLAY;
+        partial void OnSECOND_ADDRESS_COUNTRY_DISPLAYChanging(global::System.String value);
+        partial void OnSECOND_ADDRESS_COUNTRY_DISPLAYChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String MODIFIED_BY_DISPLAY
+        {
+            get
+            {
+                return _MODIFIED_BY_DISPLAY;
+            }
+            set
+            {
+                OnMODIFIED_BY_DISPLAYChanging(value);
+                ReportPropertyChanging("MODIFIED_BY_DISPLAY");
+                _MODIFIED_BY_DISPLAY = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("MODIFIED_BY_DISPLAY");
+                OnMODIFIED_BY_DISPLAYChanged();
+            }
+        }
+        private global::System.String _MODIFIED_BY_DISPLAY;
+        partial void OnMODIFIED_BY_DISPLAYChanging(global::System.String value);
+        partial void OnMODIFIED_BY_DISPLAYChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Int32> SDB_STAFF_ID
+        {
+            get
+            {
+                return _SDB_STAFF_ID;
+            }
+            set
+            {
+                OnSDB_STAFF_IDChanging(value);
+                ReportPropertyChanging("SDB_STAFF_ID");
+                _SDB_STAFF_ID = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("SDB_STAFF_ID");
+                OnSDB_STAFF_IDChanged();
+            }
+        }
+        private Nullable<global::System.Int32> _SDB_STAFF_ID;
+        partial void OnSDB_STAFF_IDChanging(Nullable<global::System.Int32> value);
+        partial void OnSDB_STAFF_IDChanged();
 
         #endregion
 
@@ -6228,6 +6324,30 @@ namespace eHR.PMS.Model.Context
         private Nullable<global::System.DateTime> _MODIFIED_TIMESTAMP;
         partial void OnMODIFIED_TIMESTAMPChanging(Nullable<global::System.DateTime> value);
         partial void OnMODIFIED_TIMESTAMPChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String PROGRESS_UPDATE
+        {
+            get
+            {
+                return _PROGRESS_UPDATE;
+            }
+            set
+            {
+                OnPROGRESS_UPDATEChanging(value);
+                ReportPropertyChanging("PROGRESS_UPDATE");
+                _PROGRESS_UPDATE = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("PROGRESS_UPDATE");
+                OnPROGRESS_UPDATEChanged();
+            }
+        }
+        private global::System.String _PROGRESS_UPDATE;
+        partial void OnPROGRESS_UPDATEChanging(global::System.String value);
+        partial void OnPROGRESS_UPDATEChanged();
 
         #endregion
 
@@ -6942,6 +7062,30 @@ namespace eHR.PMS.Model.Context
         private Nullable<global::System.DateTime> _MODIFIED_TIMESTAMP;
         partial void OnMODIFIED_TIMESTAMPChanging(Nullable<global::System.DateTime> value);
         partial void OnMODIFIED_TIMESTAMPChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String PROGRESS_UPDATE
+        {
+            get
+            {
+                return _PROGRESS_UPDATE;
+            }
+            set
+            {
+                OnPROGRESS_UPDATEChanging(value);
+                ReportPropertyChanging("PROGRESS_UPDATE");
+                _PROGRESS_UPDATE = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("PROGRESS_UPDATE");
+                OnPROGRESS_UPDATEChanged();
+            }
+        }
+        private global::System.String _PROGRESS_UPDATE;
+        partial void OnPROGRESS_UPDATEChanging(global::System.String value);
+        partial void OnPROGRESS_UPDATEChanged();
 
         #endregion
 
@@ -7756,6 +7900,30 @@ namespace eHR.PMS.Model.Context
         private Nullable<global::System.DateTime> _MODIFIED_TIMESTAMP;
         partial void OnMODIFIED_TIMESTAMPChanging(Nullable<global::System.DateTime> value);
         partial void OnMODIFIED_TIMESTAMPChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String PROGRESS_UPDATE
+        {
+            get
+            {
+                return _PROGRESS_UPDATE;
+            }
+            set
+            {
+                OnPROGRESS_UPDATEChanging(value);
+                ReportPropertyChanging("PROGRESS_UPDATE");
+                _PROGRESS_UPDATE = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("PROGRESS_UPDATE");
+                OnPROGRESS_UPDATEChanged();
+            }
+        }
+        private global::System.String _PROGRESS_UPDATE;
+        partial void OnPROGRESS_UPDATEChanging(global::System.String value);
+        partial void OnPROGRESS_UPDATEChanged();
 
         #endregion
 
@@ -8426,6 +8594,30 @@ namespace eHR.PMS.Model.Context
         private Nullable<global::System.DateTime> _MODIFIED_TIMESTAMP;
         partial void OnMODIFIED_TIMESTAMPChanging(Nullable<global::System.DateTime> value);
         partial void OnMODIFIED_TIMESTAMPChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String PROGRESS_UPDATE
+        {
+            get
+            {
+                return _PROGRESS_UPDATE;
+            }
+            set
+            {
+                OnPROGRESS_UPDATEChanging(value);
+                ReportPropertyChanging("PROGRESS_UPDATE");
+                _PROGRESS_UPDATE = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("PROGRESS_UPDATE");
+                OnPROGRESS_UPDATEChanged();
+            }
+        }
+        private global::System.String _PROGRESS_UPDATE;
+        partial void OnPROGRESS_UPDATEChanging(global::System.String value);
+        partial void OnPROGRESS_UPDATEChanged();
 
         #endregion
 

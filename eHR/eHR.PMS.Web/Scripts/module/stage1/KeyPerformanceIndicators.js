@@ -7,7 +7,6 @@ define("stage1.kpi", ['jquery', 'Common', 'bootstrap', 'bootstrap.select'], func
     var savefunction = function () {
         var KPIArray = new Array();
         $.each($(".KPIforDatabase"), function () {
-            //KPIArray.push($(this).val());
             KPIArray.push(encodeURIComponent($.trim($(this).val())));
         });
         $.ajax({
@@ -77,6 +76,65 @@ define("stage1.kpi", ['jquery', 'Common', 'bootstrap', 'bootstrap.select'], func
         });
     };
 
+    var saveProgressFunction = function () {
+        var KPIArray = new Array();
+        $.each($(".Progress"), function () {
+            //KPIArray.push($(this).val());
+            KPIArray.push({ KpiId: $(this).attr("name"), Progress: encodeURIComponent($.trim($(this).val())) });
+        });
+        $.ajax({
+            url: $("#forRazorValue").attr("saveprogressurl"),
+            type: "POST",
+            dataType: "Json",
+            data: { "KPIForDatabase": JSON.stringify(KPIArray)},
+            beforeSend: function () {
+                //$("#stage1kpisave").button('loading');
+                //$("#buttongroup").showLoading();
+                if (!pdfsave) {
+                    $('#resultcontent').hide();
+                    $('#loadingcontent').show();
+                    $('#InfoModal').modal();
+                }
+                else {
+                    $('#part1').css("visibility", "visible");
+                    $('#spanclass1').css("visibility", "hidden");
+                    $('#part2').css("visibility", "hidden");
+                    $('#spanclass2').css("visibility", "hidden");
+                    $('#modal-footer').hide();
+                    $('#PDFModal').modal();
+                }
+            },
+            success: function (data) {
+                if (!pdfsave) {
+                    $("#stage1progresssave").button('reset');
+                    $('#loadingcontent').hide();
+                    $('#resultcontent').show();
+                    $('#InfoModal').modal();
+                }
+                else {
+                    $('#part1').css("visibility", "hidden");
+                    $('#spanclass1').css("visibility", "visible");
+                    $.ajax({
+                        url: $("#forRazorValue").attr("exportPDFurl"),
+                        type: "POST",
+                        dataType: "Json",
+                        beforeSend: function () {
+                            $('#part2').css("visibility", "visible");
+                        },
+                        success: function (data) {
+                            $("#ExportPDF").button('reset');
+                            $('#part2').css("visibility", "hidden");
+                            $('#spanclass2').css("visibility", "visible");
+                            $("#modal-footer").show();
+                            $('#PDFOpen').click(function () {
+                                window.location.href = $("#forRazorValue").attr("openPDFurl") + data;
+                            });
+                        }
+                    });
+                }
+            }
+        });
+    };
 
     var autosavefunction = function () {
         var KPIArray = new Array();
@@ -146,7 +204,8 @@ define("stage1.kpi", ['jquery', 'Common', 'bootstrap', 'bootstrap.select'], func
             UpdatedivforEdit = div.find(".Updatediv");
             //KPItextforEdit.val($(this).parent().prev().prev().prev().prev().prev().text());
             //PTtextforEdit.val($(this).parent().prev().prev().text());
-
+            //KPItextforEdit.val(replaceAll("<BR checkedByCssHelper=\"true\">", "\n", $(this).parent().prev().prev().prev().prev().prev().html()));
+            //PTtextforEdit.val(replaceAll("<BR checkedByCssHelper=\"true\">", "\n", $(this).parent().prev().prev().html()));
 
             KPItextforEdit.val(ReplaceEncode(br2nl(replaceAll("<BR checkedByCssHelper=\"true\">", "\n", $(this).parent().prev().prev().prev().prev().prev().html()))));
             //var temp = replaceAll("<BR checkedByCssHelper=\"true\">", "\n", $(this).parent().prev().prev().html());
@@ -240,7 +299,6 @@ define("stage1.kpi", ['jquery', 'Common', 'bootstrap', 'bootstrap.select'], func
             //editbuttonobject.parent().prev().prev().prev().prev().prev().text(nl2br(KPItextforEdit.val()));
             editbuttonobject.parent().prev().prev().prev().prev().prev().html(nl2br($.trim(KPItextforEdit.val())));
             //editbuttonobject.parent().prev().prev().text(nl2br(PTtextforEdit.val()));
-            //var temp = nl2br($.trim(PTtextforEdit.val()));
             editbuttonobject.parent().prev().prev().html(nl2br($.trim(PTtextforEdit.val())));
             editbuttonobject.parent().prev().prev().prev().prev().text(PrioritytextHidSelectforEdit.find(".filter-option").text());
             editbuttonobject.parent().prev().prev().prev().find(".PriorityId").val(PrioritytextforEdit.val());
@@ -354,12 +412,24 @@ define("stage1.kpi", ['jquery', 'Common', 'bootstrap', 'bootstrap.select'], func
             }
         });
 
+        $("#stage1progresssubmit").click(function () {
+
+            $.each($(".Progress"), function () {
+                $(this).val(encodeURIComponent($.trim($(this).val())));
+            });
+
+            $("form").submit();
+        });
+
         $("#stage1kpisave").click(function () {
             $(".alert-danger").remove();
             pdfsave = false;
             savefunction();
         });
-
+        $("#stage1progresssave").click(function () {
+            pdfsave = false;
+            saveProgressFunction();
+        });
         $("#btn_appraisal_cancel").click(function () {
             $('#CancelInfoModal').modal();
         });
@@ -394,8 +464,10 @@ define("stage1.kpi", ['jquery', 'Common', 'bootstrap', 'bootstrap.select'], func
 
     function ReplaceEncode(str) {
         var div = document.createElement('div');
-        div.innerHTML = str;
-        var decoded = div.firstChild.nodeValue;
+        div.innerHTML = "<pre>" + str + "</pre>";
+        var decoded = div.children[0].firstChild.nodeValue; 
         return decoded;
     }
+
+
 });

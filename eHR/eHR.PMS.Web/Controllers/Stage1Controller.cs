@@ -59,35 +59,60 @@ namespace eHR.PMS.Web.Controllers
         [HttpPost]
         public ActionResult KeyPerformanceIndicators(int taskid, int id, FormCollection form)
         {
-            int index = 0;
-            string[] result = new string[form.Count - 1];
-            string message = string.Empty;
-            foreach (string key in form.AllKeys.Where(s => s.Contains("KPIforDatabase")))
+            if (form["isViewMode"].ToLower() != "true")
             {
-                result[index] = form[key];
-                index++;
-            }
+                int index = 0;
+                string[] result = new string[form.AllKeys.Where(s => s.Contains("KPIforDatabase")).Count()];
+                string message = string.Empty;
+                foreach (string key in form.AllKeys.Where(s => s.Contains("KPIforDatabase")))
+                {
+                    result[index] = form[key];
+                    index++;
+                }
 
-            string[] deleteKpiId = null;
+                string[] deleteKpiId = null;
 
-            if (form["deleteKPIid"].ToString().Length > 1)
-            {
-                deleteKpiId = form["deleteKPIid"].ToString().Substring(1).Split('-');
-            }
+                if (form["deleteKPIid"].ToString().Length > 1)
+                {
+                    deleteKpiId = form["deleteKPIid"].ToString().Substring(1).Split('-');
+                }
 
 
-            if (PMS.Model.PMSModel.UpdateAppraisalKPIs(
-                    Business.AppraisalManager.GetKPIItemsToInsert(result),
-                    Business.AppraisalManager.GetKPIItemsToUpdate(result),
-                    Business.AppraisalManager.GetKPIItemsToDelete(deleteKpiId), out message))
-            {
-                //TempData["AlertMessage"] = Resources.Resource.MSG_NEXT_SUCCESS;
-                return Redirect(Url.Content("~/Stage1/CoreValues/" + taskid + "/" + id));
+                if (PMS.Model.PMSModel.UpdateAppraisalKPIs(
+                        Business.AppraisalManager.GetKPIItemsToInsert(result),
+                        Business.AppraisalManager.GetKPIItemsToUpdate(result),
+                        Business.AppraisalManager.GetKPIItemsToDelete(deleteKpiId), out message))
+                {
+                    //TempData["AlertMessage"] = Resources.Resource.MSG_NEXT_SUCCESS;
+                    return Redirect(Url.Content("~/Stage1/CoreValues/" + taskid + "/" + id));
+                }
+                else
+                {
+                    TempData["AlertMessage"] = Resources.Resource.MSG_NEXT_FAIL;
+                    return View();
+                }
             }
             else
             {
-                TempData["AlertMessage"] = Resources.Resource.MSG_NEXT_FAIL;
-                return View();
+                int index = 0;
+                string[] result = new string[form.AllKeys.Where(s => s.Contains("Progress")).Count()];
+                string message = string.Empty;
+                foreach (string key in form.AllKeys.Where(s => s.Contains("Progress")))
+                {
+                    result[index] = form[key] + "^&*"+key;
+                    index++;
+                }
+
+                if (PMS.Model.PMSModel.UpdateAppraisalKPIProgress(Business.AppraisalManager.GetKPIProgressToUpdate(result), out message))
+                {
+                    //TempData["AlertMessage"] = Resources.Resource.MSG_NEXT_SUCCESS;
+                    return Redirect(Url.Content("~/Stage1/CoreValues/" + taskid + "/" + id));
+                }
+                else
+                {
+                    TempData["AlertMessage"] = Resources.Resource.MSG_NEXT_FAIL;
+                    return View();
+                }
             }
         }
 
@@ -142,6 +167,19 @@ namespace eHR.PMS.Web.Controllers
             return Json(new { message = message, kpiid = newkpiidarray });
         }
 
+        [HttpPost]
+        public JsonResult KPIProgressSave(string[] KPIForDatabase)
+        {
+            string message = string.Empty;
+            //string temp = KPIForDatabase[0];
+            string temp = Uri.UnescapeDataString(KPIForDatabase[0]);
+
+            string[] splitString = { "},{" };
+            string[] result = temp.Substring(2, temp.Length - 2).Split(splitString, StringSplitOptions.None);
+
+            PMS.Model.PMSModel.UpdateAppraisalKPIProgress(Business.AppraisalManager.GetKPIProgressToUpdateForAjax(result), out message);
+            return Json(message);
+        }
         #endregion KPI
 
         #region Core Values
@@ -189,34 +227,60 @@ namespace eHR.PMS.Web.Controllers
         [HttpPost]
         public ActionResult CoreValues(int taskid, int id, FormCollection form)
         {
-            int index = 0;
-            string[] splitString2 = { "^%*" };
-            string[] result = new string[form.Count];
-            string message = string.Empty;
-            foreach (string key in form.AllKeys.Where(s => s.Contains("KPIforDatabase")))
+            if (form["isViewMode"].ToLower() != "true")
             {
-                result[index] = form[key];
-                index++;
-            }
-            string[] deleteKpiId = null;
-            if (form["deleteKPIid"].ToString().Length > 1)
-            {
-                deleteKpiId = form["deleteKPIid"].ToString().Substring(1).Split('-');
-            }
+                int index = 0;
+                string[] splitString2 = { "^%*" };
+                string[] result = new string[form.AllKeys.Where(s => s.Contains("KPIforDatabase")).Count()];
+                string message = string.Empty;
+                foreach (string key in form.AllKeys.Where(s => s.Contains("KPIforDatabase")))
+                {
+                    result[index] = form[key];
+                    index++;
+                }
+                string[] deleteKpiId = null;
+                if (form["deleteKPIid"].ToString().Length > 1)
+                {
+                    deleteKpiId = form["deleteKPIid"].ToString().Substring(1).Split('-');
+                }
 
-            if (PMS.Model.PMSModel.UpdateAppraisalCoreValues(
-                Business.AppraisalManager.GetCoreValueItemsToInsert(result),
-                Business.AppraisalManager.GetCoreValueItemsToUpdate(result),
-                Business.AppraisalManager.GetCoreValueItemsToDelete(deleteKpiId), out message))
-            {
-                //TempData["AlertMessage"] = Resources.Resource.MSG_NEXT_SUCCESS;
-                return Redirect(Url.Content("~/Stage1/PerformanceCoachingandReview/" + taskid + "/" + id));
+                if (PMS.Model.PMSModel.UpdateAppraisalCoreValues(
+                    Business.AppraisalManager.GetCoreValueItemsToInsert(result),
+                    Business.AppraisalManager.GetCoreValueItemsToUpdate(result),
+                    Business.AppraisalManager.GetCoreValueItemsToDelete(deleteKpiId), out message))
+                {
+                    //TempData["AlertMessage"] = Resources.Resource.MSG_NEXT_SUCCESS;
+                    return Redirect(Url.Content("~/Stage1/PerformanceCoachingandReview/" + taskid + "/" + id));
+                }
+                else
+                {
+                    ViewData["appraisalid"] = id;
+                    TempData["AlertMessage"] = Resources.Resource.MSG_NEXT_FAIL;
+                    return View();
+                }
             }
             else
             {
-                ViewData["appraisalid"] = id;
-                TempData["AlertMessage"] = Resources.Resource.MSG_NEXT_FAIL;
-                return View();
+                int index = 0;
+                string[] result = new string[form.AllKeys.Where(s => s.Contains("Progress")).Count()];
+                string message = string.Empty;
+                foreach (string key in form.AllKeys.Where(s => s.Contains("Progress")))
+                {
+                    result[index] = form[key] + "^&*" + key;
+                    index++;
+                }
+
+                if (PMS.Model.PMSModel.UpdateAppraisalCoreValuesProgress(Business.AppraisalManager.GetCoreValuesProgressToUpdate(result), out message))
+                {
+                    //TempData["AlertMessage"] = Resources.Resource.MSG_NEXT_SUCCESS;
+                    return Redirect(Url.Content("~/Stage1/PerformanceCoachingandReview/" + taskid + "/" + id));
+                }
+                else
+                {
+                    ViewData["appraisalid"] = id;
+                    TempData["AlertMessage"] = Resources.Resource.MSG_NEXT_FAIL;
+                    return View();
+                }
             }
         }
 
@@ -269,6 +333,19 @@ namespace eHR.PMS.Web.Controllers
             return Json(new { message = message, kpiid = newkpiidarray });
         }
 
+        [HttpPost]
+        public JsonResult CoreValuesProgressSave(string[] KPIForDatabase)
+        {
+            string message = string.Empty;
+            //string temp = KPIForDatabase[0];
+            string temp = Uri.UnescapeDataString(KPIForDatabase[0]);
+
+            string[] splitString = { "},{" };
+            string[] result = temp.Substring(2, temp.Length - 2).Split(splitString, StringSplitOptions.None);
+
+            PMS.Model.PMSModel.UpdateAppraisalCoreValuesProgress(Business.AppraisalManager.GetCoreValuesProgressToUpdateForAjax(result), out message);
+            return Json(message);
+        }
         #endregion Core Values
 
         #region Performance Coaching
@@ -324,20 +401,41 @@ namespace eHR.PMS.Web.Controllers
         [HttpPost]
         public ActionResult PerformanceCoachingandReview(int taskid, int id, FormCollection form)
         {
-            Dictionary<string, string> dictform = FormCollectionToDict(form);
-            dictform.Add("AppraisalID", id.ToString());
-            string message = string.Empty;
-
-            if (PMS.Model.PMSModel.UpdateAppraisalPerformanceCoaching(Business.AppraisalManager.GetPerformanceCoachingItemFromFormInput(dictform), out message))
+            if (form["isViewMode"].ToLower() != "true")
             {
-               // TempData["AlertMessage"] = "Appraisal information is saved.";
-                return Redirect(Url.Content("~/Stage1/CareerDevelopment/" + taskid + "/" + id));
+                Dictionary<string, string> dictform = FormCollectionToDict(form);
+                dictform.Add("AppraisalID", id.ToString());
+                string message = string.Empty;
+
+                if (PMS.Model.PMSModel.UpdateAppraisalPerformanceCoaching(Business.AppraisalManager.GetPerformanceCoachingItemFromFormInput(dictform), out message))
+                {
+                    // TempData["AlertMessage"] = "Appraisal information is saved.";
+                    return Redirect(Url.Content("~/Stage1/CareerDevelopment/" + taskid + "/" + id));
+                }
+                else
+                {
+                    ViewData["appraisalid"] = id;
+                    TempData["AlertMessage"] = Resources.Resource.MSG_NEXT_FAIL;
+                    return View();
+                }
             }
             else
             {
-                ViewData["appraisalid"] = id;
-                TempData["AlertMessage"] = Resources.Resource.MSG_NEXT_FAIL;
-                return View();
+                Dictionary<string, string> dictform = new Dictionary<string, string>();
+                dictform = FormCollectionToDict(form);
+                dictform.Add("AppraisalID", Convert.ToString(id));
+                string message = string.Empty;
+
+                if (Model.PMSModel.UpdateAppraisalPerformanceCoachingProgress(Business.AppraisalManager.GetPerformanceCoachingItemProgressFromFormInput(dictform), out message))
+                {
+                    return Redirect(Url.Content("~/Stage1/CareerDevelopment/" + taskid + "/" + id));
+                }
+                else
+                {
+                    ViewData["appraisalid"] = id;
+                    TempData["AlertMessage"] = Resources.Resource.MSG_SAVE_FAIL;
+                    return View();
+                }
             }
         }
 
@@ -352,6 +450,18 @@ namespace eHR.PMS.Web.Controllers
             dictform.Add("ImprovementsArea",ImprovementsArea);
 
             PMS.Model.PMSModel.UpdateAppraisalPerformanceCoaching(Business.AppraisalManager.GetPerformanceCoachingItemFromFormInput(dictform), out message);
+            return Json(message);
+        }
+
+        [HttpPost]
+        public JsonResult PerformanceCoachingandReviewProgressSave(string ApprID, string Progress)
+        {
+            string message = string.Empty;
+            Dictionary<string, string> dictform = new Dictionary<string, string>();
+            dictform.Add("AppraisalID", ApprID);
+            dictform.Add("Progress", Progress);
+
+            PMS.Model.PMSModel.UpdateAppraisalPerformanceCoachingProgress(Business.AppraisalManager.GetPerformanceCoachingItemProgressFromFormInput(dictform), out message);
             return Json(message);
         }
 
@@ -409,18 +519,27 @@ namespace eHR.PMS.Web.Controllers
         [HttpPost]
         public ActionResult CareerDevelopment(int taskid, int id, FormCollection form)
         {
-            Dictionary<string, string> dictform = new Dictionary<string, string>();
-            dictform = FormCollectionToDict(form);
-            dictform.Add("AppraisalID", Convert.ToString(id));
-            dictform.Add("TaskID", Convert.ToString(taskid));
-            string message = string.Empty;
-
-            if (Model.PMSModel.UpdateAppraisalCareerDevelopment(Business.AppraisalManager.GetCareerDevelopmentItemFromFormInput(dictform), out message))
+            if (form["isViewMode"].ToLower() != "true")
             {
-                if (Business.AppraisalManager.ProcessAppraisalSubmission(id, taskid, CurrentUser, out message))
+                Dictionary<string, string> dictform = new Dictionary<string, string>();
+                dictform = FormCollectionToDict(form);
+                dictform.Add("AppraisalID", Convert.ToString(id));
+                dictform.Add("TaskID", Convert.ToString(taskid));
+                string message = string.Empty;
+
+                if (Model.PMSModel.UpdateAppraisalCareerDevelopment(Business.AppraisalManager.GetCareerDevelopmentItemFromFormInput(dictform), out message))
                 {
-                    TempData["AlertMessage"] = Resources.Resource.MSG_APPRAISAL_SUBMITTED;
-                    return Redirect(Url.Content("~/"));
+                    if (Business.AppraisalManager.ProcessAppraisalSubmission(id, taskid, CurrentUser, out message))
+                    {
+                        TempData["AlertMessage"] = Resources.Resource.MSG_APPRAISAL_SUBMITTED;
+                        return Redirect(Url.Content("~/"));
+                    }
+                    else
+                    {
+                        ViewData["appraisalid"] = id;
+                        TempData["AlertMessage"] = Resources.Resource.MSG_SAVE_FAIL;
+                        return View();
+                    }
                 }
                 else
                 {
@@ -431,9 +550,22 @@ namespace eHR.PMS.Web.Controllers
             }
             else
             {
-                ViewData["appraisalid"] = id;
-                TempData["AlertMessage"] = Resources.Resource.MSG_SAVE_FAIL;
-                return View();
+                Dictionary<string, string> dictform = new Dictionary<string, string>();
+                dictform = FormCollectionToDict(form);
+                dictform.Add("AppraisalID", Convert.ToString(id));
+                string message = string.Empty;
+
+                if (Model.PMSModel.UpdateAppraisalCareerDevelopmentProgress(Business.AppraisalManager.GetCareerDevelopmentProgressFromFormInput(dictform), out message))
+                {
+                    TempData["AlertMessage"] = Resources.Resource.MSG_APPRAISAL_SUBMITTED;
+                    return Redirect(Url.Content("~/"));
+                }
+                else
+                {
+                    ViewData["appraisalid"] = id;
+                    TempData["AlertMessage"] = Resources.Resource.MSG_SAVE_FAIL;
+                    return View();
+                }
             }
         }
 
@@ -450,6 +582,15 @@ namespace eHR.PMS.Web.Controllers
             return Json(message);
         }
 
+        public JsonResult CareerDevelopmentProgressSave(string ApprID, string Progress)
+        {
+            Dictionary<string, string> form = new Dictionary<string, string>();
+            form.Add("AppraisalID", ApprID);
+            form.Add("Progress", Progress);
+            string message = string.Empty;
+            Model.PMSModel.UpdateAppraisalCareerDevelopmentProgress(Business.AppraisalManager.GetCareerDevelopmentProgressFromFormInput(form), out message);
+            return Json(message);
+        }
         #endregion Career Development
 
         private bool CheckAccessRights(Model.DTO.Appraisal.Appraisal appraisal)

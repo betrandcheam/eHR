@@ -1591,6 +1591,55 @@ namespace eHR.PMS.Business
             return lst_kpis;
         }
 
+        public static List<PMS.Model.DTO.Appraisal.KPI> GetKPIProgressToUpdate(string[] result)
+        {
+            List<PMS.Model.DTO.Appraisal.KPI> lst_kpis = null;
+
+            if (!Lib.Utility.Common.IsNullOrEmptyList(result))
+            {
+                lst_kpis = new List<Model.DTO.Appraisal.KPI>();
+                string[] arr_values = new string[2];
+                string[] arr_seperator = { "^&*" };
+
+                foreach (string str_result in result)
+                {
+                    arr_values = Uri.UnescapeDataString(str_result).Split(arr_seperator, StringSplitOptions.None);
+                    PMS.Model.DTO.Appraisal.KPI obj_kpi = new Model.DTO.Appraisal.KPI()
+                    {
+                        Id = Convert.ToInt32(arr_values[1].Substring(8)),
+                        Progress = Lib.Utility.Common.ReplaceLineBreaksForDatabase(arr_values[0])
+                    };
+                    lst_kpis.Add(obj_kpi);
+                } 
+            }
+            return lst_kpis;
+        }
+        public static List<PMS.Model.DTO.Appraisal.KPI> GetKPIProgressToUpdateForAjax(string[] result)
+        {
+            List<PMS.Model.DTO.Appraisal.KPI> lst_kpis = null;
+
+            if (!Lib.Utility.Common.IsNullOrEmptyList(result))
+            {
+                lst_kpis = new List<Model.DTO.Appraisal.KPI>();
+                string[] arr_values = new string[2];
+
+                foreach (string str_result in result)
+                {
+                    string[] kparray = str_result.Replace("\"", "").Split(',');
+                    //string tmp_comment = kparray[1].Split(':')[1].Replace("}]", "").Trim().TrimEnd('\r', '\n').Replace("\\n", Environment.NewLine).Trim();
+                    string tmp_progress = Lib.Utility.Common.ReplaceLineBreaksForDatabase(kparray[1].Split(':')[1].Replace("}]", "").Trim());
+                    //string tmp_comment_id = Lib.Utility.Common.ReplaceLineBreaksForDatabase(kparray[2].Split(':')[1].Replace("}]", "").Trim());
+                    string tmp_comment_id = kparray[0].Split(':')[1].Trim().Substring(8);
+                    PMS.Model.DTO.Appraisal.KPI obj_kpi = new Model.DTO.Appraisal.KPI()
+                    {
+                        Id = Convert.ToInt32(tmp_comment_id),
+                        Progress = Lib.Utility.Common.ReplaceLineBreaksForDatabase(tmp_progress)
+                    };
+                    lst_kpis.Add(obj_kpi);
+                }
+            }
+            return lst_kpis;
+        }
         public static List<PMS.Model.DTO.Appraisal.KPIComment> GetKPICommentItemsToSave(string[] result, int commentorId, DateTime commentTimestamp, out List<PMS.Model.DTO.Appraisal.KPIComment> lst_comments, out List<PMS.Model.DTO.Appraisal.KPIComment> lst_delete_comments)
         {
             lst_comments = null;
@@ -1780,6 +1829,56 @@ namespace eHR.PMS.Business
             return lst_core_values;
         }
 
+        public static List<PMS.Model.DTO.Appraisal.CoreValue> GetCoreValuesProgressToUpdate(string[] result)
+        {
+            List<PMS.Model.DTO.Appraisal.CoreValue> lst_kpis = null;
+
+            if (!Lib.Utility.Common.IsNullOrEmptyList(result))
+            {
+                lst_kpis = new List<Model.DTO.Appraisal.CoreValue>();
+                string[] arr_values = new string[2];
+                string[] arr_seperator = { "^&*" };
+
+                foreach (string str_result in result)
+                {
+                    arr_values = Uri.UnescapeDataString(str_result).Split(arr_seperator, StringSplitOptions.None);
+                    PMS.Model.DTO.Appraisal.CoreValue obj_kpi = new Model.DTO.Appraisal.CoreValue()
+                    {
+                        Id = Convert.ToInt32(arr_values[1].Substring(8)),
+                        Progress = Lib.Utility.Common.ReplaceLineBreaksForDatabase(arr_values[0])
+                    };
+                    lst_kpis.Add(obj_kpi);
+                }
+            }
+            return lst_kpis;
+        }
+
+        public static List<PMS.Model.DTO.Appraisal.CoreValue> GetCoreValuesProgressToUpdateForAjax(string[] result)
+        {
+            List<PMS.Model.DTO.Appraisal.CoreValue> lst_kpis = null;
+
+            if (!Lib.Utility.Common.IsNullOrEmptyList(result))
+            {
+                lst_kpis = new List<Model.DTO.Appraisal.CoreValue>();
+                string[] arr_values = new string[2];
+
+                foreach (string str_result in result)
+                {
+                    string[] kparray = str_result.Replace("\"", "").Split(',');
+                    //string tmp_comment = kparray[1].Split(':')[1].Replace("}]", "").Trim().TrimEnd('\r', '\n').Replace("\\n", Environment.NewLine).Trim();
+                    string tmp_progress = Lib.Utility.Common.ReplaceLineBreaksForDatabase(kparray[1].Split(':')[1].Replace("}]", "").Trim());
+                    //string tmp_comment_id = Lib.Utility.Common.ReplaceLineBreaksForDatabase(kparray[2].Split(':')[1].Replace("}]", "").Trim());
+                    string tmp_comment_id = kparray[0].Split(':')[1].Trim().Substring(8);
+                    PMS.Model.DTO.Appraisal.CoreValue obj_kpi = new Model.DTO.Appraisal.CoreValue()
+                    {
+                        Id = Convert.ToInt32(tmp_comment_id),
+                        Progress = Lib.Utility.Common.ReplaceLineBreaksForDatabase(tmp_progress)
+                    };
+                    lst_kpis.Add(obj_kpi);
+                }
+            }
+            return lst_kpis;
+        }
         #endregion Core Value Items
 
         #region Performance Coaching Items
@@ -1798,6 +1897,22 @@ namespace eHR.PMS.Business
                     //AreasOfStrength = form["StrengthsArea"].Trim().TrimEnd('\r', '\n').Replace("\\n", Environment.NewLine)
                     AreasOfImprovement = Lib.Utility.Common.ReplaceLineBreaksForDatabase(Uri.UnescapeDataString(form["ImprovementsArea"].Trim())),
                     AreasOfStrength = Lib.Utility.Common.ReplaceLineBreaksForDatabase(Uri.UnescapeDataString(form["StrengthsArea"].Trim()))
+                };
+            }
+            return obj_performance_coaching;
+        }
+
+        public static PMS.Model.DTO.Appraisal.PerformanceCoaching GetPerformanceCoachingItemProgressFromFormInput(Dictionary<string, string> form)
+        {
+            PMS.Model.DTO.Appraisal.PerformanceCoaching obj_performance_coaching = null;
+
+            if (!Lib.Utility.Common.IsNullOrEmptyList(form))
+            {
+                obj_performance_coaching = new Model.DTO.Appraisal.PerformanceCoaching()
+                {
+                    Appraisal = new Model.DTO.Appraisal.Appraisal() { Id = Convert.ToInt32(form["AppraisalID"]) },
+
+                    Progress = Lib.Utility.Common.ReplaceLineBreaksForDatabase(Uri.UnescapeDataString(form["Progress"].Trim()))
                 };
             }
             return obj_performance_coaching;
@@ -1823,6 +1938,21 @@ namespace eHR.PMS.Business
                     ShortTermGoals = Lib.Utility.Common.ReplaceLineBreaksForDatabase(Uri.UnescapeDataString(form["ShorttermCareerGoal"].Trim())),
                     CareerPlans = Lib.Utility.Common.ReplaceLineBreaksForDatabase(Uri.UnescapeDataString(form["DevelopmentPlan"].Trim())),
                     LearningPlans = Lib.Utility.Common.ReplaceLineBreaksForDatabase(Uri.UnescapeDataString(form["Learninganddevelopment"].Trim()))
+                };
+            }
+            return obj_career_development;
+        }
+
+        public static PMS.Model.DTO.Appraisal.CareerDevelopment GetCareerDevelopmentProgressFromFormInput(Dictionary<string, string> form)
+        {
+            PMS.Model.DTO.Appraisal.CareerDevelopment obj_career_development = null;
+
+            if (!Lib.Utility.Common.IsNullOrEmptyList(form))
+            {
+                obj_career_development = new Model.DTO.Appraisal.CareerDevelopment()
+                {
+                    Appraisal = new Model.DTO.Appraisal.Appraisal() { Id = Convert.ToInt32(form["AppraisalID"]) },                   
+                    Progress = Lib.Utility.Common.ReplaceLineBreaksForDatabase(Uri.UnescapeDataString(form["Progress"].Trim())),
                 };
             }
             return obj_career_development;

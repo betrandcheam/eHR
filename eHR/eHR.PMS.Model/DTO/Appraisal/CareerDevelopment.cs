@@ -13,6 +13,7 @@ namespace eHR.PMS.Model.DTO.Appraisal
         private string str_short_term_goals;
         private string str_career_plans;
         private string str_learning_plans;
+        private string str_progress;
         private List<PMS.Model.DTO.Appraisal.CareerDevelopmentComment> lst_comments;
         private PMS.Model.DTO.Core.Employee obj_modifier;
         private DateTime? dt_modified_timestamp;
@@ -51,6 +52,12 @@ namespace eHR.PMS.Model.DTO.Appraisal
         {
             get { return str_learning_plans; }
             set { str_learning_plans = value; }
+        }
+
+        public string Progress
+        {
+            get { return str_progress; }
+            set { str_progress = value; }
         }
 
         public List<PMS.Model.DTO.Appraisal.CareerDevelopmentComment> Comments

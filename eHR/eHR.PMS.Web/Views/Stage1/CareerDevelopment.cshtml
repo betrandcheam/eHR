@@ -1,11 +1,15 @@
 ﻿@{
     var message = TempData["AlertMessage"] ?? string.Empty;
 }
-@{int index = 0;}
 @model eHR.PMS.Web.Models.DTO.AppraisalPage
+@{int index = 0;
+  bool IsProgressDisplay = (Model.ViewOnly && Model.Appraisal.Status.Id == eHR.PMS.Model.PMSConstants.STATUS_ID_APPROVED && Model.Appraisal.Employee.Id.ToString() == ViewData["userid"].ToString());  
+  }
+
 
  <div class="frame">
         <form action="@(Url.Content("~/Stage1/CareerDevelopment/"))@Model.CurrentTaskId/@Model.Appraisal.Id" method="post">
+        <input type="hidden" name="isViewMode" id="isViewMode" value="@(Model.ViewOnly.ToString())" />
         <ul id="sectionlist" class="nav nav-tabs">
             @{if (!eHR.PMS.Lib.Utility.Common.IsNullOrEmptyList(Model.Sections))
               {
@@ -121,14 +125,39 @@
                             }
                         }
                       </div>
+
+                      
+                        @{
+                            if (!eHR.PMS.Lib.Utility.Common.IsNullOrEmptyList(Model.Appraisal.CareerDevelopments))
+                            {
+                                if (Model.ViewOnly && Model.Appraisal.Status.Id == eHR.PMS.Model.PMSConstants.STATUS_ID_APPROVED)
+                                {
+                                    <div class="form-group">
+                                        <label for="Progress">Progress Update: </label>
+                                        @{if (Model.Appraisal.Employee.Id.ToString() == ViewData["userid"].ToString())
+                                          {
+                                            <textarea id="Progress" name="Progress" class="form-control idleField" rows="3" >@(Model.Appraisal.CareerDevelopments.First().Progress != null ? Model.Appraisal.CareerDevelopments.First().Progress.Replace(Environment.NewLine, "\n") : "")</textarea>                                                
+                                          }
+                                          else
+                                          {
+                                            <textarea id="Progress" name="Progress" disabled="disabled" class="form-control idleField" rows="3" >@(Model.Appraisal.CareerDevelopments.First().Progress != null ? Model.Appraisal.CareerDevelopments.First().Progress.Replace(Environment.NewLine, "\n") : "")</textarea>                                                                                              
+                                          }
+                                         }
+                                     </div>
+                                }
+                            }
+                            
+                        }
+                     
+
                       <div class="form-group">
                             <a href="javascript:void(0)" class="ViewKpiComments btn btn-warning btn-xs" ><i class="glyphicon glyphicon-pencil"></i> View Comments</a>                        
                             <div style="display:none;">
                                  @{ if (!eHR.PMS.Lib.Utility.Common.IsNullOrEmptyList(Model.Appraisal.CareerDevelopments))
                                     {
                                         IEnumerable<eHR.PMS.Model.DTO.Appraisal.CareerDevelopmentComment> templist = Model.Appraisal.CareerDevelopments.First().Comments;
-                                                       if (!eHR.PMS.Lib.Utility.Common.IsNullOrEmptyList(templist) && templist.Where(s => s.FormSaveOnly == false).Count()>0)
-                                                      {
+                                        if (!eHR.PMS.Lib.Utility.Common.IsNullOrEmptyList(templist) && templist.Where(s => s.FormSaveOnly == false).Count() > 0)
+                                        {
                                                         
                                                         <div class="Comments">
                                                                 <div style="width:500px;">                                                   
@@ -145,22 +174,23 @@
                                                                 </div>                                                  
                                                      
                                                        </div>
-                                                      }
-                                                      else
-                                                      {
+                                        }
+                                        else
+                                        {
                                                         <div class="Comments"></div>
-                                                      }
-                                                  }
+                                        }
+                                    }
                                                   }
                             </div>
                       </div>
                      <div id="buttongroup" style="text-align: center;">
                      <div style="float:left;">
                          <a href="@(Url.Content("~/Stage1/PerformanceCoachingandReview/"))@Model.CurrentTaskId/@Model.Appraisal.Id" class="btn btn-warning btn-xs"><i class="glyphicon glyphicon-hand-left"></i> Prev</a>
-                         @{if(!Model.ViewOnly)
+                         @{if (!Model.ViewOnly)
                            {
                            <button type="button" id="stage1kpisubmit" class="btn btn-success btn-xs">Submit <i class="glyphicon glyphicon-ok"></i></button>
-                           }  
+                           }
+                           
                           }
                      </div>
                      <!--<button type="button" id="stage1kpisubmit" class="btn btn-primary"><i class="glyphicon glyphicon-floppy-saved"></i> Submit</button>
@@ -173,6 +203,10 @@
                            }
                            else
                            {
+                               if (IsProgressDisplay)
+                               {
+                                    <button type="button" data-loading-text="Saving...." id="stage1progresssave" class="btn btn-success btn-xs"><i class="glyphicon glyphicon-save"></i> Save</button>
+                               }
                             <a href="@(Url.Content("~/"))" class="btn btn-danger btn-xs"><i class="glyphicon glyphicon-floppy-remove"></i> Cancel</a>
                            }
                          } 
@@ -205,6 +239,25 @@
               </div><!-- /.modal-dialog -->
             </div><!-- /.modal -->
            
+           <!--pop up info for progressupdate -->
+            <div style="top:50%;" class="modal fade" id="ProgressUpdateInfoModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+              <div class="modal-dialog" style="text-align:center;">
+                <div  class="modal-content">
+                  <div class="modal-body" style="padding-bottom:0px;">
+                        <div class="alert alert-warning alert-dismissable">
+                          <strong>@(eHR.PMS.Web.Resources.Resource.MSG_APPRAISAL_SUBMISSION)</strong>
+                        </div>
+                  </div>
+                  <div class="modal-footer">
+                    <!--<button type="submit" data-loading-text="Submit...." class="btn btn-primary">Yes</button>-->
+                    <button type="button" id="btn_progress_modal_ok" data-loading-text="Submit...." class="btn btn-primary">Yes</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">No</button>
+                  </div>
+
+                </div><!-- /.modal-content -->
+              </div><!-- /.modal-dialog -->
+            </div><!-- /.modal -->
+
            <!--pop up info for cancel -->
             <div style="top:50%;" class="modal fade" id="CancelInfoModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
               <div class="modal-dialog" style="text-align:center;">
@@ -241,7 +294,7 @@
         <div id="resultcontent" class="modal-content" style="display:none;">
           <div class="modal-body" style="padding-bottom:0px;">
                 <div class="alert alert-success alert-dismissable">
-                  <strong>@(eHR.PMS.Web.Resources.Resource.MSG_SAVE_SUCCESS_CAREER_DEVELOPMENT.Replace("[%DEADLINE%]",Model.SubmissionDeadline))</strong>
+                  <strong>@((!Model.ViewOnly) ? eHR.PMS.Web.Resources.Resource.MSG_SAVE_SUCCESS_CAREER_DEVELOPMENT.Replace("[%DEADLINE%]", Model.SubmissionDeadline) : eHR.PMS.Web.Resources.Resource.MSG_PROGRESS_UPDATE)</strong>
                 </div>
           </div>
           <div class="modal-footer">
@@ -269,8 +322,8 @@
       </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
 <input type="hidden" id="forRazorValue" message='@message' openPDFurl="@(Url.Content("~/Home/PDFFiles/"))" exportPDFurl="@(Url.Content("~/Home/pdfExport/" + Model.Appraisal.Id))"
-  saveurl="@(Url.Content("~/Stage1/CareerDevelopmentSave"))" apprid='@Model.Appraisal.Id'
-    rooturl="@(Url.Content("~/"))" autosaveinterval="@eHR.PMS.Web.Resources.Resource.AUTO_SAVE_INTERVAL"  viewmode="@(Model.ViewOnly?"view":"input")"/>
+  saveurl="@(Url.Content("~/Stage1/CareerDevelopmentSave"))" apprid='@Model.Appraisal.Id' saveprogressurl="@(Url.Content("~/Stage1/CareerDevelopmentProgressSave"))"
+    rooturl="@(Url.Content("~/"))" autosaveinterval="@eHR.PMS.Web.Resources.Resource.AUTO_SAVE_INTERVAL"  viewmode="@(Model.ViewOnly ? "view" : "input")"/>
 @section scripts
         {
         <!--<script type="text/javascript">

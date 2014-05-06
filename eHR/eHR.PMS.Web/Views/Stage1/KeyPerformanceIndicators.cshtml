@@ -2,7 +2,9 @@
     var message = TempData["AlertMessage"] ?? string.Empty;
 }
 @model eHR.PMS.Web.Models.DTO.AppraisalPage
-@{  int index = 0; int kpiindex = 0; int commentsindex = 1;}
+@{  int index = 0; int kpiindex = 0; int commentsindex = 1;
+    bool IsProgressDisplay = (Model.ViewOnly && Model.Appraisal.Status.Id == eHR.PMS.Model.PMSConstants.STATUS_ID_APPROVED && Model.Appraisal.Employee.Id.ToString() == ViewData["userid"].ToString());
+        }
 
 <div class="frame">
     <ul id="sectionlist" class="nav nav-tabs">
@@ -37,6 +39,7 @@
             @Html.Raw(@eHR.PMS.Model.PMSConstants.KPIDescription)
             </div>
             <form action="@(Url.Content("~/Stage1/KeyPerformanceIndicators/"))@(Model.CurrentTaskId)/@Model.Appraisal.Id" method="post">
+            <input type="hidden" name="isViewMode" id="isViewMode" value="@(Model.ViewOnly.ToString())" />
             <input type="hidden" name="deleteKPIid" id="deleteKPIid" />
             @foreach (eHR.PMS.Model.DTO.Master.Block kpinfo in Model.CurrentSection.Blocks)
             {
@@ -64,7 +67,12 @@
                                     <th style="width:5%">Priority</th>
                                     <th></th>
                                     <th style="width:30%">Performance Target</th>   
-                                    <th></th>                                
+                                    <th></th> 
+                                    @{ if (Model.ViewOnly && Model.Appraisal.Status.Id == eHR.PMS.Model.PMSConstants.STATUS_ID_APPROVED)
+                                       {
+                                           <th style="width:30%">Progress Update</th>
+                                       }   
+                                    }                               
                                     <th style="width:30%"></th>
                                 </tr>
                             </thead>
@@ -84,6 +92,23 @@
                                                 <td>
                                                 <input type="hidden" class="KPIforDatabase" name="KPIforDatabase@(kpiindex++)Block@(kpinfo.Id)" value="@(kpi.Id)^&*@(kpi.Appraisal.Id)^&*@(Model.CurrentSection.Id)^&*@(kpi.Block.Id)^&*@(kpi.Description)^&*@(kpi.Target)^&*@(kpi.Priority.Id)^&*ONERECORDENDED"/>
                                                 </td>
+                                                @{ if (Model.ViewOnly && Model.Appraisal.Status.Id == eHR.PMS.Model.PMSConstants.STATUS_ID_APPROVED)
+                                                   {
+                                                       <td>
+                                                            @{
+                                                                if(Model.Appraisal.Employee.Id.ToString() == ViewData["userid"].ToString())
+                                                                {
+                                                                    <textarea name="Progress@(kpi.Id)" class="Progress idleField" rows="2" cols="5">@(kpi.Progress != null ? kpi.Progress.Replace(Environment.NewLine, "\n") : "")</textarea>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <textarea name="Progress@(kpi.Id)" class="Progress idleField" disabled="disabled" rows="2" cols="5">@(kpi.Progress != null ? kpi.Progress.Replace(Environment.NewLine, "\n") : "")</textarea>
+                                                                }
+                                                            }
+                                                 
+                                                        </td>
+                                                   }
+                                                }
                                                 <td align="right">
                                                     @{ if (!Model.ViewOnly)
                                                        {
@@ -94,9 +119,9 @@
                                                      <a commentsid="@(kpinfo.Id)@(commentsindex++)" href="javascript:void(0)" class="ViewKpiComments btn btn-warning btn-xs" ><i class="glyphicon glyphicon-pencil"></i> View Comments</a>                                                     
                                                 </td>
                                                 <td style="display:none;">
-                                                    @{ IEnumerable<eHR.PMS.Model.DTO.Appraisal.KPIComment> templist=kpi.Comments;
-                                                       if (!eHR.PMS.Lib.Utility.Common.IsNullOrEmptyList(templist) && templist.Where(s => s.FormSaveOnly == false).Count()>0)
-                                                      {
+                                                    @{ IEnumerable<eHR.PMS.Model.DTO.Appraisal.KPIComment> templist = kpi.Comments;
+                                                       if (!eHR.PMS.Lib.Utility.Common.IsNullOrEmptyList(templist) && templist.Where(s => s.FormSaveOnly == false).Count() > 0)
+                                                       {
                                                         
                                                         <div class="Comments">
                                                                 <div style="width:500px;">                                                   
@@ -106,18 +131,18 @@
                                                                      <li class="list-group-item">
                                                                      <span class="badge">By @(comment.Commentor.PreferredName) on @(Convert.ToDateTime(comment.CommentedTimestamp).ToString("hh:mm tt, dd-MMM-yyyy"))</span>                                                                                                                           
                                                                      <br />
-                                                                     <p style="word-wrap:break-word;">@(MvcHtmlString.Create(comment.Comments.Replace(Environment.NewLine,"<br />")))</p>
+                                                                     <p style="word-wrap:break-word;">@(MvcHtmlString.Create(comment.Comments.Replace(Environment.NewLine, "<br />")))</p>
                                                                      </li>
                                                               }
                                                                 </ul> 
                                                                 </div>                                                  
                                                      
                                                        </div>
-                                                      }
-                                                      else
-                                                      {
+                                                       }
+                                                       else
+                                                       {
                                                         <div class="Comments"></div>
-                                                      }
+                                                       }
                                                   }
                                                 </td>
                                             </tr>
@@ -183,11 +208,18 @@
                                   
                 @{if (!Model.ViewOnly)
                   {
-                 <button type="button" id="stage1kpisubmit" class="btn btn-warning btn-xs">Next <i class="glyphicon glyphicon-hand-right"></i></button>
+                    <button type="button" id="stage1kpisubmit" class="btn btn-warning btn-xs">Next <i class="glyphicon glyphicon-hand-right"></i></button>
                   }
                   else
                   {
-                <a href="@(Url.Content("~/Stage1/CoreValues/"))@Model.CurrentTaskId/@Model.Appraisal.Id" class="btn btn-warning btn-xs"><i class="glyphicon glyphicon-hand-right"></i> Next</a>
+                      if (IsProgressDisplay)
+                      {
+                          <button type="button" id="stage1progresssubmit" class="btn btn-warning btn-xs">Next <i class="glyphicon glyphicon-hand-right"></i></button>
+                      }
+                      else
+                      {
+                          <a href="@(Url.Content("~/Stage1/CoreValues/"))@Model.CurrentTaskId/@Model.Appraisal.Id" class="btn btn-warning btn-xs"><i class="glyphicon glyphicon-hand-right"></i> Next</a>
+                      }
                   }
                 }
              </div>
@@ -201,7 +233,11 @@
                   }
                   else
                   {
-                  <a href="@(Url.Content("~/"))" class="btn btn-danger btn-xs"><i class="glyphicon glyphicon-floppy-remove"></i> Cancel</a>
+                      if (IsProgressDisplay)
+                      {
+                          <button type="button" data-loading-text="Saving...." id="stage1progresssave" class="btn btn-success btn-xs"><i class="glyphicon glyphicon-save"></i> Save</button>
+                      }
+                      <a href="@(Url.Content("~/"))" class="btn btn-danger btn-xs"><i class="glyphicon glyphicon-floppy-remove"></i> Cancel</a>
                   }
                  }    
              </div>
@@ -273,7 +309,7 @@
         <div id="resultcontent" class="modal-content" style="display:none;">
           <div class="modal-body" style="padding-bottom:0px;">
                 <div class="alert alert-success alert-dismissable">
-                  <strong>@(eHR.PMS.Web.Resources.Resource.MSG_SAVE_SUCCESS_KPI.Replace("[%DEADLINE%]",Model.SubmissionDeadline))</strong>
+                  <strong>@(eHR.PMS.Web.Resources.Resource.MSG_SAVE_SUCCESS_KPI.Replace("[%DEADLINE%]", Model.SubmissionDeadline))</strong>
                 </div>
           </div>
           <div class="modal-footer">
@@ -299,7 +335,8 @@
       </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
 
-<input type="hidden" id="forRazorValue" openPDFurl="@(Url.Content("~/Home/PDFFiles/"))" exportPDFurl="@(Url.Content("~/Home/pdfExport/" + Model.Appraisal.Id))"  saveurl="@(Url.Content("~/Stage1/KPISave"))" apprid='@Model.Appraisal.Id' viewmode="@(Model.ViewOnly?"view":"input")" 
+<input type="hidden" id="forRazorValue" openPDFurl="@(Url.Content("~/Home/PDFFiles/"))" exportPDFurl="@(Url.Content("~/Home/pdfExport/" + Model.Appraisal.Id))"  saveurl="@(Url.Content("~/Stage1/KPISave"))" 
+apprid='@Model.Appraisal.Id' saveprogressurl="@(Url.Content("~/Stage1/KPIProgressSave"))" viewmode="@(Model.ViewOnly ? "view" : "input")" 
     rooturl="@(Url.Content("~/"))" autosaveinterval="@eHR.PMS.Web.Resources.Resource.AUTO_SAVE_INTERVAL"/>
 @section scripts
         {

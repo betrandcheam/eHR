@@ -13,6 +13,7 @@ namespace eHR.PMS.Model.DTO.Appraisal
         private PMS.Model.DTO.Master.Block obj_block;
         private PMS.Model.DTO.Master.CoreValueCompetency obj_competency;
         private string str_target;
+        private string str_progress;
         private int? int_self_score;
         private int? int_level_1_score;
         private int? int_level_2_score;
@@ -55,6 +56,12 @@ namespace eHR.PMS.Model.DTO.Appraisal
         {
             get { return str_target; }
             set { str_target = value; }
+        }
+
+        public string Progress
+        {
+            get { return str_progress; }
+            set { str_progress = value; }
         }
 
         public int? SelfScore

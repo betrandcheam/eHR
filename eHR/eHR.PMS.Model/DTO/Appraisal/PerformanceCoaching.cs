@@ -12,6 +12,7 @@ namespace eHR.PMS.Model.DTO.Appraisal
         private PMS.Model.DTO.Master.Section obj_section;
         private string str_strength_area;
         private string str_improvement_area;
+        private string str_progress;
         private List<PMS.Model.DTO.Appraisal.PerformanceCoachingComment> lst_comments;
         private PMS.Model.DTO.Core.Employee obj_modifier;
         private DateTime? dt_modified_timestamp;
@@ -44,6 +45,12 @@ namespace eHR.PMS.Model.DTO.Appraisal
         {
             get { return str_improvement_area; }
             set { str_improvement_area = value; }
+        }
+
+        public string Progress
+        {
+            get { return str_progress; }
+            set { str_progress = value; }
         }
 
         public List<PMS.Model.DTO.Appraisal.PerformanceCoachingComment> Comments

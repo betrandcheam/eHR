@@ -351,6 +351,10 @@
           <Property Name="SENIOR_MANAGEMENT_TEAM_MEMBER_DISPLAY" Type="nvarchar" MaxLength="770" StoreGeneratedPattern="Computed" />
           <Property Name="PERFORMANCE_APPRAISAL_LEVEL1_APPROVER_DISPLAY" Type="nvarchar" MaxLength="770" StoreGeneratedPattern="Computed" />
           <Property Name="PERFORMANCE_APPRAISAL_LEVEL2_APPROVER_DISPLAY" Type="nvarchar" MaxLength="770" StoreGeneratedPattern="Computed" />
+          <Property Name="FIRST_ADDRESS_COUNTRY_DISPLAY" Type="varchar" MaxLength="255" StoreGeneratedPattern="Computed" />
+          <Property Name="SECOND_ADDRESS_COUNTRY_DISPLAY" Type="varchar" MaxLength="255" StoreGeneratedPattern="Computed" />
+          <Property Name="MODIFIED_BY_DISPLAY" Type="nvarchar" MaxLength="770" StoreGeneratedPattern="Computed" />
+          <Property Name="SDB_STAFF_ID" Type="int" />
         </EntityType>
         <EntityType Name="MST_ACR_GRADE">
           <Key>
@@ -370,7 +374,7 @@
           </Key>
           <Property Name="ID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="NAME" Type="varchar" MaxLength="255" />
-          <Property Name="ABBREVIATION" Type="varchar" MaxLength="5" />
+          <Property Name="ABBREVIATION" Type="varchar" MaxLength="10" />
           <Property Name="DESCRIPTION" Type="varchar" MaxLength="255" />
           <Property Name="ACTIVE" Type="bit" />
           <Property Name="MODIFIED_BY_ID" Type="int" />
@@ -465,6 +469,7 @@
           <Property Name="SHORT_TERM_GOALS" Type="nvarchar(max)" />
           <Property Name="CAREER_PLAN" Type="nvarchar(max)" />
           <Property Name="LEARNING_PLAN" Type="nvarchar(max)" />
+          <Property Name="PROGRESS_UPDATE" Type="nvarchar(max)" />
           <Property Name="MODIFIED_BY_ID" Type="int" />
           <Property Name="MODIFIED_BY_DOMAIN_ID" Type="varchar" MaxLength="100" />
           <Property Name="MODIFIED_TIMESTAMP" Type="datetime" />
@@ -496,6 +501,7 @@
           <Property Name="LEVEL_1_SCORE" Type="int" />
           <Property Name="LEVEL_2_SCORE" Type="int" />
           <Property Name="FINAL_SCORE" Type="int" />
+          <Property Name="PROGRESS_UPDATE" Type="nvarchar(max)" />
           <Property Name="MODIFIED_BY_ID" Type="int" />
           <Property Name="MODIFIED_BY_DOMAIN_ID" Type="varchar" MaxLength="100" />
           <Property Name="MODIFIED_TIMESTAMP" Type="datetime" />
@@ -528,6 +534,7 @@
           <Property Name="LEVEL_1_SCORE" Type="int" />
           <Property Name="LEVEL_2_SCORE" Type="int" />
           <Property Name="FINAL_SCORE" Type="int" />
+          <Property Name="PROGRESS_UPDATE" Type="nvarchar(max)" />
           <Property Name="MODIFIED_BY_ID" Type="int" />
           <Property Name="MODIFIED_BY_DOMAIN_ID" Type="varchar" MaxLength="100" />
           <Property Name="MODIFIED_TIMESTAMP" Type="datetime" />
@@ -554,6 +561,7 @@
           <Property Name="APPRAISAL_ID" Type="int" />
           <Property Name="STRENGTH_AREA" Type="nvarchar(max)" />
           <Property Name="IMPROVEMENT_AREA" Type="nvarchar(max)" />
+          <Property Name="PROGRESS_UPDATE" Type="nvarchar(max)" />
           <Property Name="MODIFIED_BY_ID" Type="int" />
           <Property Name="MODIFIED_BY_DOMAIN_ID" Type="varchar" MaxLength="100" />
           <Property Name="MODIFIED_TIMESTAMP" Type="datetime" />
@@ -1861,6 +1869,10 @@
           <Property Type="String" Name="PERFORMANCE_APPRAISAL_LEVEL1_APPROVER_DISPLAY" MaxLength="770" FixedLength="false" Unicode="true" annotation:StoreGeneratedPattern="Computed" />
           <Property Type="String" Name="PERFORMANCE_APPRAISAL_LEVEL2_APPROVER_DISPLAY" MaxLength="770" FixedLength="false" Unicode="true" annotation:StoreGeneratedPattern="Computed" />
           <NavigationProperty Name="PMS_APPRAISAL_TRAIL" Relationship="PMSModel.FK_PMS_APPRAISAL_TRAIL_EMPLOYEE" FromRole="EMPLOYEE" ToRole="PMS_APPRAISAL_TRAIL" />
+          <Property Type="String" Name="FIRST_ADDRESS_COUNTRY_DISPLAY" MaxLength="255" FixedLength="false" Unicode="false" annotation:StoreGeneratedPattern="Computed" />
+          <Property Type="String" Name="SECOND_ADDRESS_COUNTRY_DISPLAY" MaxLength="255" FixedLength="false" Unicode="false" annotation:StoreGeneratedPattern="Computed" />
+          <Property Type="String" Name="MODIFIED_BY_DISPLAY" MaxLength="770" FixedLength="false" Unicode="true" annotation:StoreGeneratedPattern="Computed" />
+          <Property Type="Int32" Name="SDB_STAFF_ID" />
         </EntityType>
         <EntityType Name="MST_ACR_GRADE">
           <Key>
@@ -2004,6 +2016,7 @@
           <Property Type="DateTime" Name="MODIFIED_TIMESTAMP" />
           <NavigationProperty Name="PMS_APPRAISAL" Relationship="PMSModel.FK_PMS_APPRAISAL_CAREER_DEVELOPMENT_PMS_APPRAISAL" FromRole="PMS_APPRAISAL_CAREER_DEVELOPMENT" ToRole="PMS_APPRAISAL" />
           <NavigationProperty Name="PMS_APPRAISAL_CAREER_DEVELOPMENT_COMMENT" Relationship="PMSModel.FK_PMS_APPRAISAL_CAREER_DEVELOPMENT_COMMENT_PMS_APPRAISAL_CAREER_DEVELOPMENT" FromRole="PMS_APPRAISAL_CAREER_DEVELOPMENT" ToRole="PMS_APPRAISAL_CAREER_DEVELOPMENT_COMMENT" />
+          <Property Type="String" Name="PROGRESS_UPDATE" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="PMS_APPRAISAL_CAREER_DEVELOPMENT_COMMENT">
           <Key>
@@ -2041,6 +2054,7 @@
           <NavigationProperty Name="PMS_APPRAISAL_CORE_VALUE_COMMENT" Relationship="PMSModel.FK_PMS_APPRAISAL_CORE_VALUE_COMMENT_PMS_APPRAISAL_CORE_VALUE" FromRole="PMS_APPRAISAL_CORE_VALUE" ToRole="PMS_APPRAISAL_CORE_VALUE_COMMENT" />
           <NavigationProperty Name="PMS_MST_BLOCK" Relationship="PMSModel.FK_PMS_APPRAISAL_CORE_VALUE_PMS_MST_BLOCK" FromRole="PMS_APPRAISAL_CORE_VALUE" ToRole="PMS_MST_BLOCK" />
           <NavigationProperty Name="PMS_MST_CORE_VALUE_COMPETENCY" Relationship="PMSModel.FK_PMS_APPRAISAL_CORE_VALUE_PMS_MST_CORE_VALUE_COMPETENCY" FromRole="PMS_APPRAISAL_CORE_VALUE" ToRole="PMS_MST_CORE_VALUE_COMPETENCY" />
+          <Property Type="String" Name="PROGRESS_UPDATE" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="PMS_APPRAISAL_CORE_VALUE_COMMENT">
           <Key>
@@ -2079,6 +2093,7 @@
           <NavigationProperty Name="PMS_APPRAISAL_KPI_COMMENT" Relationship="PMSModel.FK_PMS_APPRAISAL_KPI_COMMENT_PMS_APPRAISAL_KPI" FromRole="PMS_APPRAISAL_KPI" ToRole="PMS_APPRAISAL_KPI_COMMENT" />
           <NavigationProperty Name="PMS_MST_BLOCK" Relationship="PMSModel.FK_PMS_APPRAISAL_KPI_PMS_MST_BLOCK" FromRole="PMS_APPRAISAL_KPI" ToRole="PMS_MST_BLOCK" />
           <NavigationProperty Name="PMS_MST_PRIORITY" Relationship="PMSModel.FK_PMS_APPRAISAL_KPI_PMS_MST_PRIORITY" FromRole="PMS_APPRAISAL_KPI" ToRole="PMS_MST_PRIORITY" />
+          <Property Type="String" Name="PROGRESS_UPDATE" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="PMS_APPRAISAL_KPI_COMMENT">
           <Key>
@@ -2109,6 +2124,7 @@
           <Property Type="DateTime" Name="MODIFIED_TIMESTAMP" />
           <NavigationProperty Name="PMS_APPRAISAL" Relationship="PMSModel.FK_PMS_APPRAISAL_PERFORMANCE_COACHING_PMS_APPRAISAL" FromRole="PMS_APPRAISAL_PERFORMANCE_COACHING" ToRole="PMS_APPRAISAL" />
           <NavigationProperty Name="PMS_APPRAISAL_PERFORMANCE_COACHING_COMMENT" Relationship="PMSModel.FK_PMS_APPRAISAL_PERFORMANCE_COACHING_COMMENT_PMS_APPRAISAL_PERFORMANCE_COACHING" FromRole="PMS_APPRAISAL_PERFORMANCE_COACHING" ToRole="PMS_APPRAISAL_PERFORMANCE_COACHING_COMMENT" />
+          <Property Type="String" Name="PROGRESS_UPDATE" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="PMS_APPRAISAL_REVIEWER">
           <Key>
@@ -3117,6 +3133,10 @@
           <EntitySetMapping Name="EMPLOYEEs">
             <EntityTypeMapping TypeName="PMSModel.EMPLOYEE">
               <MappingFragment StoreEntitySet="EMPLOYEE">
+                <ScalarProperty Name="SDB_STAFF_ID" ColumnName="SDB_STAFF_ID" />
+                <ScalarProperty Name="MODIFIED_BY_DISPLAY" ColumnName="MODIFIED_BY_DISPLAY" />
+                <ScalarProperty Name="SECOND_ADDRESS_COUNTRY_DISPLAY" ColumnName="SECOND_ADDRESS_COUNTRY_DISPLAY" />
+                <ScalarProperty Name="FIRST_ADDRESS_COUNTRY_DISPLAY" ColumnName="FIRST_ADDRESS_COUNTRY_DISPLAY" />
                 <ScalarProperty Name="PERFORMANCE_APPRAISAL_LEVEL2_APPROVER_DISPLAY" ColumnName="PERFORMANCE_APPRAISAL_LEVEL2_APPROVER_DISPLAY" />
                 <ScalarProperty Name="PERFORMANCE_APPRAISAL_LEVEL1_APPROVER_DISPLAY" ColumnName="PERFORMANCE_APPRAISAL_LEVEL1_APPROVER_DISPLAY" />
                 <ScalarProperty Name="SENIOR_MANAGEMENT_TEAM_MEMBER_DISPLAY" ColumnName="SENIOR_MANAGEMENT_TEAM_MEMBER_DISPLAY" />
@@ -3303,6 +3323,7 @@
           <EntitySetMapping Name="PMS_APPRAISAL_CAREER_DEVELOPMENT">
             <EntityTypeMapping TypeName="PMSModel.PMS_APPRAISAL_CAREER_DEVELOPMENT">
               <MappingFragment StoreEntitySet="PMS_APPRAISAL_CAREER_DEVELOPMENT">
+                <ScalarProperty Name="PROGRESS_UPDATE" ColumnName="PROGRESS_UPDATE" />
                 <ScalarProperty Name="MODIFIED_TIMESTAMP" ColumnName="MODIFIED_TIMESTAMP" />
                 <ScalarProperty Name="MODIFIED_BY_DOMAIN_ID" ColumnName="MODIFIED_BY_DOMAIN_ID" />
                 <ScalarProperty Name="MODIFIED_BY_ID" ColumnName="MODIFIED_BY_ID" />
@@ -3332,6 +3353,7 @@
           <EntitySetMapping Name="PMS_APPRAISAL_CORE_VALUE">
             <EntityTypeMapping TypeName="PMSModel.PMS_APPRAISAL_CORE_VALUE">
               <MappingFragment StoreEntitySet="PMS_APPRAISAL_CORE_VALUE">
+                <ScalarProperty Name="PROGRESS_UPDATE" ColumnName="PROGRESS_UPDATE" />
                 <ScalarProperty Name="MODIFIED_TIMESTAMP" ColumnName="MODIFIED_TIMESTAMP" />
                 <ScalarProperty Name="MODIFIED_BY_DOMAIN_ID" ColumnName="MODIFIED_BY_DOMAIN_ID" />
                 <ScalarProperty Name="MODIFIED_BY_ID" ColumnName="MODIFIED_BY_ID" />
@@ -3365,6 +3387,7 @@
           <EntitySetMapping Name="PMS_APPRAISAL_KPI">
             <EntityTypeMapping TypeName="PMSModel.PMS_APPRAISAL_KPI">
               <MappingFragment StoreEntitySet="PMS_APPRAISAL_KPI">
+                <ScalarProperty Name="PROGRESS_UPDATE" ColumnName="PROGRESS_UPDATE" />
                 <ScalarProperty Name="MODIFIED_TIMESTAMP" ColumnName="MODIFIED_TIMESTAMP" />
                 <ScalarProperty Name="MODIFIED_BY_DOMAIN_ID" ColumnName="MODIFIED_BY_DOMAIN_ID" />
                 <ScalarProperty Name="MODIFIED_BY_ID" ColumnName="MODIFIED_BY_ID" />
@@ -3399,6 +3422,7 @@
           <EntitySetMapping Name="PMS_APPRAISAL_PERFORMANCE_COACHING">
             <EntityTypeMapping TypeName="PMSModel.PMS_APPRAISAL_PERFORMANCE_COACHING">
               <MappingFragment StoreEntitySet="PMS_APPRAISAL_PERFORMANCE_COACHING">
+                <ScalarProperty Name="PROGRESS_UPDATE" ColumnName="PROGRESS_UPDATE" />
                 <ScalarProperty Name="MODIFIED_TIMESTAMP" ColumnName="MODIFIED_TIMESTAMP" />
                 <ScalarProperty Name="MODIFIED_BY_DOMAIN_ID" ColumnName="MODIFIED_BY_DOMAIN_ID" />
                 <ScalarProperty Name="MODIFIED_BY_ID" ColumnName="MODIFIED_BY_ID" />

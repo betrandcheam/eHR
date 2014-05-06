@@ -1510,6 +1510,37 @@ namespace eHR.PMS.Model
             }
             return boo_success;
         }
+
+        public static bool UpdateAppraisalKPIProgress(List<PMS.Model.DTO.Appraisal.KPI> updateList, out string message)
+        {
+            bool boo_success = false;
+            message = string.Empty;
+            PMS.Model.Context.PMSEntities dc_pms = new PMS.Model.Context.PMSEntities();
+            try
+            {
+                
+                if (!Lib.Utility.Common.IsNullOrEmptyList(updateList))
+                {
+                    foreach (PMS.Model.DTO.Appraisal.KPI obj_kpi in updateList)
+                    {
+                        Model.Context.PMS_APPRAISAL_KPI entity = dc_pms.PMS_APPRAISAL_KPI.Where(rec => rec.ID == obj_kpi.Id).Single();
+                        entity.PROGRESS_UPDATE = obj_kpi.Progress;
+                    }
+                }
+
+                dc_pms.SaveChanges();
+                boo_success = true;
+            }
+            catch (Exception exc)
+            {
+                message = exc.Message;
+            }
+            finally
+            {
+                dc_pms.Dispose();
+            }
+            return boo_success;
+        }
         #endregion KPI
 
         #region Core Values
@@ -1786,6 +1817,37 @@ namespace eHR.PMS.Model
             }
             return boo_success;
         }
+
+        public static bool UpdateAppraisalCoreValuesProgress(List<PMS.Model.DTO.Appraisal.CoreValue> updateList, out string message)
+        {
+            bool boo_success = false;
+            message = string.Empty;
+            PMS.Model.Context.PMSEntities dc_pms = new PMS.Model.Context.PMSEntities();
+            try
+            {
+
+                if (!Lib.Utility.Common.IsNullOrEmptyList(updateList))
+                {
+                    foreach (PMS.Model.DTO.Appraisal.CoreValue obj_kpi in updateList)
+                    {
+                        Model.Context.PMS_APPRAISAL_CORE_VALUE entity = dc_pms.PMS_APPRAISAL_CORE_VALUE.Where(rec => rec.ID == obj_kpi.Id).Single();
+                        entity.PROGRESS_UPDATE = obj_kpi.Progress;
+                    }
+                }
+
+                dc_pms.SaveChanges();
+                boo_success = true;
+            }
+            catch (Exception exc)
+            {
+                message = exc.Message;
+            }
+            finally
+            {
+                dc_pms.Dispose();
+            }
+            return boo_success;
+        }
         #endregion Core Values
 
         #region Performance Coaching
@@ -1825,6 +1887,36 @@ namespace eHR.PMS.Model
                         }
                     }
 
+                    dc_pms.SaveChanges();
+                    boo_success = true;
+                }
+            }
+            catch (Exception exc)
+            {
+                message = exc.Message;
+            }
+            finally
+            {
+                dc_pms.Dispose();
+            }
+
+            return boo_success;
+        }
+
+        public static bool UpdateAppraisalPerformanceCoachingProgress(PMS.Model.DTO.Appraisal.PerformanceCoaching performanceCoaching, out string message)
+        {
+            bool boo_success = false;
+            message = string.Empty;
+            Model.Context.PMS_APPRAISAL_PERFORMANCE_COACHING entity;
+            PMS.Model.Context.PMSEntities dc_pms = new PMS.Model.Context.PMSEntities();
+
+            try
+            {
+                if (performanceCoaching != null)
+                {
+                    entity = dc_pms.PMS_APPRAISAL_PERFORMANCE_COACHING.Where(rec => rec.APPRAISAL_ID == performanceCoaching.Appraisal.Id).SingleOrDefault();
+                    
+                    entity.PROGRESS_UPDATE = performanceCoaching.Progress;
                     dc_pms.SaveChanges();
                     boo_success = true;
                 }
@@ -1953,6 +2045,34 @@ namespace eHR.PMS.Model
             return boo_success;
         }
 
+        public static bool UpdateAppraisalCareerDevelopmentProgress(PMS.Model.DTO.Appraisal.CareerDevelopment careerDevelopment, out string message)
+        {
+            bool boo_success = false;
+            message = string.Empty;
+            Model.Context.PMS_APPRAISAL_CAREER_DEVELOPMENT entity;
+            PMS.Model.Context.PMSEntities dc_pms = new PMS.Model.Context.PMSEntities();
+
+            try
+            {
+                if (careerDevelopment != null)
+                {
+                    entity = dc_pms.PMS_APPRAISAL_CAREER_DEVELOPMENT.Where(rec => rec.APPRAISAL_ID == careerDevelopment.Appraisal.Id).SingleOrDefault();
+                    entity.PROGRESS_UPDATE = careerDevelopment.Progress;
+                    dc_pms.SaveChanges();
+                    boo_success = true;
+                }
+            }
+            catch (Exception exc)
+            {
+                message = exc.Message;
+            }
+            finally
+            {
+                dc_pms.Dispose();
+            }
+
+            return boo_success;
+        }
         public static bool UpdateAppraisalCareerDevelopmentComment(List<PMS.Model.DTO.Appraisal.CareerDevelopmentComment> updateList, out string message)
         {
             bool boo_success = false;

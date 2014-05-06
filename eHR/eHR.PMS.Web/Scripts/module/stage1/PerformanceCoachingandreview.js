@@ -58,6 +58,61 @@ define("stage1.performance", ['jquery', 'bootstrap'], function ($) {
             }
         });
     };
+
+    var saveProgressFunction = function () {
+        $.ajax({
+            url: $("#forRazorValue").attr("saveprogressurl"),
+            type: "POST",
+            dataType: "Json",
+            data: { "ApprID": $("#forRazorValue").attr("apprid"), "Progress": encodeURIComponent($.trim($("#Progress").val())) },
+            beforeSend: function () {
+                //$("#stage1kpisave").button('loading');
+                //$("#buttongroup").showLoading();
+                if (!pdfsave) {
+                    $('#resultcontent').hide();
+                    $('#loadingcontent').show();
+                    $('#InfoModal').modal();
+                }
+                else {
+                    $('#part1').css("visibility", "visible");
+                    $('#spanclass1').css("visibility", "hidden");
+                    $('#part2').css("visibility", "hidden");
+                    $('#spanclass2').css("visibility", "hidden");
+                    $('#modal-footer').hide();
+                    $('#PDFModal').modal();
+                }
+            },
+            success: function (data) {
+                if (!pdfsave) {
+                    $("#stage1progresssave").button('reset');
+                    $('#loadingcontent').hide();
+                    $('#resultcontent').show();
+                }
+                else {
+                    $('#part1').css("visibility", "hidden");
+                    $('#spanclass1').css("visibility", "visible");
+                    $.ajax({
+                        url: $("#forRazorValue").attr("exportPDFurl"),
+                        type: "POST",
+                        dataType: "Json",
+                        beforeSend: function () {
+                            $('#part2').css("visibility", "visible");
+                        },
+                        success: function (data) {
+                            $("#ExportPDF").button('reset');
+                            $('#part2').css("visibility", "hidden");
+                            $('#spanclass2').css("visibility", "visible");
+                            $("#modal-footer").show();
+                            $('#PDFOpen').click(function () {
+                                window.location.href = $("#forRazorValue").attr("openPDFurl") + data;
+                            });
+                        }
+                    });
+                }
+                //$('#InfoModal').modal();
+            }
+        });
+    };
     /*
     var autosavefunction = function () {
     $.ajax({
@@ -94,12 +149,20 @@ define("stage1.performance", ['jquery', 'bootstrap'], function ($) {
             $("#ImprovementsArea").val(encodeURIComponent($.trim($("#ImprovementsArea").val())));
             $("form").submit();
         });
+        $("#stage1progresssubmit").click(function () {
+            $("#Progress").val(encodeURIComponent($.trim($("#Progress").val())));
+            $("form").submit();
+        });
         $("#stage1kpisave").click(function () {
             if ($(".alert-specialChar").length > 0) {
                 $(this).button('reset');
                 return false;
             }
             savefunction();
+        });
+        $("#stage1progresssave").click(function () {
+            pdfsave = false;
+            saveProgressFunction();
         });
         $("#btn_appraisal_cancel").click(function () {
             $('#CancelInfoModal').modal();

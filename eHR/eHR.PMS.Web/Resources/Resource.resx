@@ -165,6 +165,9 @@
   <data name="MSG_NO_APPRAISAL_FOUND" xml:space="preserve">
     <value>No appraisal record found. Please try again or contact IT Department.</value>
   </data>
+  <data name="MSG_PROGRESS_UPDATE" xml:space="preserve">
+    <value>Your Appraisal is Updated.</value>
+  </data>
   <data name="MSG_REJECT_SUBMISSION" xml:space="preserve">
     <value>Proceed to reject?</value>
   </data>
